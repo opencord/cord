@@ -1,0 +1,8 @@
+hosts: [
+  { host_ip: "10.100.198.200", host_name: "corddev"},
+  { host_ip: "10.100.198.201", host_name: "prod"},
+]
+
+obsolete_services:
+  - puppet
+  - chef-client

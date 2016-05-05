@@ -1,0 +1,98 @@
+/*
+ * Copyright 2012 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.opencord.build.rules.*
+import org.yaml.snakeyaml.Yaml
+
+allprojects {
+    apply plugin: 'base'
+    apply plugin: 'de.gesellix.docker'
+    //apply plugin: 'com.tmiyamon.config'
+
+    docker {
+        // dockerHost = System.env.DOCKER_HOST ?: 'unix:///var/run/docker.sock'
+        // dockerHost = System.env.DOCKER_HOST ?: 'https://192.168.99.100:2376'
+        // certPath = System.getProperty('docker.cert.path') ?: "${System.getProperty('user.home')}/.docker/machine/machines/default"
+        // authConfigPlain = [
+        //   "username"       : "joe",
+        //   "password"       : "some-pw-as-needed",
+        //   "email"          : "joe@acme.com",
+        //   "serveraddress"  : "https://index.docker.io/v1/"
+        //  ]
+    }
+}
+
+ext {
+
+    // Upstream registry to simplify filling out the comps table below
+    upstreamReg = 'docker.io'
+
+    // Target registry to be used to publish docker images needed for deployment
+    targetReg = 'localhost:5000'
+
+    // The tag used to tag the docker images push to the target registry
+    targetTag = 'candidate'
+
+    // Component table
+    comps = [
+        'nginx':      [ 'type':     'image',
+                        'upstream': upstreamReg,
+                        'name':     'nginx',
+                        'digest':   'sha256:b555f8c64ab4e85405e0d8b03f759b73ce88deb802892a3b155ef55e3e832806' ],
+        'swarm':      [ 'type':     'image',
+                        'upstream': upstreamReg,
+                        'name':     'swarm',
+                        'digest':   'sha256:6ca9b40980e2fcdcd229900ec8933f3e92c14ead22c9404cb09736cb4f3a9248' ],
+    ]
+
+    // Deployment target config file (yaml format); this can be overwritten from the command line
+    // using the -PdeployConfig=<file-path> syntax.
+    deployConfig = project.hasProperty('deployConfig') ?
+            project.getProperty('deployConfig') : './config/default.yml'
+
+}
+
+task fetchUpstreamImages {
+  comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
+}
+
+task fetch {
+  dependsOn fetchUpstreamImages
+}
+
+task publishImages {
+  comps.each { name, _ -> dependsOn "publish" + name }
+}
+
+task publish {
+  dependsOn publishImages
+}
+
+tasks.addRule(new DockerFetchRule(project))
+tasks.addRule(new DockerPublishRule(project))
+tasks.addRule(new DockerTagRule(project))
+
+task deploy {
+    // TODO this is a place-holder.
+    doFirst {
+        println "Using deployment config: $deployConfig"
+        File configFile = new File(deployConfig)
+        def yaml = new Yaml()
+        def config = yaml.load(configFile.newReader())
+        println "Config: $config"
+        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
+    }
+}
