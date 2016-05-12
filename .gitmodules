@@ -1,0 +1,3 @@
+[submodule "components/maas"]
+	path = components/maas
+	url = ../maas

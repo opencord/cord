@@ -32,7 +32,7 @@ class DockerFetchRule implements Rule {
     }
 
     String getDescription() {
-        'Rule Usage: fetch<image-name>'
+        'Rule Usage: fetch<component-name>'
     }
 
     void apply(String taskName) {

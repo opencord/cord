@@ -32,7 +32,7 @@ class DockerTagRule implements Rule {
     }
 
     String getDescription() {
-        'Rule Usage: tag<image-name>'
+        'Rule Usage: tag<component-name>'
     }
 
     void apply(String taskName) {

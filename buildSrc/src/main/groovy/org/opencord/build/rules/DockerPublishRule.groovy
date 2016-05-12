@@ -32,7 +32,7 @@ class DockerPublishRule implements Rule {
     }
 
     String getDescription() {
-        'Rule Usage: publish<image-name>'
+        'Rule Usage: publish<component-name>'
     }
 
     void apply(String taskName) {
@@ -40,7 +40,8 @@ class DockerPublishRule implements Rule {
             project.task(taskName, type: DockerPushTask) {
                 ext.compName = taskName - 'publish'
                 dependsOn "tag" + compName
-                repositoryName = compName + ':' + project.targetTag
+                def spec = project.comps[ext.compName]
+                repositoryName = spec.name + ':' + project.targetTag
                 registry = project.targetReg
             }
         }

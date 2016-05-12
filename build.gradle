@@ -48,14 +48,25 @@ ext {
 
     // Component table
     comps = [
-        'nginx':      [ 'type':     'image',
-                        'upstream': upstreamReg,
-                        'name':     'nginx',
-                        'digest':   'sha256:b555f8c64ab4e85405e0d8b03f759b73ce88deb802892a3b155ef55e3e832806' ],
-        'swarm':      [ 'type':     'image',
-                        'upstream': upstreamReg,
-                        'name':     'swarm',
-                        'digest':   'sha256:6ca9b40980e2fcdcd229900ec8933f3e92c14ead22c9404cb09736cb4f3a9248' ],
+            'maas': [
+                    'type':         'gitmodule',
+                    'upstream':     '../maas',
+                    'branch':       'master',
+                    'tag':          null,
+                    'componentDir': './components/maas'
+            ],
+            'nginx': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'nginx',
+                    'digest':   'sha256:b555f8c64ab4e85405e0d8b03f759b73ce88deb802892a3b155ef55e3e832806'
+            ],
+            'swarm': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'swarm',
+                    'digest':   'sha256:6ca9b40980e2fcdcd229900ec8933f3e92c14ead22c9404cb09736cb4f3a9248'
+            ],
     ]
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
@@ -66,24 +77,30 @@ ext {
 }
 
 task fetchUpstreamImages {
-  comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
+    comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
+}
+
+task fetchGitSubmodules {
+    comps.each { name, spec -> if (spec.type == 'gitmodule') { dependsOn "gitupdate" + name } }
 }
 
 task fetch {
-  dependsOn fetchUpstreamImages
+    dependsOn fetchUpstreamImages
+    dependsOn fetchGitSubmodules
 }
 
 task publishImages {
-  comps.each { name, _ -> dependsOn "publish" + name }
+    comps.each { name, _ -> dependsOn "publish" + name }
 }
 
 task publish {
-  dependsOn publishImages
+    dependsOn publishImages
 }
 
 tasks.addRule(new DockerFetchRule(project))
 tasks.addRule(new DockerPublishRule(project))
 tasks.addRule(new DockerTagRule(project))
+tasks.addRule(new GitSubmoduleUpdateRule(project))
 
 task deploy {
     // TODO this is a place-holder.
