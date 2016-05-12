@@ -36,11 +36,10 @@ class DockerTagRule implements Rule {
     }
 
     void apply(String taskName) {
-        if (taskName.startsWith('tag')) {
+        if (taskName.startsWith('tag') && !taskName.equals('tag')) {
             project.task(taskName, type: DockerTagTask) {
                 ext.compName = taskName - 'tag'
-                dependsOn "fetch" + compName
-                def spec = project.comps[ext.compName]
+                def spec = project.comps[compName]
                 imageId = spec.name + '@' + spec.digest
                 tag = compName + ':' + project.targetTag
             }

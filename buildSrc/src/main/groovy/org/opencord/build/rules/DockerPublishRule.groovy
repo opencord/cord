@@ -39,7 +39,10 @@ class DockerPublishRule implements Rule {
         if (taskName.startsWith('publish')) {
             project.task(taskName, type: DockerPushTask) {
                 ext.compName = taskName - 'publish'
-                dependsOn "tag" + compName
+                println "Publish rule: $taskName + $compName"
+                def tagTask = "tag$compName"
+                println "Tagtask: $tagTask"
+                dependsOn tagTask
                 def spec = project.comps[ext.compName]
                 repositoryName = spec.name + ':' + project.targetTag
                 registry = project.targetReg

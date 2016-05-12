@@ -38,13 +38,13 @@ allprojects {
 ext {
 
     // Upstream registry to simplify filling out the comps table below
-    upstreamReg = 'docker.io'
+    upstreamReg = project.hasProperty('upstreamReg') ? project.getProperty('upstreamReg') : 'docker.io'
 
     // Target registry to be used to publish docker images needed for deployment
-    targetReg = 'localhost:5000'
+    targetReg = project.hasProperty('targetReg') ? project.getProperty('targetReg') : 'localhost:5000'
 
     // The tag used to tag the docker images push to the target registry
-    targetTag = 'candidate'
+    targetTag = project.hasProperty('targetTag') ? project.getProperty('targetTag') : 'candidate'
 
     // Component table
     comps = [
@@ -71,8 +71,7 @@ ext {
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
     // using the -PdeployConfig=<file-path> syntax.
-    deployConfig = project.hasProperty('deployConfig') ?
-            project.getProperty('deployConfig') : './config/default.yml'
+    deployConfig = project.hasProperty('deployConfig') ? project.getProperty('deployConfig') : './config/default.yml'
 
 }
 
@@ -90,7 +89,7 @@ task fetch {
 }
 
 task publishImages {
-    comps.each { name, _ -> dependsOn "publish" + name }
+    comps.each { name, spec -> if (spec.type == 'image') { dependsOn "publish" + name } }
 }
 
 task publish {

@@ -72,7 +72,7 @@ Pre-fetch all pre-requisites needed to build all components for OpenCORD. This i
 Time to build artifacts needed for deployment:
 
    ```
-   ./gradlew build
+   ./gradlew buildImages
    ```
    
 Lets publish all artifacts to the staging registry (Docker registry).
