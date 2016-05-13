@@ -14,34 +14,38 @@
  * limitations under the License.
  */
 
-package org.opencord.build.rules
+package org.opencord.gradle.rules
 
 import org.gradle.api.Rule
-import de.gesellix.gradle.docker.tasks.DockerTagTask
+import de.gesellix.gradle.docker.tasks.DockerPushTask
 
 
 /**
- * Gradle Rule class to tag a docker image
+ * Gradle Rule class to publish (push) a docker image to a private repo
  */
-class DockerTagRule implements Rule {
+class DockerPublishRule implements Rule {
 
     def project
 
-    DockerTagRule(project) {
+    DockerPublishRule(project) {
         this.project = project
     }
 
     String getDescription() {
-        'Rule Usage: tag<component-name>'
+        'Rule Usage: publish<component-name>'
     }
 
     void apply(String taskName) {
-        if (taskName.startsWith('tag') && !taskName.equals('tag')) {
-            project.task(taskName, type: DockerTagTask) {
-                ext.compName = taskName - 'tag'
-                def spec = project.comps[compName]
-                imageId = spec.name + '@' + spec.digest
-                tag = compName + ':' + project.targetTag
+        if (taskName.startsWith('publish')) {
+            project.task(taskName, type: DockerPushTask) {
+                ext.compName = taskName - 'publish'
+                println "Publish rule: $taskName + $compName"
+                def tagTask = "tag$compName"
+                println "Tagtask: $tagTask"
+                dependsOn tagTask
+                def spec = project.comps[ext.compName]
+                repositoryName = spec.name + ':' + project.targetTag
+                registry = project.targetReg
             }
         }
     }

@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-package org.opencord.build.rules
+package org.opencord.gradle.rules
 
 import org.gradle.api.Rule
-import org.gradle.api.tasks.Exec
+import de.gesellix.gradle.docker.tasks.DockerPullTask
 
 
 /**
  * Gradle Rule class to fetch a docker image
  */
-class GitSubmoduleUpdateRule implements Rule {
+class DockerFetchRule implements Rule {
 
     def project
 
-    GitSubmoduleUpdateRule(project) {
+    DockerFetchRule(project) {
         this.project = project
     }
 
     String getDescription() {
-        'Rule Usage: gitupdate<component-name>'
+        'Rule Usage: fetch<component-name>'
     }
 
     void apply(String taskName) {
-        if (taskName.startsWith('gitupdate')) {
-            project.task(taskName, type: Exec) {
-                ext.compName = taskName - 'gitupdate'
+        if (taskName.startsWith('fetch')) {
+            project.task(taskName, type: DockerPullTask) {
+                ext.compName = taskName - 'fetch'
                 def spec = project.comps[ext.compName]
-                workingDir = '.'
-                commandLine '/usr/bin/git', 'submodule', 'update', '--init', spec.componentDir
+                imageName = spec.name + '@' + spec.digest
             }
         }
     }

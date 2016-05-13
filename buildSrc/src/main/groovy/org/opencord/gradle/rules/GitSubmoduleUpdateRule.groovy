@@ -14,38 +14,34 @@
  * limitations under the License.
  */
 
-package org.opencord.build.rules
+package org.opencord.gradle.rules
 
 import org.gradle.api.Rule
-import de.gesellix.gradle.docker.tasks.DockerPushTask
+import org.gradle.api.tasks.Exec
 
 
 /**
- * Gradle Rule class to publish (push) a docker image to a private repo
+ * Gradle Rule class to fetch a docker image
  */
-class DockerPublishRule implements Rule {
+class GitSubmoduleUpdateRule implements Rule {
 
     def project
 
-    DockerPublishRule(project) {
+    GitSubmoduleUpdateRule(project) {
         this.project = project
     }
 
     String getDescription() {
-        'Rule Usage: publish<component-name>'
+        'Rule Usage: gitupdate<component-name>'
     }
 
     void apply(String taskName) {
-        if (taskName.startsWith('publish')) {
-            project.task(taskName, type: DockerPushTask) {
-                ext.compName = taskName - 'publish'
-                println "Publish rule: $taskName + $compName"
-                def tagTask = "tag$compName"
-                println "Tagtask: $tagTask"
-                dependsOn tagTask
+        if (taskName.startsWith('gitupdate')) {
+            project.task(taskName, type: Exec) {
+                ext.compName = taskName - 'gitupdate'
                 def spec = project.comps[ext.compName]
-                repositoryName = spec.name + ':' + project.targetTag
-                registry = project.targetReg
+                workingDir = '.'
+                commandLine '/usr/bin/git', 'submodule', 'update', '--init', spec.componentDir
             }
         }
     }

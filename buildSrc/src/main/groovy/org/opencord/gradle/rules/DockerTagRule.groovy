@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package org.opencord.build.rules
+package org.opencord.gradle.rules
 
 import org.gradle.api.Rule
-import de.gesellix.gradle.docker.tasks.DockerPullTask
+import de.gesellix.gradle.docker.tasks.DockerTagTask
 
 
 /**
- * Gradle Rule class to fetch a docker image
+ * Gradle Rule class to tag a docker image
  */
-class DockerFetchRule implements Rule {
+class DockerTagRule implements Rule {
 
     def project
 
-    DockerFetchRule(project) {
+    DockerTagRule(project) {
         this.project = project
     }
 
     String getDescription() {
-        'Rule Usage: fetch<component-name>'
+        'Rule Usage: tag<component-name>'
     }
 
     void apply(String taskName) {
-        if (taskName.startsWith('fetch')) {
-            project.task(taskName, type: DockerPullTask) {
-                ext.compName = taskName - 'fetch'
-                def spec = project.comps[ext.compName]
-                imageName = spec.name + '@' + spec.digest
+        if (taskName.startsWith('tag') && !taskName.equals('tag')) {
+            project.task(taskName, type: DockerTagTask) {
+                ext.compName = taskName - 'tag'
+                def spec = project.comps[compName]
+                imageId = spec.name + '@' + spec.digest
+                tag = compName + ':' + project.targetTag
             }
         }
     }

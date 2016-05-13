@@ -26,7 +26,7 @@ Thumbs.db
 /registry
 
 # Build
-/build
+build
 
 # Gradle
 .gradle
@@ -34,3 +34,5 @@ Thumbs.db
 # Ansible
 ansible/*.retry
 
+# Backup files
+*.bak

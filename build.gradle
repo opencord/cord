@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import org.opencord.build.rules.*
+import org.opencord.gradle.rules.*
 import org.yaml.snakeyaml.Yaml
 
 allprojects {
