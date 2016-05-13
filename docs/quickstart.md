@@ -40,11 +40,23 @@ Target server:
 
 On the build host, clone the OpenCORD integration repository and switch into its top directory:
 
+For now you can clone the repository anonymously:
+
    ```
    git clone https://gerrit.opencord.org/opencord
    cd opencord
    ```
-   
+
+If -- for whatever reason -- you decide to clone the repo as a private
+repository using ssh, then you should add your private key to your local ssh
+forwarding agent, because we will clone additional OpenCORD repositories within
+the Vagrant environment using the same git access mode, and this will require your
+local agent to know your identity:
+
+   ```
+   ssh-add ~/.ssh/id_rsa
+   ```
+
 Bring up the standardized OpenCORD build and development environment (VM). This will take a few minutes, depending on your connection speed:
 
    ```

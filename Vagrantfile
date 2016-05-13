@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "corddev" do |d|
+    d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
