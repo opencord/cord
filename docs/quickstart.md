@@ -1,12 +1,12 @@
-# OpenCORD Quick Start Guide
+# CORD Quick Start Guide
 
 [*This description is for a stand-alone bare-metal target server.
 If we succeed to bring up CORD on a VM, we will relax the text and
 go for the simpler experience.*]
 
-This tutorial walks you through the steps to bring up an OpenCORD "POD" on a single server.
-This deployment uses a simulated fabric, but it is good to get a quick feel
-for what is involved and how CORD works.
+This tutorial walks you through the steps to bring up a CORD "POD" on
+a single server.  This deployment uses a simulated fabric, but it is
+good to get a quick feel for what is involved and how CORD works.
 
 Specifically, the tutorial covers the following:
 
@@ -36,9 +36,9 @@ Target server:
 * Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to install Ubuntu 14.04).
 
 
-### Bring up an Use the OpenCORD Build Environment
+### Bring up and Use the CORD Build Environment
 
-On the build host, clone the OpenCORD integration repository and switch into its top directory:
+On the build host, clone the CORD integration repository and switch into its top directory:
 
 For now you can clone the repository anonymously:
 
@@ -49,7 +49,7 @@ For now you can clone the repository anonymously:
 
 If -- for whatever reason -- you decide to clone the repo as a private
 repository using ssh, then you should add your private key to your local ssh
-forwarding agent, because we will clone additional OpenCORD repositories within
+forwarding agent, because we will clone additional CORD repositories within
 the Vagrant environment using the same git access mode, and this will require your
 local agent to know your identity:
 
@@ -57,7 +57,7 @@ local agent to know your identity:
    ssh-add ~/.ssh/id_rsa
    ```
 
-Bring up the standardized OpenCORD build and development environment (VM). This will take a few minutes, depending on your connection speed:
+Bring up the standardized CORD build and development environment (VM). This will take a few minutes, depending on your connection speed:
 
    ```
    vagrant up corddev
@@ -69,7 +69,7 @@ Login to the build environment:
    vagrant ssh corddev
    ```
    
-Switch to the OpenCORD integration directory, which is shared from your host:
+Switch to the CORD integration directory, which is shared from your host:
 
    ```
    cd /opencord
@@ -121,7 +121,8 @@ Exit from the build environment and destroy it:
    
 ### Congratulations
 
-If you got this far, you successfully built, deployed, and tested your first OpenCORD POD.
+If you got this far, you successfully built, deployed, and tested your
+first CORD POD.
 
 
 ### Further Steps

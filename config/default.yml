@@ -1,8 +1,35 @@
+# Deployment configuration for VirtualBox based head node.
+#
+# This deployment configuration can be utilized with the head node created
+# via `vargrant up headnode` from the gerrit.opencord.org/maas repository.
 ---
-
-size: 2
-
 seedServer:
   ip: '10.100.198.202'
 
-otherServers: []
+  # User name and password used by Ansible to connect to the host for remote
+  # provisioning
+  user: 'vagrant'
+  password: 'vagrant'
+
+  # Specifies tasks within the head node provisioning not to execute, including:
+  #
+  # switch_support -   don't download the switch ONL images as there are no 
+  #                    switches in this configuration
+  # interface_config - don't update the network configuration of the headnode
+  #                    as it is configured by vagrant to the proper settings
+  skipTags:
+    - 'switch_support'
+    - 'interface_config'
+
+  # Specifies the extra settings required for this configuration
+  #
+  # virtualbox_support - install support for managing virtual box based
+  #                      compute nodes
+  extraVars:
+    - 'virtualbox_support=1'
+
+otherServers:
+  # Specifies the configuration for dynamically added compute nodes
+  location: 'http://gerrit.opencord.org/maas'
+  rolesPath: 'roles'
+  role: 'compute-node'

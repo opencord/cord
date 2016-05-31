@@ -1,32 +1,47 @@
-# Welcome to OpenCORD
+# Welcome to CORD
 
-This repository is an entry point to OpenCORD. It helps you to build and deploy OpenCORD.
+This repository is an entry point to CORD's open reference
+implementation. It helps you to build and deploy CORD.
 
 
 ### What is CORD
 
-CORD (Central Office Reimagined as a Data Center) is a revolutionary concept to
-turn Telco Central Offices (and MSO Head Ends) into a modern mini data-center, a.k.a. POD.
-The POD is made up of commodity servers, switches, and other networking devices.
-The POD is an application deployment platform optimized for both conventional cloud-scale
-applications as well as virtual network functions (VNF).
+CORD (Central Office Re-architected as a Datacenter) is a
+revolutionary concept to turn Telco Central Offices (and MSO Head
+Ends) into a modern mini-datacenters. We call this a CORD POD. A
+POD is made up of commodity servers, switches, and other networking
+devices.  The POD is an application deployment platform optimized for
+both conventional cloud-scale applications as well as virtual network
+functions (VNF).
 
+### What is the CORD Reference Implementation
 
-### What is OpenCORD
+The CORD open reference implementation is comprised of:
 
-OpenCORD is a reference implementation of the CORD concept and is comprised of:
+- A number of POD hardware specifications that can serve as reference
+  implementations
 
-- A number of POD hardware specifications, which can serve as reference implementations
-- A software platform that when deployed on the servers implements service-agnostic software infrastructure enabling deployment of sophisticated network services
-- A few sample service implementations that can be readily deployed onto OpenCORD PODs
-- A deployment automation framework that simplifies the installation of the platform layers as well as the sample services
-- An extendable test framework and test suite to verify and characterize the platfrom as well as the sample services
-- Extensive documentatio to work with OpenCORD
+- A software platform that when deployed on the servers implements
+  service-agnostic software infrastructure enabling deployment of
+  sophisticated network services
 
+- A few sample service implementations that can be readily deployed
+  onto CORD PODs
+
+- A deployment automation framework that simplifies the installation
+  of the platform layers as well as the sample services
+
+- An extendable test framework and test suite to verify and
+  characterize the platfrom as well as the sample services
+
+- Extensive documentation to work with CORD
 
 ### Quick Start
 
-If this is your first encounter with OpenCORD, you may consider giving it a quick spin. We made it real easy. You can bring up OpenCORD on a single server or on a few servers (with or without a real fabric) with a few commands.
+If this is your first encounter with CORD, you may consider giving it
+a quick spin. We made it real easy. You can bring up CORD on a single
+server or on a few servers (with or without a real fabric) with a few
+commands.
 
 Please follow our [Quick Start Tutorial](docs/quickstart.md).
 
