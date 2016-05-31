@@ -3,6 +3,11 @@ hosts: [
   { host_ip: "10.100.198.201", host_name: "prod"},
 ]
 
+use_latest_for:
+  - debian-keyring
+  - debian-archive-keyring
+  - rng-tools
+
 obsolete_services:
   - puppet
   - chef-client

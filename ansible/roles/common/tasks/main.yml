@@ -12,6 +12,12 @@
   with_items: hosts
   tags: [common]
 
+- name: Latest apt packages
+  apt:
+    name: "{{ item }}"
+  with_items: use_latest_for
+  tags: [common]
+
 - name: Services are not running
   service:
     name: "{{ item }}"
