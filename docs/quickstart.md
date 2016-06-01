@@ -43,8 +43,8 @@ On the build host, clone the CORD integration repository and switch into its top
 For now you can clone the repository anonymously:
 
    ```
-   git clone https://gerrit.opencord.org/opencord
-   cd opencord
+   git clone https://gerrit.opencord.org/cord
+   cd cord
    ```
 
 If -- for whatever reason -- you decide to clone the repo as a private
@@ -72,10 +72,10 @@ Login to the build environment:
 Switch to the CORD integration directory, which is shared from your host:
 
    ```
-   cd /opencord
+   cd /cord
    ```
    
-Pre-fetch all pre-requisites needed to build all components for OpenCORD. This is the step that takes the longest time as a large number of images and files need to be downloaded.
+Pre-fetch all pre-requisites needed to build all components for CORD. This is the step that takes the longest time as a large number of images and files need to be downloaded.
 
    ```
    ./gradlew fetch

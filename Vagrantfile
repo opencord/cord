@@ -4,9 +4,9 @@
 Vagrant.configure(2) do |config|
 
   if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-    config.vm.synced_folder ".", "/opencord", mount_options: ["dmode=700,fmode=600"]
+    config.vm.synced_folder ".", "/cord", mount_options: ["dmode=700,fmode=600"]
   else
-    config.vm.synced_folder ".", "/opencord"
+    config.vm.synced_folder ".", "/cord"
   end
 
   config.vm.define "corddev" do |d|
@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opencord/ansible/corddev.yml -c local"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/ansible/corddev.yml -c local"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
