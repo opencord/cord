@@ -62,6 +62,13 @@ ext {
                     'tag':          null,
                     'componentDir': './components/cord-tester'
             ],
+            'cord-onos-publisher': [
+                    'type':         'gitmodule',
+                    'upstream':     '../cord-onos-publisher',
+                    'branch':       'master',
+                    'tag':          null,
+                    'componentDir': './components/cord-onos-publisher'
+            ],
             'nginx': [
                     'type':     'image',
                     'upstream': upstreamReg,

@@ -4,3 +4,6 @@
 [submodule "components/cord-tester"]
 	path = components/cord-tester
 	url = ../cord-tester
+[submodule "components/cord-onos-publisher"]
+	path = components/cord-onos-publisher
+	url = ../cord-onos-publisher
