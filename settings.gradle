@@ -1,1 +1,2 @@
 include 'components/maas'
+include 'components/cord-tester'

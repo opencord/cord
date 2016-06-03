@@ -1,3 +1,6 @@
 [submodule "components/maas"]
 	path = components/maas
 	url = ../maas
+[submodule "components/cord-tester"]
+	path = components/cord-tester
+	url = ../cord-tester

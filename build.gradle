@@ -55,6 +55,13 @@ ext {
                     'tag':          null,
                     'componentDir': './components/maas'
             ],
+            'cord-tester': [
+                    'type':         'gitmodule',
+                    'upstream':     '../cord-tester',
+                    'branch':       'master',
+                    'tag':          null,
+                    'componentDir': './components/cord-tester'
+            ],
             'nginx': [
                     'type':     'image',
                     'upstream': upstreamReg,
