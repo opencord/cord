@@ -8,3 +8,4 @@
     - consul-template
     - registry
     - java8-oracle
+    - buildtools
