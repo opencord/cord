@@ -81,12 +81,6 @@ ext {
                     'name':     'swarm',
                     'digest':   'sha256:6ca9b40980e2fcdcd229900ec8933f3e92c14ead22c9404cb09736cb4f3a9248'
             ],
-            'onos':  [
-                    'type':     'image',
-                    'upstream': upstreamReg,
-                    'name':     'onosproject/onos',
-                    'digest':   'sha256:0f65940cfc7759c0bf63c4e60d30c4ad31a2565fadfbb9d9160a27ef87edd8e2'
-            ],
     ]
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
