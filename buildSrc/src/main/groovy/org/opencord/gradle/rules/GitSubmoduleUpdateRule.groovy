@@ -41,7 +41,7 @@ class GitSubmoduleUpdateRule implements Rule {
                 ext.compName = taskName - 'gitupdate'
                 def spec = project.comps[ext.compName]
                 workingDir = '.'
-                commandLine '/usr/bin/git', 'submodule', 'update', '--init', spec.componentDir
+                commandLine '/usr/bin/git', 'submodule', 'update', '--init', '--recursive', spec.componentDir
             }
         }
     }
