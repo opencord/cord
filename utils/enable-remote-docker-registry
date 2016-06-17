@@ -11,6 +11,7 @@ fi
 
 OUT=$(tempfile)
 head -1 /etc/default/docker >> $OUT
+echo "" >> $OUT
 while [ $# -gt 0 ]; do
   echo "DOCKER_OPTS=\"\$DOCKER_OPTS --insecure-registry $1\"" >> $OUT
   shift
