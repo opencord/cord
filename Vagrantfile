@@ -25,8 +25,25 @@ Vagrant.configure(2) do |config|
     d.vm.box = "ubuntu/trusty64"
     d.vm.hostname = "prod"
     d.vm.network "private_network", ip: "10.100.198.201"
+    d.vm.network "private_network", ip: "10.6.0.1", virtualbox__intnet: "cord-test-network"
     d.vm.provider "virtualbox" do |v|
-      v.memory = 1024
+      v.memory = 2048
+    end
+  end
+
+  config.vm.define "computenode" do |c|
+    c.vm.box = "clink15/pxe"
+    c.vm.synced_folder '.', '/vagrant', disable: true
+    c.vm.communicator = "none"
+    c.vm.hostname = "computenode"
+    c.vm.network "private_network",
+    adapter: "1",
+    type: "dhcp",
+    auto_config: false,
+    virtualbox__intnet: "cord-test-network"
+    c.vm.provider "virtualbox" do |v|
+      v.memory = 1048
+      v.gui = "true"
     end
   end
 

@@ -25,3 +25,16 @@
   ignore_errors: yes
   with_items: obsolete_services
   tags: [common]
+
+- name: Ensure known_hosts file is absent
+  file:
+    path: /home/vagrant/.ssh/known_hosts
+    state: absent
+
+- name: Disable Known Host Checking
+  copy:
+    src: files/ssh_config
+    dest: /home/vagrant/.ssh/config
+    owner: vagrant
+    group: vagrant
+    mode: 0600
