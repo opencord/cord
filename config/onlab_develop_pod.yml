@@ -28,6 +28,10 @@ seedServer:
   skipTags:
     - 'switch_support'
     - 'interface_config'
+
+docker:
+  imageVersion: candidate
+
 otherNodes:
   # Experimental
   #
