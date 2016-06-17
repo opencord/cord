@@ -1,0 +1,22 @@
+#!/bin/bash
+
+PROG=$(basename $0)
+
+HELP=$(echo "$*" | grep "\-h" | wc -w)
+
+if [ $HELP -ne 0 ]; then
+  echo "usage: $PROG <remote-registry>..."
+  exit 1
+fi
+
+OUT=$(tempfile)
+head -1 /etc/default/docker >> $OUT
+while [ $# -gt 0 ]; do
+  echo "DOCKER_OPTS=\"\$DOCKER_OPTS --insecure-registry $1\"" >> $OUT
+  shift
+done
+
+sudo cp $OUT /etc/default/docker
+rm $OUT
+
+sudo service docker restart
