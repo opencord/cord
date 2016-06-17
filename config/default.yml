@@ -27,6 +27,7 @@ seedServer:
   #                      compute nodes
   extraVars:
     - 'virtualbox_support=1'
+    - 'external_iface=eth0'
 
 otherServers:
   # Specifies the configuration for dynamically added compute nodes
