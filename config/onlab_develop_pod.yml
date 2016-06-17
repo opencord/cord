@@ -26,7 +26,6 @@ seedServer:
   management_iface: 'em2'
   external_iface: 'em1'
   skipTags:
-    - 'switch_support'
     - 'interface_config'
 
 docker:
