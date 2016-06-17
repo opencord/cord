@@ -126,3 +126,11 @@ task deploy {
         println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
     }
 }
+
+task hopeful {
+    dependsOn fetch
+    dependsOn buildImages
+    dependsOn prime
+    dependsOn publish
+    dependsOn deploy
+}
