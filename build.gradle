@@ -108,8 +108,6 @@ task prime {
     }
 }
 
-task buildImages
-
 // ---------------- Useful tasks ----------------
 
 task fetchUpstreamImages {
@@ -148,18 +146,5 @@ task deploy {
         println "Config: $config"
         println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
     }
-}
-
-deploy.mustRunAfter(publish)
-publish.mustRunAfter(prime)
-publish.mustRunAfter(buildImages)
-buildImages.mustRunAfter(fetch)
-
-task hopeful {
-    dependsOn fetch
-    dependsOn buildImages
-    dependsOn prime
-    dependsOn publish
-    dependsOn deploy
 }
 
