@@ -138,7 +138,7 @@ task hopeful {
 // ------------- PlaceHolders ----------------
 
 task updateDocker (type: Exec) {
-    commandLine 'sudo', utils/enable-remote-docker-registry', $targetReg
+    commandLine 'sudo', utils/enable-remote-docker-registry', "$targetReg"
 }
 
 task prime {
