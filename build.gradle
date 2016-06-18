@@ -153,7 +153,7 @@ task deploy {
 deploy.mustRunAfter(publish)
 publish.mustRunAfter(prime)
 publish.mustRunAfter(buildImages)
-fetch.mustRunAfter(buildImages)
+buildImages.mustRunAfter(fetch)
 
 task hopeful {
     dependsOn fetch
