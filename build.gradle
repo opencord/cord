@@ -134,3 +134,24 @@ task hopeful {
     dependsOn publish
     dependsOn deploy
 }
+
+------------- PlaceHolders ----------------
+
+task updateDocker (type: Exec) {
+    commandLine 'sudo', utils/enable-remote-docker-registry', $targetReg
+}
+
+task prime {
+    // TODO this is a place-holder.
+    dependsOn updateDocker
+    doFirst {
+        println "Using deployment config: $deployConfig"
+        File configFile = new File(deployConfig)
+        def yaml = new Yaml()
+        def config = yaml.load(configFile.newReader())
+        println "Config: $config"
+        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
+    }
+}
+
+task buildImages
