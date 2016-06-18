@@ -150,11 +150,12 @@ task deploy {
     }
 }
 
+deploy.mustRunAfter(publish)
+publish.mustRunAfter(prime)
+publish.mustRunAfter(buildImages)
+fetch.mustRunAfter(buildImages)
+
 task hopeful {
-    deploy.mustRunAfter(publish)
-    publish.mustRunAfter(prime)
-    publish.mustRunAfter(buildImages)
-    fetch.mustRunAfter(buildImages)
     dependsOn fetch
     dependsOn buildImages
     dependsOn prime
