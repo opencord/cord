@@ -23,27 +23,48 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "prod" do |d|
     d.vm.box = "ubuntu/trusty64"
+    d.vm.synced_folder '.', '/vagrant', disable: true
     d.vm.hostname = "prod"
     d.vm.network "private_network", ip: "10.100.198.201"
-    d.vm.network "private_network", ip: "10.6.0.1", virtualbox__intnet: "cord-test-network"
+    d.vm.network "private_network", ip: "10.1.0.1", virtualbox__intnet: "cord-test-network"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
   end
 
-  config.vm.define "computenode" do |c|
-    c.vm.box = "clink15/pxe"
-    c.vm.synced_folder '.', '/vagrant', disable: true
-    c.vm.communicator = "none"
-    c.vm.hostname = "computenode"
-    c.vm.network "private_network",
-    adapter: "1",
-    type: "dhcp",
-    auto_config: false,
-    virtualbox__intnet: "cord-test-network"
-    c.vm.provider "virtualbox" do |v|
+  config.vm.define "switch" do |s|
+    s.vm.box = "ubuntu/trusty64"
+    s.vm.hostname = "fakeswitch"
+    s.vm.network "private_network", ip: "10.100.198.253"
+    s.vm.network "private_network",
+        type: "dhcp",
+        virtualbox__intnet: "cord-test-network",
+        mac: "cc37ab000001"
+    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/ansible/fakeswitch.yml -c local"
+    s.vm.provider "virtualbox" do |v|
       v.memory = 1048
-      v.gui = "true"
+      v.name = "fakeswitch"
+    end
+  end
+
+  (1..3).each do |i|
+    # Defining VM properties
+    config.vm.define "compute_node#{i}" do |c|
+      c.vm.box = "clink15/pxe"
+      c.vm.synced_folder '.', '/vagrant', disable: true
+      c.vm.communicator = "none"
+      c.vm.hostname = "computenode"
+      c.vm.network "private_network",
+        adapter: "1",
+        type: "dhcp",
+        auto_config: false,
+        virtualbox__intnet: "cord-test-network"
+      c.vm.provider "virtualbox" do |v|
+        v.name = "compute_node#{i}"
+        v.memory = 1048
+        v.gui = "true"
+      end
     end
   end
 

@@ -1,0 +1,43 @@
+- name: Ensure Root User
+  become: yes
+  user:
+    name: root
+    password: '$6$o5YKQzd9CIadXU$KPaV6CcDd1XPr4cO.dRnWnMnrZl9mBEM84Pfhp9b1v6fLWHdoQ1gPJ4qa0lGvxpukcWtWtwiZezi3JWisMd4D.'
+
+- name: Ensure Directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  with_items:
+    - /mnt/flash2
+    - /etc/accton
+
+- name: Ensure Commands
+  become: yes
+  template:
+    src: files/{{ item }}
+    dest: /usr/bin/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - persist
+    - savepersist
+
+- name: Ensure Root SSH
+  become: yes
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin yes"
+
+- name: Ensure SSH Config
+  become: yes
+  service:
+    name: ssh
+    state: restarted
+  #failed_when: false
