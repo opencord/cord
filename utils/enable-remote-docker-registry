@@ -9,15 +9,22 @@ if [ $HELP -ne 0 ]; then
   exit 1
 fi
 
+LINE="DOCKER_OPTS=\"\$DOCKER_OPTS --insecure-registry $1\""
+
 OUT=$(tempfile)
-head -1 /etc/default/docker >> $OUT
-echo "" >> $OUT
+cat /etc/default/docker >> $OUT
+CHANGED=0
 while [ $# -gt 0 ]; do
-  echo "DOCKER_OPTS=\"\$DOCKER_OPTS --insecure-registry $1\"" >> $OUT
+  FOUND=$(grep "$LINE" /etc/default/docker | wc -l)
+  if [ $FOUND -eq 0 ]; then
+    echo "DOCKER_OPTS=\"\$DOCKER_OPTS --insecure-registry $1\"" >> $OUT
+    CHANGED=1
+  fi
   shift
 done
 
-sudo cp $OUT /etc/default/docker
-rm $OUT
-
-sudo service docker restart
+if [ $CHANGED -eq 1 ]; then
+  sudo cp $OUT /etc/default/docker
+  sudo service docker restart
+fi
+rm -f $OUT
