@@ -7,3 +7,6 @@
 [submodule "components/cord-onos-publisher"]
 	path = components/cord-onos-publisher
 	url = ../cord-onos-publisher
+[submodule "components/platform-install"]
+	path = components/platform-install
+	url = ../platform-install
