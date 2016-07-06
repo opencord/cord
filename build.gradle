@@ -69,6 +69,13 @@ ext {
                     'tag':          null,
                     'componentDir': './components/cord-onos-publisher'
             ],
+            'platform-install': [
+                    'type':         'gitmodule',
+                    'upstream':     '../platform-install',
+                    'branch':       'master',
+                    'tag':          null,
+                    'componentDir': './components/platform-install'
+            ],
             'nginx': [
                     'type':     'image',
                     'upstream': upstreamReg,

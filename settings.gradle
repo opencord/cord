@@ -1,3 +1,4 @@
 include 'components/maas'
 include 'components/cord-onos-publisher'
 include 'components/cord-tester'
+include 'components/platform-install'
