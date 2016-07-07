@@ -143,7 +143,19 @@ tasks.addRule(new DockerPublishRule(project))
 tasks.addRule(new DockerTagRule(project))
 tasks.addRule(new GitSubmoduleUpdateRule(project))
 
-task deploy {
+task deployBase {
+    // TODO this is a place-holder.
+    doFirst {
+        println "Using deployment config: $deployConfig"
+        File configFile = new File(deployConfig)
+        def yaml = new Yaml()
+        def config = yaml.load(configFile.newReader())
+        println "Config: $config"
+        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
+    }
+}
+
+task deployPlatform {
     // TODO this is a place-holder.
     doFirst {
         println "Using deployment config: $deployConfig"
