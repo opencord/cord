@@ -7,6 +7,7 @@ use_latest_for:
   - debian-keyring
   - debian-archive-keyring
   - rng-tools
+  - python-netaddr
 
 obsolete_services:
   - puppet
