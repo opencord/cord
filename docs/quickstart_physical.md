@@ -1,21 +1,60 @@
-# CORD Quick Start Guide using Virtual Machine Nodes
+# CORD Quick Start Guide using Physical Nodes
 
-[*This description is for bringing up a CORD POD on virtual
-machines on a single physical host. The purpose of this solution
-is to give the user an experience of bring up a CORD on bare
-metal.*]
+This guide is meant to enable the user to utilize the artifacts of this
+repository to to deploy CORD on to a physical hardware rack. The artifacts in
+this repository will deploy CORD against a standard physical rack wired
+according to the **best practices** as defined in this document.
 
-This guide is meant to enable the user to quickly exercise the capabilities
-provided by the artifacts of this repository. There are three high level tasks
-that can be exercised:
-   - Create development environment
-   - Build and Publish Docker images that support bare metal provisioning
-   - Deploy the bare metal provisioning capabilities to a virtual machine (head
-       node) and PXE boot a compute node
+## Physical configuration
+![Physical Hardware Connectivity](images/physical.png)
+
+As depicted in the diagram above the base model for the CORD POD deployment
+contains:
+- 4 OF switches comprising the leaf - spine fabric utilized for data traffic
+- 4 compute nodes with with 2 40G ports and 2 1G ports
+- 1 top of rack (TOR) switch utilized for management communications
+
+The best practices in terms of connecting the components of the CORD POD
+include:
+- Leaf nodes are connected to the spines nodes starting at the highest port
+number on the leaf.
+- For a given leaf node, its connection to the spine nodes terminate on the
+same port number on each spine.
+- Leaf *n* connections to spine nodes terminate at port *n* on each spine
+node.
+- Leaf spine switches are connected into the management TOR starting from the
+highest port number.
+- Compute nodes 40G interfaces are named *eth0* and *eth1*.
+- Compute nodes 10G interfaces are named *eth2* and *eth3*.
+- Compute node *n* is connected to the management TOR switch on port *n*,
+egressing from the compute node at *eth2*.
+- Compute node *n* is connected to its primary leaf, egressing at *eth0* and terminating on the leaf at port *n*.
+- Compute node *n* is connected to its secondary leaf, egressing at *eth1* and
+terminating on the leaf at port *n*.
+- *eth3* on the head node is the uplink from the POD to the Internet.
+
+The following assumptions are made about the phyical CORD POD being deployed:
+- The leaf - spine switchs are Accton 6712s
+- The compute nodes are using 40G Intel NIC cards
+- The compute node that is to be designated the *head node* has
+Ubuntu 14.04 LTS installed.
 
 **Prerequisite: Vagrant is installed and operationally.**
 **Note:** *This quick start guide has only been tested against Vagrant and
 VirtualBox, specially on MacOS.*
+
+## Bootstrapping the Head Node
+The head node is the key to the physical deployment of a CORD POD. The
+automated deployment of the physical POD is designed such that the head node is
+manually deployed, with the aid of automation tools, such as Ansible and from
+this head node the rest of the POD deployment is automated.
+
+The head node can be deployed either from a node outside the CORD POD or by
+deploying from the head to the head node. The procedure in each scenario is
+slightly different because during the bootstrapping of the head node it is
+possible that the interfaces needed to be renamed and the system to be
+rebooted. This guide assumes that the head node is being bootstrapped from a
+host outside of the POD.
 
 ## Create Development Environment
 The development environment is required for the other tasks in this repository.
@@ -49,13 +88,6 @@ vagrant up corddev
 **NOTE:** *It may have several minutes for the first command `vagrant up
 corddev` to complete as it will include creating the VM as well as downloading
 and installing various software packages.*
-
-To create the VM that represents the POD head node the following vagrant
-command can be used. This will create a basic Ubuntu 14.04 LTS server with
-no additional software installed.
-```
-vagrant up prod
-```
 
 ### Connect to the Development Machine
 To connect to the development machine the following vagrant command can be used.
@@ -176,13 +208,12 @@ images; and some, like `abh1nav/dockerui` were downloaded when the development
 machine was created with `vagrant up`.*
 
 ## Deployment Configuration File
-The commands to deploy the POD can be customized via a *deployment
-configuration file*. The file is in [YAML](http://yaml.org/). For
-the purposes of the quick start using vagrant VMs for the POD nodes a
-deployment configuration file has been provide in
-[`config/default.yml`](config/default.yml). This default configuration
-specifies the target server as the vagrant machine named `prod` that was
-created earlier.
+The commands to deploy the POD can be customized via a *deployment configuration
+file*. The file is in [YAML](http://yaml.org/).
+
+To construct a configuration file for yoru physical POD you should copy the
+sample deployment configuration found in `config/sample.yml` and modify the
+values to fit your physical deployment.
 
 ## Prime the Target server
 The target server is the server that will assume the role of the head node in
@@ -192,14 +223,13 @@ docker registry on the target server allows the deployment process to push
 images to the target server that are used in the reset of the process, thus
 making the head node a self contained deployment.
 ```
-./gradew prime
+./gradew -PdeployConfig=config/podX.yml prime
 ```
 
 ### Complete
 Once the `prime` command successfully runs this task is complete. When this
 step is complete a Docker registry and Docker registry mirror. It can be
-verified that these are running by using the `docker ps` command on the
-producation head node VM.
+verified that these are running by using the `docker ps` command.
 ```
 docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
 CONTAINER ID        IMAGE               COMMAND                  CREATED AT
@@ -213,7 +243,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradew -PtargetReg=10.100.198.201:5000 publish
+./gradew -PtargetReg=<head-node-ip-address>:5000 publish
 ```
 
 ### Complete
@@ -222,7 +252,7 @@ step is complete it can be verified by performing a query on the target
 server's Docker registry using the following command on the development
 machine.
 ```
-curl -sS http://10.100.198.201:5000/v2/_catalog | jq .
+curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
 {
   "repositories": [
     "consul",
@@ -247,20 +277,6 @@ of the compute node. These tasks are accomplished utilizing additionally
 Vagrant machines as well as executing `gradle` tasks in the Vagrant
 development machine.
 
-### VirtualBox Power Management
-The default MAAS deployment does not support power management for virtual box
-based hosts. As part of the MAAS installation support was added for power
-management, but it does require some additional configuration. This additional
-configuration is detailed at the end of this document, but is mentioned here
-because when deploying the head node an additional parameter must be set. This
-parameter specifies the username on the host machine that should be used when
-SSHing from the head node to the host machine to remotely execute the
-`vboxmanage` command. This is typically the username used when logging into your
-laptop or desktop development machine. This value is set by editing the
-`config/default.yml` file and replacing the default value of
-`seedServer.power_helper_user` with the approriate username. The default value
-is `cord`
-
 ### Deploy MAAS
 Canonical MAAS provides the PXE and other bare metal provisioning services for
 CORD and will be deployed on the head node.
@@ -273,24 +289,15 @@ so if an error is encountered something went horrible wrong (tm).
 
 ### Complete
 This step is complete when the command successfully runs. The Web UI for MAAS
-can be viewed by browsing to the vagrant machine named `prod`. Because this
-machine is on a host internal network it can't be directly reached from the
-host machine, typically your laptop. In order to expose the UI, from the VM host
-machine you will issue the following command:
-```
-vagrant ssh prod -- -L 8080:localhost:80
-```
-This command will create a SSH tunnel from the VM host machine to the head
-node so that from the VM host you can view the MAAS UI by visiting the URL
-`http://localhost:8080/MAAS`. The default authentication credentials are a
-username of `cord` and a password of `cord`.
+can be viewed by browsing to the target machine using a URL of the form
+`http://head-node-ip-address/MAAS`.
 
 After the `deployBase` command install `MAAS`, it initiates the download of
 an Ubuntu 14.04 boot image that will be used to boot the other POD servers.
 This download can take some time and the process cannot continue until the
 download is complete. The status of the download can be verified through
-the UI by visiting the URL `http://localhost:8888/MAAS/images/`, or via the
-command line from head node via the following commands:
+the UI by visiting the URL `http://head-node-ip-address/MAAS/images/`,
+or via the command line from head node via the following commands:
 ```
 APIKEY=$(sudo maas-region-admin apikey --user=cord)
 maas login cord http://localhost/MAAS/api/1.0 "$APIKEY"
@@ -319,44 +326,36 @@ so if an error is encountered something went horrible wrong (tm).
 This step is complete when the command successfully runs. The deployment of XOS
 includes a deployment of Open Stack.
 
-## Create and Boot Compute Node
-The sample vagrant VM based POD is configured to support the creation of 3
-compute nodes. These nodes will PXE boot from the head node and are created
-using the `vagrant up` command as follows:
-```
-vagrant up compute_node1
-vagrant up compute_node2
-vagrant up compute_node3
-```
-**NOTE:** *This task is executed on your host machine and not in the
-development virtual machine*
+## Booting Compute Nodes
 
-When starting the compute node VMs the console (UI) for each will be displayed
-so you are able to watch the boot process if you like.
+### Network configuration
+The proposed configuration for a CORD POD is has the following network configuration on the head node:
 
-As vagrant starts these machines, you will see the following error:
-```
-==> compute_node1: Waiting for machine to boot. This may take a few minutes...
-The requested communicator 'none' could not be found.
-Please verify the name is correct and try again.
-```
+   - eth0 / eth1 - 40G interfaces, not relevant for the test environment.
+   - eth2 - the interface on which the head node supports PXE boots and is an internally interface to which all
+            the compute nodes connected
+   - eth3 - WAN link. the head node will NAT from eth2 to eth3
+   - mgmtbr - Not associated with a physical network and used to connect in the VM created by the openstack
+              install that is part of XOS
 
-This error is normal and is because vagrant attempts to `SSH` to a server
-after it is started. However, because the process is PXE booting these servers
-this is not possible. To work around (with) vagrant the vagrant `communicator`
-setting for each of the compute nodes is set to "none", thus vagrant complains,
-but the machines will PXE boot.
+The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and mgmtbr interfaces.
 
-The compute node VM will boot, register with MAAS, and then be shut off. After
-this is complete an entry for the node will be in the MAAS UI at
-`http://localhost:8888/MAAS/#/nodes`. It will be given a random hostname made
-up, in the Canonical way, of a adjective and an noun, such as
-`popular-feast.cord.lab`. *The name will be different for every deployment.*
-The new node will be in the `New` state.
+Once it has been verified that the ubuntu boot image has been downloaded the
+compute nodes may be PXE booted.
 
-If you have properly configured power management for virtualbox (see below) the
-host will be automatically transitioned from `New` through the states of
-`Commissioning` and `Acquired` to `Deployed`.
+**Note:** *In order to ensure that the compute node PXE boot the bios settings
+may have to be adjusted. Additionally, the remote power management on the
+compute nodes must be enabled.*
+
+The compute node will boot, register with MAAS, and then be shut off. After this
+is complete an entry for the node will be in the MAAS UI at
+`http://head-node-ip-address/MAAS/#/nodes`. It will be given a random hostname
+made up, in the Canonical way, of a adjective and an noun, such as
+`popular-feast.cord.lab`. *The name will be different for every deployment.* The
+new node will be in the `New` state.
+
+As the machines boot they should be automatically transitioned from `New`
+through the states of `Commissioning` and `Acquired` to `Deployed`.
 
 ### Post Deployment Provisioning of the Compute Node
 Once the node is in the `Deployed` state, it will be provisioned for use in a
@@ -401,32 +400,40 @@ other values that status might hold are:
    - `3` - Failed, the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
 
-## Create and Boot False switch
-The VM based deployment includes the definition of a vagrant machine that will
-exercise some of the automation used to boot OpenFlow switches in the CORD POD.
-It accomplishes this by forcing the MAC address on the vagrant VM to be a MAC
-that is recognized as a supported OpenFlow switch.
-
-The POD automation will thus perform post provisioning on the this VM to
-download and install software to the device. This vagrant VM can be created
-with the following command:
-```
-vagrant up switch
-```
+# Booting OpenFlow switches
+Once the compute nodes have begun their boot process you may also boot the
+switches that support the leaf spine fabric. These switches should ONIE install
+boot and download their boot image from MAAS.
 
 ### Complete
 This step is complete when the command completes successfully. You can verify
 the provisioning of the false switch by querying the provisioning service
 using curl.
 ```
-curl -sS http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/cc:37:ab:00:00:01 | jq '[{ "status": .status, "name": .request.Info.name, "message": .message}]'
+curl -sS http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/ | jq '[.[] | { "status": .status, "name": .request.Info.name, "message": .message}]'
 [
   {
     "message": "",
-    "name": "fakeswitch",
+    "name": "leaf-1",
+    "status": 2
+  },
+  {
+    "message": "",
+    "name": "leaf-2",
+    "status": 2
+  },
+  {
+    "message": "",
+    "name": "spine-1",
+    "status": 2
+  },
+  {
+    "message": "",
+    "name": "spine-2",
     "status": 2
   }
 ]
+
 ```
 In the above a "status" of 2 means that the provisioning is complete. The
 other values that status might hold are:
@@ -437,23 +444,3 @@ other values that status might hold are:
    - `2` - Complete, the provisioning has been completed successfully
    - `3` - Failed, the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
-
-#### Virtual Box Power Management
-Virtual box power management is implemented via helper scripts that SSH to the
-virtual box host and execute `vboxmanage` commands. For this to work The scripts
-must be configured with a username and host to utilize when SSHing and that
-account must allow SSH from the head node guest to the host using SSH keys such
-that no password entry is required.
-
-To enable SSH key based login, assuming that VirtualBox is running on a Linux
-based system, you can copy the MAAS ssh public key from
-`/var/lib/maas/.ssh/id_rsa.pub` on the head known to your accounts
-`authorized_keys` files. You can verify that this is working by issuing the
-following commands from your host machine:
-```
-vagrant ssh headnode
-sudo su - maas
-ssh yourusername@host_ip_address
-```
-
-If you are able to accomplish these commands the VirtualBox power management should operate correctly.
