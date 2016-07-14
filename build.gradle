@@ -76,6 +76,12 @@ ext {
                     'tag':          null,
                     'componentDir': './components/platform-install'
             ],
+            'onosproject/onos': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'onosproject/onos',
+                    'digest':   'sha256:6c310b6bc798f745977973c8c883d3dd1eb250fd124ae4d627fd98a69efb5afc'
+            ],
             'nginx': [
                     'type':     'image',
                     'upstream': upstreamReg,
