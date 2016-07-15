@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5af74547_c947e44a",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-07-15T07:41:50Z",
+      "side": 1,
+      "message": "Still some references to \"maas\" and \"maasdev\"",
+      "revId": "56e1ffa273fc34620ed4a44c6717861acd5b76c2",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5af74547_e94aa054",
+        "filename": "docs/quickstart_vm.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-07-15T07:41:50Z",
+      "side": 1,
+      "message": "I believe that \"./gradlew deployPlatform\" is not expected to work in this scenario.  Do we want to take it out?",
+      "revId": "56e1ffa273fc34620ed4a44c6717861acd5b76c2",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
