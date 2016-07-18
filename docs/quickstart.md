@@ -155,7 +155,33 @@ steps:
  * Running `ping` in the client to a public IP address in the Internet
 
 Success of this test means that traffic is flowing between the subscriber
-household and the Internet via the vSG.
+household and the Internet via the vSG.  If it succeeds, the end of the test
+output should have some lines like this:
+
+```
+TASK [post-deploy-tests : Test external connectivity in test client] ***********
+Monday 18 July 2016  22:21:19 +0000 (0:00:04.381)       0:01:37.751 ***********
+changed: [128.104.222.194]
+
+TASK [post-deploy-tests : Output from ping test] *******************************
+Monday 18 July 2016  22:21:25 +0000 (0:00:05.603)       0:01:43.355 ***********
+ok: [128.104.222.194] => {
+    "pingtest.stdout_lines": [
+        "nova-compute-1 | SUCCESS | rc=0 >>",
+        "PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.",
+        "64 bytes from 8.8.8.8: icmp_seq=1 ttl=46 time=29.9 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=2 ttl=46 time=29.2 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=3 ttl=46 time=29.5 ms",
+        "",
+        "--- 8.8.8.8 ping statistics ---",
+        "3 packets transmitted, 3 received, 0% packet loss, time 2002ms",
+        "rtt min/avg/max/mdev = 29.254/29.567/29.910/0.334 ms"
+    ]
+}
+
+PLAY RECAP *********************************************************************
+128.104.222.194            : ok=15   changed=8    unreachable=0    failed=0
+```
 
 ### Optional cleanup
 
@@ -175,4 +201,3 @@ first CORD POD.
 You are now ready to bring up a multi-node POD with a real switching
 fabric and multiple physical compute nodes.  The process for doing so is described in
 [quickstart_physical.md](./quickstart_physical.md).
-
