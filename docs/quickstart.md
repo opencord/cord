@@ -6,8 +6,8 @@ of this demonstration POD is to enable those interested in understanding how COR
 examine and interact with a running CORD environment.  It is a good place for
 novice CORD users to start.
 
-[* NOTE: If you are looking for instructions on how to install a multi-node POD, you will
-find them in [quickstart_physical.md](./quickstart_physical.md). *]
+**NOTE:** *If you are looking for instructions on how to install a multi-node POD, you will
+find them in [quickstart_physical.md](./quickstart_physical.md).*
 
 Specifically, the tutorial covers the following:
 
@@ -45,10 +45,10 @@ If you do not have a target server available, you can borrow one on
 [CloudLab](https://www.cloudlab.us).  Sign up for an account using your organization's
 email address and choose "Join Existing Project"; for "Project Name" enter `cord-testdrive`.
 
-[*Note: CloudLab is supporting CORD as a courtesy.  It is expected that you will
+**NOTE:** *CloudLab is supporting CORD as a courtesy.  It is expected that you will
 not use CloudLab resources for purposes other than evaluating CORD.  If, after a
 week or two, you wish to continue using CloudLab to experiment with or develop CORD,
-then you must apply for your own separate CloudLab project.*]
+then you must apply for your own separate CloudLab project.*
 
 Once your account is approved, start an experiment using the `OnePC-Ubuntu14.04.4` profile
 on either the Wisconsin or Clemson cluster.  This will provide you with a temporary target server
@@ -122,13 +122,13 @@ Deploy the CORD software to the the target server and configure it to form a run
 > OpenStack services, ONOS, and XOS in VMs on the target server.  It also brings up
 > a compute node as a VM.
 
-Note that this step usually takes *at least an hour* to complete.  Be patient!
+This step usually takes *at least an hour* to complete.  Be patient!
 
 ### Complete
 
 This step is completed once the Ansible playbook finishes without errors.  If
 an error is encountered when running this step, the first thing to try is
-just running the above `gradlew` command again.  
+just running the above `gradlew` command again.
 
 Once the step completes, two instances of ONOS are running, in
 the `onos-cord-1` and `onos-fabric-1` VMs, though only `onos-cord-1` is used in
