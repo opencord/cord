@@ -1,16 +1,13 @@
 # CORD Quick Start Guide
 
-[*This description is for a stand-alone bare-metal target server.
-It brings up a CORD POD on virtual machines on a single physical host. The purpose
-of this solution is to enable those interested in understanding how CORD works to
+This tutorial guide walks through the steps to bring up a demonstration CORD "POD",
+running in virtual machines on a single physical server. The purpose
+of this demonstration POD is to enable those interested in understanding how CORD works to
 examine and interact with a running CORD environment.  It is a good place for
-novice CORD users to start.*]
+novice CORD users to start.
 
-[*NOTE: If you are looking for instructions on how to install a multi-node POD... (look where?) *]
-
-This tutorial walks you through the steps to bring up a CORD "POD" on
-a single bare-metal server.  This deployment uses a simulated fabric, but it is
-good to get a quick feel for what is involved and how CORD works.
+[* NOTE: If you are looking for instructions on how to install a multi-node POD, you will
+find them in [quickstart_physical.md](./quickstart_physical.md). *]
 
 Specifically, the tutorial covers the following:
 
@@ -146,7 +143,7 @@ After the single-node POD is set up, you can execute a set of basic health
 tests on the platform by running this command:
 
 ```
-./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml post-deploy-tests
+./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml postDeployTests
 ```
 
 Currently this tests the E2E connectivity of the POD by performing the following
@@ -175,12 +172,7 @@ vagrant destroy -f
 If you got this far, you successfully built, deployed, and tested your
 first CORD POD.
 
+You are now ready to bring up a multi-node POD with a real switching
+fabric and multiple physical compute nodes.  The process for doing so is described in
+[quickstart_physical.md](./quickstart_physical.md).
 
-### Further Steps
-
-[TODO]
-* Port forwarding for XOS login.  This should work:
-  * URL: `http://<target-server>/`
-  * Username: `padmin@vicci.org`
-  * Password: `letmein`
-* Add pointer to where to go next.  

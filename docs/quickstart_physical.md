@@ -5,6 +5,10 @@ repository to to deploy CORD on to a physical hardware rack. The artifacts in
 this repository will deploy CORD against a standard physical rack wired
 according to the **best practices** as defined in this document.
 
+[* NOTE: If you are new to CORD, you should start by bringing up a development
+POD on a single physical server to get familiar with the CORD deployment
+process.  Instructions to do so are in [quickstart.md](./quickstart.md). *]
+
 ## Physical configuration
 ![Physical Hardware Connectivity](images/physical.png)
 
