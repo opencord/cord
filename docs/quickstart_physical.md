@@ -57,64 +57,13 @@ rebooted. This guide assumes that the head node is being bootstrapped from a
 host outside of the POD.
 
 ## Create Development Environment
-The development environment is required for the other tasks in this repository.
-The other tasks could technically be done outside this Vagrant based development
-environment, but it would be left to the user to ensure connectivity and
-required tools are installed. It is far easier to leverage the Vagrant based
-environment.
 
-### Cloning the Repository
-To clone the repository select a location on the outside the POD (OtP) host and
-issue the `git` command to download (clone) the repository.
-```
-git clone http://gerrit.opencord.org/cord
-```
-When this is complete, a listing (`ls`) of this directory should yield output
-similar to:
-```
-ls
-LICENSE.txt        ansible/           components/        gradle/            gradlew.bat        utils/
-README.md          build.gradle       config/            gradle.properties  scripts/
-Vagrantfile        buildSrc/          docs/              gradlew*           settings.gradle
-```
-### Create Development Machine and Head Node Production Server
-To create the development machine the following single Vagrant command can be
-used. This will create an Ubuntu 14.04 LTS based virtual machine and install
-some basic required packages, such as Docker, Docker Compose, and
-Oracle Java 8.
-```
-vagrant up corddev
-```
-**NOTE:** *It may have several minutes for the first command `vagrant up
-corddev` to complete as it will include creating the VM as well as downloading
-and installing various software packages.*
+Follow the instructions in [devel_env_setup.md](./devel_env_setup.md) to set
+up the Vagrant development machine for CORD on your build host outside the
+POD (OtP).
 
-### Connect to the Development Machine
-To connect to the development machine the following vagrant command can be used.
-```
-vagrant ssh corddev
-```
-
-Once connected to the Vagrant machine, you can find the deployment artifacts
-in the `/cord` directory on the VM.
-```
-cd /cord
-```
-
-### Gradle
-[Gradle](https://gradle.org/) is the build tool that is used to help
-orchestrate the build and deployment of a POD. A *launch* script is included
-in the vagrant machine that will automatically download and install `gradle`.
-The script is called `gradlew` and the download / install will be invoked on
-the first use of this script; thus the first use may take a little longer
-than subsequent invocations and requires a connection to the internet.
-
-### Complete
-Once you have created and connected to the development environment this task is
-complete. The `cord` repository files can be found on the development machine
-under `/cord`. This directory is mounted from the host machine so changes
-made to files in this directory will be reflected on the host machine and
-vice-versa.
+The rest of the tasks in this guide are run from inside the Vagrant development
+machine, in the `/cord` directory.
 
 ## Fetch
 The fetching phase of the deployment pulls Docker images from the public
@@ -125,7 +74,7 @@ command:
 ./gradlew fetch
 ```
 
-### complete
+### Complete
 Once the fetch command has successfully been run, this step is complete. After
 this command completes you should be able to see the Docker images that were
 downloaded using the `docker images` command on the development machine:
@@ -137,6 +86,7 @@ consul              <none>              62f109a3299c        2 weeks ago         
 registry            2.4.0               8b162eee2794        9 weeks ago         171.1 MB
 abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       469.5 MB
 ```
+
 
 ## Build Images
 Bare metal provisioning leverages utilities built and packaged as Docker
