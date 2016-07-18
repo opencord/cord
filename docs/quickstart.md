@@ -20,7 +20,7 @@ Specifically, the tutorial covers the following:
 4. Run some tests on the platform
 5. Clean-up
 
-### What you need (Prerequisites)
+## What you need (Prerequisites)
 
 You will need a build machine (can be your developer laptop) and a target server.
 
@@ -59,48 +59,35 @@ meeting the above requirements.
 
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more information.
 
-### Bring up the CORD Build Environment
+## Create the development environment
 
-On the build host, clone the CORD integration repository anonymously and switch into its top directory:
+Follow the instructions in [devel_env_setup.md](./devel_env_setup.md) to set
+up the Vagrant development machine for CORD on your build host.  
 
-   ```
-   git clone https://gerrit.opencord.org/cord
-   cd cord
-   ```
+The rest of the tasks in this guide are run from inside the Vagrant development
+machine, in the `/cord` directory.
 
-If -- for whatever reason -- you decide to clone the repo as a private
-repository using ssh, then you should add your private key to your local ssh
-forwarding agent, because we will clone additional CORD repositories within
-the Vagrant environment using the same git access mode, and this will require your
-local agent to know your identity:
+## Fetch
+The fetching phase of the deployment pulls Docker images from the public
+repository down to the local machine as well as clones any `git` submodules
+that are part of the project. This phase can be initiated with the following
+command:
+```
+./gradlew fetch
+```
 
-   ```
-   ssh-add ~/.ssh/id_rsa
-   ```
-
-Bring up the standardized CORD build and development environment (VM). This will take a few minutes, depending on your connection speed:
-
-   ```
-   vagrant up corddev
-   ```
-
-Login to the build environment:
-
-   ```
-   vagrant ssh corddev
-   ```
-
-Switch to the CORD integration directory, which is shared from your host:
-
-   ```
-   cd /cord
-   ```
-
-Pre-fetch all pre-requisites needed to build all components for CORD. This step can take a while as a large number of images and files need to be downloaded.
-
-   ```
-   ./gradlew fetch
-   ```
+### Complete
+Once the fetch command has successfully been run, this step is complete. After
+this command completes you should be able to see the Docker images that were
+downloaded using the `docker images` command on the development machine:
+```
+docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+python              2.7-alpine          836fa7aed31d        5 days ago          56.45 MB
+consul              <none>              62f109a3299c        2 weeks ago         41.05 MB
+registry            2.4.0               8b162eee2794        9 weeks ago         171.1 MB
+abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       469.5 MB
+```
 
 ## Edit the configuration file
 
@@ -108,29 +95,29 @@ Edit the configuration file `/cord/components/platform-install/config/default.ym
 server as well as the `username / password` for accessing the server.  You can skip adding the password if you can SSH
 to the target server from inside the Vagrant VM as `username` without one (e.g., by running `ssh-agent`).
 
-Before proceeding, verify that you can SSH to the target server from the development environment using the
-above IP address, username, and password.  Also verify that the user account can `sudo` without a password.
+If you are planning on deploying the single-node POD to a CloudLab host, uncomment
+the following lines in the configuration file:
 
-Edit `/cord/gradle.properties` to add the following line:
+```
+#extraVars:
+#  - 'on_cloudlab=True'
+```
 
-   ```
-   deployConfig=/cord/components/platform-install/config/default.yml
-   ```
+This will signal the install process to set up extra disk space on the CloudLab
+node for use by CORD.
 
-If your target server is a CloudLab machine, uncomment the following two lines in the
-configuration file:
+### Complete
 
-   ```
-   #extraVars:
-   #  - 'on_cloudlab=True'
-  ```
+Before proceeding, verify that you can SSH to the target server from the development
+environment using the IP address, username, and password that you entered into the
+configuration file.  Also verify that the user account can `sudo` without a password.
 
-### Deploy the single-node CORD POD on the target server
+## Deploy the single-node CORD POD on the target server
 
 Deploy the CORD software to the the target server and configure it to form a running POD.
 
-   ```
-   ./gradlew deploySingle
+```
+./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml deploySingle
    ```
 > *What this does:*
 >
@@ -140,22 +127,48 @@ Deploy the CORD software to the the target server and configure it to form a run
 
 Note that this step usually takes *at least an hour* to complete.  Be patient!
 
-Execute a set of basic health tests on the platform:
+### Complete
 
-   ```
-   ./gradlew post-deploy-tests
-   ```
+This step is completed once the Ansible playbook finishes without errors.  If
+an error is encountered when running this step, the first thing to try is
+just running the above `gradlew` command again.  
 
+Once the step completes, two instances of ONOS are running, in
+the `onos-cord-1` and `onos-fabric-1` VMs, though only `onos-cord-1` is used in
+the single-node install.  OpenStack is also running on the target server with a virtual
+compute node called `nova-compute-1`.  Finally, XOS is running inside the `xos-1`
+VM and is controlling ONOS and OpenStack.  You can get a deeper understanding of
+the configuration of the target server by visiting [head_node_services.md](./head_node_services.md).
+
+## Run the post-deployment tests
+
+After the single-node POD is set up, you can execute a set of basic health
+tests on the platform by running this command:
+
+```
+./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml post-deploy-tests
+```
+
+Currently this tests the E2E connectivity of the POD by performing the following
+steps:
+ * Setting up a sample CORD subscriber in XOS
+ * Launch a vSG for that subscriber on the CORD POD
+ * Creating a test client, corresponding to a device in the subscriber's household
+ * Connecting the test client to the vSG using a simulated OLT
+ * Running `ping` in the client to a public IP address in the Internet
+
+Success of this test means that traffic is flowing between the subscriber
+household and the Internet via the vSG.
 
 ### Optional cleanup
 
-Exit from the build environment and destroy it:
+Once you are finished deploying the single-node POD, you can exit from the development
+environment on the build host and destroy it:
 
-   ```
-   exit
-   vagrant destroy -f
-   ```
-
+```
+exit
+vagrant destroy -f
+```
 
 ### Congratulations
 
