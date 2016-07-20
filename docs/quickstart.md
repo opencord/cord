@@ -137,16 +137,26 @@ compute node called `nova-compute-1`.  Finally, XOS is running inside the `xos-1
 VM and is controlling ONOS and OpenStack.  You can get a deeper understanding of
 the configuration of the target server by visiting [head_node_services.md](./head_node_services.md).
 
-## Run the post-deployment tests
+## Login to the CORD GUI and look around
 
-After the single-node POD is set up, you can execute a set of basic health
-tests on the platform by running this command:
+You can access the CORD GUI (provided by XOS) by pointing your browser to URL
+`http://<target-server>`, using username `padmin@vicci.org` and password `letmein`.
+
+The state of the system is that all CORD services have been onboarded to XOS (you
+can see them in the GUI by clicking _Services_ at left), but no
+CORD subscribers have been created yet.  To create a sample subscriber, proceed
+to the next step.
+
+## Run the post-deployment test
+
+After the single-node POD is set up, you can execute a basic health
+test on the platform by running this command:
 
 ```
 ./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml postDeployTests
 ```
 
-Currently this tests the E2E connectivity of the POD by performing the following
+This tests the E2E connectivity of the POD by performing the following
 steps:
  * Setting up a sample CORD subscriber in XOS
  * Launch a vSG for that subscriber on the CORD POD
@@ -154,7 +164,7 @@ steps:
  * Connecting the test client to the vSG using a simulated OLT
  * Running `ping` in the client to a public IP address in the Internet
 
-Success of this test means that traffic is flowing between the subscriber
+Success means that traffic is flowing between the subscriber
 household and the Internet via the vSG.  If it succeeds, the end of the test
 output should have some lines like this:
 
