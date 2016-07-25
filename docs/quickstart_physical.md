@@ -47,7 +47,7 @@ Ubuntu 14.04 LTS installed.
 **Note:** *This quick start guide has only been tested against Vagrant and
 VirtualBox, specially on MacOS.*
 
-## Bootstrapping the Head Node
+## Bootstrap the Head Node
 The head node is the key to the physical deployment of a CORD POD. The
 automated deployment of the physical POD is designed such that the head node is
 manually deployed, with the aid of automation tools, such as Ansible and from
@@ -58,16 +58,77 @@ deploying from the head to the head node. The procedure in each scenario is
 slightly different because during the bootstrapping of the head node it is
 possible that the interfaces needed to be renamed and the system to be
 rebooted. This guide assumes that the head node is being bootstrapped from a
-host outside of the POD.
+host outside of the POD (OtP).
 
-## Create Development Environment
+## Clone the Repository
+To clone the repository, on your OtP build host issue the `git` command:
+```
+git clone http://gerrit.opencord.org/cord
+```
 
-Follow the instructions in [devel_env_setup.md](./devel_env_setup.md) to set
-up the Vagrant development machine for CORD on your build host outside the
-POD (OtP).
+### Complete
+When this is complete, a listing (`ls`) of this directory should yield output
+similar to:
+```
+ls
+LICENSE.txt        ansible/           components/        gradle/            gradlew.bat        utils/
+README.md          build.gradle       config/            gradle.properties  scripts/
+Vagrantfile        buildSrc/          docs/              gradlew*           settings.gradle
+```
+## Create the Development Machine
 
-The rest of the tasks in this guide are run from inside the Vagrant development
-machine, in the `/cord` directory.
+The development environment is required for the tasks in this repository.
+This environment leverages [Vagrant](https://www.vagrantup.com/docs/getting-started/)
+to install the tools required to build and deploy the CORD software.
+
+To create the development machine the following  Vagrant command can be
+used. This will create an Ubuntu 14.04 LTS based virtual machine and install
+some basic required packages, such as Docker, Docker Compose, and
+Oracle Java 8.
+```
+vagrant up corddev
+```
+**NOTE:** *It may takes several minutes for the first command `vagrant up
+corddev` to complete as it will include creating the VM as well as downloading
+and installing various software packages.*
+
+### Complete
+
+Once the Vagrant VM is created and provisioned, you will see output ending
+with:
+```
+==> corddev: PLAY RECAP *********************************************************************
+==> corddev: localhost                  : ok=29   changed=25   unreachable=0    failed=0
+==> corddev: Configuring cache buckets...
+```
+
+## Connect to the Development Machine
+To connect to the development machine the following vagrant command can be used.
+```
+vagrant ssh corddev
+```
+
+Once connected to the Vagrant machine, you can find the deployment artifacts
+in the `/cord` directory on the VM.
+```
+cd /cord
+```
+
+### Gradle
+[Gradle](https://gradle.org/) is the build tool that is used to help
+orchestrate the build and deployment of a POD. A *launch* script is included
+in the Vagrant machine that will automatically download and install `gradle`.
+The script is called `gradlew` and the download / install will be invoked on
+the first use of this script; thus the first use may take a little longer
+than subsequent invocations and requires a connection to the internet.
+
+### Complete
+Once you have created and connected to the development environment this task is
+complete. The `cord` repository files can be found on the development machine
+under `/cord`. This directory is mounted from the host machine so changes
+made to files in this directory will be reflected on the host machine and
+vice-versa.
+
 
 ## Fetch
 The fetching phase of the deployment pulls Docker images from the public
@@ -177,7 +238,7 @@ docker registry on the target server allows the deployment process to push
 images to the target server that are used in the reset of the process, thus
 making the head node a self contained deployment.
 ```
-./gradew -PdeployConfig=config/podX.yml prime
+./gradlew -PdeployConfig=config/podX.yml prime
 ```
 
 ### Complete
@@ -197,7 +258,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradew -PtargetReg=<head-node-ip-address>:5000 publish
+./gradlew -PtargetReg=<head-node-ip-address>:5000 publish
 ```
 
 ### Complete
@@ -287,10 +348,10 @@ The proposed configuration for a CORD POD is has the following network configura
 
    - eth0 / eth1 - 40G interfaces, not relevant for the test environment.
    - eth2 - the interface on which the head node supports PXE boots and is an internally interface to which all
-            the compute nodes connected
+   the compute nodes connected
    - eth3 - WAN link. the head node will NAT from eth2 to eth3
    - mgmtbr - Not associated with a physical network and used to connect in the VM created by the openstack
-              install that is part of XOS
+   install that is part of XOS
 
 The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and mgmtbr interfaces.
 
