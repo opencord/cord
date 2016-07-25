@@ -19,9 +19,10 @@ Specifically, the tutorial covers the following:
 
 ## What you need (Prerequisites)
 
-You will need a build machine (can be your developer laptop) and a target server.
+You will need a *build host* (e.g., your laptop) and a *target server*.  The build host will run
+a development environment in a Vagrant VM that will be used to deploy CORD to the target server.
 
-Build host:
+Build host requirements:
 
 * Mac OS X, Linux, or Windows with a 64-bit OS
 * [`git`](https://git-scm.com/) (2.5.4 or later)
@@ -29,7 +30,7 @@ Build host:
 * Access to the Internet
 * SSH access to the target server
 
-Target server:
+Target server requirements:
 
 * 64-bit server, with
   * 48GB+ RAM
@@ -39,9 +40,9 @@ Target server:
 * Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to install Ubuntu 14.04).
 * Account used to SSH from build host has password-less *sudo* capability (e.g., like the `ubuntu` user)
 
-### Running on CloudLab (optional)
+### Target Server on CloudLab (optional)
 
-If you do not have a target server available, you can borrow one on
+If you do not have a target server available that meets the above requirements, you can borrow one on
 [CloudLab](https://www.cloudlab.us).  Sign up for an account using your organization's
 email address and choose "Join Existing Project"; for "Project Name" enter `cord-testdrive`.
 
@@ -56,13 +57,74 @@ meeting the above requirements.
 
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more information.
 
-## Create the development environment
+## Clone the Repository
+To clone the repository, on your build host issue the `git` command:
+```
+git clone http://gerrit.opencord.org/cord
+```
 
-Follow the instructions in [devel_env_setup.md](./devel_env_setup.md) to set
-up the Vagrant development machine for CORD on your build host.  
+### Complete
+When this is complete, a listing (`ls`) of this directory should yield output
+similar to:
+```
+ls
+LICENSE.txt        ansible/           components/        gradle/            gradlew.bat        utils/
+README.md          build.gradle       config/            gradle.properties  scripts/
+Vagrantfile        buildSrc/          docs/              gradlew*           settings.gradle
+```
+## Create the Development Machine
 
-The rest of the tasks in this guide are run from inside the Vagrant development
-machine, in the `/cord` directory.
+The development environment is required for the tasks in this repository.
+This environment leverages [Vagrant](https://www.vagrantup.com/docs/getting-started/)
+to install the tools required to build and deploy the CORD software.
+
+To create the development machine the following  Vagrant command can be
+used. This will create an Ubuntu 14.04 LTS based virtual machine and install
+some basic required packages, such as Docker, Docker Compose, and
+Oracle Java 8.
+```
+vagrant up corddev
+```
+**NOTE:** *It may takes several minutes for the first command `vagrant up
+corddev` to complete as it will include creating the VM as well as downloading
+and installing various software packages.*
+
+### Complete
+
+Once the Vagrant VM is created and provisioned, you will see output ending
+with:
+```
+==> corddev: PLAY RECAP *********************************************************************
+==> corddev: localhost                  : ok=29   changed=25   unreachable=0    failed=0
+==> corddev: Configuring cache buckets...
+```
+
+## Connect to the Development Machine
+To connect to the development machine the following vagrant command can be used.
+```
+vagrant ssh corddev
+```
+
+Once connected to the Vagrant machine, you can find the deployment artifacts
+in the `/cord` directory on the VM.
+```
+cd /cord
+```
+
+### Gradle
+[Gradle](https://gradle.org/) is the build tool that is used to help
+orchestrate the build and deployment of a POD. A *launch* script is included
+in the Vagrant machine that will automatically download and install `gradle`.
+The script is called `gradlew` and the download / install will be invoked on
+the first use of this script; thus the first use may take a little longer
+than subsequent invocations and requires a connection to the internet.
+
+### Complete
+Once you have created and connected to the development environment this task is
+complete. The `cord` repository files can be found on the development machine
+under `/cord`. This directory is mounted from the host machine so changes
+made to files in this directory will be reflected on the host machine and
+vice-versa.
 
 ## Fetch
 The fetching phase of the deployment pulls Docker images from the public
@@ -140,7 +202,7 @@ the configuration of the target server by visiting [head_node_services.md](./hea
 ## Login to the CORD GUI and look around
 
 You can access the CORD GUI (provided by XOS) by pointing your browser to URL
-`http://<target-server>`, using username `padmin@vicci.org` and password `letmein`.
+`http://<target-server>:8888`, using username `padmin@vicci.org` and password `letmein`.
 
 The state of the system is that all CORD services have been onboarded to XOS (you
 can see them in the GUI by clicking _Services_ at left), but no
