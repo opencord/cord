@@ -300,7 +300,8 @@ CORD and will be deployed on the head node.
 ```
 
 This task can take some time so be patient. It should complete without errors,
-so if an error is encountered something went horrible wrong (tm).
+so if an error is encountered something went Horribly Wrong (tm).  See the
+[Getting Help](#Getting Help) section.
 
 ### Complete
 This step is complete when the command successfully runs. The Web UI for MAAS
@@ -335,7 +336,8 @@ XOS to the head node use the following command:
 ```
 
 This task can take some time so be patient. It should complete without errors,
-so if an error is encountered something went horrible wrong (tm).
+so if an error is encountered something went Horribly Wrong (tm).  See
+the [Getting Help](#Getting Help) section.
 
 ### Complete
 This step is complete when the command successfully runs. The deployment of XOS
@@ -376,6 +378,7 @@ through the states of `Commissioning` and `Acquired` to `Deployed`.
 Once the node is in the `Deployed` state, it will be provisioned for use in a
 CORD POD by the execution of an `Ansible` playbook.
 
+
 ### Complete
 Once the compute node is in the `Deployed` state and post deployment provisioning on the compute node is
 complete, this task is complete.
@@ -415,7 +418,7 @@ other values that status might hold are:
    - `3` - Failed, the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
 
-# Booting OpenFlow switches
+## Booting OpenFlow switches
 Once the compute nodes have begun their boot process you may also boot the
 switches that support the leaf spine fabric. These switches should ONIE install
 boot and download their boot image from MAAS.
@@ -459,3 +462,183 @@ other values that status might hold are:
    - `2` - Complete, the provisioning has been completed successfully
    - `3` - Failed, the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
+
+## Post Deployment Configuration of XOS and ONOS
+
+Currently, after the compute nodes are provisioned, some manual configuration is required of the ONOS
+services in XOS.  It is expected that this process will be automated in the future, but for the time
+being the following steps must be carried out.
+
+### VTN Configuration
+
+XOS maintains the network configuration of the ONOS VTN app and pushes this configuration to ONOS.  Information
+for new nodes must be manually added to XOS.  XOS will generate the VTN network configuration
+from this information and push it to ONOS.
+
+On the XOS head node, login to the XOS VM and change to the `service-profiles/cord-pod` directory:
+
+```
+ssh ubuntu@xos
+cd service-profiles/cord-pod
+```
+
+A script called `make-vtn-external-yaml.sh` can be used to create a TOSCA template for the VTN
+information maintained by XOS.  To run it:
+
+```
+rm vtn-external.yaml; make vtn-external.yaml
+```
+
+This will generate a TOSCA file called `vtn-external.yaml` that is used to store the network
+information required by VTN in XOS.  The information in this TOSCA file closely maps onto the
+fields in the [VTN ONOS app's network configuration](https://wiki.opencord.org/display/CORD/Network+Config+Guide).  For
+example, in `vtn-external.yaml`, under the
+*properties* field of *service#vtn*, you will see fields such as *privateGatewayMac*, *localManagementIp*,
+and *ovsdbPort*; these correspond to the fields of the same name in VTN's network configuration.
+
+The `vtn-external.yaml` file is generated with the information that applies to the single-node CORD POD.  You
+will need to change the values of some fields in this file for your POD.  For each OpenStack compute
+node (e.g., *nova-compute-1.cord.lab*), you will see the following in `vtn-external.yaml`:
+
+```
+    nova-compute-1.cord.lab:
+      type: tosca.nodes.Node
+
+    # VTN bridgeId field for node nova-compute-1.cord.lab
+    nova-compute-1.cord.lab_bridgeId_tag:
+      type: tosca.nodes.Tag
+      properties:
+          name: bridgeId
+          value: of:0000000000000001
+      requirements:
+          - target:
+              node: nova-compute-1.cord.lab
+              relationship: tosca.relationships.TagsObject
+          - service:
+              node: service#ONOS_CORD
+              relationship: tosca.relationships.MemberOfService
+
+    # VTN dataPlaneIntf field for node nova-compute-1.cord.lab
+    nova-compute-1.cord.lab_dataPlaneIntf_tag:
+      type: tosca.nodes.Tag
+      properties:
+          name: dataPlaneIntf
+          value: fabric
+      requirements:
+          - target:
+              node: nova-compute-1.cord.lab
+              relationship: tosca.relationships.TagsObject
+          - service:
+              node: service#ONOS_CORD
+              relationship: tosca.relationships.MemberOfService
+
+    # VTN dataPlaneIp field for node nova-compute-1.cord.lab
+    nova-compute-1.cord.lab_dataPlaneIp_tag:
+      type: tosca.nodes.Tag
+      properties:
+          name: dataPlaneIp
+          value: 10.168.0.253/24
+      requirements:
+          - target:
+              node: nova-compute-1.cord.lab
+              relationship: tosca.relationships.TagsObject
+          - service:
+              node: service#ONOS_CORD
+              relationship: tosca.relationships.MemberOfService
+```
+
+The above YAML stores node-specific fields required by VTN:
+   - *bridgeId*: the unique device ID of the integration bridge
+   - *dataPlaneIntf*: data network interface
+   - *dataPlaneIp*: data network IP of the machine
+
+You will need to edit the above values to reflect the desired configuration for each compute node.  For
+more details on the format of VTN's network configuration, see
+[the VTN Network Configuration Guide](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
+
+### Fabric Gateway Configuration
+To configure the fabric gateway, you will need to edit the file `cord-services.yaml` in the same directory
+(`service-profile/cord-pod`).  You will see a section that looks like this:
+
+```
+    addresses_vsg:
+      type: tosca.nodes.AddressPool
+      properties:
+          addresses: 10.168.0.0/24
+          gateway_ip: 10.168.0.1
+          gateway_mac: 02:42:0a:a8:00:01
+```
+
+Edit this section so that it reflects the fabric's address block assigned to the vSGs, as well
+as the gateway IP and MAC address that the vSGs should use to reach the Internet.
+
+### Update Information in XOS
+
+Once the `vtn-external.yaml` and `cord-services.yaml` files have been edited as described above,
+push them to XOS by running the following in the `service-profile/cord-pod` directory:
+
+```
+make vtn
+make cord
+```
+
+### Complete
+
+This step is complete once you see the new information for the VTN app in XOS and ONOS.
+
+To check the VTN configuration maintained by XOS:
+   - Go to the "ONOS apps" page in the CORD GUI:
+      - URL: `http://<head-node>:8888/admin/onos/onosapp/`
+      - Username: `padmin@vicci.org`
+      - Password: `letmein`
+   - Select *VTN_ONOS_app* in the table
+   - Verfy that the *Backend status text* has a green check with the message *successfully enacted*
+   - Select *Attributes* tab
+   - Look for the *rest_onos/v1/network/configuration/* attribute.  Verify that its value looks correct for the VTN app's network configuration.
+
+To check that the network configuration has been successfully pushed
+to the ONOS VTN app and processed by it:
+
+   - Log into ONOS from the head node
+      - Command: `ssh -p 8101 karaf@onos-cord`
+      - Password: `karaf`
+   - Run the `cordvtn-nodes` command
+   - Verify that the information for all nodes is correct
+   - Verify that the initialization status of all nodes is *COMPLETE*
+
+This will look like the following:
+
+```
+$ ssh -p 8101 karaf@onos-cord
+Password authentication
+Password: # the password is 'karaf'
+Welcome to Open Network Operating System (ONOS)!
+     ____  _  ______  ____
+    / __ \/ |/ / __ \/ __/
+   / /_/ /    / /_/ /\ \
+   \____/_/|_/\____/___/
+
+Documentation: wiki.onosproject.org
+Tutorials:     tutorials.onosproject.org
+Mailing lists: lists.onosproject.org
+
+Come help out! Find out how at: contribute.onosproject.org
+
+Hit '<tab>' for a list of available commands
+and '[cmd] --help' for help on a specific command.
+Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
+
+onos> cordvtn-nodes
+hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.168.0.253/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
+Total 1 nodes
+```
+
+## Getting Help
+
+If it seems that something has gone wrong with your setup, there are a number of ways that you
+can get	help --	in the documentation on the [OpenCORD wiki](https://wiki.opencord.org),	on the
+[OpenCORD Slack channel](https://opencord.slack.com) (get an invitation [here](https://slackin.opencord.org),
+or on the [CORD-discuss mailing list](https://groups.google.com/a/opencord.org/forum/#!forum/cord-discuss).
+
+See the	[How to	Contribute to CORD wiki page](https://wiki.opencord.org/display/CORD/How+to+Contribute+to+CORD#HowtoContributetoCORD-AskingQuestions)
+for more information.
