@@ -301,7 +301,7 @@ CORD and will be deployed on the head node.
 
 This task can take some time so be patient. It should complete without errors,
 so if an error is encountered something went Horribly Wrong (tm).  See the
-[Getting Help](#Getting Help) section.
+[Getting Help](#getting-help) section.
 
 ### Complete
 This step is complete when the command successfully runs. The Web UI for MAAS
@@ -337,7 +337,7 @@ XOS to the head node use the following command:
 
 This task can take some time so be patient. It should complete without errors,
 so if an error is encountered something went Horribly Wrong (tm).  See
-the [Getting Help](#Getting Help) section.
+the [Getting Help](#getting-help) section.
 
 ### Complete
 This step is complete when the command successfully runs. The deployment of XOS
@@ -465,22 +465,49 @@ other values that status might hold are:
 
 ## Post Deployment Configuration of XOS and ONOS
 
-Currently, after the compute nodes are provisioned, some manual configuration is required of the ONOS
-services in XOS.  It is expected that this process will be automated in the future, but for the time
-being the following steps must be carried out.
+The compute node provisioning process described above (under [Booting Compute Nodes](#booting-compute-nodes))
+will install the servers as OpenStack compute nodes.  You should be able to see them on the CORD head node
+by running the following commands:
+```
+source ~/admin-openrc.sh
+nova hypervisor-list
+```
+
+You will see output like the following (showing each of the nodes you have provisioned):
+
+```
++----+-------------------------+
+| ID | Hypervisor hostname     |
++----+-------------------------+
+| 1  | nova-compute-1.cord.lab |
++----+-------------------------+
+```
+
+However, after the compute nodes are provisioned, currently some additional manual configuration is required to set up the ONOS
+services in XOS.  We intend to automate this process in the future, but for the time being the following steps must be carried out.
+
+To prepare to run these steps, on the CORD head node, login to the XOS VM and change to the `service-profiles/cord-pod` directory:
+
+```
+ssh ubuntu@xos
+cd service-profiles/cord-pod
+```
+
+All of the steps listed below are run in this directory.
+
+### Add the Nodes to XOS
+
+To create entries for the newly provisioned nodes in XOS, run the following command:
+
+```
+make new-nodes
+```
 
 ### VTN Configuration
 
 XOS maintains the network configuration of the ONOS VTN app and pushes this configuration to ONOS.  Information
 for new nodes must be manually added to XOS.  XOS will generate the VTN network configuration
 from this information and push it to ONOS.
-
-On the XOS head node, login to the XOS VM and change to the `service-profiles/cord-pod` directory:
-
-```
-ssh ubuntu@xos
-cd service-profiles/cord-pod
-```
 
 A script called `make-vtn-external-yaml.sh` can be used to create a TOSCA template for the VTN
 information maintained by XOS.  To run it:
@@ -557,8 +584,8 @@ more details on the format of VTN's network configuration, see
 [the VTN Network Configuration Guide](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
 
 ### Fabric Gateway Configuration
-To configure the fabric gateway, you will need to edit the file `cord-services.yaml` in the same directory
-(`service-profile/cord-pod`).  You will see a section that looks like this:
+To configure the fabric gateway, you will need to edit the file `cord-services.yaml`.
+You will see a section that looks like this:
 
 ```
     addresses_vsg:
@@ -575,7 +602,7 @@ as the gateway IP and MAC address that the vSGs should use to reach the Internet
 ### Update Information in XOS
 
 Once the `vtn-external.yaml` and `cord-services.yaml` files have been edited as described above,
-push them to XOS by running the following in the `service-profile/cord-pod` directory:
+push them to XOS by running the following:
 
 ```
 make vtn
@@ -637,7 +664,7 @@ Total 1 nodes
 
 If it seems that something has gone wrong with your setup, there are a number of ways that you
 can get	help --	in the documentation on the [OpenCORD wiki](https://wiki.opencord.org),	on the
-[OpenCORD Slack channel](https://opencord.slack.com) (get an invitation [here](https://slackin.opencord.org),
+[OpenCORD Slack channel](https://opencord.slack.com) (get an invitation [here](https://slackin.opencord.org)),
 or on the [CORD-discuss mailing list](https://groups.google.com/a/opencord.org/forum/#!forum/cord-discuss).
 
 See the	[How to	Contribute to CORD wiki page](https://wiki.opencord.org/display/CORD/How+to+Contribute+to+CORD#HowtoContributetoCORD-AskingQuestions)
