@@ -99,8 +99,8 @@ with:
 ```
 ==> corddev: PLAY RECAP *********************************************************************
 ==> corddev: localhost                  : ok=29   changed=25   unreachable=0    failed=0
-==> corddev: Configuring cache buckets...
 ```
+The important thing is that the *unreachable* and *failed* counts are both zero.
 
 ## Connect to the Development Machine
 To connect to the development machine the following vagrant command can be used.
@@ -463,7 +463,7 @@ other values that status might hold are:
    - `3` - Failed, the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
 
-## Post Deployment Configuration of XOS and ONOS
+## Post Deployment Configuration of XOS / ONOS VTN app
 
 The compute node provisioning process described above (under [Booting Compute Nodes](#booting-compute-nodes))
 will install the servers as OpenStack compute nodes.  You should be able to see them on the CORD head node
@@ -659,6 +659,19 @@ onos> cordvtn-nodes
 hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.168.0.253/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
 Total 1 nodes
 ```
+
+## Post Deployment Configuration of the ONOS Fabric
+
+Configuring the switching fabric for use with CORD is documented in the
+[Fabric Configuration Guide](https://wiki.opencord.org/display/CORD/Fabric+Configuration+Guide) on the OpenCORD wiki.
+
+The
+[CORD-Integrated Fabric](https://wiki.opencord.org/display/CORD/Fabric+Configuration+Guide#FabricConfigurationGuide-CORD-IntegratedFabric)
+section of the guide details how to load the modified fabric configuration into XOS and ONOS.
+
+### Complete
+
+This step is complete when each compute node can ping the fabric IP address of all the other nodes.
 
 ## Getting Help
 
