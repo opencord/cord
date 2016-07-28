@@ -63,7 +63,7 @@ host outside of the POD (OtP).
 ## Clone the Repository
 To clone the repository, on your OtP build host issue the `git` command:
 ```
-git clone -b cord-1.0 http://gerrit.opencord.org/cord
+git clone http://gerrit.opencord.org/cord
 ```
 
 ### Complete
@@ -420,7 +420,7 @@ other values that status might hold are:
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
-](#re-provision-copute-nodes-and-switches)
+](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized compute node.
 
 ## Booting OpenFlow switches
@@ -469,7 +469,7 @@ other values that status might hold are:
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
-](#re-provision-copute-nodes-and-switches)
+](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized switch.
 
 ## Post Deployment Configuration of XOS / ONOS VTN app
