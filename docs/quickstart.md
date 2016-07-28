@@ -202,60 +202,82 @@ the configuration of the target server by visiting [head_node_services.md](./hea
 ## Login to the CORD GUI and look around
 
 You can access the CORD GUI (provided by XOS) by pointing your browser to URL
-`http://<target-server>:8888`, using username `padmin@vicci.org` and password `letmein`.
+`http://<target-server>`, using username `padmin@vicci.org` and password `letmein`.
 
 The state of the system is that all CORD services have been onboarded to XOS (you
 can see them in the GUI by clicking _Services_ at left), but no
 CORD subscribers have been created yet.  To create a sample subscriber, proceed
 to the next step.
 
-## Run the post-deployment test
+## Run the post-deployment tests
 
-After the single-node POD is set up, you can execute a basic health
-test on the platform by running this command:
+After the single-node POD is set up, you can execute basic health
+tests on the platform by running this command:
 
 ```
 ./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml postDeployTests
 ```
 
+### test-vsg
+
 This tests the E2E connectivity of the POD by performing the following
 steps:
- * Setting up a sample CORD subscriber in XOS
- * Launch a vSG for that subscriber on the CORD POD
- * Creating a test client, corresponding to a device in the subscriber's household
- * Connecting the test client to the vSG using a simulated OLT
- * Running `ping` in the client to a public IP address in the Internet
+ * Sets up a sample CORD subscriber in XOS
+ * Launches a vSG for that subscriber on the CORD POD
+ * Creates a test client, corresponding to a device in the subscriber's household
+ * Connects the test client to the vSG using a simulated OLT
+ * Runs `ping` in the client to a public IP address in the Internet
 
 Success means that traffic is flowing between the subscriber
-household and the Internet via the vSG.  If it succeeds, the end of the test
-output should have some lines like this:
+household and the Internet via the vSG.  If it succeeds, you should see some
+lines like these in the output:
 
 ```
-TASK [post-deploy-tests : Test external connectivity in test client] ***********
-Monday 18 July 2016  22:21:19 +0000 (0:00:04.381)       0:01:37.751 ***********
-changed: [128.104.222.194]
-
-TASK [post-deploy-tests : Output from ping test] *******************************
-Monday 18 July 2016  22:21:25 +0000 (0:00:05.603)       0:01:43.355 ***********
-ok: [128.104.222.194] => {
+TASK [test-vsg : Output from ping test] ****************************************
+Thursday 28 July 2016  15:00:17 -0600 (0:00:03.367)       0:01:20.075 *********
+ok: [localhost] => {
     "pingtest.stdout_lines": [
         "nova-compute-1 | SUCCESS | rc=0 >>",
         "PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.",
-        "64 bytes from 8.8.8.8: icmp_seq=1 ttl=46 time=29.9 ms",
-        "64 bytes from 8.8.8.8: icmp_seq=2 ttl=46 time=29.2 ms",
-        "64 bytes from 8.8.8.8: icmp_seq=3 ttl=46 time=29.5 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=1 ttl=45 time=5.30 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=2 ttl=45 time=5.29 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=3 ttl=45 time=5.36 ms",
         "",
         "--- 8.8.8.8 ping statistics ---",
-        "3 packets transmitted, 3 received, 0% packet loss, time 2002ms",
-        "rtt min/avg/max/mdev = 29.254/29.567/29.910/0.334 ms"
+        "3 packets transmitted, 3 received, 0% packet loss, time 2003ms",
+        "rtt min/avg/max/mdev = 5.295/5.320/5.365/0.031 ms"
     ]
 }
-
-PLAY RECAP *********************************************************************
-128.104.222.194            : ok=15   changed=8    unreachable=0    failed=0
 ```
 
-### Optional cleanup
+### test-exampleservice
+
+This test builds on `test-vsg` by loading the *exampleservice* described in the
+[Tutorial on Assembling and On-Boarding Services](https://wiki.opencord.org/display/CORD/Assembling+and+On-Boarding+Services%3A+A+Tutorial).
+The purpose of the *exampleservice* is to demonstrate how new subscriber-facing services
+can be easily deployed to a CORD POD. This test performs the following steps:
+ * On-boards *exampleservice* into the CORD POD
+ * Creates an *exampleservice* tenant, which causes a VM to be created and Apache to be loaded and configured inside
+ * Runs a `curl` from the subscriber test client, through the vSG, to the Apache server.
+
+Success means that the Apache server launched by the *exampleservice* tenant is fully configured
+and is reachable from the subscriber client via the vSG.  If it succeeds, you should see some
+lines like these in the output:
+
+```
+TASK [test-exampleservice : Output from curl test] *****************************
+Thursday 28 July 2016  15:01:43 -0600 (0:00:01.441)       0:02:46.634 *********
+ok: [localhost] => {
+    "curltest.stdout_lines": [
+        "nova-compute-1 | SUCCESS | rc=0 >>",
+        "ExampleService",
+        " Service Message: \"hello\"",
+        " Tenant Message: \"world\""
+    ]
+}
+```
+
+## Optional cleanup
 
 Once you are finished deploying the single-node POD, you can exit from the development
 environment on the build host and destroy it:
@@ -265,7 +287,7 @@ exit
 vagrant destroy -f
 ```
 
-### Congratulations
+## Congratulations
 
 If you got this far, you successfully built, deployed, and tested your
 first CORD POD.
