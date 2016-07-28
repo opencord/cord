@@ -307,13 +307,13 @@ so if an error is encountered something went Horribly Wrong (tm).  See the
 ### Complete
 This step is complete when the command successfully runs. The Web UI for MAAS
 can be viewed by browsing to the target machine using a URL of the form
-`http://head-node-ip-address/MAAS`.
+`http://head-node-ip-address:5240/MAAS`.
 
 After the `deployBase` command install `MAAS`, it initiates the download of
 an Ubuntu 14.04 boot image that will be used to boot the other POD servers.
 This download can take some time and the process cannot continue until the
 download is complete. The status of the download can be verified through
-the UI by visiting the URL `http://head-node-ip-address/MAAS/images/`,
+the UI by visiting the URL `http://head-node-ip-address:5240/MAAS/images/`,
 or via the command line from head node via the following commands:
 ```
 APIKEY=$(sudo maas-region-admin apikey --user=cord)
@@ -367,7 +367,7 @@ compute nodes must be enabled.*
 
 The compute node will boot, register with MAAS, and then be shut off. After this
 is complete an entry for the node will be in the MAAS UI at
-`http://head-node-ip-address/MAAS/#/nodes`. It will be given a random hostname
+`http://head-node-ip-address:5240/MAAS/#/nodes`. It will be given a random hostname
 made up, in the Canonical way, of a adjective and an noun, such as
 `popular-feast.cord.lab`. *The name will be different for every deployment.* The
 new node will be in the `New` state.
