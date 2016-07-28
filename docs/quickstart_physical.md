@@ -671,6 +671,35 @@ Total 1 nodes
 
 ## Post Deployment Configuration of the ONOS Fabric
 
+### Manully Configure IP Address on the Compute Node `fabric` Interface
+The IP address on the compute node fabric interface need to be manually configured now.
+Here is the list of IP addresses we are going to use for this pod.
+```
+compute-1: 10.6.1.1/24 gw 10.6.1.254
+compute-2: 10.6.1.2/24 gw 10.6.1.254
+compute-3: 10.6.2.1/24 gw 10.6.2.254
+compute-4: 10.6.2.2/24 gw 10.6.2.254
+```
+To configure the IP address, you need to log in to the compute node and edit `/etc/network/interfaces`.
+Take `compute-1` for example
+```
+auto fabric
+iface fabric inet static
+  address 10.6.1.1
+  network 10.6.1.0
+  netmask 255.255.255.0
+  bond-mode active-backup
+  bond-miimon 100
+  bond-slaves none
+```
+Restart the interfaces to apply the change.
+```
+sudo ifdown fabric
+sudo ifup eth0
+sudo ifup eth1
+```
+
+### Modify and Apply Fabric Configuration
 Configuring the switching fabric for use with CORD is documented in the
 [Fabric Configuration Guide](https://wiki.opencord.org/display/CORD/Fabric+Configuration+Guide) on the OpenCORD wiki.
 
@@ -742,6 +771,25 @@ onos> netcfg
       }
     },
 ... etc.
+```
+
+### Connect Switches to the controller
+We need to manually connects the switches to ONOS after the network config is applied.
+Locate the switches by running the following command on the haed node.
+```
+admin@cord-head-1:~$ cat /etc/bind/maas/dhcp_harvest.inc | grep onl
+onl-x86-CC37AB6182D2    IN A 10.6.0.11 ; cc:37:ab:61:82:d2
+onl-x86-CC37AB617EC2    IN A 10.6.0.17 ; cc:37:ab:61:7e:c2
+onl-x86-CC37AB6180CA    IN A 10.6.0.8 ; cc:37:ab:61:80:ca
+onl-x86-CC37AB618048    IN A 10.6.0.18 ; cc:37:ab:61:80:48
+```
+Log in to each switch (default user/pass is root/onl) and run the following command
+```
+/root/connect -bg
+```
+If something goes wrong and you need to reconnect the switch to the controller, run
+```
+/root/killit && /root/purge && /root/connect -bg
 ```
 
 ### Complete
