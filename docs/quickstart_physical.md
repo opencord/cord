@@ -420,7 +420,7 @@ other values that status might hold are:
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
-](#re-provision-copute-nodes-and-switches)
+](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized compute node.
 
 ## Booting OpenFlow switches
@@ -469,7 +469,7 @@ other values that status might hold are:
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
-](#re-provision-copute-nodes-and-switches)
+](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized switch.
 
 ## Post Deployment Configuration of XOS / ONOS VTN app
