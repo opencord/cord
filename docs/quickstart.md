@@ -60,7 +60,7 @@ Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more informa
 ## Clone the Repository
 To clone the repository, on your build host issue the `git` command:
 ```
-git clone http://gerrit.opencord.org/cord
+git clone -b cord-1.0 http://gerrit.opencord.org/cord
 ```
 
 ### Complete
