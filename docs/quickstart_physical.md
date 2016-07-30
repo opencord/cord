@@ -667,6 +667,7 @@ Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
 onos> cordvtn-nodes
 hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.168.0.253/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
 Total 1 nodes
+```
 
 ### Troubleshoot
 If the compute node is not initialized properly (i.e. not in the COMPLETE state):
