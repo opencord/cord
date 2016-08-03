@@ -778,22 +778,11 @@ onos> netcfg
 
 ### Connect Switches to the controller
 We need to manually connects the switches to ONOS after the network config is applied.
-Locate the switches by running the following command on the haed node.
+This can be done by running following ansible script on the head node.
 ```
-admin@cord-head-1:~$ cat /etc/bind/maas/dhcp_harvest.inc | grep onl
-onl-x86-CC37AB6182D2    IN A 10.6.0.11 ; cc:37:ab:61:82:d2
-onl-x86-CC37AB617EC2    IN A 10.6.0.17 ; cc:37:ab:61:7e:c2
-onl-x86-CC37AB6180CA    IN A 10.6.0.8 ; cc:37:ab:61:80:ca
-onl-x86-CC37AB618048    IN A 10.6.0.18 ; cc:37:ab:61:80:48
+ansible-playbook /etc/maas/ansible/connect-switch.yml
 ```
-Log in to each switch (default user/pass is root/onl) and run the following command
-```
-/root/connect -bg
-```
-If something goes wrong and you need to reconnect the switch to the controller, run
-```
-/root/killit && /root/purge && /root/connect -bg
-```
+This ansible script will automatically locate all switches in DHCP harvest and connect them to the controller.
 
 ### Complete
 
