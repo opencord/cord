@@ -776,6 +776,28 @@ onos> netcfg
 ... etc.
 ```
 
+### Update physical host locations in XOS
+
+To correctly configure the fabric when VMs and containers
+are created on a physical host, XOS needs to associate the `location` tag of each physical host (from the fabric configuration)
+with its Node object in XOS.  This step needs to be done after new physical compute nodes are
+provisioned on the POD.  To update the node locations in XOS:
+
+```
+ssh ubuntu@xos
+cd ~/service-profile/cord-pod
+rm fabric.yaml
+make fabric.yaml
+```
+
+Edit `fabric.yaml`, updating the `value` field under `<hostname>_location_tag` to
+reflect the `location` of the host from the fabric configuration created in the
+previous step.  Then run:
+
+```
+make fabric
+```
+
 ### Connect Switches to the controller
 We need to manually connects the switches to ONOS after the network config is applied.
 This can be done by running following ansible script on the head node.
@@ -787,6 +809,7 @@ This ansible script will automatically locate all switches in DHCP harvest and c
 ### Complete
 
 This step is complete when each compute node can ping the fabric IP address of all the other nodes.
+
 
 ## Getting Help
 
