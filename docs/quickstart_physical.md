@@ -307,7 +307,8 @@ so if an error is encountered something went Horribly Wrong (tm).  See the
 ### Complete
 This step is complete when the command successfully runs. The Web UI for MAAS
 can be viewed by browsing to the target machine using a URL of the form
-`http://head-node-ip-address:5240/MAAS`.
+`http://head-node-ip-address:5240/MAAS`. To login web page , use Cord for
+username and password.
 
 After the `deployBase` command install `MAAS`, it initiates the download of
 an Ubuntu 14.04 boot image that will be used to boot the other POD servers.
