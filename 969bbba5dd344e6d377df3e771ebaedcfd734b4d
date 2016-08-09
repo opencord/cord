@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_eafe1738",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2016-08-09T00:09:46Z",
+      "side": 1,
+      "message": "nit: please remove space at end of line",
+      "range": {
+        "startLine": 310,
+        "startChar": 73,
+        "endLine": 310,
+        "endChar": 74
+      },
+      "revId": "969bbba5dd344e6d377df3e771ebaedcfd734b4d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
