@@ -496,11 +496,11 @@ You will see output like the following (showing each of the nodes you have provi
 However, after the compute nodes are provisioned, currently some additional manual configuration is required to set up the ONOS
 services in XOS.  We intend to automate this process in the future, but for the time being the following steps must be carried out.
 
-To prepare to run these steps, on the CORD head node, login to the XOS VM and change to the `service-profiles/cord-pod` directory:
+To prepare to run these steps, on the CORD head node, login to the XOS VM and change to the `service-profile/cord-pod` directory:
 
 ```
 ssh ubuntu@xos
-cd service-profiles/cord-pod
+cd service-profile/cord-pod
 ```
 
 All of the steps listed below are run in this directory.
@@ -625,7 +625,7 @@ This step is complete once you see the new information for the VTN app in XOS an
 
 To check the VTN configuration maintained by XOS:
    - Go to the "ONOS apps" page in the CORD GUI:
-      - URL: `http://<head-node>:8888/admin/onos/onosapp/`
+      - URL: `http://<head-node>/admin/onos/onosapp/`
       - Username: `padmin@vicci.org`
       - Password: `letmein`
    - Select *VTN_ONOS_app* in the table
