@@ -28,8 +28,8 @@ same port number on each spine.
 node.
 - Leaf spine switches are connected into the management TOR starting from the
 highest port number.
-- Compute nodes 40G interfaces are named *eth0* and *eth1*.
-- Compute nodes 10G interfaces are named *eth2* and *eth3*.
+- Compute nodes fabric interfaces (typically 40G or 10G) are named *eth0* and *eth1*.
+- Compute nodes POD management interfaces (typically 1G) are named *eth2* and *eth3*.
 - Compute node *n* is connected to the management TOR switch on port *n*,
 egressing from the compute node at *eth2*.
 - Compute node *n* is connected to its primary leaf, egressing at *eth0* and terminating on the leaf at port *n*.
@@ -350,11 +350,10 @@ includes a deployment of Open Stack.
 ### Network configuration
 The proposed configuration for a CORD POD is has the following network configuration on the head node:
 
-   - eth0 / eth1 - 40G interfaces, not relevant for the test environment.
-   - eth2 - the interface on which the head node supports PXE boots and is an internally interface to which all
-   the compute nodes connected
+   - eth0 / eth1 - fabric interfaces (40G or 10G), not relevant for the test environment.
+   - mgmtbr - the bridge on which the head node supports PXE boots and is an internally interface to which all
+   the compute and VM nodes connected. This bridge uses eth2 as its bridge ports
    - eth3 - WAN link. the head node will NAT from eth2 to eth3
-   - mgmtbr - Not associated with a physical network and used to connect in the VM created by the openstack
    install that is part of XOS
 
 The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and mgmtbr interfaces.
