@@ -26,7 +26,9 @@ Vagrant.configure(2) do |config|
     d.vm.synced_folder '.', '/vagrant', disable: true
     d.vm.hostname = "prod"
     d.vm.network "private_network", ip: "10.100.198.201"
-    d.vm.network "private_network", ip: "10.1.0.1", virtualbox__intnet: "cord-test-network"
+    d.vm.network "private_network", ip: "0.0.0.0", virtualbox__intnet: "cord-test-network"
+    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/ansible/prod.yml -c local"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end

@@ -27,8 +27,6 @@ seedServer:
   #                 interface connecting the head node (and the POD) to the
   #                 Internet. All traffic in the POD to external hosts will be
   #                 NAT-ed through this interface
-  # management_iface - the name of the interface that connects the head node to the POD
-  #                    internal network.
   # external_iface   - the name of the interface that connects the head node to the
   #                    Internet
   # management_network - the network and mask bits to used for hosts on the management
@@ -36,7 +34,6 @@ seedServer:
   fabric_ip: '10.6.1.1/24'
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
-  #management_iface: 'eth3'
   #external_iface: 'eth2'
   management_network: 10.1.0.0/24
 

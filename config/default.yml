@@ -3,6 +3,8 @@
 # This deployment configuration can be utilized with the head node created
 # via `vargrant up headnode` from the gerrit.opencord.org/maas repository.
 ---
+debug: false
+
 seedServer:
   ip: '10.100.198.201'
 
@@ -19,10 +21,11 @@ seedServer:
   #                    as it is configured by vagrant to the proper settings
   skipTags:
     - 'switch_support'
+    - 'reboot'
     - 'interface_config'
 
+  fabric_ip: '10.1.1.1/24'
   management_ip: '10.1.0.1/24'
-  management_iface: 'eth2'
   external_iface: 'eth0'
   management_network: '10.1.0.0/24'
 
@@ -38,9 +41,6 @@ docker:
 
 otherServers:
   # Specifies the configuration for dynamically added compute nodes
-  location: 'http://gerrit.opencord.org/maas'
-  rolesPath: 'roles'
-  role: 'compute-node'
   fabric:
     network: '10.1.1.1/24'
     range_low: '10.1.1.2'

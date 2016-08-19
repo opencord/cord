@@ -1,0 +1,17 @@
+- name: Bridge Support is Present
+  apt:
+    name: bridge-utils
+    force: yes
+  tags: [prod]
+
+- name: Ensure Management Bridge
+  copy:
+    src: mgmtbr.cfg
+    dest: /etc/network/interfaces.d/mgmtbr.cfg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure Management Bridge Up
+  command: ifup mgmtbr
+
