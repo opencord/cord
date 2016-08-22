@@ -31,6 +31,13 @@ seedServer:
   #                    Internet
   # management_network - the network and mask bits to used for hosts on the management
   #                      network
+  # fabric_iface_spec - specifies the NIC types that will be used for the leaf spine
+  #                     fabric in the deployment. This defaults to "i40e|mlx4_en". The
+  #                     format is values separated by a vertical bar '|' without spaces.
+  #                     The value that this is compared against is the value return by
+  #                     `ethtool -i <iface>` on the head and compute nodes.
+  #
+  #fabric_iface_spec: one|two|three
   fabric_ip: '10.6.1.1/24'
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
