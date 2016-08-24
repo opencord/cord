@@ -42,7 +42,7 @@ seedServer:
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
   #external_iface: 'eth2'
-  management_network: 10.1.0.0/24
+  management_network: 10.6.0.0/24
 
   # the skipTags options allow various part of the deployment to be skipped
   # switch_support - does not deploy switch boot images to the PXE server
@@ -68,7 +68,7 @@ otherNodes:
   # Specifies the subnet and address range that will be used to allocate IP addresses
   # to the compute nodes as they are deployed into the POD.
   fabric:
-    network: 10.1.1.1/24
-    management: 10.1.0.0/24
-    range_low: 10.1.1.2
+    network: 10.6.1.1/24
+    management: 10.6.0.0/24
+    range_low: 10.6.1.2
     range_high: 10.6.1.253
