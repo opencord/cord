@@ -1,0 +1,8 @@
+include 'maas'
+include 'platform-install'
+
+rootProject.name = 'main'
+project(':').buildFileName = 'build.gradle.new'
+project(':maas').buildFileName = 'build.gradle.new'
+project(':platform-install').buildFileName = 'build.gradle.new'
+
