@@ -26,9 +26,15 @@ import de.gesellix.gradle.docker.tasks.DockerPushTask
 class DockerPublishRule implements Rule {
 
     def project
+    def dependency
 
     DockerPublishRule(project) {
         this.project = project
+    }
+
+    DockerPublishRule(project, dependency) {
+        this.project = project
+        this.dependency = dependency
     }
 
     String getDescription() {
@@ -42,6 +48,9 @@ class DockerPublishRule implements Rule {
                 println "Publish rule: $taskName + $compName"
                 def tagTask = "tag$compName"
                 println "Tagtask: $tagTask"
+                if (dependency) {
+                    dependsOn dependency
+                }
                 dependsOn tagTask
                 def spec = project.comps[ext.compName]
                 repositoryName = spec.name + ':' + project.targetTag

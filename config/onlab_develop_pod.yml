@@ -23,9 +23,8 @@ seedServer:
   fabric_ip: '10.6.1.1/24'
   management_ip: '10.6.0.1/24'
   external_ip: '10.90.0.2/24'
-  external_iface: 'em1'
+  external_iface: 'eth0'
   skipTags:
-    - 'interface_config'
 
 docker:
   imageVersion: candidate
