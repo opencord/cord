@@ -117,12 +117,10 @@ task publish {
 }
 
 tasks.addRule(new DockerFetchRule(project))
-tasks.addRule(new DockerPublishRule(project))
+tasks.addRule(new DockerPublishRule(project, project(':maas').prime))
 tasks.addRule(new DockerTagRule(project))
-tasks.addRule(new GitSubmoduleUpdateRule(project))
 
 project('platform-install').deployPlatform.dependsOn project(':maas').deployBase
-publishImages.mustRunAfter project(':maas').prime 
 
 task deploy  {
     dependsOn << project(':platform-install').deployPlatform
