@@ -1,8 +1,10 @@
 include 'maas'
 include 'platform-install'
+includeFlat 'onos-apps'
 
 rootProject.name = 'main'
 project(':').buildFileName = 'build.gradle.new'
 project(':maas').buildFileName = 'build.gradle.new'
 project(':platform-install').buildFileName = 'build.gradle.new'
+project(':onos-apps').buildFileName = 'build.gradle.new'
 
