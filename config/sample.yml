@@ -37,7 +37,7 @@ seedServer:
   #                     The value that this is compared against is the value return by
   #                     `ethtool -i <iface>` on the head and compute nodes.
   #
-  #fabric_iface_spec: one|two|three
+  #fabric_iface_spec: 'i40e|mlx4_en'
   fabric_ip: '10.6.1.1/24'
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
