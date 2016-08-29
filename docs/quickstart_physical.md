@@ -60,10 +60,34 @@ possible that the interfaces needed to be renamed and the system to be
 rebooted. This guide assumes that the head node is being bootstrapped from a
 host outside of the POD (OtP).
 
+## Install Repo
+
+Make sure you have a bin directory in your home directory and that it is included in your path:
+
+```
+mkdir ~/bin
+PATH=~/bin:$PATH
+```
+
+(of course you can put repo wherever you want)
+
+Download the Repo tool and ensure that it is executable:
+
+```
+curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+chmod a+x ~/bin/repo
+```
+
 ## Clone the Repository
 To clone the repository, on your OtP build host issue the `git` command:
 ```
-git clone http://gerrit.opencord.org/cord
+mkdir opencord && cd opencord
+repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
+```
+
+Fetch the opencord source code
+```
+repo sync
 ```
 
 ### Complete
@@ -71,9 +95,7 @@ When this is complete, a listing (`ls`) of this directory should yield output
 similar to:
 ```
 ls
-LICENSE.txt        ansible/           components/        gradle/            gradlew.bat        utils/
-README.md          build.gradle       config/            gradle.properties  scripts/
-Vagrantfile        buildSrc/          docs/              gradlew*           settings.gradle
+build		onos-apps
 ```
 ## Create the Development Machine
 
@@ -86,6 +108,7 @@ used. This will create an Ubuntu 14.04 LTS based virtual machine and install
 some basic required packages, such as Docker, Docker Compose, and
 Oracle Java 8.
 ```
+cd build
 vagrant up corddev
 ```
 **NOTE:** *The VM will consume 2G RAM and about 12G disk space. Make sure it can obtain sufficient resources.
@@ -231,28 +254,6 @@ To construct a configuration file for yoru physical POD you should copy the
 sample deployment configuration found in `config/sample.yml` and modify the
 values to fit your physical deployment.
 
-## Prime the Target server
-The target server is the server that will assume the role of the head node in
-the cord POD. Priming this server consists of deploying some base software that
-is required to deploy the base software, such as a docker registry. Having the
-docker registry on the target server allows the deployment process to push
-images to the target server that are used in the reset of the process, thus
-making the head node a self contained deployment.
-```
-./gradlew -PdeployConfig=config/podX.yml -PtargetReg=<head-node-ip-address>:5000 prime
-```
-
-### Complete
-Once the `prime` command successfully runs this task is complete. When this
-step is complete a Docker registry and Docker registry mirror. It can be
-verified that these are running by using the `docker ps` command.
-```
-docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
-CONTAINER ID        IMAGE               COMMAND                  CREATED AT
-5f1cbebe7e61        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
-6d3a911e5323        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
-```
-
 ## Publish
 Publishing consists of *pushing* the build docker images to the Docker
 repository on the target head node. This step can take a while as it has to
@@ -263,10 +264,20 @@ This step is started with the following command:
 ```
 
 ### Complete
+
 Once the `publish` command successfully runs this task is complete. When this
-step is complete it can be verified by performing a query on the target
-server's Docker registry using the following command on the development
-machine.
+step is complete a Docker registry and Docker registry mirror. It can be
+verified that these are running by using the `docker ps` command.
+```
+docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
+CONTAINER ID        IMAGE               COMMAND                  CREATED AT
+5f1cbebe7e61        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
+6d3a911e5323        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
+```
+
+We can also query the docker registry on the head node. We should be able to
+observe a list of docker images.
+
 ```
 curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
 {
@@ -291,13 +302,14 @@ There are three parts to deploying bare metal: deploying the head node PXE
 server (`MAAS`), PXE booting a compute node, and post deployment provisioning
 of the compute node. These tasks are accomplished utilizing additionally
 Vagrant machines as well as executing `gradle` tasks in the Vagrant
-development machine.
+development machine. This task also provisions XOS. XOS provides service
+provisioning and orchestration for the CORD POD.
 
-### Deploy MAAS
+### Deploy MAAS and XOS
 Canonical MAAS provides the PXE and other bare metal provisioning services for
 CORD and will be deployed on the head node.
 ```
-./gradlew -PdeployConfig=config/podX.yml deployBase
+./gradlew -PdeployConfig=config/podX.yml deploy
 ```
 
 This task can take some time so be patient. It should complete without errors,
@@ -305,6 +317,7 @@ so if an error is encountered something went Horribly Wrong (tm).  See the
 [Getting Help](#getting-help) section.
 
 ### Complete
+
 This step is complete when the command successfully runs. The Web UI for MAAS
 can be viewed by browsing to the target machine using a URL of the form
 `http://head-node-ip-address:5240/MAAS`. To login web page , use Cord for
@@ -330,20 +343,7 @@ proceed.
 
 Browse around the UI and get familiar with MAAS via documentation at `http://maas.io`
 
-## Deploy XOS
-XOS provides service provisioning and orchestration for the CORD POD. To deploy
-XOS to the head node use the following command:
-```
-./gradlew -PdeployConfig=config/podX.yml deployPlatform
-```
-
-This task can take some time so be patient. It should complete without errors,
-so if an error is encountered something went Horribly Wrong (tm).  See
-the [Getting Help](#getting-help) section.
-
-### Complete
-This step is complete when the command successfully runs. The deployment of XOS
-includes a deployment of Open Stack.
+The deployment of XOS includes a deployment of Open Stack.
 
 ## Booting Compute Nodes
 

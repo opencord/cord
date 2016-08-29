@@ -17,6 +17,23 @@
 import org.opencord.gradle.rules.*
 import org.yaml.snakeyaml.Yaml
 
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.2.1"
+  }
+}
+
+apply plugin: "com.dorongold.task-tree"
+
+evaluationDependsOn(':maas')
+evaluationDependsOn(':platform-install')
+evaluationDependsOn(':onos-apps')
+
 allprojects {
     apply plugin: 'base'
     apply plugin: 'de.gesellix.docker'
@@ -48,34 +65,6 @@ ext {
 
     // Component table
     comps = [
-            'maas': [
-                    'type':         'gitmodule',
-                    'upstream':     '../maas',
-                    'branch':       'master',
-                    'tag':          null,
-                    'componentDir': './components/maas'
-            ],
-            'cord-tester': [
-                    'type':         'gitmodule',
-                    'upstream':     '../cord-tester',
-                    'branch':       'master',
-                    'tag':          null,
-                    'componentDir': './components/cord-tester'
-            ],
-            'cord-onos-publisher': [
-                    'type':         'gitmodule',
-                    'upstream':     '../cord-onos-publisher',
-                    'branch':       'master',
-                    'tag':          null,
-                    'componentDir': './components/cord-onos-publisher'
-            ],
-            'platform-install': [
-                    'type':         'gitmodule',
-                    'upstream':     '../platform-install',
-                    'branch':       'master',
-                    'tag':          null,
-                    'componentDir': './components/platform-install'
-            ],
             'onosproject/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
@@ -102,42 +91,26 @@ ext {
 
 }
 
-// ------------- PlaceHolders ----------------
-
-task updateDocker (type: Exec) {
-    commandLine 'sudo', 'utils/enable-remote-docker-registry', "$targetReg"
-}
-
-task prime {
-    // TODO this is a place-holder.
-    dependsOn updateDocker
-    doFirst {
-        println "Using deployment config: $deployConfig"
-        File configFile = new File(deployConfig)
-        def yaml = new Yaml()
-        def config = yaml.load(configFile.newReader())
-        println "Config: $config"
-        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
-    }
-}
-
 // ---------------- Useful tasks ----------------
 
 task fetchUpstreamImages {
     comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
 }
 
-task fetchGitSubmodules {
-    comps.each { name, spec -> if (spec.type == 'gitmodule') { dependsOn "gitupdate" + name } }
+
+task fetch  {
+    dependsOn fetchUpstreamImages
 }
 
-task fetch {
-    dependsOn fetchUpstreamImages
-    dependsOn fetchGitSubmodules
+task buildImages  {
+    logger.info "Root project has nothing to build"
 }
 
 task publishImages {
-    comps.each { name, spec -> if (spec.type == 'image') { dependsOn "publish" + name } }
+    comps.each { name, spec -> if (spec.type == 'image') { 
+            dependsOn "publish" + name 
+          } 
+    }
 }
 
 task publish {
@@ -145,31 +118,13 @@ task publish {
 }
 
 tasks.addRule(new DockerFetchRule(project))
-tasks.addRule(new DockerPublishRule(project))
+tasks.addRule(new DockerPublishRule(project, project(':maas').prime))
 tasks.addRule(new DockerTagRule(project))
-tasks.addRule(new GitSubmoduleUpdateRule(project))
 
-task deployBase {
-    // TODO this is a place-holder.
-    doFirst {
-        println "Using deployment config: $deployConfig"
-        File configFile = new File(deployConfig)
-        def yaml = new Yaml()
-        def config = yaml.load(configFile.newReader())
-        println "Config: $config"
-        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
-    }
-}
+project('platform-install').deployPlatform.dependsOn project(':maas').deployBase
+project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 
-task deployPlatform {
-    // TODO this is a place-holder.
-    doFirst {
-        println "Using deployment config: $deployConfig"
-        File configFile = new File(deployConfig)
-        def yaml = new Yaml()
-        def config = yaml.load(configFile.newReader())
-        println "Config: $config"
-        println "Access some data in config:\n\tSeed server IP=${config.seedServer.ip}"
-    }
+task deploy  {
+    dependsOn << project(':platform-install').deployPlatform
 }
 

@@ -57,10 +57,34 @@ meeting the above requirements.
 
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more information.
 
-## Clone the Repository
-To clone the repository, on your build host issue the `git` command:
+## Install Repo
+
+Make sure you have a bin directory in your home directory and that it is included in your path:
+
 ```
-git clone http://gerrit.opencord.org/cord
+mkdir ~/bin
+PATH=~/bin:$PATH
+```
+
+(of course you can put repo wherever you want)
+
+Download the Repo tool and ensure that it is executable:
+
+```
+curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+chmod a+x ~/bin/repo
+```
+
+## Clone the Repository
+To clone the repository, on your OtP build host issue the `git` command:
+```
+mkdir opencord && cd opencord
+repo init -u https://gerrit.opencord.org/manifest -b master -g build
+```
+
+Fetch the opencord source code
+```
+repo sync
 ```
 
 ### Complete
@@ -68,10 +92,9 @@ When this is complete, a listing (`ls`) of this directory should yield output
 similar to:
 ```
 ls
-LICENSE.txt        ansible/           components/        gradle/            gradlew.bat        utils/
-README.md          build.gradle       config/            gradle.properties  scripts/
-Vagrantfile        buildSrc/          docs/              gradlew*           settings.gradle
+build
 ```
+
 ## Create the Development Machine
 
 The development environment is required for the tasks in this repository.
@@ -83,6 +106,7 @@ used. This will create an Ubuntu 14.04 LTS based virtual machine and install
 some basic required packages, such as Docker, Docker Compose, and
 Oracle Java 8.
 ```
+cd build
 vagrant up corddev
 ```
 **NOTE:** *It may takes several minutes for the first command `vagrant up
@@ -150,7 +174,7 @@ abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       
 
 ## Edit the configuration file
 
-Edit the configuration file `/cord/components/platform-install/config/default.yml`.  Add the IP address of your target
+Edit the configuration file `/cord/platform-install/config/default.yml`.  Add the IP address of your target
 server as well as the `username / password` for accessing the server.  You can skip adding the password if you can SSH
 to the target server from inside the Vagrant VM as `username` without one (e.g., by running `ssh-agent`).
 
@@ -176,7 +200,7 @@ configuration file.  Also verify that the user account can `sudo` without a pass
 Deploy the CORD software to the the target server and configure it to form a running POD.
 
 ```
-./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml deploySingle
+./gradlew -PdeployConfig=/cord/platform-install/config/default.yml deploySingle
    ```
 > *What this does:*
 >
@@ -215,7 +239,7 @@ After the single-node POD is set up, you can execute basic health
 tests on the platform by running this command:
 
 ```
-./gradlew -PdeployConfig=/cord/components/platform-install/config/default.yml postDeployTests
+./gradlew -PdeployConfig=/cord/platform-install/config/default.yml postDeployTests
 ```
 
 ### test-vsg
