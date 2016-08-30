@@ -135,7 +135,7 @@ vagrant ssh corddev
 Once connected to the Vagrant machine, you can find the deployment artifacts
 in the `/cord` directory on the VM.
 ```
-cd /cord
+cd /cord/build
 ```
 
 ### Gradle
@@ -260,7 +260,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradlew -PtargetReg=<head-node-ip-address>:5000 publish
+./gradlew -PdeployConfig=config/podX.yml -PtargetReg=<head-node-ip-address>:5000 publish
 ```
 
 ### Complete
