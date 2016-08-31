@@ -217,7 +217,7 @@ docker registry on the target server allows the deployment process to push
 images to the target server that are used in the reset of the process, thus
 making the head node a self contained deployment.
 ```
-./gradew prime
+./gradlew prime
 ```
 
 ### Complete
@@ -238,7 +238,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradew -PtargetReg=10.100.198.201:5000 publish
+./gradlew -PtargetReg=10.100.198.201:5000 publish
 ```
 
 ### Complete
