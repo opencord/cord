@@ -37,7 +37,7 @@
 
 - name: vagrant user is added to the docker group
   user:
-    name: vagrant
+    name: "{{ ansible_env['SUDO_USER'] }}"
     group: docker
   register: user_result
   tags: [docker]
