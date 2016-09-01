@@ -1,0 +1,14 @@
+# Deployment configuration for a single-node POD on CloudLab
+---
+debug: false
+
+seedServer:
+  ip: '66.201.42.212'
+
+  # User name used by Ansible to connect to the host for remote
+  # provisioning.  Assumes private key loaded into ssh-agent.
+  user: 'jenkins'
+
+docker:
+  imageVersion: candidate
+
