@@ -36,3 +36,7 @@ ansible/*.retry
 
 # Backup files
 *.bak
+
+# sub repos
+platform-install
+maas
