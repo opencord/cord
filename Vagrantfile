@@ -54,7 +54,7 @@ Vagrant.configure(2) do |config|
     config.vm.box = "fgrehm/trusty64-lxc"
     d.ssh.forward_agent = true
     d.vm.hostname = "testbox"
-    d.vm.network "private_network", ip: "10.100.198.200"
+    d.vm.network "private_network", ip: "10.0.3.100", lxc__bridge_name: 'lxcbr0'
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
     config.vm.provider :lxc do |lxc|
