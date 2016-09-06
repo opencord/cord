@@ -60,9 +60,9 @@ Vagrant.configure(2) do |config|
     config.vm.provider :lxc do |lxc|
         # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
         lxc.customize 'cgroup.memory.limit_in_bytes', '2048M'
-        lxc.customize 'aa_profile' = unconfined
-        lxc.customize 'cgroup.devices.allow = b 7:* rwm'
-        lxc.customize 'cgroup.devices.allow = c 10:237 rwm'
+        lxc.customize 'aa_profile', 'unconfined'
+        lxc.customize 'cgroup.devices.allow', 'b 7:* rwm'
+        lxc.customize 'cgroup.devices.allow', 'c 10:237 rwm'
     end
   end 
 
