@@ -50,6 +50,19 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  config.vm.define "testbox" do |d|
+    d.vm.box = "fgrehm/trusty64-lxc"
+    d.ssh.forward_agent = true
+    d.vm.hostname = "testbox"
+    d.vm.network "private_network", ip: "10.0.3.100", lxc__bridge_name: 'lxcbr0'
+    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
+    config.vm.provider :lxc do |lxc|
+        # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
+        lxc.customize 'cgroup.memory.limit_in_bytes', '2048M'
+    end
+  end 
+
 
   (1..3).each do |i|
     # Defining VM properties
