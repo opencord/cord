@@ -123,6 +123,9 @@ tasks.addRule(new DockerTagRule(project))
 
 project('platform-install').deployPlatform.dependsOn project(':maas').deployBase
 project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
+project('platform-install').deployPlatform.dependsOn project(':onos-apps').deploy
+project(':onos-apps').deploy.dependsOn project(':maas').deployBase
+
 
 task deploy  {
     dependsOn << project(':platform-install').deployPlatform
