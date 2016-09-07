@@ -22,6 +22,30 @@
       "revId": "c64cf7fbe0ae469a6b3df3bccaf37a1cc9bf4117",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a014df3_98948438",
+        "filename": "build.gradle",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2016-09-07T20:44:51Z",
+      "side": 1,
+      "message": ": just refers to the root project, in this case it doesn\u0027t matter.",
+      "parentUuid": "1a014df3_b8886023",
+      "range": {
+        "startLine": 127,
+        "startChar": 9,
+        "endLine": 127,
+        "endChar": 19
+      },
+      "revId": "c64cf7fbe0ae469a6b3df3bccaf37a1cc9bf4117",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
