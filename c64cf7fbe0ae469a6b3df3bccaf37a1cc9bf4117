@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_b8886023",
+        "filename": "build.gradle",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-09-07T19:47:57Z",
+      "side": 1,
+      "message": "Should there be a \u0027:\u0027?  Line 125 doesn\u0027t have one.",
+      "range": {
+        "startLine": 127,
+        "startChar": 9,
+        "endLine": 127,
+        "endChar": 19
+      },
+      "revId": "c64cf7fbe0ae469a6b3df3bccaf37a1cc9bf4117",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
