@@ -1,9 +1,9 @@
 
 node ('build') {
    // Mark the code checkout 'stage'....
-   stage 'Checkout'
+   //stage 'Checkout'
    // Get cord from opencord repo
-   checkout([$class: 'RepoScm', currentBranch: true, manifestBranch: 'master', manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true])
+   //checkout([$class: 'RepoScm', currentBranch: true, manifestBranch: 'master', manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true])
    
    stage 'chdir to build'
    dir('build') {
