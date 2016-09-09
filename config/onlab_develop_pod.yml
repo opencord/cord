@@ -25,6 +25,7 @@ seedServer:
   management_ip: '10.6.0.1/24'
   external_ip: '10.90.0.251/16'
   external_iface: 'eth0'
+  external_gw: '10.90.0.1'
   skipTags:
 
 docker:
