@@ -53,9 +53,10 @@ node ('build') {
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=10.90.0.251:5000 -PdeployConfig=config/onlab_develop_pod.yml deploy" corddev'
 
             currentBuild.result = 'SUCCESS'
+            step([$class: 'Mailer', recipients: 'cord-dev@opencord.org', sendToIndividuals: false])
         } catch (err) {
             currentBuild.result = 'FAILURE'
-            step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'ali@onlab.us', sendToIndividuals: false])
+            step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'cord-dev@opencord.org', sendToIndividuals: false])
         } finally {
             sh 'vagrant destroy -f corddev'
         }
