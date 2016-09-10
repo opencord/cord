@@ -3,29 +3,47 @@ node ('build') {
    checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
    stage 'chdir to build'
    dir('build') {
+        stage 'Redeploy head node and Build Vagrant box'
         try {
-            stage 'Login to Maas'
-            sh "maas login maas http://10.90.0.2/MAAS/api/2.0 ${apiKey}"
+            parallel( 
+                maasOps: {
+                    sh "maas login maas http://10.90.0.2/MAAS/api/2.0 ${apiKey}"
+                    sh "maas maas machine release ${systemId}"
+                    
+                    timeout(time: 15) {
+                        waitUntil {
+                           try {
+                                sh "maas maas machine read ${systemId} | grep Ready"
+                                return true
+                            } catch (exception) {
+                                return false
+                            }
+                        }
+                    }
+                    
+                    sh 'maas maas machines allocate'
+                    sh "maas maas machine deploy ${systemId}"
+                    
+                    timeout(time: 30) {
+                        waitUntil {
+                           try {
+                                sh "maas maas machine read ${systemId} | grep Deployed"
+                                return true
+                            } catch (exception) {
+                                return false
+                            }
+                        }
+                    }
+                    
+                }, vagrantOps: {
+                    sh 'vagrant up corddev'
+                }, failFast : true
+            )
             
-            stage 'Release head node'
-            sh "maas maas machine release ${systemId}"
-            sleep 180
-            
-            stage 'Acquire head Node'
-            sh 'maas maas machines allocate'
-            
-            stage 'Deploy head node'
-            sh "maas maas machine deploy ${systemId}"
-            
-            sleep 750
-            
-            stage 'Bring up vagrant box'
-            sh 'vagrant up corddev'
-
-            stage 'Fetch build elements'
+            stage 'Fetch CORD packages'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew fetch" corddev'
-
-            stage 'Build Images'
+            
+            stage 'Build CORD Images'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
 
             stage 'Publish to headnode'
