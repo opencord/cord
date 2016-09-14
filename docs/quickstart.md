@@ -1,34 +1,20 @@
-# CORD Quick Start Guide
+# CORD-in-a-Box Quick Start Guide
 
 This tutorial guide walks through the steps to bring up a demonstration CORD "POD",
-running in virtual machines on a single physical server. The purpose
+running in virtual machines on a single physical server (a.k.a. "CORD-in-a-Box"). The purpose
 of this demonstration POD is to enable those interested in understanding how CORD works to
 examine and interact with a running CORD environment.  It is a good place for
 novice CORD users to start.
 
-**NOTE:** *If you are looking for instructions on how to install a multi-node POD, you will
-find them in [quickstart_physical.md](./quickstart_physical.md).*
-
-Specifically, the tutorial covers the following:
-
-1. Bring up a build environment
-2. Fetch all artifacts
-3. Deploy the software to the target platform (server)
-4. Run some tests on the platform
-5. Clean-up
+**NOTE:** *This tutorial installs a simplified version of a CORD POD on a single server
+using virtual machines.  If you are looking for instructions on how to install a multi-node POD, you will
+find them in [quickstart_physical.md](./quickstart_physical.md).  For more
+details about the actual build process, look there.*
 
 ## What you need (Prerequisites)
 
-You will need a *build host* (e.g., your laptop) and a *target server*.  The build host will run
-a development environment in a Vagrant VM that will be used to deploy CORD to the target server.
-
-Build host requirements:
-
-* Mac OS X, Linux, or Windows with a 64-bit OS
-* [`git`](https://git-scm.com/) (2.5.4 or later)
-* [`Vagrant`](https://www.vagrantup.com/) (1.8.1 or later)
-* Access to the Internet
-* SSH access to the target server
+You will need a *target server*, which will run both a development environment
+in a Vagrant VM (used to deploy CORD) as well as CORD-in-a-Box itself.
 
 Target server requirements:
 
@@ -38,7 +24,7 @@ Target server requirements:
   * 1TB+ disk
 * Access to the Internet
 * Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to install Ubuntu 14.04).
-* Account used to SSH from build host has password-less *sudo* capability (e.g., like the `ubuntu` user)
+* User account used to install CORD-in-a-Box has password-less *sudo* capability (e.g., like the `ubuntu` user)
 
 ### Target Server on CloudLab (optional)
 
@@ -51,196 +37,146 @@ not use CloudLab resources for purposes other than evaluating CORD.  If, after a
 week or two, you wish to continue using CloudLab to experiment with or develop CORD,
 then you must apply for your own separate CloudLab project.*
 
-Once your account is approved, start an experiment using the `OnePC-Ubuntu14.04.4` profile
+Once your account is approved, start an experiment using the `OnePC-Ubuntu14.04.5` profile
 on either the Wisconsin or Clemson cluster.  This will provide you with a temporary target server
 meeting the above requirements.
 
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more information.
 
-## Install Repo
+## Download and Run the Script
 
-Make sure you have a bin directory in your home directory and that it is included in your path:
+*Update these instructions once the patches are finalized and merged*
 
-```
-mkdir ~/bin
-PATH=~/bin:$PATH
-```
-
-(of course you can put repo wherever you want)
-
-Download the Repo tool and ensure that it is executable:
+On the target server, download the script that installs CORD-in-a-Box.  Then run it,
+saving the screen output to a file called `install.out`:
 
 ```
-curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
+curl https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
+bash ./cord-in-a-box.sh -t | tee ~/install.out
 ```
 
-## Clone the Repository
-To clone the repository, on your OtP build host issue the `git` command:
-```
-mkdir opencord && cd opencord
-repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
-```
-
-Fetch the opencord source code
-```
-repo sync
-```
-
-### Complete
-When this is complete, a listing (`ls`) of this directory should yield output
-similar to:
-```
-ls
-build
-```
-
-## Create the Development Machine
-
-The development environment is required for the tasks in this repository.
-This environment leverages [Vagrant](https://www.vagrantup.com/docs/getting-started/)
-to install the tools required to build and deploy the CORD software.
-
-To create the development machine the following  Vagrant command can be
-used. This will create an Ubuntu 14.04 LTS based virtual machine and install
-some basic required packages, such as Docker, Docker Compose, and
-Oracle Java 8.
-```
-cd build
-vagrant up corddev
-```
-**NOTE:** *It may takes several minutes for the first command `vagrant up
-corddev` to complete as it will include creating the VM as well as downloading
-and installing various software packages.*
+The script takes a *long time* (at least two hours) to run.  Be patient!  If it hasn't completely
+failed yet, then assume all is well!
 
 ### Complete
 
-Once the Vagrant VM is created and provisioned, you will see output ending
-with:
-```
-==> corddev: PLAY RECAP *********************************************************************
-==> corddev: localhost                  : ok=29   changed=25   unreachable=0    failed=0
-==> corddev: Configuring cache buckets...
-```
+The script builds the CORD-in-a-Box and runs a couple of tests to ensure that
+things are working as expected.  Once it has finished running, you'll see a
+**BUILD SUCCESSFUL** message.
 
-## Connect to the Development Machine
-To connect to the development machine the following vagrant command can be used.
-```
-vagrant ssh corddev
-```
+The file `~/install.out` contains the full output of the build process.
 
-Once connected to the Vagrant machine, you can find the deployment artifacts
-in the `/cord` directory on the VM.
-```
-cd /cord
-```
+## Inspecting CORD-in-a-Box
 
-### Gradle
-[Gradle](https://gradle.org/) is the build tool that is used to help
-orchestrate the build and deployment of a POD. A *launch* script is included
-in the Vagrant machine that will automatically download and install `gradle`.
-The script is called `gradlew` and the download / install will be invoked on
-the first use of this script; thus the first use may take a little longer
-than subsequent invocations and requires a connection to the internet.
-
-### Complete
-Once you have created and connected to the development environment this task is
-complete. The `cord` repository files can be found on the development machine
-under `/cord`. This directory is mounted from the host machine so changes
-made to files in this directory will be reflected on the host machine and
-vice-versa.
-
-## Fetch
-The fetching phase of the deployment pulls Docker images from the public
-repository down to the local machine as well as clones any `git` submodules
-that are part of the project. This phase can be initiated with the following
-command:
-```
-./gradlew fetch
-```
-
-### Complete
-Once the fetch command has successfully been run, this step is complete. After
-this command completes you should be able to see the Docker images that were
-downloaded using the `docker images` command on the development machine:
-```
-docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-python              2.7-alpine          836fa7aed31d        5 days ago          56.45 MB
-consul              <none>              62f109a3299c        2 weeks ago         41.05 MB
-registry            2.4.0               8b162eee2794        9 weeks ago         171.1 MB
-abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       469.5 MB
-```
-
-## Edit the configuration file
-
-Edit the configuration file `/cord/platform-install/config/default.yml`.  Add the IP address of your target
-server as well as the `username / password` for accessing the server.  You can skip adding the password if you can SSH
-to the target server from inside the Vagrant VM as `username` without one (e.g., by running `ssh-agent`).
-
-If you are planning on deploying the single-node POD to a CloudLab host, uncomment
-the following lines in the configuration file:
+CORD-in-a-Box installs the target server as a CORD head node, with OpenStack,
+ONOS, and XOS services running inside VMs.  An OpenStack compute node
+is also brought up inside a virtual machine.  You can see all the virtual
+machines by running `virsh list` on the target server:
 
 ```
-#extraVars:
-#  - 'on_cloudlab=True'
+$ virsh list
+ Id    Name                           State
+----------------------------------------------------
+ 2     build_corddev                  running
+ 3     juju-1                         running
+ 4     ceilometer-1                   running
+ 5     glance-1                       running
+ 6     keystone-1                     running
+ 7     percona-cluster-1              running
+ 8     nagios-1                       running
+ 9     neutron-api-1                  running
+ 10    nova-cloud-controller-1        running
+ 11    openstack-dashboard-1          running
+ 12    rabbitmq-server-1              running
+ 13    onos-cord-1                    running
+ 14    onos-fabric-1                  running
+ 15    xos-1                          running
+ 18    build_compute_node             running
 ```
 
-This will signal the install process to set up extra disk space on the CloudLab
-node for use by CORD.
-
-### Complete
-
-Before proceeding, verify that you can SSH to the target server from the development
-environment using the IP address, username, and password that you entered into the
-configuration file.  Also verify that the user account can `sudo` without a password.
-
-## Deploy the single-node CORD POD on the target server
-
-Deploy the CORD software to the the target server and configure it to form a running POD.
+The `build_corddev` VM is the Vagrant development machine that executes
+the build process.  It download and build Docker containers and publish them
+to the target server. It then installs MaaS on the target server (for bare-metal
+provisioning) and the ONOS, XOS, and OpenStack services in VMs.  This VM
+can be entered as follows:
 
 ```
-./gradlew -PdeployConfig=/cord/platform-install/config/default.yml deploySingle
-   ```
-> *What this does:*
->
-> This command uses an Ansible playbook (cord-single-playbook.yml) to install
-> OpenStack services, ONOS, and XOS in VMs on the target server.  It also brings up
-> a compute node as a VM.
+cd ~/opencord/build; vagrant ssh corddev
+```
 
-This step usually takes *at least an hour* to complete.  Be patient!
+The CORD build environment is located in `/cord/build` inside this VM.  It is
+possible to manually run individual steps in the build process here if you wish; see
+[quickstart_physical.md](./quickstart_physical.md) for more information on
+how to run build steps.
 
-### Complete
-
-This step is completed once the Ansible playbook finishes without errors.  If
-an error is encountered when running this step, the first thing to try is
-just running the above `gradlew` command again.
-
-Once the step completes, two instances of ONOS are running, in
+The VMs ending with names ending with `-1` are running the various CORD
+head node services.  Two instances of ONOS are running, in
 the `onos-cord-1` and `onos-fabric-1` VMs, though only `onos-cord-1` is used in
-the single-node install.  OpenStack is also running on the target server with a virtual
-compute node called `nova-compute-1`.  Finally, XOS is running inside the `xos-1`
+the CORD-in-a-Box.  XOS is running inside the `xos-1`
 VM and is controlling ONOS and OpenStack.  You can get a deeper understanding of
 the configuration of the target server by visiting [head_node_services.md](./head_node_services.md).
-
-## Login to the CORD GUI and look around
-
-You can access the CORD GUI (provided by XOS) by pointing your browser to URL
-`http://<target-server>`, using username `padmin@vicci.org` and password `letmein`.
-
-The state of the system is that all CORD services have been onboarded to XOS (you
-can see them in the GUI by clicking _Services_ at left), but no
-CORD subscribers have been created yet.  To create a sample subscriber, proceed
-to the next step.
-
-## Run the post-deployment tests
-
-After the single-node POD is set up, you can execute basic health
-tests on the platform by running this command:
+These VMs can be entered as follows:
 
 ```
-./gradlew -PdeployConfig=/cord/platform-install/config/default.yml postDeployTests
+ssh ubuntu@<vm-name>
 ```
+
+The `build_compute_node` VM is the virtual compute node controlled by OpenStack.
+This VM can be entered as follows:
+
+```
+source ~/admin-openrc.sh
+ssh ubuntu@$( nova service-list | grep nova-compute | awk '{print $4}' )
+```
+
+### Docker Containers
+
+The target server runs a Docker image registry, a Maven repository containing
+the CORD ONOS apps, and a number of microservices used in bare-metal provisioning.
+You can see these by running `docker ps`:
+
+```
+$ docker ps
+CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                           NAMES
+adfe0a0b68e8        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp   mavenrepo
+da6bdd4ca322        docker-registry:5000/cord-dhcp-harvester:candidate    "python /dhcpharveste"   3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp          harvester
+b6fe30f03f73        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours                                          switchq
+a1a7d4c7589f        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                          automation
+628fb3725abf        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours                                          provisioner
+fe7b3414cf88        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp                        generator
+c7159495f9b4        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours                                          allocator
+33bf33214d98        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                          storage
+b44509b3314e        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp          registry
+79060bba9994        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp          registry-mirror
+```
+
+### MaaS GUI
+
+You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to the URL
+`http://<target-server>/MAAS/`.  Username and password are both `cord`.  For more
+information on MaaS, see [the MaaS documentation](http://maas.io/docs).
+
+### XOS GUI
+
+You can access the XOS GUI by pointing your browser to URL
+`http://<target-server>/xos/`.  Username is `padmin@vicci.org` and password is `letmein`.
+
+The state of the system is that all CORD services have been onboarded to XOS.  You
+can see them in the GUI by clicking _Services_ at left.  Clicking on the name of
+a service will show more details about it.
+
+A sample CORD subscriber has also been created.  A nice way to drill down into
+the configuration is to click _Customize_ at left, add the _Diagnostic_
+dashboard, and then click _Diagnostic_ at left.  To see the details of the
+subscriber in this dashboard, click the green box next to _Subscriber_ and
+select `cordSubscriber-1`.  The dashboard will change to show information
+specific to that subscriber.
+
+## Test results
+
+After CORD-in-a-Box was set up, a couple of basic health
+tests were executed on the platform.  The results of these tests can be
+found near the end of `~/install.out`.
 
 ### test-vsg
 
@@ -253,7 +189,7 @@ steps:
  * Runs `ping` in the client to a public IP address in the Internet
 
 Success means that traffic is flowing between the subscriber
-household and the Internet via the vSG.  If it succeeds, you should see some
+household and the Internet via the vSG.  If it succeeded, you should see some
 lines like these in the output:
 
 ```
@@ -285,7 +221,7 @@ can be easily deployed to a CORD POD. This test performs the following steps:
  * Runs a `curl` from the subscriber test client, through the vSG, to the Apache server.
 
 Success means that the Apache server launched by the *exampleservice* tenant is fully configured
-and is reachable from the subscriber client via the vSG.  If it succeeds, you should see some
+and is reachable from the subscriber client via the vSG.  If it succeeded, you should see some
 lines like these in the output:
 
 ```
@@ -299,16 +235,6 @@ ok: [localhost] => {
         " Tenant Message: \"world\""
     ]
 }
-```
-
-## Optional cleanup
-
-Once you are finished deploying the single-node POD, you can exit from the development
-environment on the build host and destroy it:
-
-```
-exit
-vagrant destroy -f
 ```
 
 ## Congratulations
