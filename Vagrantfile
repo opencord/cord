@@ -19,6 +19,11 @@ Vagrant.configure(2) do |config|
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
+    d.vm.provider :libvirt do |domain|
+      d.vm.synced_folder '../', '/cord', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
+      d.vm.synced_folder '.', '/vagrant', type: 'rsync', disabled: true
+      domain.memory = 2048
+    end
   end
 
   config.vm.define "prod" do |d|
@@ -66,7 +71,6 @@ Vagrant.configure(2) do |config|
     end
   end 
 
-
   (1..3).each do |i|
     # Defining VM properties
     config.vm.define "compute_node#{i}" do |c|
@@ -74,15 +78,30 @@ Vagrant.configure(2) do |config|
       c.vm.synced_folder '.', '/vagrant', disable: true
       c.vm.communicator = "none"
       c.vm.hostname = "computenode"
-      c.vm.network "private_network",
-        adapter: "1",
-        type: "dhcp",
-        auto_config: false,
-        virtualbox__intnet: "cord-test-network"
       c.vm.provider "virtualbox" do |v|
         v.name = "compute_node#{i}"
         v.memory = 1048
         v.gui = "true"
+        c.vm.network "private_network",
+          adapter: "1",
+          type: "dhcp",
+          auto_config: false,
+          virtualbox__intnet: "cord-test-network"
+      end
+      c.vm.provider :libvirt do |domain|
+        domain.memory = 8192
+        domain.cpus = 4
+        domain.machine_virtual_size = 100
+        domain.storage :file, :size => '100G', :type => 'qcow2'
+        domain.boot 'network'
+        domain.boot 'hd'
+        domain.nested = true
+        c.vm.network "public_network",
+          adapter: 1,
+          auto_config: false,
+          dev: "mgmtbr",
+          mode: "bridge",
+          type: "bridge"
       end
     end
   end
