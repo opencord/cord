@@ -79,7 +79,7 @@ chmod a+x ~/bin/repo
 To clone the repository, on your OtP build host issue the `git` command:
 ```
 mkdir opencord && cd opencord
-repo init -u https://gerrit.opencord.org/manifest -b master -g build
+repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
 ```
 
 Fetch the opencord source code
