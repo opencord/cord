@@ -4,11 +4,11 @@ node ('build') {
    dir('build') {
         stage 'Redeploy head node and Build Vagrant box'
         try {
-            parallel( 
+            parallel(
                 maasOps: {
                     sh "maas login maas http://10.90.0.2/MAAS/api/2.0 ${apiKey}"
                     sh "maas maas machine release ${systemId}"
-                    
+
                     timeout(time: 15) {
                         waitUntil {
                            try {
@@ -19,10 +19,10 @@ node ('build') {
                             }
                         }
                     }
-                    
+
                     sh 'maas maas machines allocate'
                     sh "maas maas machine deploy ${systemId}"
-                    
+
                     timeout(time: 30) {
                         waitUntil {
                            try {
@@ -33,15 +33,15 @@ node ('build') {
                             }
                         }
                     }
-                    
+
                 }, vagrantOps: {
                     sh 'vagrant up corddev'
                 }, failFast : true
             )
-            
+
             stage 'Fetch CORD packages'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew fetch" corddev'
-            
+
             stage 'Build CORD Images'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
 
@@ -50,7 +50,7 @@ node ('build') {
 
             stage 'Deploy'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=10.90.0.251:5000 -PdeployConfig=config/onlab_develop_pod.yml deploy" corddev'
-            
+
             stage 'Power cycle compute nodes'
             parallel(
                 compute_1: {
@@ -64,11 +64,24 @@ node ('build') {
             sh 'ssh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R 10.90.0.251'
             def cordapikey = sh(returnStdout: true, script: "sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 sudo maas-region-admin apikey --username cord")
             sh "sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 maas login pod-maas http://10.90.0.251/MAAS/api/1.0 $cordapikey"
-            timeout(time: 30) {
+            timeout(time: 45) {
                 waitUntil {
                     try {
-                        num = sh(returnStdout: true, script: "sshpass -p ${headnodepass} ssh -l ${headnodeuser} 10.90.0.251  maas pod-maas nodes list | grep Deployed")
-                        return num == "2"
+                        num = sh(returnStdout: true, script: "sshpass -p ${headnodepass} ssh -l ${headnodeuser} 10.90.0.251  maas pod-maas nodes list | grep Deployed | wc -l").trim()
+                        return num == '2'
+                    } catch (exception) {
+                        return false
+                    }
+                }
+            }
+
+            stage 'Wait for computes nodes to be provisioned'
+            ip = sh (returnStdout: true, script:"sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}'  provisioner").trim()
+            timeout(time:45) {
+                waitUntil {
+                    try {
+                        out = sh (returnStdout: true, script:"sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(1))'").trim()
+                        return out != ""
                     } catch (exception) {
                         return false
                     }
