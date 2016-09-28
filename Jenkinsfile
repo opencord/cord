@@ -50,24 +50,25 @@ node ('build') {
 
             stage 'Deploy'
             sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=10.90.0.251:5000 -PdeployConfig=config/onlab_develop_pod.yml deploy" corddev'
-
+            
             stage 'Power cycle compute nodes'
             parallel(
                 compute_1: {
-                    sh "ipmitool -U admin -P admin -H 10.90.0.10 power cycle"
+                    sh 'ipmitool -U admin -P admin -H 10.90.0.10 power cycle'
                 }, compute_2: {
-                    sh "ipmitool -U admin -P admin -H 10.90.0.11 power cycle"
-                }, failfast : true
+                    sh 'ipmitool -U admin -P admin -H 10.90.0.11 power cycle'
+                }, failFast : true
             )
 
             stage 'Wait for compute nodes to get deployed'
-            def cordapikey = sh(returnStdout: true, script: 'sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 sudo maas-region-admin apikey --username cord') 
-            sh 'sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 maas login pod-maas http://10.90.0.251/MAAS/api/1.0 $cordapikey'
+            sh 'ssh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R 10.90.0.251'
+            def cordapikey = sh(returnStdout: true, script: "sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 sudo maas-region-admin apikey --username cord")
+            sh "sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 maas login pod-maas http://10.90.0.251/MAAS/api/1.0 $cordapikey"
             timeout(time: 30) {
                 waitUntil {
                     try {
-                        num = sh(returnStdout: true, script: 'sshpass -p ${headnodepass} ssh -l ${headnodeuser} 10.90.0.251  maas pod-maas nodes list | grep Deployed')
-                        return num == 2
+                        num = sh(returnStdout: true, script: "sshpass -p ${headnodepass} ssh -l ${headnodeuser} 10.90.0.251  maas pod-maas nodes list | grep Deployed")
+                        return num == "2"
                     } catch (exception) {
                         return false
                     }
