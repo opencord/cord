@@ -80,7 +80,7 @@ node ('build') {
             timeout(time:45) {
                 waitUntil {
                     try {
-                        out = sh (returnStdout: true, script:"sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(1))'").trim()
+                        out = sh (returnStdout: true, script:"sshpass -p ${headnodepass} ssh -oStrictHostKeyChecking=no -l ${headnodeuser} 10.90.0.251 curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(2))'").trim()
                         return out != ""
                     } catch (exception) {
                         return false
