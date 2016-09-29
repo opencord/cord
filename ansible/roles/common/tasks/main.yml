@@ -31,6 +31,9 @@
     path: "{{ ansible_env['PWD'] }}/.ssh/known_hosts"
     state: absent
 
+- name: Create .ssh directory
+  file: path={{ ansible_env['PWD'] }}/.ssh state=directory mode=0755
+
 - name: Disable Known Host Checking
   copy:
     src: files/ssh_config
