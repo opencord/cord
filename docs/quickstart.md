@@ -27,6 +27,8 @@ Build host requirements:
 * Mac OS X, Linux, or Windows with a 64-bit OS
 * [`git`](https://git-scm.com/) (2.5.4 or later)
 * [`Vagrant`](https://www.vagrantup.com/) (1.8.1 or later)
+* For linux installation (ubuntu) install virtualbox
+    $apt-get install virtualbox
 * Access to the Internet
 * SSH access to the target server
 
@@ -132,7 +134,7 @@ vagrant ssh corddev
 Once connected to the Vagrant machine, you can find the deployment artifacts
 in the `/cord` directory on the VM.
 ```
-cd /cord
+cd /cord/build
 ```
 
 ### Gradle
@@ -174,7 +176,7 @@ abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       
 
 ## Edit the configuration file
 
-Edit the configuration file `/cord/platform-install/config/default.yml`.  Add the IP address of your target
+Edit the configuration file `/cord/build/platform-install/config/default.yml`.  Add the IP address of your target
 server as well as the `username / password` for accessing the server.  You can skip adding the password if you can SSH
 to the target server from inside the Vagrant VM as `username` without one (e.g., by running `ssh-agent`).
 
@@ -200,7 +202,7 @@ configuration file.  Also verify that the user account can `sudo` without a pass
 Deploy the CORD software to the the target server and configure it to form a running POD.
 
 ```
-./gradlew -PdeployConfig=/cord/platform-install/config/default.yml deploySingle
+./gradlew -PdeployConfig=/cord/build/platform-install/config/default.yml deploySingle
    ```
 > *What this does:*
 >
