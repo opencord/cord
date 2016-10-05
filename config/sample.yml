@@ -31,13 +31,6 @@ seedServer:
   #                    Internet
   # management_network - the network and mask bits to used for hosts on the management
   #                      network
-  # fabric_iface_spec - specifies the NIC types that will be used for the leaf spine
-  #                     fabric in the deployment. This defaults to "i40e|mlx4_en". The
-  #                     format is values separated by a vertical bar '|' without spaces.
-  #                     The value that this is compared against is the value return by
-  #                     `ethtool -i <iface>` on the head and compute nodes.
-  #
-  #fabric_iface_spec: 'i40e|mlx4_en'
   fabric_ip: '10.6.1.1/24'
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
@@ -49,7 +42,7 @@ seedServer:
   #
   # reboot - will not reboot the head node after updating its network configuration
   #          this may mean the network configuration will not take effect, but will
-  #          also prevent you from being locked out of the server if there is a 
+  #          also prevent you from being locked out of the server if there is a
   #          network configuration error.
   #
   # interface_config - will not modify the network configuration of the head node,
@@ -58,6 +51,30 @@ seedServer:
   #  - 'switch_support'
   #  - 'reboot'
   #  - 'interface_config'
+
+  # The following variable settings can be used to customize how the network interfaces
+  # are selected into the fabric and management bridge interface or ignored/excluded.
+  # See the documentation docs/quickstart_physical.md for more information about how
+  # to set these variables.
+  extraVars:
+  #  - 'fabric_include_names=<name1>,<name2>,...'
+  #  - 'fabric_include_module_types=<mtype1>,<mtype2>,...'
+  #  - 'fabric_include_bus_types=<btype1>,<btype2>,...'
+  #  - 'fabric_exclude_names=<name1>,<name2>,...'
+  #  - 'fabric_exclude_module_types=<mtype1>,<mtype2>,...'
+  #  - 'fabric_exclude_bus_types=<btype1>,<btype2>,...'
+  #  - 'fabric_ignore_names=<name1>,<name2>,...'
+  #  - 'fabric_ignore_module_types=<mtype1>,<mtype2>,...'
+  #  - 'fabric_ignore_bus_types=<btype1>,<btype2>,...'
+  #  - 'management_include_names=<name1>,<name2>,...'
+  #  - 'management_include_module_types=<mtype1>,<mtype2>,...'
+  #  - 'management_include_bus_types=<btype1>,<btype2>,...'
+  #  - 'management_exclude_names=<name1>,<name2>,...'
+  #  - 'management_exclude_module_types=<mtype1>,<mtype2>,...'
+  #  - 'management_exclude_bus_types=<btype1>,<btype2>,...'
+  #  - 'management_ignore_names=<name1>,<name2>,...'
+  #  - 'management_ignore_module_types=<mtype1>,<mtype2>,...'
+  #  - 'management_ignore_bus_types=<btype1>,<btype2>,...'
 
 docker:
   imageVersion: candidate

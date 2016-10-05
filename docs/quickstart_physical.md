@@ -348,13 +348,85 @@ The deployment of XOS includes a deployment of Open Stack.
 ## Booting Compute Nodes
 
 ### Network configuration
-The proposed configuration for a CORD POD is has the following network configuration on the head node:
 
-   - eth0 / eth1 - fabric interfaces (40G or 10G), not relevant for the test environment.
-   - mgmtbr - the bridge on which the head node supports PXE boots and is an internally interface to which all
-   the compute and VM nodes connected. This bridge uses eth2 as its bridge ports
-   - eth3 - WAN link. the head node will NAT from eth2 to eth3
-   install that is part of XOS
+The CORD POD uses two core network interfaces, `fabric` and `mgmtbr`. The `fabric` interface will be used
+to bond all interfaces meant to be used for CORD data traffic and the `mgmtbr` will be used to bridge all
+interfaces used for POD management (signalling) traffic.
+
+An additional interface of import on the head node is the external interface, or the interface through which
+the management net accesses upstream servers; such as the Ineteret.
+
+How physical interfaces are identified and mapped to either the `fabric` or `mgmtbr` interface is a combination
+of their name, NIC driver, and/or bus type.
+
+By default any interface that has a module or kernel driver of `tun`, `bridge`, `bonding`, or `veth` will be
+ignored when selecting devices for the `fabric` and `mgmtbr` interfaces. As will any interface that is not
+associated with a bus type or has a bus type of `N/A` or `tap`. For your specific deployment you can
+verify the interface information using the `ethtool -i <name>` command on the linux prompt.
+
+All other interfaces that are not ignored will be considered for selection to either the `fabric` or
+`mbmtbr` interface. By default, any interface that has a module or kernel driver of `i40e` or `mlx4_en` will
+be selected to the `fabric` interface and all others will be selected to the `mgmtbr` interface.
+
+As the `fabric` interface is a `bond` the first interface, sorted alpha numberically by name, will be used
+as the primary interface.
+
+Currently the `mgmtbr` interface is a bridge and the physical interfaces will be added as `bridge_ports`
+on the `mgmtbr`. This is likely to change to a `bond` in a future release and at this time the primary
+interface will be selected by alpha numberic sorting.
+
+#### Customizing Network Configuration
+
+The network configuration can be customized to your deployment using a set of variables that can be set
+in your deployment configuration file, e.g. `podX.yml`. There is a set of include, exclude, and ignore
+variables that operation on the interface name, module type, and bus type. By setting values on these
+variables it is fairly easy to customize the network settings.
+
+The options are processed as following:
+
+1. If a given interface matches an ignore option, it is not available to be selected into either the `fabric` or `mgmtbr` interface and will not be modified in the `/etc/network/interface`.
+1. If no include criteria are specified and the given interfaces matches then exclude criteria then the interface will be set as `manual` configuraiton in the `/etc/network/interface` file and will not be `auto` activated
+1. If no include criteria are specified and the given interface does _NOT_ match the exclude criteria then this interface will be included in either the `frabric` or `mgmtbr` interface
+1. If include criteria are specified and the given interface does not match the criteria then the interface will be ignored and its configuration will _NOT_ be modified
+1. If include criteria are specified and the given interface matches the criteria then if the given interface also matches the exclude criteria then this interface will be set as `manual` configuraiton in the `/etc/network/interface` file and will not be `auto` activated
+1. If include criteria are specified and the given interface matches the criteria and if it does _NOT_ match the exclude criteria then this interface will be included in either the `frabric` or `mgmtbr` interface
+
+By default, the only criteria that are specified is the _fabric include module types_ and they are set to `i40e,mlx4_en` (_NOTE: the list is now comma separated and not vertical bar (`|`) separated._)
+
+If the _fabric include module types_ is specified and the _management exclude module types_ are not specified, then
+by default the _fabric include module types_ are used as the _management exclude module types_. This ensures that
+by default the `fabric` and the `mgmtbr` do not intersect on interface module types.
+
+If an external interface is specified in the deployment configuration, this interface will be added to the
+_farbric_ and _management_ _ignore names_ list.
+
+Each of the criteria is specified as a comma separated list of regular expressions.
+Default
+
+To set the variables you can use the `seedServer.extraVars` section in the deployment config file as follows:
+
+```
+seedServer:
+  extraVars:
+    - 'fabric_include_names=<name1>,<name2>'
+    - 'fabric_include_module_types=<mod1>,<mod2>'
+    - 'fabric_include_bus_types=<bus1>,<bus2>'
+    - 'fabric_exclude_names=<name1>,<name2>'
+    - 'fabric_exclude_module_types=<mod1>,<mod2>'
+    - 'fabric_exclude_bus_types=<bus1>,<bus2>'
+    - 'fabric_ignore_names=<name1>,<name2>'
+    - 'fabric_ignore_module_types=<mod1>,<mod2>'
+    - 'fabric_ignore_bus_types=<bus1>,<bus2>'
+    - 'management_include_names=<name1>,<name2>'
+    - 'management_include_module_types=<mod1>,<mod2>'
+    - 'management_include_bus_types=<bus1>,<bus2>'
+    - 'management_exclude_names=<name1>,<name2>'
+    - 'management_exclude_module_types=<mod1>,<mod2>'
+    - 'management_exclude_bus_types=<bus1>,<bus2>'
+    - 'management_ignore_names=<name1>,<name2>'
+    - 'management_ignore_module_types=<mod1>,<mod2>'
+    - 'management_ignore_bus_types=<bus1>,<bus2>'
+```
 
 The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and mgmtbr interfaces.
 
