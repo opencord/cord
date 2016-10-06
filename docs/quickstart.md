@@ -45,8 +45,6 @@ Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more informa
 
 ## Download and Run the Script
 
-*Update these instructions once the patches are finalized and merged*
-
 On the target server, download the script that installs CORD-in-a-Box.  Then run it,
 saving the screen output to a file called `install.out`:
 
