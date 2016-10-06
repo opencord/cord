@@ -51,8 +51,8 @@ On the target server, download the script that installs CORD-in-a-Box.  Then run
 saving the screen output to a file called `install.out`:
 
 ```
-curl https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
-bash ./cord-in-a-box.sh -t | tee ~/install.out
+curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
+bash ~/cord-in-a-box.sh -t | tee ~/install.out
 ```
 
 The script takes a *long time* (at least two hours) to run.  Be patient!  If it hasn't completely
