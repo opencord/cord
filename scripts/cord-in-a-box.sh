@@ -90,7 +90,7 @@ function bootstrap() {
   fi
 
   cd $CORDDIR/build
-  vagrant plugin install vagrant-libvirt
+  vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
   vagrant plugin install vagrant-mutate
   vagrant box list ubuntu/trusty64 | grep virtualbox || vagrant box add ubuntu/trusty64
   vagrant box list ubuntu/trusty64 | grep libvirt || vagrant mutate ubuntu/trusty64 libvirt --input-provider virtualbox
