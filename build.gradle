@@ -83,6 +83,12 @@ ext {
                     'name':     'swarm',
                     'digest':   'sha256:6ca9b40980e2fcdcd229900ec8933f3e92c14ead22c9404cb09736cb4f3a9248'
             ],
+            'xosproject/vsg': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'xosproject/vsg',
+                    'digest':   'sha256:18d1c6ef9767d8a41c9b51948776052d024d4e3294e5d1d6dde1a49112175d91'
+            ],
     ]
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
