@@ -170,12 +170,12 @@ downloaded using the `docker images` command on the development machine:
 ```
 docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-python              2.7-alpine          836fa7aed31d        5 days ago          56.45 MB
-consul              <none>              62f109a3299c        2 weeks ago         41.05 MB
-registry            2.4.0               8b162eee2794        9 weeks ago         171.1 MB
-abh1nav/dockerui    latest              6e4d05915b2a        19 months ago       469.5 MB
+python              2.7-alpine          7fb9bd20d612        13 days ago         71.31 MB
+onosproject/onos    <none>              309088c647cf        12 weeks ago        825.6 MB
+consul              <none>              62f109a3299c        3 months ago        41.05 MB
+swarm               <none>              47dc182ea74b        5 months ago        19.32 MB
+nginx               <none>              3c69047c6034        5 months ago        182.7 MB
 ```
-
 
 ## Build Images
 Bare metal provisioning leverages utilities built and packaged as Docker
@@ -282,6 +282,7 @@ observe a list of docker images.
 curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
 {
   "repositories": [
+    "config-generator",
     "consul",
     "cord-dhcp-harvester",
     "cord-ip-allocator",
