@@ -1,14 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Look at the command line arguments and the environment to
-# determine the provider being used
-if ARGV[1] and (ARGV[1].split('=')[0] == "--provider" or ARGV[2])
-  provider = (ARGV[1].split('=')[1] || ARGV[2])
-else
-  provider = (ENV['VAGRANT_DEFAULT_PROVIDER'] || :virtualbox).to_sym
-end
-
 Vagrant.configure(2) do |config|
 
   if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
@@ -20,6 +12,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
+    d.vm.synced_folder '.', '/vagrant', disable: true
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
@@ -27,15 +20,8 @@ Vagrant.configure(2) do |config|
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
-
-    # The libvirt provider is not handling mounts "normally", so for now get the source into the VM
-    # via an rsync
-    if provider == "libvirt"
-      d.vm.synced_folder '../', '/cord', type: 'rsync', rsync__args: ["--verbose", "--archive", "--delete", "-z"]
-      d.vm.synced_folder '.', '/vagrant', type: 'rsync', disabled: true
-      d.vm.provider :libvirt do |domain|
-        domain.memory = 2048
-      end
+    d.vm.provider :libvirt do |v|
+      v.memory = 2048
     end
   end
 
