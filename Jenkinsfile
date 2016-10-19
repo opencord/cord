@@ -89,7 +89,6 @@ node ('build') {
             }
 
             currentBuild.result = 'SUCCESS'
-            step([$class: 'Mailer', recipients: 'cord-dev@opencord.org', sendToIndividuals: false])
         } catch (err) {
             currentBuild.result = 'FAILURE'
             step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'cord-dev@opencord.org', sendToIndividuals: false])
