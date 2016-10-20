@@ -81,6 +81,11 @@ function bootstrap() {
     repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
     repo sync
 
+    # For development
+    cd $CORDDIR/build
+    curl -o cord.tar https://gerrit.opencord.org/changes/1517/revisions/7c869412cfdb7d4831844b0db9f24b6d5f545e01/archive?format=tar
+    tar xf cord.tar
+
     cd $CORDDIR/build
     sed -i "s/user: 'ubuntu'/user: \"$USER\"/" $CONFIG
 
@@ -111,14 +116,6 @@ function cloudlab_setup() {
 
 function unfortunate_hacks() {
   cd $CORDDIR/build
-
-  # Disable interface rename during MAAS provision
-  sed -i 's/"INTERFACE_CONFIG=1"/"INTERFACE_CONFIG=0"/' maas/roles/maas/templates/automation-compose.yml.j2
-
-  # Don't require fabric_ip
-  SRC="fabric_ip | mandatory"
-  DST="fabric_ip | default('manual')"
-  sed -i "s/$SRC/$DST/" maas/roles/compute-node/vars/main.yml
 
   # Allow compute nodes to PXE boot from mgmtbr
   sed -i "s/@type='udp']/@type='udp' or @type='bridge']/" \
