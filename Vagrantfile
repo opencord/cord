@@ -103,6 +103,9 @@ Vagrant.configure(2) do |config|
       dev: "mgmtbr",
       mode: "bridge",
       type: "bridge"
+    c.vm.network "private_network",
+      adapter: 2,
+      ip: "10.6.1.2"
     c.vm.provider :libvirt do |domain|
       domain.memory = 8192
       domain.cpus = 4

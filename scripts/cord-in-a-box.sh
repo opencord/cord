@@ -86,7 +86,9 @@ function bootstrap() {
 
     # Set external interface in config file
     IFACE=$(route | grep default | awk '{print $8}' )
-    sed -i "s/eth0/$IFACE/" $CONFIG
+    SRC="'eth0'"
+    DST="'"$IFACE"'"
+    sed -i "s/$SRC/$DST/" $CONFIG
   fi
 
   cd $CORDDIR/build
@@ -111,14 +113,6 @@ function cloudlab_setup() {
 
 function unfortunate_hacks() {
   cd $CORDDIR/build
-
-  # Disable interface rename during MAAS provision
-  sed -i 's/"INTERFACE_CONFIG=1"/"INTERFACE_CONFIG=0"/' maas/roles/maas/templates/automation-compose.yml.j2
-
-  # Don't require fabric_ip
-  SRC="fabric_ip | mandatory"
-  DST="fabric_ip | default('manual')"
-  sed -i "s/$SRC/$DST/" maas/roles/compute-node/vars/main.yml
 
   # Allow compute nodes to PXE boot from mgmtbr
   sed -i "s/@type='udp']/@type='udp' or @type='bridge']/" \
@@ -163,6 +157,15 @@ function set_up_maas_user() {
 function add_compute_node() {
   cd $CORDDIR/build
   sudo su $USER -c 'vagrant up compute_node --provider libvirt'
+
+  # Change MAC address of bridge to match cord-pod service profile
+  # This change won't survive a reboot
+  sudo ifconfig virbr3 hw ether 02:42:0a:06:01:01
+
+  # Add gateway IP addresses to virbr3 for vsg and exampleservice tests
+  # This change won't survive a reboot
+  sudo ip address add 10.6.1.129 dev virbr3
+  sudo ip address add 10.6.1.193 dev virbr3
 
   # Sign into MAAS
   KEY=$(sudo maas-region-admin apikey --username=cord)
