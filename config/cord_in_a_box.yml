@@ -24,7 +24,7 @@ seedServer:
     - 'reboot'
     - 'interface_config'
 
-  fabric_ip: '10.1.1.1/24'
+  fabric_ip: '10.6.1.1/24'
   management_ip: '10.1.0.1/24'
   external_iface: 'eth0'
   management_network: '10.1.0.0/24'
@@ -39,6 +39,11 @@ seedServer:
   extraVars:
     #- 'on_cloudlab=True'
     - 'cord_in_a_box=True'
+    - 'fabric_include_names=eth2'
+    - 'fabric_include_module_types=omit'
+    - 'fabric_exclude_names=eth0,eth1'
+    - 'management_include_names=eth1'
+    - 'management_exclude_names=eth0,eth2'
 
 docker:
   imageVersion: candidate
@@ -46,6 +51,5 @@ docker:
 otherServers:
   # Specifies the configuration for dynamically added compute nodes
   fabric:
-    network: '10.1.1.1/24'
-    range_low: '10.1.1.2'
-    range_high: '10.1.1.253'
+    network: '10.6.1.1/24'
+    management: '10.1.0.0/24'

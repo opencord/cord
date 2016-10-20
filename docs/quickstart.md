@@ -123,8 +123,7 @@ The `build_compute_node` VM is the virtual compute node controlled by OpenStack.
 This VM can be entered as follows:
 
 ```
-source ~/admin-openrc.sh
-ssh ubuntu@$( nova service-list | grep nova-compute | awk '{print $4}' )
+ssh ubuntu@$( cord prov list | tail -1 | awk '{print $2}' )
 ```
 
 ### Docker Containers
@@ -192,18 +191,17 @@ lines like these in the output:
 
 ```
 TASK [test-vsg : Output from ping test] ****************************************
-Thursday 28 July 2016  15:00:17 -0600 (0:00:03.367)       0:01:20.075 *********
-ok: [localhost] => {
+Thursday 27 October 2016  15:29:17 +0000 (0:00:03.144)       0:19:21.336 ******
+ok: [10.100.198.201] => {
     "pingtest.stdout_lines": [
-        "nova-compute-1 | SUCCESS | rc=0 >>",
         "PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.",
-        "64 bytes from 8.8.8.8: icmp_seq=1 ttl=45 time=5.30 ms",
-        "64 bytes from 8.8.8.8: icmp_seq=2 ttl=45 time=5.29 ms",
-        "64 bytes from 8.8.8.8: icmp_seq=3 ttl=45 time=5.36 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=1 ttl=47 time=29.7 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=2 ttl=47 time=29.2 ms",
+        "64 bytes from 8.8.8.8: icmp_seq=3 ttl=47 time=29.1 ms",
         "",
         "--- 8.8.8.8 ping statistics ---",
         "3 packets transmitted, 3 received, 0% packet loss, time 2003ms",
-        "rtt min/avg/max/mdev = 5.295/5.320/5.365/0.031 ms"
+        "rtt min/avg/max/mdev = 29.176/29.367/29.711/0.243 ms"
     ]
 }
 ```
@@ -224,10 +222,9 @@ lines like these in the output:
 
 ```
 TASK [test-exampleservice : Output from curl test] *****************************
-Thursday 28 July 2016  15:01:43 -0600 (0:00:01.441)       0:02:46.634 *********
-ok: [localhost] => {
+Thursday 27 October 2016  15:34:40 +0000 (0:00:01.116)       0:24:44.732 ******
+ok: [10.100.198.201] => {
     "curltest.stdout_lines": [
-        "nova-compute-1 | SUCCESS | rc=0 >>",
         "ExampleService",
         " Service Message: \"hello\"",
         " Tenant Message: \"world\""
