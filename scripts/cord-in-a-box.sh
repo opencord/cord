@@ -112,14 +112,6 @@ function cloudlab_setup() {
 function unfortunate_hacks() {
   cd $CORDDIR/build
 
-  # Disable interface rename during MAAS provision
-  sed -i 's/"INTERFACE_CONFIG=1"/"INTERFACE_CONFIG=0"/' maas/roles/maas/templates/automation-compose.yml.j2
-
-  # Don't require fabric_ip
-  SRC="fabric_ip | mandatory"
-  DST="fabric_ip | default('manual')"
-  sed -i "s/$SRC/$DST/" maas/roles/compute-node/vars/main.yml
-
   # Allow compute nodes to PXE boot from mgmtbr
   sed -i "s/@type='udp']/@type='udp' or @type='bridge']/" \
     ~/.vagrant.d/gems/gems/vagrant-libvirt-0.0.35/lib/vagrant-libvirt/action/set_boot_order.rb
