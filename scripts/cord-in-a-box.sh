@@ -81,12 +81,19 @@ function bootstrap() {
     repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
     repo sync
 
+    # For development
+    cd $CORDDIR/build
+    curl -o cord.tar https://gerrit.opencord.org/changes/1517/revisions/84c75dfbc13926acfad367e1578fb98e52585d93/archive?format=tar
+    tar xf cord.tar
+
     cd $CORDDIR/build
     sed -i "s/user: 'ubuntu'/user: \"$USER\"/" $CONFIG
 
     # Set external interface in config file
     IFACE=$(route | grep default | awk '{print $8}' )
-    sed -i "s/eth0/$IFACE/" $CONFIG
+    SRC="'eth0'"
+    DST="'"$IFACE"'"
+    sed -i "s/$SRC/$DST/" $CONFIG
   fi
 
   cd $CORDDIR/build
@@ -111,14 +118,6 @@ function cloudlab_setup() {
 
 function unfortunate_hacks() {
   cd $CORDDIR/build
-
-  # Disable interface rename during MAAS provision
-  sed -i 's/"INTERFACE_CONFIG=1"/"INTERFACE_CONFIG=0"/' maas/roles/maas/templates/automation-compose.yml.j2
-
-  # Don't require fabric_ip
-  SRC="fabric_ip | mandatory"
-  DST="fabric_ip | default('manual')"
-  sed -i "s/$SRC/$DST/" maas/roles/compute-node/vars/main.yml
 
   # Allow compute nodes to PXE boot from mgmtbr
   sed -i "s/@type='udp']/@type='udp' or @type='bridge']/" \
