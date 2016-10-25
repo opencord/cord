@@ -646,7 +646,7 @@ node (e.g., *nova-compute-1.cord.lab*), you will see the following in `vtn-exter
       type: tosca.nodes.Tag
       properties:
           name: dataPlaneIp
-          value: 10.168.0.253/24
+          value: 10.6.1.1/24
       requirements:
           - target:
               node: nova-compute-1.cord.lab
@@ -738,7 +738,7 @@ and '[cmd] --help' for help on a specific command.
 Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
 
 onos> cordvtn-nodes
-hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.168.0.253/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
+hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.6.1.1/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
 Total 1 nodes
 ```
 
