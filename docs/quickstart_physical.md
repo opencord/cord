@@ -646,7 +646,7 @@ node (e.g., *nova-compute-1.cord.lab*), you will see the following in `vtn-exter
       type: tosca.nodes.Tag
       properties:
           name: dataPlaneIp
-          value: 10.168.0.253/24
+          value: 10.6.1.1/24
       requirements:
           - target:
               node: nova-compute-1.cord.lab
