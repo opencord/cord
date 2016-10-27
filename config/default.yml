@@ -38,10 +38,3 @@ seedServer:
 
 docker:
   imageVersion: candidate
-
-otherServers:
-  # Specifies the configuration for dynamically added compute nodes
-  fabric:
-    network: '10.1.1.1/24'
-    range_low: '10.1.1.2'
-    range_high: '10.1.1.253'
