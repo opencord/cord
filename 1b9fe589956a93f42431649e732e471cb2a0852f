@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_96b0d0de",
+        "filename": "config/cord_in_a_box.yml",
+        "patchSetId": 22
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2016-10-27T19:18:26Z",
+      "side": 1,
+      "message": "The range_low/_high actually aren\u0027t used, but feel free to set them. :)",
+      "revId": "1b9fe589956a93f42431649e732e471cb2a0852f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
