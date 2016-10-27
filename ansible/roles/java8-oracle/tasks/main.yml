@@ -5,7 +5,8 @@
 
 - name: Add Oracle Java repository
   sudo: yes
-  apt_repository: repo='ppa:webupd8team/java'
+  apt_repository:
+    repo: "{{ java_apt_repo | default('ppa:webupd8team/java') }}"
 
 - name: Accept Java 8 license
   sudo: yes
