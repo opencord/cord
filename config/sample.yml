@@ -32,6 +32,8 @@ seedServer:
   # management_network - the network and mask bits to used for hosts on the management
   #                      network
   fabric_ip: '10.6.1.1/24'
+  #fabric_range_low: '10.6.1.2'
+  #fabric_range_high: '10.6.1.100'
   management_ip: '10.6.0.1/24'
   external_ip: '47.135.132.21/24'
   #external_iface: 'eth2'
@@ -75,17 +77,14 @@ seedServer:
   #  - 'management_ignore_names=<name1>,<name2>,...'
   #  - 'management_ignore_module_types=<mtype1>,<mtype2>,...'
   #  - 'management_ignore_bus_types=<btype1>,<btype2>,...'
+  #  - ubuntu_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/archive.ubuntu.com/ubuntu trusty main universe"
+  #  - ubuntu_updates_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/archive.ubuntu.com/ubuntu trusty-updates main universe"
+  #  - docker_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/apt.dockerproject.org/repo ubuntu-trusty main"
+  #  - java_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/ppa.launchpad.net/webupd8team/java/ubuntu trusty main"
+  #  - ansible_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/ppa.launchpad.net/ansible/ansible/ubuntu trusty main"
+  #  - maas_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/ppa.launchpad.net/maas/stable/ubuntu trusty main"
+  #  - dell_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/linux.dell.com/repo/community trusty openmanage"
+  #  - juju_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/ppa.launchpad.net/juju/stable/ubuntu trusty main"
 
 docker:
   imageVersion: candidate
-
-otherNodes:
-  # Experimental
-  #
-  # Specifies the subnet and address range that will be used to allocate IP addresses
-  # to the compute nodes as they are deployed into the POD.
-  fabric:
-    network: 10.6.1.1/24
-    management: 10.6.0.0/24
-    range_low: 10.6.1.2
-    range_high: 10.6.1.253
