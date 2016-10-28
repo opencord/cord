@@ -1,6 +1,6 @@
 - name: Debian add Docker repository and update apt cache
   apt_repository:
-    repo: "{{ docker_apt_repo | default('deb https://apt.dockerproject.org/repo ubuntu-{{ debian_version }} main') }}"
+    repo: deb https://apt.dockerproject.org/repo ubuntu-{{ debian_version }} main
     update_cache: yes
     state: present
   tags: [docker]
