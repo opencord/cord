@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_365b3c56",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-10-28T12:38:17Z",
+      "side": 1,
+      "message": "I suspect this might confuse libvirt if there are any images in there.... but maybe it\u0027s OK.",
+      "range": {
+        "startLine": 108,
+        "startChar": 75,
+        "endLine": 108,
+        "endChar": 109
+      },
+      "revId": "388e38ca481daa6ad53b58b9e6dad52f82bdd216",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
