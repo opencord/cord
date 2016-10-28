@@ -101,8 +101,18 @@ function bootstrap() {
 function cloudlab_setup() {
   if [ -e /usr/testbed/bin/mkextrafs ]
   then
+    sudo mkdir -p /var/extra
+
     # Sometimes this command fails on the first try
-    sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/lib/libvirt/images/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/lib/libvirt/images/"
+    sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/extra/"
+
+    # we'll replace /var/lib/libvirt/images with a symlink below
+    [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
+
+    sudo mkdir -p /var/extra/libvirt_images
+    sudo mkdir -p /var/extra/docker
+    [ ! -e /var/lib/libvirt/images ] && sudo ln -s /var/extra/libvirt_images /var/lib/libvirt/images
+    [ ! -e /var/lib/docker ] && sudo ln -s /var/extra/docker /var/lib/docker
 
     cd $CORDDIR/build
     SRC="#- 'on_cloudlab=True'"
