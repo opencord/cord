@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
-    d.vm.synced_folder '.', '/vagrant', disable: true
+    d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
@@ -20,14 +20,15 @@ Vagrant.configure(2) do |config|
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
-    d.vm.provider :libvirt do |v|
+    d.vm.provider :libvirt do |v, override|
       v.memory = 2048
+      override.vm.synced_folder "..", "/cord", type: "nfs"
     end
   end
 
   config.vm.define "prod" do |d|
     d.vm.box = "ubuntu/trusty64"
-    d.vm.synced_folder '.', '/vagrant', disable: true
+    d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "prod"
     d.vm.network "private_network", ip: "10.100.198.201"
     d.vm.network "private_network", ip: "0.0.0.0", virtualbox__intnet: "cord-test-network"
@@ -74,7 +75,7 @@ Vagrant.configure(2) do |config|
     # Defining VM properties
     config.vm.define "compute_node#{i}" do |c|
       c.vm.box = "clink15/pxe"
-      c.vm.synced_folder '.', '/vagrant', disable: true
+      c.vm.synced_folder '.', '/vagrant', disabled: true
       c.vm.communicator = "none"
       c.vm.hostname = "computenode"
       c.vm.network "private_network",
@@ -94,7 +95,7 @@ Vagrant.configure(2) do |config|
   # Not able to merge with virtualbox config for compute nodes above
   # Issue is that here no box and no private network are specified
   config.vm.define "compute_node" do |c|
-    c.vm.synced_folder '.', '/vagrant', disable: true
+    c.vm.synced_folder '.', '/vagrant', disabled: true
     c.vm.communicator = "none"
     c.vm.hostname = "computenode"
     c.vm.network "public_network",
