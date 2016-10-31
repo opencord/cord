@@ -132,7 +132,8 @@ function install_head_node() {
   cd $CORDDIR/build
 
   # Network setup to install physical server as head node
-  ip addr list dev virbr2 | grep 10.100.198.201 || sudo ip addr add dev virbr2 10.100.198.201
+  BRIDGE=$( route -n | grep 10.100.198.0 | awk '{print $8}' )
+  ip addr list dev $BRIDGE | grep 10.100.198.201 || sudo ip addr add dev $BRIDGE 10.100.198.201
   ifconfig mgmtbr || sudo brctl addbr mgmtbr
   sudo ifconfig mgmtbr 10.1.0.1/24 up
 
@@ -160,12 +161,13 @@ function add_compute_node() {
 
   # Change MAC address of bridge to match cord-pod service profile
   # This change won't survive a reboot
-  sudo ifconfig virbr3 hw ether 02:42:0a:06:01:01
+  BRIDGE=$( route -n | grep 10.6.1.0 | awk '{print $8}' )
+  sudo ifconfig $BRIDGE hw ether 02:42:0a:06:01:01
 
-  # Add gateway IP addresses to virbr3 for vsg and exampleservice tests
+  # Add gateway IP addresses to $BRIDGE for vsg and exampleservice tests
   # This change won't survive a reboot
-  sudo ip address add 10.6.1.129 dev virbr3
-  sudo ip address add 10.6.1.193 dev virbr3
+  sudo ip address add 10.6.1.129 dev $BRIDGE
+  sudo ip address add 10.6.1.193 dev $BRIDGE
 
   # Sign into MAAS
   KEY=$(sudo maas-region-admin apikey --username=cord)
@@ -216,11 +218,12 @@ function run_diagnostics() {
 
 # Parse options
 RUN_TEST=0
+SETUP_ONLY=0
 SETUP_BRANCH="master"
 DIAGNOSTICS=0
 CLEANUP=0
 
-while getopts "b:cdehi:p:r:ts:" opt; do
+while getopts "b:cdhst" opt; do
   case ${opt} in
     b ) XOS_BRANCH=$OPTARG
       ;;
@@ -234,8 +237,11 @@ while getopts "b:cdehi:p:r:ts:" opt; do
       echo "    $0 -c             cleanup from previous test"
       echo "    $0 -d             run diagnostic collector"
       echo "    $0 -h             display this help message"
+      echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       exit 0
+      ;;
+    s ) SETUP_ONLY=1
       ;;
     t ) RUN_TEST=1
       ;;
@@ -257,6 +263,13 @@ bootstrap
 cloudlab_setup
 unfortunate_hacks
 corddev_up
+
+if [[ $SETUP_ONLY -ne 0 ]]
+then
+  echo "Finished build environment setup, exiting..."
+  exit 0
+fi
+
 install_head_node
 set_up_maas_user
 add_compute_node
