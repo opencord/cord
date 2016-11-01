@@ -1,6 +1,6 @@
 - name: Apt packages
   apt:
     name: "{{ item }}"
-  with_items: apt_packages
+  with_items: "{{ apt_packages }}"
   tags: [buildtools]
 
