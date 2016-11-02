@@ -22,6 +22,30 @@
       "revId": "388e38ca481daa6ad53b58b9e6dad52f82bdd216",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a014df3_36221cba",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2016-11-02T22:46:22Z",
+      "side": 1,
+      "message": "When the script runs, the directory is empty. If the directory isn\u0027t empty, then the rmdir should fail causing the script to fail.",
+      "parentUuid": "1a014df3_365b3c56",
+      "range": {
+        "startLine": 108,
+        "startChar": 75,
+        "endLine": 108,
+        "endChar": 109
+      },
+      "revId": "388e38ca481daa6ad53b58b9e6dad52f82bdd216",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
