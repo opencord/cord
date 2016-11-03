@@ -198,9 +198,8 @@ function add_compute_node() {
   STATUS=$(sudo /usr/local/bin/get-node-prov-state |jq ".[] | select(.id == \"$NODEID\").status")
   until [ "$STATUS" == "2" ]; do
     if [ "$STATUS" == "3" ]; then
-      echo "*** ERROR in provisioning!"
-      echo "*** Check /etc/maas/ansible/logs/$NODEID.log"
-      exit 1
+      echo "*** [WARNING] Possible error in node provisioning process"
+      echo "*** [WARNING] Check /etc/maas/ansible/logs/$NODEID.log"
     fi
     echo "Waiting for the compute node to be fully provisioned"
     sleep 60
