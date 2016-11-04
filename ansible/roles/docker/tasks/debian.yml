@@ -10,7 +10,7 @@
     name: docker-engine
     state: latest
     force: yes
-  tags: [docker]
+  tags: [docker, skip_ansible_lint]
 
 - name: Debian python-pip is present
   apt: name=python-pip state=present
