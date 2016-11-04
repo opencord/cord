@@ -14,6 +14,7 @@
 - name: CentOS Daemon is reloaded
   command: systemctl daemon-reload
   tags: [docker]
+  changed_when: true
 
 - name: CentOS service is running
   service:
