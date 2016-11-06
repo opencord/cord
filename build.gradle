@@ -89,6 +89,24 @@ ext {
                     'name':     'xosproject/vsg',
                     'digest':   'sha256:18d1c6ef9767d8a41c9b51948776052d024d4e3294e5d1d6dde1a49112175d91'
             ],
+            'xosproject/xos-postgres': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'xosproject/xos-postgres',
+                    'digest':   'sha256:f2d31a50b8af7434ab07b1e54e99c1ff1e10d77d16a46e5d6933d3c0528f4820'
+            ],
+            'xosproject/cord-app-build': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'xosproject/cord-app-build',
+                    'digest':   'sha256:528c6ac3a87609779035857a7b1cf9fab8e046e7ac259d72cf275f1c46d7416e'
+            ],
+            'redis': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'redis',
+                    'digest':   'sha256:0fe5a7afa2c2154f37c8ab56a9a6c5023cb0405cc0e85b34d8dcc1de6c3f143e'
+            ],
     ]
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
