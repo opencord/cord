@@ -111,8 +111,10 @@ function cloudlab_setup() {
 
     sudo mkdir -p /var/extra/libvirt_images
     sudo mkdir -p /var/extra/docker
+    sudo mkdir -p /var/extra/docker-registry
     [ ! -e /var/lib/libvirt/images ] && sudo ln -s /var/extra/libvirt_images /var/lib/libvirt/images
     [ ! -e /var/lib/docker ] && sudo ln -s /var/extra/docker /var/lib/docker
+    [ ! -e /docker-registry ] && sudo ln -s /var/extra/docker-registry /docker-registry
 
     cd $CORDDIR/build
     SRC="#- 'on_cloudlab=True'"
