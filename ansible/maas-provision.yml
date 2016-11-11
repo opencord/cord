@@ -1,0 +1,5 @@
+- hosts: all
+  remote_user: vagrant
+  serial: 1
+  roles:
+    - maas-provision

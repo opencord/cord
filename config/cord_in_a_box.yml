@@ -10,8 +10,8 @@ seedServer:
 
   # User name and password used by Ansible to connect to the host for remote
   # provisioning
-  user: 'ubuntu'
-  password: 'foo'
+  user: 'vagrant'
+  password: 'vagrant'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #
@@ -33,8 +33,8 @@ seedServer:
   #
   # virtualbox_support - install support for managing virtual box based
   #                      compute nodes
-  virtualbox_support: 1
-  power_helper_user: 'cord'
+  # virtualbox_support: 1
+  # power_helper_user: 'cord'
 
   extraVars:
     #- 'on_cloudlab=True'
