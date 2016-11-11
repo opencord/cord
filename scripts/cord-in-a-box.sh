@@ -82,6 +82,7 @@ function bootstrap() {
     repo sync
 
     # Patches to evaluate
+    cd $CORDDIR/build
     repo download platform-install 1664/27
 
     cd $CORDDIR/build
