@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
   end
 
   #By default, this variable is set to 2, such that Vagrantfile allows creation
-  #of compute nodes up to 2. If the number of compute nodes to be supported more 
+  #of compute nodes up to 2. If the number of compute nodes to be supported more
   #than 2, set the environment variable NUM_COMPUTE_NODES to the desired value
   #before executing this Vagrantfile.
   num_compute_nodes = (ENV['NUM_COMPUTE_NODES'] || 2).to_i
@@ -38,12 +38,31 @@ Vagrant.configure(2) do |config|
     d.vm.box = "ubuntu/trusty64"
     d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "prod"
+    d.vm.network "forwarded_port", guest: 80, host: 80, host_ip: '*'
     d.vm.network "private_network", ip: "10.100.198.201"
-    d.vm.network "private_network", ip: "0.0.0.0", virtualbox__intnet: "cord-test-network"
+    d.vm.network "private_network",
+        ip: "0.0.0.0",
+        auto_config: false,
+        virtualbox__intnet: "cord-mgmt-network",
+        libvirt__network_name: "cord-mgmt-network",
+        libvirt__forward_mode: "none",
+        libvirt__dhcp_enabled: false
+    d.vm.network "private_network",
+        ip: "10.6.1.201", # To set up the 10.6.1.1 IP address on bridge
+        virtualbox__intnet: "cord-fabric-network",
+        libvirt__network_name: "cord-fabric-network",
+        libvirt__forward_mode: "nat",
+        libvirt__dhcp_enabled: false
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/prod.yml -c local"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
+    end
+    d.vm.provider :libvirt do |v, override|
+      v.memory = 16384
+      v.cpus = 8
+      v.storage :file, :size => '100G', :type => 'qcow2'
+      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/add-extra-drive.yml -c local"
     end
   end
 
@@ -53,7 +72,8 @@ Vagrant.configure(2) do |config|
     s.vm.network "private_network", ip: "10.100.198.253"
     s.vm.network "private_network",
         type: "dhcp",
-        virtualbox__intnet: "cord-test-network",
+        virtualbox__intnet: "cord-fabric-network",
+        libvirt__network_name: "cord-fabric-network",
         mac: "cc37ab000001"
     s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
     s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/fakeswitch.yml -c local"
@@ -79,53 +99,40 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  (1..3).each do |i|
-    # Defining VM properties
-    config.vm.define "compute_node#{i}" do |c|
-      c.vm.box = "clink15/pxe"
-      c.vm.synced_folder '.', '/vagrant', disabled: true
-      c.vm.communicator = "none"
-      c.vm.hostname = "computenode"
-      c.vm.network "private_network",
-        adapter: "1",
-        type: "dhcp",
-        auto_config: false,
-        virtualbox__intnet: "cord-test-network"
-      c.vm.provider "virtualbox" do |v|
-        v.name = "compute_node#{i}"
-        v.memory = 1048
-        v.gui = "true"
-      end
-    end
-  end
-
   num_compute_nodes.times do |n|
-    # Libvirt compute node
-    # Not able to merge with virtualbox config for compute nodes above
-    # Issue is that here no box and no private network are specified
     config.vm.define "compute_node-#{n+1}" do |c|
       compute_ip = compute_ips[n]
       compute_index = n+1
       c.vm.synced_folder '.', '/vagrant', disabled: true
       c.vm.communicator = "none"
       c.vm.hostname = "computenode-#{compute_index}"
-      c.vm.network "public_network",
+      c.vm.network "private_network",
         adapter: 1,
+        ip: "0.0.0.0",
         auto_config: false,
-        dev: "mgmtbr",
-        mode: "bridge",
-        type: "bridge"
+        virtualbox__intnet: "cord-mgmt-network",
+        libvirt__network_name: "cord-mgmt-network"
       c.vm.network "private_network",
         adapter: 2,
-        ip: "#{compute_ip}"
-      c.vm.provider :libvirt do |domain|
-        domain.memory = 8192
-        domain.cpus = 4
-        domain.machine_virtual_size = 100
-        domain.storage :file, :size => '100G', :type => 'qcow2'
-        domain.boot 'network'
-        domain.boot 'hd'
-        domain.nested = true
+        ip: "#{compute_ip}",
+        auto_config: false,
+        virtualbox__intnet: "cord-fabric-network",
+        libvirt__network_name: "cord-fabric-network",
+        libvirt__forward_mode: "nat",
+        libvirt__dhcp_enabled: false
+      c.vm.provider :libvirt do |v|
+        v.memory = 8192
+        v.cpus = 4
+        v.machine_virtual_size = 100
+        v.storage :file, :size => '100G', :type => 'qcow2'
+        v.boot 'network'
+        v.boot 'hd'
+        v.nested = true
+      end
+      c.vm.provider "virtualbox" do |v, override|
+        override.vm.box = "clink15/pxe"
+        v.memory = 1048
+        v.gui = "true"
       end
     end
   end
