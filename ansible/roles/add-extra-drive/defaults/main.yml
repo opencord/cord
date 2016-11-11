@@ -1,0 +1,6 @@
+extra_disk_dev: /dev/vda
+
+extra_disk_part: /dev/vda1
+
+extra_disk_links:
+ - { src: /mnt/lxd, dest: /var/lib/lxd }
