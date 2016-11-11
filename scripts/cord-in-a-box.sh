@@ -16,37 +16,6 @@ function cleanup_from_previous_test() {
   cd $CORDDIR/build
   vagrant destroy
 
-  echo "Destroying juju environment"
-  juju destroy-environment --force -y manual
-
-  VMS=$( sudo uvt-kvm list )
-  for VM in $VMS
-  do
-    echo "Destroying $VM"
-    sudo uvt-kvm destroy $VM
-  done
-
-  echo "Cleaning up files"
-  rm -rf ~/.juju
-  rm -f ~/.ssh/known_hosts
-  rm -rf ~/platform-install
-  rm -rf ~/cord_apps
-  rm -rf ~/.ansible_async
-
-  echo "Removing MAAS"
-  [ -e  /usr/local/bin/remove-maas-components ] && /usr/local/bin/remove-maas-components
-
-  echo "Remove apt-cacher-ng"
-  sudo apt-get remove -y apt-cacher-ng
-  sudo rm -f /etc/apt/apt.conf.d/02apt-cacher-ng
-
-  echo "Removing mgmtbr"
-  ifconfig mgmtbr && sudo ip link set dev mgmtbr down && sudo brctl delbr mgmtbr
-
-  echo "Removing Juju packages"
-  sudo apt-get remove --purge -y $(dpkg --get-selections | grep "juju\|nova\|neutron\|keystone\|glance" | awk '{print $1}')
-  sudo apt-get autoremove -y
-
   rm -rf $CORDDIR
 
   set -e
@@ -88,7 +57,6 @@ function bootstrap() {
     done
 
     cd $CORDDIR/build
-    sed -i "s/user: 'ubuntu'/user: \"$USER\"/" $CONFIG
 
     # Set external interface in config file
     IFACE=$(route | grep default | awk '{print $8}' )
@@ -119,16 +87,7 @@ function cloudlab_setup() {
     [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
 
     sudo mkdir -p /mnt/extra/libvirt_images
-    sudo mkdir -p /mnt/extra/docker
-    sudo mkdir -p /mnt/extra/docker-registry
     [ ! -e /var/lib/libvirt/images ] && sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
-    [ ! -e /var/lib/docker ] && sudo ln -s /mnt/extra/docker /var/lib/docker
-    [ ! -e /docker-registry ] && sudo ln -s /mnt/extra/docker-registry /docker-registry
-
-    cd $CORDDIR/build
-    SRC="#- 'on_cloudlab=True'"
-    DST="- 'on_cloudlab=True'"
-    sed -i "s/$SRC/$DST/" config/cord_in_a_box.yml
   fi
 }
 
@@ -140,10 +99,11 @@ function unfortunate_hacks() {
     ~/.vagrant.d/gems/gems/vagrant-libvirt-0.0.35/lib/vagrant-libvirt/action/set_boot_order.rb
 }
 
-function corddev_up() {
+function vagrant_vms_up() {
   cd $CORDDIR/build
 
   sudo su $USER -c 'vagrant up corddev --provider libvirt'
+  sudo su $USER -c 'vagrant up prod --provider libvirt'
 
   # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
   # It allows SSH'ing to the machine via 'ssh corddev'
@@ -154,10 +114,6 @@ function install_head_node() {
   cd $CORDDIR/build
 
   # Network setup to install physical server as head node
-  BRIDGE=$( route -n | grep 10.100.198.0 | awk '{print $8}' )
-  ip addr list dev $BRIDGE | grep 10.100.198.201 || sudo ip addr add dev $BRIDGE 10.100.198.201
-  ifconfig mgmtbr || sudo brctl addbr mgmtbr
-  sudo ifconfig mgmtbr 10.1.0.1/24 up
 
   # SSH config saved earlier allows us to connect to VM without running 'vagrant'
   scp ~/.ssh/id_rsa* corddev:.ssh
@@ -194,6 +150,11 @@ function add_compute_node() {
   # This change won't survive a reboot
   sudo ip address add 10.6.1.129 dev $BRIDGE
   sudo ip address add 10.6.1.193 dev $BRIDGE
+
+  ####################################################
+  # Don't think things will work after this point... #
+  ####################################################
+
 
   # Sign into MAAS
   KEY=$(sudo maas-region-admin apikey --username=cord)
@@ -288,7 +249,7 @@ set -e
 bootstrap
 cloudlab_setup
 unfortunate_hacks
-corddev_up
+vagrant_vms_up
 
 if [[ $SETUP_ONLY -ne 0 ]]
 then
