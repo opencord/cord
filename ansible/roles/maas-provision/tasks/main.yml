@@ -1,0 +1,27 @@
+# Doesn't seem to be a MAAS module for Ansible yet
+- name: Get MAAS credentials
+  become: yes
+  command: maas-region-admin apikey --username=cord
+  register: maas_key
+
+- name: Login to MAAS
+  command: maas login cord http://localhost/MAAS/api/1.0 {{ maas_key.stdout }}
+
+- name: Wait for node to become ready
+  shell: maas cord nodes list|jq -r '.[] | select(.status == 0).system_id'
+  register: nodeid
+  until: nodeid | success
+  retries: 40
+  delay: 15
+
+# We need to be able to reboot the VM on the physical server running CiaB
+- name: Add remote power state
+  command: maas cord node update {{ nodeid.stdout }} power_type="virsh" power_parameters_power_address="qemu+ssh://{{ maas_user }}@10.100.198.1/system" power_parameters_power_id="{{ vagrant_name }}"
+
+- name: Wait for node to be fully provisioned
+  become: yes
+  shell: /usr/local/bin/get-node-prov-state |jq ''.[] | select(.id == "{{ nodeid.stdout }}").status'
+  register: prov_state
+  until: prov_state == "2"
+  retries: 80
+  delay: 15
