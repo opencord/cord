@@ -1,0 +1,36 @@
+- name: Check if the disk is partitioned
+  stat: path={{ extra_disk_dev }}1
+  register: device_stat
+
+- name: Set disk label
+  command: parted {{ extra_disk_dev }} mklabel msdos
+  when: device_stat.stat.exists == false
+
+- name: Create primary partition
+  command: parted {{ extra_disk_dev }} mkpart primary 1 100%
+  when: device_stat.stat.exists == false
+
+- name: Make filesystem
+  filesystem:
+    fstype: ext4
+    dev: "{{ extra_disk_dev }}1"
+
+- name: Mount extra disk
+  mount:
+    name: /mnt
+    src: "{{ extra_disk_dev }}1"
+    fstype: ext4
+    state: mounted
+
+- name: Create directories
+  file:
+    path: "{{ item.src }}"
+    state: directory
+  with_items: "{{ extra_disk_links }}"
+
+- name: Set up links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items: "{{ extra_disk_links }}"
