@@ -37,6 +37,12 @@ Vagrant.configure(2) do |config|
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
+    d.vm.provider :libvirt do |v, override|
+      v.memory = 16384
+      v.cpus = 8
+      v.storage :file, :size => '100G', :type => 'qcow2'
+      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/add-extra-drive.yml -c local"
+    end
   end
 
   config.vm.define "switch" do |s|
