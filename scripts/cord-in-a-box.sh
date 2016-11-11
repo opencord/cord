@@ -81,6 +81,10 @@ function bootstrap() {
     repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos,orchestration
     repo sync
 
+    # Patches to evaluate
+    cd $CORDDIR/build
+    repo download platform-install 1664/27
+
     cd $CORDDIR/build
     sed -i "s/user: 'ubuntu'/user: \"$USER\"/" $CONFIG
 
@@ -101,20 +105,20 @@ function bootstrap() {
 function cloudlab_setup() {
   if [ -e /usr/testbed/bin/mkextrafs ]
   then
-    sudo mkdir -p /var/extra
+    sudo mkdir -p /mnt/extra
 
     # Sometimes this command fails on the first try
-    sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/var/extra/"
+    sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/"
 
     # we'll replace /var/lib/libvirt/images with a symlink below
     [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
 
-    sudo mkdir -p /var/extra/libvirt_images
-    sudo mkdir -p /var/extra/docker
-    sudo mkdir -p /var/extra/docker-registry
-    [ ! -e /var/lib/libvirt/images ] && sudo ln -s /var/extra/libvirt_images /var/lib/libvirt/images
-    [ ! -e /var/lib/docker ] && sudo ln -s /var/extra/docker /var/lib/docker
-    [ ! -e /docker-registry ] && sudo ln -s /var/extra/docker-registry /docker-registry
+    sudo mkdir -p /mnt/extra/libvirt_images
+    sudo mkdir -p /mnt/extra/docker
+    sudo mkdir -p /mnt/extra/docker-registry
+    [ ! -e /var/lib/libvirt/images ] && sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
+    [ ! -e /var/lib/docker ] && sudo ln -s /mnt/extra/docker /var/lib/docker
+    [ ! -e /docker-registry ] && sudo ln -s /mnt/extra/docker-registry /docker-registry
 
     cd $CORDDIR/build
     SRC="#- 'on_cloudlab=True'"
