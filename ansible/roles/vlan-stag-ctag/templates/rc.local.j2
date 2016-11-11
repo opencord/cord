@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+# Set up VLAN tagging interface ("simulated OLT")
+ip link add link {{ olt_if }} name {{ olt_if }}.{{ s_tag }} type vlan id {{ s_tag }}
+ip link add link {{ olt_if }}.{{ s_tag }} name {{ olt_if }}.{{ s_tag }}.{{ c_tag }} type vlan id {{ c_tag }}
+ifconfig {{ olt_if }} up
+ifconfig {{ olt_if }}.{{ s_tag }} up
+ifconfig {{ olt_if }}.{{ s_tag }}.{{ c_tag }} up
+
+# Get IP address from vSG
+dhclient {{ olt_if }}.{{ s_tag }}.{{ c_tag }}
+
+exit 0

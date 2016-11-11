@@ -19,9 +19,9 @@ in a Vagrant VM (used to deploy CORD) as well as CORD-in-a-Box itself.
 Target server requirements:
 
 * 64-bit server, with
-  * 48GB+ RAM
-  * 12+ CPU cores
-  * 1TB+ disk
+  * 32GB+ RAM
+  * 8+ CPU cores
+  * 200GB+ disk
 * Access to the Internet
 * Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to install Ubuntu 14.04).
 * User account used to install CORD-in-a-Box has password-less *sudo* capability (e.g., like the `ubuntu` user)
@@ -81,40 +81,32 @@ You can find the project path used by the `repo` tool in the [manifest/default.x
 
 ## Inspecting CORD-in-a-Box
 
-CORD-in-a-Box installs the target server as a CORD head node, with OpenStack,
-ONOS, and XOS services running inside VMs.  An OpenStack compute node
-is also brought up inside a virtual machine.  You can see all the virtual
-machines by running `virsh list` on the target server:
+CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs.
+You can inspect their current status as follows:
 
 ```
-$ virsh list
- Id    Name                           State
-----------------------------------------------------
- 2     build_corddev                  running
- 3     juju-1                         running
- 4     ceilometer-1                   running
- 5     glance-1                       running
- 6     keystone-1                     running
- 7     percona-cluster-1              running
- 8     nagios-1                       running
- 9     neutron-api-1                  running
- 10    nova-cloud-controller-1        running
- 11    openstack-dashboard-1          running
- 12    rabbitmq-server-1              running
- 13    onos-cord-1                    running
- 14    onos-fabric-1                  running
- 15    xos-1                          running
- 18    build_compute_node             running
+~$ cd opencord/build/
+~/opencord/build$ vagrant status
+Current machine states:
+
+corddev                   running (libvirt)
+prod                      running (libvirt)
+switch                    not created (libvirt)
+testbox                   not created (libvirt)
+compute_node-1            running (libvirt)
+compute_node-2            not created (libvirt)
 ```
 
-The `build_corddev` VM is the Vagrant development machine that executes
-the build process.  It download and build Docker containers and publish them
-to the target server. It then installs MaaS on the target server (for bare-metal
-provisioning) and the ONOS, XOS, and OpenStack services in VMs.  This VM
+### corddev VM
+
+The `corddev` VM is a development machine used by the `cord-in-a-box.sh` script to drive the
+installation.  It downloads and builds Docker containers and publishes them
+to the virtal head node (see below). It then installs MaaS on the virtual head node (for bare-metal
+provisioning) and the ONOS, XOS, and OpenStack services in containers.  This VM
 can be entered as follows:
 
 ```
-cd ~/opencord/build; vagrant ssh corddev
+$ ssh corddev
 ```
 
 The CORD build environment is located in `/cord/build` inside this VM.  It is
@@ -122,44 +114,139 @@ possible to manually run individual steps in the build process here if you wish;
 [quickstart_physical.md](./quickstart_physical.md) for more information on
 how to run build steps.
 
-The VMs ending with names ending with `-1` are running the various CORD
-head node services.  Two instances of ONOS are running, in
-the `onos-cord-1` and `onos-fabric-1` VMs, though only `onos-cord-1` is used in
-the CORD-in-a-Box.  XOS is running inside the `xos-1`
-VM and is controlling ONOS and OpenStack.  You can get a deeper understanding of
-the configuration of the target server by visiting [head_node_services.md](./head_node_services.md).
-These VMs can be entered as follows:
+### prod VM
+
+The `prod` VM is the virtual head node of the POD.  It runs the OpenStack,
+ONOS, and XOS services inside containers.  It also simulates a subscriber
+devices using a container.  To enter it, simply type:
 
 ```
-ssh ubuntu@<vm-name>
+$ ssh prod
 ```
 
-The `build_compute_node` VM is the virtual compute node controlled by OpenStack.
-This VM can be entered as follows:
+Inside the VM, a number of services run in Docker and LXD containers.
+
+NOTE: NO ONOS CONTAINERS HERE YET!
 
 ```
-ssh ubuntu@$( cord prov list | tail -1 | awk '{print $2}' )
+vagrant@prod:~$ docker ps
+CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                              NAMES
+649bb35c54aa        xosproject/xos-ui                                     "python /opt/xos/mana"   About an hour ago   Up About an hour    8000/tcp, 0.0.0.0:8888->8888/tcp   cordpod_xos_ui_1
+700f23298686        xosproject/xos-synchronizer-exampleservice            "bash -c 'sleep 120; "   About an hour ago   Up About an hour    8000/tcp                           cordpod_xos_synchronizer_exampleservice_1
+05266a97d245        xosproject/xos-synchronizer-vtr                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vtr_1
+1fcd23a4b0b5        xosproject/xos-synchronizer-vsg                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vsg_1
+72741c1d431a        xosproject/xos-synchronizer-onos                      "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_onos_1
+b31eb4a938ff        xosproject/xos-synchronizer-fabric                    "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_fabric_1
+b14213da2ae2        xosproject/xos-synchronizer-openstack                 "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_openstack_1
+159c937b84d5        xosproject/xos-synchronizer-vtn                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vtn_1
+741c5465bd69        xosproject/xos                                        "python /opt/xos/mana"   2 hours ago         Up 2 hours          0.0.0.0:81->81/tcp, 8000/tcp       cordpodbs_xos_bootstrap_ui_1
+90452f1e31e9        xosproject/xos                                        "bash -c 'cd /opt/xos"   2 hours ago         Up 2 hours          8000/tcp                           cordpodbs_xos_synchronizer_onboarding_1
+5d744962e86c        redis                                                 "docker-entrypoint.sh"   2 hours ago         Up 2 hours          6379/tcp                           cordpodbs_xos_redis_1
+bd29494712dc        xosproject/xos-postgres                               "/usr/lib/postgresql/"   2 hours ago         Up 2 hours          5432/tcp                           cordpodbs_xos_db_1
+c127d493f194        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp      mavenrepo
+9d4b98d49e69        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                             automation
+2f0f8bba4c4e        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours          0.0.0.0:4244->4244/tcp             switchq
+53e3d81ddb56        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours          0.0.0.0:4243->4243/tcp             provisioner
+5853b72e0f99        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp, 0.0.0.0:4245->4245/tcp   generator
+3605c5208cb9        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours          0.0.0.0:4242->4242/tcp             allocator
+dda7030d7028        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                             storage
+775dbcf4c719        docker-registry:5000/cord-dhcp-harvester:candidate    "/go/bin/harvester"      3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp             harvester
+97a6c43fb405        registry:2.4.0                                        "/bin/registry serve "   4 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp             registry
+5a768a06e913        registry:2.4.0                                        "/bin/registry serve "   4 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp             registry-mirror
 ```
 
-### Docker Containers
-
-The target server runs a Docker image registry, a Maven repository containing
+The above shows Docker containers launched by XOS (image names starting with
+`xosproject`).  There is also a Docker image registry, a Maven repository containing
 the CORD ONOS apps, and a number of microservices used in bare-metal provisioning.
-You can see these by running `docker ps`:
 
 ```
-$ docker ps
-CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                           NAMES
-adfe0a0b68e8        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp   mavenrepo
-da6bdd4ca322        docker-registry:5000/cord-dhcp-harvester:candidate    "python /dhcpharveste"   3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp          harvester
-b6fe30f03f73        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours                                          switchq
-a1a7d4c7589f        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                          automation
-628fb3725abf        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours                                          provisioner
-fe7b3414cf88        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp                        generator
-c7159495f9b4        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours                                          allocator
-33bf33214d98        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                          storage
-b44509b3314e        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp          registry
-79060bba9994        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp          registry-mirror
+vagrant@prod:~$ sudo lxc list
++-------------------------+---------+------------------------------+------+------------+-----------+
+|          NAME           |  STATE  |             IPV4             | IPV6 |    TYPE    | SNAPSHOTS |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| ceilometer-1            | RUNNING | 10.1.0.4 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| glance-1                | RUNNING | 10.1.0.5 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| juju-1                  | RUNNING | 10.1.0.3 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| keystone-1              | RUNNING | 10.1.0.6 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| mongodb-1               | RUNNING | 10.1.0.13 (eth0)             |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| nagios-1                | RUNNING | 10.1.0.8 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| neutron-api-1           | RUNNING | 10.1.0.9 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| nova-cloud-controller-1 | RUNNING | 10.1.0.10 (eth0)             |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| openstack-dashboard-1   | RUNNING | 10.1.0.11 (eth0)             |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| percona-cluster-1       | RUNNING | 10.1.0.7 (eth0)              |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| rabbitmq-server-1       | RUNNING | 10.1.0.12 (eth0)             |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+| testclient              | RUNNING | 192.168.0.244 (eth0.222.111) |      | PERSISTENT | 0         |
++-------------------------+---------+------------------------------+------+------------+-----------+
+```
+
+The LXD containers ending with names ending with `-1` are running
+OpenStack-related services. These containers can be
+entered as follows:
+
+```
+$ ssh ubuntu@<container-name>
+```
+
+The `testclient` container runs the simulated subscriber device used
+for running simple end-to-end connectivity tests. Its only connectivity is
+to the vSG, but it can be entered using:
+
+```
+$ sudo lxc exec testclient bash
+```
+
+### compute_node-1 VM
+
+The `compute_node-1` VM is the virtual compute node controlled by OpenStack.
+This VM can be entered from the `prod` VM.  Run `cord prov list` to get the
+node name (assigned by MaaS) and then run:
+
+```
+$ ssh ubuntu@<compute-node-name>
+```
+
+Virtual machines created via XOS/OpenStack will be instantiated inside the `compute_node`
+VM.  To login to an OpenStack VM, first get the management IP address (172.27.0.x):
+
+```
+vagrant@prod:~$ nova list --all-tenants
++--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
+| ID                                   | Name                    | Status | Task State | Power State | Networks                                          |
++--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
+| 3ba837a0-81ff-47b5-8f03-020175eed6b3 | mysite_exampleservice-2 | ACTIVE | -          | Running     | management=172.27.0.3; public=10.6.1.194          |
+| 549ffc1e-c454-4ef8-9df7-b02ab692eb36 | mysite_vsg-1            | ACTIVE | -          | Running     | management=172.27.0.2; mysite_vsg-access=10.0.2.2 |
++--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
+```
+
+Then run `ssh-agent` and add the default key -- this key loaded into the VM when
+it was created:
+
+```
+vagrant@prod:~$ ssh-agent bash
+vagrant@prod:~$ ssh-add
+```
+
+SSH to the compute node with the `-A` option and then to the VM using
+the management IP obtained above.  So if the compute node name is `bony-alley`
+and the management IP is 172.27.0.2:
+
+```
+vagrant@prod:~$ ssh -A ubuntu@bony-alley
+ubuntu@bony-alley:~$ ssh ubuntu@172.27.0.2
+
+# Now you're inside the mysite-vsg-1 VM
+ubuntu@mysite-vsg-1:~$
 ```
 
 ### MaaS GUI
@@ -185,6 +272,7 @@ select `cordSubscriber-1`.  The dashboard will change to show information
 specific to that subscriber.
 
 ## Test results
+
 
 After CORD-in-a-Box was set up, a couple of basic health
 tests were executed on the platform.  The results of these tests can be
