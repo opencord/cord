@@ -37,6 +37,12 @@ Vagrant.configure(2) do |config|
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
+    d.vm.provider :libvirt do |v, override|
+      v.memory = 16384
+      v.cpus = 8
+      v.storage :file, :size => '100G'
+      override.vm.provision :shell, path: "scripts/add-extra-drive.sh"
+    end
   end
 
   config.vm.define "switch" do |s|
