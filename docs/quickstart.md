@@ -64,6 +64,21 @@ things are working as expected.  Once it has finished running, you'll see a
 
 The file `~/install.out` contains the full output of the build process.
 
+### Using cord-in-a-box.sh to download development code from Gerrit
+
+There is an `-b` option to cord-in-a-box.sh that will checkout a specific
+changset from a gerrit repo during the run.  The syntax for this is `<project
+path>:<changeset>/<revision>`.  It can be used multiple times - for example:
+
+```
+bash ~/cord-in-a-box.sh -b build/platform-install:1233/4 -b orchestration/service-profile:1234/2"
+```
+
+will check out the `platform-install` repo with changeset 1233, revision 4, and
+`service-profile` repo changeset 1234, revision 2.
+
+You can find the project path used by the `repo` tool in the [manifest/default.xml](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml) file.
+
 ## Inspecting CORD-in-a-Box
 
 CORD-in-a-Box installs the target server as a CORD head node, with OpenStack,

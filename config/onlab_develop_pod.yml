@@ -1,9 +1,9 @@
-# Deployment configuration for a phyical hardware POD
+# Deployment configuration for a physical hardware POD
 ---
 seedServer:
   ip: '10.90.0.251'
   # User name and password used by Ansible to connect to the host for remote
-  # provisioning. These default values are used for automated testing, change 
+  # provisioning. These default values are used for automated testing, change
   # with care.
   user: 'cord'
   password: 'cord'

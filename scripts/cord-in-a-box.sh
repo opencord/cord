@@ -81,6 +81,12 @@ function bootstrap() {
     repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos,orchestration
     repo sync
 
+    # check out gerrit branches using repo
+    for gerrit_branch in ${GERRIT_BRANCHES[@]}; do
+      echo "checking out opencord gerrit branch: $gerrit_branch"
+      repo download ${gerrit_branch/:/ }
+    done
+
     cd $CORDDIR/build
     sed -i "s/user: 'ubuntu'/user: \"$USER\"/" $CONFIG
 
@@ -231,15 +237,15 @@ function run_diagnostics() {
 }
 
 # Parse options
+GERRIT_BRANCHES=
 RUN_TEST=0
 SETUP_ONLY=0
-SETUP_BRANCH="master"
 DIAGNOSTICS=0
 CLEANUP=0
 
 while getopts "b:cdhst" opt; do
   case ${opt} in
-    b ) XOS_BRANCH=$OPTARG
+    b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
     c ) CLEANUP=1
       ;;
@@ -247,7 +253,8 @@ while getopts "b:cdhst" opt; do
       ;;
     h ) echo "Usage:"
       echo "    $0                install OpenStack and prep XOS and ONOS VMs [default]"
-      echo "    $0 -b <branch>    checkout <branch> of the xos git repo"
+      echo "    $0 -b <project:changeset/revision>  checkout a changesets from gerrit. Can"
+      echo "                      be used multiple times."
       echo "    $0 -c             cleanup from previous test"
       echo "    $0 -d             run diagnostic collector"
       echo "    $0 -h             display this help message"
