@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_82264a67",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-11-14T23:43:31Z",
+      "side": 1,
+      "message": "Don\u0027t think this quote should be there",
+      "range": {
+        "startLine": 74,
+        "startChar": 96,
+        "endLine": 74,
+        "endChar": 97
+      },
+      "revId": "6cbeae3771d308ffd2de8495ba236bf59e40af4f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
