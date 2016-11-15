@@ -120,6 +120,12 @@ ext {
                     'name':     'xosproject/cord-app-build',
                     'digest':   'sha256:528c6ac3a87609779035857a7b1cf9fab8e046e7ac259d72cf275f1c46d7416e'
             ],
+            'xosproject/xos-base': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'xosproject/xos-base',
+                    'digest':   'sha256:bf8199dabccb7b074a42c86ab86620253c23b24e951248cc7d293da371e1c659'
+            ],
             'redis': [
                     'type':     'image',
                     'upstream': upstreamReg,
