@@ -57,7 +57,7 @@ function bootstrap() {
   sudo apt-get update
   [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
   sudo dpkg -i vagrant_1.8.5_x86_64.deb
-  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server
+  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git
 
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
