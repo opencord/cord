@@ -16,6 +16,11 @@ function cleanup_from_previous_test() {
   cd $CORDDIR/build
   vagrant destroy
 
+  echo "remove build_corddev"
+  sudo virsh destroy build_corddev
+  sudo virsh undefine build_corddev
+  sudo virsh vol-delete --pool default build_corddev.img
+
   echo "Destroying juju environment"
   juju destroy-environment --force -y manual
 
