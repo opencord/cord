@@ -47,6 +47,7 @@ seedServer:
 
 docker:
   imageVersion: candidate
+  registry: '10.100.198.201:5000'
 
 otherServers:
   # Specifies the configuration for dynamically added compute nodes
