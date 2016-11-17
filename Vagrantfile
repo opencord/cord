@@ -9,6 +9,10 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder "..", "/cord"
   end
 
+  num_additional_compute_nodes = (ENV['NUM_ADDITIONAL_COMPUTE_NODES'] || 1).to_i
+  additional_compute_ip_base = "10.6.1."
+  additional_compute_ips = num_additional_compute_nodes.times.collect { |n| additional_compute_ip_base + "#{n+3}" }
+
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
@@ -115,6 +119,37 @@ Vagrant.configure(2) do |config|
       domain.boot 'network'
       domain.boot 'hd'
       domain.nested = true
+    end
+  end
+
+  num_additional_compute_nodes.times do |n|
+    # Libvirt additional compute node
+    # Not able to merge with virtualbox config for compute nodes above
+    # Issue is that here no box and no private network are specified
+    config.vm.define "compute_node-#{n+2}" do |c|
+      compute_ip = additional_compute_ips[n]
+      compute_index = n+2
+      c.vm.synced_folder '.', '/vagrant', disabled: true
+      c.vm.communicator = "none"
+      c.vm.hostname = "computenode-#{compute_index}"
+      c.vm.network "public_network",
+        adapter: 1,
+        auto_config: false,
+        dev: "mgmtbr",
+        mode: "bridge",
+        type: "bridge"
+      c.vm.network "private_network",
+        adapter: 2,
+        ip: "#{compute_ip}"
+      c.vm.provider :libvirt do |domain|
+        domain.memory = 8192
+        domain.cpus = 4
+        domain.machine_virtual_size = 100
+        domain.storage :file, :size => '100G', :type => 'qcow2'
+        domain.boot 'network'
+        domain.boot 'hd'
+        domain.nested = true
+      end
     end
   end
 

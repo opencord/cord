@@ -226,6 +226,42 @@ function add_compute_node() {
   echo "compute_node is fully provisioned!"
 }
 
+#TODO: Make this more generic later on
+function add_additional_one_compute_node() {
+  cd $CORDDIR/build
+  sudo su $USER -c 'vagrant up compute_node-2 --provider libvirt'
+
+  # Sign into MAAS
+  KEY=$(sudo maas-region-admin apikey --username=cord)
+  maas login cord http://localhost/MAAS/api/1.0 $KEY
+
+  NODEID=$(maas cord nodes list|jq -r '.[] | select(.status == 0).system_id')
+  until [ "$NODEID" ]; do
+    echo "Waiting for the compute node to transition to NEW state"
+    sleep 15
+    NODEID=$(maas cord nodes list|jq -r '.[] | select(.status == 0).system_id')
+  done
+
+  # Add remote power state
+  maas cord node update $NODEID power_type="virsh" \
+    power_parameters_power_address="qemu+ssh://maas@localhost/system" \
+    power_parameters_power_id="build_compute_node-2"
+
+  STATUS=$(sudo /usr/local/bin/get-node-prov-state |jq ".[] | select(.id == \"$NODEID\").status")
+  until [ "$STATUS" == "2" ]; do
+    if [ "$STATUS" == "3" ]; then
+      echo "*** [WARNING] Possible error in node provisioning process"
+      echo "*** [WARNING] Check /etc/maas/ansible/logs/$NODEID.log"
+    fi
+    echo "Waiting for the compute node to be fully provisioned"
+    sleep 60
+    STATUS=$(sudo /usr/local/bin/get-node-prov-state |jq ".[] | select(.id == \"$NODEID\").status")
+  done
+
+  echo ""
+  echo "compute_node is fully provisioned!"
+}
+
 function run_e2e_test () {
   cd $CORDDIR/build
 
@@ -248,7 +284,7 @@ SETUP_ONLY=0
 DIAGNOSTICS=0
 CLEANUP=0
 
-while getopts "b:cdhst" opt; do
+while getopts "b:cdhnst" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -266,6 +302,8 @@ while getopts "b:cdhst" opt; do
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       exit 0
+      ;;
+    n ) ADDITIONAL_COMPUTE_NODE=1
       ;;
     s ) SETUP_ONLY=1
       ;;
@@ -299,6 +337,11 @@ fi
 install_head_node
 set_up_maas_user
 add_compute_node
+
+if [[ $ADDITIONAL_COMPUTE_NODE -eq 1 ]]
+then
+  add_additional_one_compute_node
+fi
 
 if [[ $RUN_TEST -eq 1 ]]
 then
