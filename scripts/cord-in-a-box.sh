@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 
 CORDDIR=~/opencord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
+SSHCONFIG=~/.ssh/config
 
 function cleanup_from_previous_test() {
   set +e
@@ -113,7 +113,7 @@ function cloudlab_setup() {
     sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/"
 
     # Check that the mount succeeded (sometimes mkextrafs succeeds but device not mounted)
-    mount | grep sdb
+    mount | grep sdb || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
 
     # we'll replace /var/lib/libvirt/images with a symlink below
     [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
@@ -138,15 +138,16 @@ function unfortunate_hacks() {
   # Allow compute nodes to PXE boot from mgmtbr
   sed -i "s/@type='udp']/@type='udp' or @type='bridge']/" \
     ~/.vagrant.d/gems/gems/vagrant-libvirt-0.0.35/lib/vagrant-libvirt/action/set_boot_order.rb
-
-  # Should get these keys inside the VM in another way
-  cp ~/.ssh/id_rsa* $CORDDIR
 }
 
 function corddev_up() {
   cd $CORDDIR/build
 
   sudo su $USER -c 'vagrant up corddev --provider libvirt'
+
+  # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
+  # It allows SSH'ing to the machine via 'ssh corddev'
+  sudo su $USER -c "grep corddev $SSHCONFIG || vagrant ssh-config corddev >> $SSHCONFIG"
 }
 
 function install_head_node() {
@@ -158,12 +159,16 @@ function install_head_node() {
   ifconfig mgmtbr || sudo brctl addbr mgmtbr
   sudo ifconfig mgmtbr 10.1.0.1/24 up
 
-  # User has been added to the libvirtd group, but su $USER to be safe
-  sudo su $USER -c "vagrant ssh corddev -c \"cp /cord/id_rsa* ~/.ssh\""
-  sudo su $USER -c "vagrant ssh corddev -c \"cd /cord/build; ./gradlew fetch\""
-  sudo su $USER -c "vagrant ssh corddev -c \"cd /cord/build; ./gradlew buildImages\""
-  sudo su $USER -c "vagrant ssh corddev -c \"cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish\""
-  sudo su $USER -c "vagrant ssh corddev -c \"cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy\""
+  # SSH config saved earlier allows us to connect to VM without running 'vagrant'
+  scp ~/.ssh/id_rsa* corddev:.ssh
+  ssh corddev "cd /cord/build; ./gradlew fetch"
+  ssh corddev "cd /cord/build; ./gradlew buildImages"
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
+
+  # SSH config was overwritten by the deploy step
+  # Will go away when head node runs in 'prod' VM
+  sudo su $USER -c "grep corddev $SSHCONFIG || vagrant ssh-config corddev >> $SSHCONFIG"
 }
 
 function set_up_maas_user() {
@@ -225,7 +230,7 @@ function run_e2e_test () {
   cd $CORDDIR/build
 
   # User has been added to the libvirtd group, but su $USER to be safe
-  sudo su $USER -c "vagrant ssh corddev -c \"cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG postDeployTests\""
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG postDeployTests"
 }
 
 function run_diagnostics() {
