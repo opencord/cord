@@ -181,19 +181,27 @@ function set_up_maas_user() {
   sudo su maas -c 'cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
 }
 
+FIRST_COMPUTE_NODE=true
+
 function add_compute_node() {
+  echo add_compute_node: $1 $2
+    
   cd $CORDDIR/build
-  sudo su $USER -c 'vagrant up compute_node --provider libvirt'
+  sudo su $USER -c "vagrant up $1 --provider libvirt"
 
-  # Change MAC address of bridge to match cord-pod service profile
-  # This change won't survive a reboot
-  BRIDGE=$( route -n | grep 10.6.1.0 | awk '{print $8}' )
-  sudo ifconfig $BRIDGE hw ether 02:42:0a:06:01:01
+  if [ "$FIRST_COMPUTE_NODE" == true ]; then
+    # Change MAC address of bridge to match cord-pod service profile
+    # This change won't survive a reboot
+    BRIDGE=$( route -n | grep 10.6.1.0 | awk '{print $8}' )
+    sudo ifconfig $BRIDGE hw ether 02:42:0a:06:01:01
 
-  # Add gateway IP addresses to $BRIDGE for vsg and exampleservice tests
-  # This change won't survive a reboot
-  sudo ip address add 10.6.1.129 dev $BRIDGE
-  sudo ip address add 10.6.1.193 dev $BRIDGE
+    # Add gateway IP addresses to $BRIDGE for vsg and exampleservice tests
+    # This change won't survive a reboot
+    sudo ip address add 10.6.1.129 dev $BRIDGE
+    sudo ip address add 10.6.1.193 dev $BRIDGE
+
+    FIRST_COMPUTE_NODE=false
+  fi
 
   # Sign into MAAS
   KEY=$(sudo maas-region-admin apikey --username=cord)
@@ -209,7 +217,7 @@ function add_compute_node() {
   # Add remote power state
   maas cord node update $NODEID power_type="virsh" \
     power_parameters_power_address="qemu+ssh://maas@localhost/system" \
-    power_parameters_power_id="build_compute_node"
+    power_parameters_power_id="$2"
 
   STATUS=$(sudo /usr/local/bin/get-node-prov-state |jq ".[] | select(.id == \"$NODEID\").status")
   until [ "$STATUS" == "2" ]; do
@@ -247,8 +255,11 @@ RUN_TEST=0
 SETUP_ONLY=0
 DIAGNOSTICS=0
 CLEANUP=0
+#By default, cord-in-a-box creates 1 compute node. If more than one compute is
+#needed, use -n option
+NUM_COMPUTE_NODES=1
 
-while getopts "b:cdhst" opt; do
+while getopts "b:cdhn:st" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -263,9 +274,12 @@ while getopts "b:cdhst" opt; do
       echo "    $0 -c             cleanup from previous test"
       echo "    $0 -d             run diagnostic collector"
       echo "    $0 -h             display this help message"
+      echo "    $0 -n             number of compute nodes to setup. currently max 2 nodes can be supported"
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       exit 0
+      ;;
+    n ) NUM_COMPUTE_NODES=$OPTARG
       ;;
     s ) SETUP_ONLY=1
       ;;
@@ -298,7 +312,21 @@ fi
 
 install_head_node
 set_up_maas_user
-add_compute_node
+
+#Limiting the maximum number of compute nodes that can be supported to 2. If 
+#more than 2 compute nodes are needed, this script need to be enhanced to set
+#the environment variable NUM_COMPUTE_NODES before invoking the Vagrant commands
+if [[ $NUM_COMPUTE_NODES -gt 2 ]]
+then
+   echo "currently max only two compute nodes can be supported..."
+   NUM_COMPUTE_NODES=2
+fi
+
+for i in `seq 1 $NUM_COMPUTE_NODES`;
+do
+   echo adding the compute node: compute-node-$i
+   add_compute_node compute_node-$i build_compute_node-$i
+done
 
 if [[ $RUN_TEST -eq 1 ]]
 then
