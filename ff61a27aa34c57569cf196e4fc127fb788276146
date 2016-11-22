@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a014df3_b9ca989f",
+        "filename": "Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000019
+      },
+      "writtenOn": "2016-11-22T19:27:46Z",
+      "side": 1,
+      "message": "Agreed and Done",
+      "parentUuid": "1a014df3_59da7479",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 43
+      },
+      "revId": "ff61a27aa34c57569cf196e4fc127fb788276146",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a014df3_b9f3b809",
         "filename": "scripts/cord-in-a-box.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-22T15:27:57Z",
       "side": 1,
       "message": "I think it would be cleaner to change add_compute_node() to take the name of the compute node as an argument.",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "ff61a27aa34c57569cf196e4fc127fb788276146",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a014df3_f905c0c2",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000019
+      },
+      "writtenOn": "2016-11-22T19:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a014df3_b9f3b809",
       "range": {
         "startLine": 230,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1a014df3_396c489c",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000019
+      },
+      "writtenOn": "2016-11-22T19:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a014df3_99f8fce6",
+      "range": {
+        "startLine": 287,
+        "startChar": 15,
+        "endLine": 287,
+        "endChar": 24
+      },
+      "revId": "ff61a27aa34c57569cf196e4fc127fb788276146",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a014df3_79dd3070",
         "filename": "scripts/cord-in-a-box.sh",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2016-11-22T15:27:57Z",
       "side": 1,
       "message": "With above comments, this could be a loop over COMPUTE_NODES variable, calling:\n\nadd_compute_node compute_node-$i",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 33
+      },
+      "revId": "ff61a27aa34c57569cf196e4fc127fb788276146",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a014df3_596f1493",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000019
+      },
+      "writtenOn": "2016-11-22T19:27:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a014df3_79dd3070",
       "range": {
         "startLine": 339,
         "startChar": 0,
