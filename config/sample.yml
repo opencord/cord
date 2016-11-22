@@ -35,6 +35,8 @@ seedServer:
   #fabric_range_low: '10.6.1.2'
   #fabric_range_high: '10.6.1.100'
   management_ip: '10.6.0.1/24'
+  #management_range_low: '10.6.0.2'
+  #management_range_high: '10.6.0.127'
   external_ip: '47.135.132.21/24'
   #external_iface: 'eth2'
   management_network: 10.6.0.0/24
