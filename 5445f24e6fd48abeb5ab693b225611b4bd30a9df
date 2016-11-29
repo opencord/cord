@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a014df3_2ce76842",
+        "filename": "Vagrantfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2016-11-29T13:45:20Z",
+      "side": 1,
+      "message": "Does this default to 2?  If so, seems like the default should be 1.\nI think it would be clearer if we change the name of the environment variable to NUM_COMPUTE_NODES.",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 69
+      },
+      "revId": "5445f24e6fd48abeb5ab693b225611b4bd30a9df",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
