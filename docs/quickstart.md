@@ -126,37 +126,38 @@ $ ssh prod
 
 Inside the VM, a number of services run in Docker and LXD containers.
 
-NOTE: NO ONOS CONTAINERS HERE YET!
-
 ```
 vagrant@prod:~$ docker ps
-CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                              NAMES
-649bb35c54aa        xosproject/xos-ui                                     "python /opt/xos/mana"   About an hour ago   Up About an hour    8000/tcp, 0.0.0.0:8888->8888/tcp   cordpod_xos_ui_1
-700f23298686        xosproject/xos-synchronizer-exampleservice            "bash -c 'sleep 120; "   About an hour ago   Up About an hour    8000/tcp                           cordpod_xos_synchronizer_exampleservice_1
-05266a97d245        xosproject/xos-synchronizer-vtr                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vtr_1
-1fcd23a4b0b5        xosproject/xos-synchronizer-vsg                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vsg_1
-72741c1d431a        xosproject/xos-synchronizer-onos                      "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_onos_1
-b31eb4a938ff        xosproject/xos-synchronizer-fabric                    "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_fabric_1
-b14213da2ae2        xosproject/xos-synchronizer-openstack                 "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_openstack_1
-159c937b84d5        xosproject/xos-synchronizer-vtn                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                           cordpod_xos_synchronizer_vtn_1
-741c5465bd69        xosproject/xos                                        "python /opt/xos/mana"   2 hours ago         Up 2 hours          0.0.0.0:81->81/tcp, 8000/tcp       cordpodbs_xos_bootstrap_ui_1
-90452f1e31e9        xosproject/xos                                        "bash -c 'cd /opt/xos"   2 hours ago         Up 2 hours          8000/tcp                           cordpodbs_xos_synchronizer_onboarding_1
-5d744962e86c        redis                                                 "docker-entrypoint.sh"   2 hours ago         Up 2 hours          6379/tcp                           cordpodbs_xos_redis_1
-bd29494712dc        xosproject/xos-postgres                               "/usr/lib/postgresql/"   2 hours ago         Up 2 hours          5432/tcp                           cordpodbs_xos_db_1
-c127d493f194        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp      mavenrepo
-9d4b98d49e69        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                             automation
-2f0f8bba4c4e        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours          0.0.0.0:4244->4244/tcp             switchq
-53e3d81ddb56        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours          0.0.0.0:4243->4243/tcp             provisioner
-5853b72e0f99        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp, 0.0.0.0:4245->4245/tcp   generator
-3605c5208cb9        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours          0.0.0.0:4242->4242/tcp             allocator
-dda7030d7028        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                             storage
-775dbcf4c719        docker-registry:5000/cord-dhcp-harvester:candidate    "/go/bin/harvester"      3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp             harvester
-97a6c43fb405        registry:2.4.0                                        "/bin/registry serve "   4 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp             registry
-5a768a06e913        registry:2.4.0                                        "/bin/registry serve "   4 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp             registry-mirror
+CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                                            NAMES
+043ea433232c        xosproject/xos-ui                                     "python /opt/xos/mana"   About an hour ago   Up About an hour    8000/tcp, 0.0.0.0:8888->8888/tcp                                                                 cordpod_xos_ui_1
+40b6b05be96c        xosproject/xos-synchronizer-exampleservice            "bash -c 'sleep 120; "   About an hour ago   Up About an hour    8000/tcp                                                                                         cordpod_xos_synchronizer_exampleservice_1
+cfd93633bfae        xosproject/xos-synchronizer-vtr                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vtr_1
+d2d2a0799ca0        xosproject/xos-synchronizer-vsg                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vsg_1
+480b5e85e87d        xosproject/xos-synchronizer-onos                      "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_onos_1
+9686909333c3        xosproject/xos-synchronizer-fabric                    "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_fabric_1
+de53b100ce20        xosproject/xos-synchronizer-openstack                 "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_openstack_1
+8a250162424c        xosproject/xos-synchronizer-vtn                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vtn_1
+f1bd21f98a9f        xosproject/xos                                        "python /opt/xos/mana"   2 hours ago         Up 2 hours          0.0.0.0:81->81/tcp, 8000/tcp                                                                     cordpodbs_xos_bootstrap_ui_1
+e41ccc63e7dd        xosproject/xos                                        "bash -c 'cd /opt/xos"   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpodbs_xos_synchronizer_onboarding_1
+7fdeb35614e8        redis                                                 "docker-entrypoint.sh"   2 hours ago         Up 2 hours          6379/tcp                                                                                         cordpodbs_xos_redis_1
+84fa440023bf        xosproject/xos-postgres                               "/usr/lib/postgresql/"   2 hours ago         Up 2 hours          5432/tcp                                                                                         cordpodbs_xos_db_1
+ef0dd85badf3        onosproject/onos:latest                               "./bin/onos-service"     2 hours ago         Up 2 hours          0.0.0.0:6653->6653/tcp, 0.0.0.0:8101->8101/tcp, 0.0.0.0:8181->8181/tcp, 0.0.0.0:9876->9876/tcp   onosfabric_xos-onos_1
+e2348ddee189        xos/onos                                              "./bin/onos-service"     2 hours ago         Up 2 hours          0.0.0.0:6654->6653/tcp, 0.0.0.0:8102->8101/tcp, 0.0.0.0:8182->8181/tcp, 0.0.0.0:9877->9876/tcp   onoscord_xos-onos_1
+f487db716d8c        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp                                                                    mavenrepo
+0a24bcc3640a        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                                                                                           automation
+c5448fb834ac        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours          0.0.0.0:4244->4244/tcp                                                                           switchq
+7690414fec4b        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours          0.0.0.0:4243->4243/tcp                                                                           provisioner
+833752cd8c71        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp, 0.0.0.0:4245->4245/tcp                                                                 generator
+300df95eb6bd        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                                                                                           storage
+e0a68af23e9c        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours          0.0.0.0:4242->4242/tcp                                                                           allocator
+240a8b3e5af5        docker-registry:5000/cord-dhcp-harvester:candidate    "/go/bin/harvester"      3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp                                                                           harvester
+9444c39ffe10        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp                                                                           registry
+13d2f04e3b9b        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp                                                                           registry-mirror
 ```
 
 The above shows Docker containers launched by XOS (image names starting with
-`xosproject`).  There is also a Docker image registry, a Maven repository containing
+`xosproject`).  Containers starting with `onos` are running ONOS.
+There is also a Docker image registry, a Maven repository containing
 the CORD ONOS apps, and a number of microservices used in bare-metal provisioning.
 
 ```
