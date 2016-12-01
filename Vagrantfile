@@ -62,6 +62,7 @@ Vagrant.configure(2) do |config|
       v.memory = 16384
       v.cpus = 8
       v.storage :file, :size => '100G', :type => 'qcow2'
+      override.vm.synced_folder "..", "/cord", type: "nfs"
       override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/add-extra-drive.yml -c local"
     end
   end
