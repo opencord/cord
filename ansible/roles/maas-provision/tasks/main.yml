@@ -31,7 +31,7 @@
   shell: /usr/local/bin/get-node-prov-state |jq '.[] | select(.id == "{{ nodeid.stdout }}").status'
   register: prov_state
   until: prov_state.stdout == "2"
-  retries: 80
+  retries: 120
   delay: 30
   tags:
     - skip_ansible_lint
