@@ -253,13 +253,13 @@ ubuntu@mysite-vsg-1:~$
 ### MaaS GUI
 
 You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to the URL
-`http://<target-server>/MAAS/`.  Username and password are both `cord`.  For more
+`http://<target-server>:8080/MAAS/`.  Username and password are both `cord`.  For more
 information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
-`http://<target-server>/xos/`.  Username is `padmin@vicci.org` and password is `letmein`.
+`http://<target-server>:8080/xos/`.  Username is `padmin@vicci.org` and password is `letmein`.
 
 The state of the system is that all CORD services have been onboarded to XOS.  You
 can see them in the GUI by clicking _Services_ at left.  Clicking on the name of

@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
     d.vm.box = "ubuntu/trusty64"
     d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "prod"
-    d.vm.network "forwarded_port", guest: 80, host: 80, host_ip: '*'
+    d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
     d.vm.network "private_network", ip: "10.100.198.201"
     d.vm.network "private_network",
         ip: "0.0.0.0",
