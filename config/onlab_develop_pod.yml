@@ -28,6 +28,11 @@ seedServer:
   external_gw: '10.90.0.1'
   skipTags:
 
+passwords:
+  compute_node: "ubuntu"
+  maas_admin: "admin"
+  maas_user: "cord"
+
 docker:
   imageVersion: candidate
 
