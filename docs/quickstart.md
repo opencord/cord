@@ -336,6 +336,42 @@ ok: [10.100.198.201] => {
 }
 ```
 
+## Troubleshooting
+
+If the CORD-in-a-Box build fails, you may try simply resuming the
+build at the place that failed.  The easiest way is to do is to re-run
+the `cord-in-a-box.sh` script; this will start the build at the
+beginning and skip over the steps that have already been completed.
+
+A build can also be resumed manually; this is often quicker than
+re-running the install script, but requires more knowledge about how
+the build works.  The `cord-in-a-box.sh` script drives the build by
+entering the `corddev` VM and executing the following commands in
+`/cord/build`:
+
+```
+$ ./gradlew fetch
+$ ./gradlew buildImages
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml -PtargetReg=10.100.198.201:5000 publish
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deploy
+```
+
+The final `deploy` task is the longest one and so failures are most likely to
+happen here.  It can be broken up into the following ordered sub-tasks:
+
+```
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployBase
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml prepPlatform
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployOpenStack
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployONOS
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployXOS
+$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml setupAutomation
+```
+
+Manually driving the build following a failure involves looking in the log to 
+figure out the failing task, and then running that task and subsequent tasks
+using the above commands.
+
 ## Congratulations
 
 If you got this far, you successfully built, deployed, and tested your
