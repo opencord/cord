@@ -6,13 +6,14 @@ CORDDIR=~/opencord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
+USER=$(whoami)
 
 function cleanup_from_previous_test() {
   echo "## Cleanup ##"
 
   echo "Destroying all Vagrant VMs"
   cd $CORDDIR/build
-  vagrant destroy
+  sudo su $USER -c 'vagrant destroy'
 
   echo "Removing $CORDDIR"
   cd ~
@@ -28,7 +29,6 @@ function bootstrap() {
 
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 
-  USER=$(whoami)
   sudo adduser $USER libvirtd
 
   sudo curl -o /usr/local/bin/repo https://storage.googleapis.com/git-repo-downloads/repo
