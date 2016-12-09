@@ -59,7 +59,7 @@ Vagrant.configure(2) do |config|
       v.memory = 2048
     end
     d.vm.provider :libvirt do |v, override|
-      v.memory = 16384
+      v.memory = 24576
       v.cpus = 8
       v.storage :file, :size => '100G', :type => 'qcow2'
       override.vm.synced_folder "..", "/cord", type: "nfs"
