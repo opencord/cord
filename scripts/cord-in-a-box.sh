@@ -102,7 +102,13 @@ function install_head_node() {
   ssh corddev "cd /cord/build; ./gradlew fetch"
   ssh corddev "cd /cord/build; ./gradlew buildImages"
   ssh corddev "cd /cord/build; ping -c 3 prod; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
+
+  if [[ $PLATFORM_ONLY -eq 0 ]]
+  then
+    ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
+  else
+    ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deployPreXOS"
+  fi
 }
 
 function set_up_maas_user() {
@@ -162,13 +168,14 @@ function run_diagnostics() {
 GERRIT_BRANCHES=
 RUN_TEST=0
 SETUP_ONLY=0
+PLATFORM_ONLY=0
 DIAGNOSTICS=0
 CLEANUP=0
 #By default, cord-in-a-box creates 1 compute node. If more than one compute is
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdhn:st" opt; do
+while getopts "b:cdhn:spt" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -184,11 +191,14 @@ while getopts "b:cdhn:st" opt; do
       echo "    $0 -d             run diagnostic collector"
       echo "    $0 -h             display this help message"
       echo "    $0 -n             number of compute nodes to setup. currently max 2 nodes can be supported"
+      echo "    $0 -p             Build to right before the deployXOS gradle task"
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       exit 0
       ;;
     n ) NUM_COMPUTE_NODES=$OPTARG
+      ;;
+    p ) PLATFORM_ONLY=1
       ;;
     s ) SETUP_ONLY=1
       ;;
