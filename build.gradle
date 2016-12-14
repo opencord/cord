@@ -16,6 +16,7 @@
 
 import org.opencord.gradle.rules.*
 import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.DumperOptions
 
 buildscript {
   repositories {
@@ -143,6 +144,20 @@ task fetchUpstreamImages {
     comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
 }
 
+task writeYaml {
+
+   DumperOptions options = new DumperOptions()
+
+   options.setExplicitStart(true);
+   options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+   options.setPrettyFlow(true);
+   options.setIndent(4);
+
+   def yaml = new Yaml(options)
+   Writer outfile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("output.yaml"), "utf-8"))
+
+   yaml.dump(comps, outfile)
+}
 
 task fetch  {
     dependsOn fetchUpstreamImages
