@@ -1,7 +1,7 @@
 # Deployment configuration for VirtualBox based head node.
 #
 # This deployment configuration can be utilized with the head node created
-# via `vargrant up headnode` from the gerrit.opencord.org/maas repository.
+# via `vagrant up headnode` from the gerrit.opencord.org/maas repository.
 ---
 debug: false
 
@@ -44,6 +44,7 @@ seedServer:
     - 'fabric_exclude_names=eth0,eth1'
     - 'management_include_names=eth1'
     - 'management_exclude_names=eth0,eth2'
+    - 'cord_profile=rcord'
 
 docker:
   imageVersion: candidate
