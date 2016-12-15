@@ -53,12 +53,7 @@ automated deployment of the physical POD is designed such that the head node is
 manually deployed, with the aid of automation tools, such as Ansible and from
 this head node the rest of the POD deployment is automated.
 
-The head node can be deployed either from a node outside the CORD POD or by
-deploying from the head to the head node. The procedure in each scenario is
-slightly different because during the bootstrapping of the head node it is
-possible that the interfaces needed to be renamed and the system to be
-rebooted. This guide assumes that the head node is being bootstrapped from a
-host outside of the POD (OtP).
+The head node is deployed from a host outside the CORD POD (OtP).
 
 ## Install Repo
 
@@ -82,7 +77,7 @@ chmod a+x ~/bin/repo
 To clone the repository, on your OtP build host issue the `git` command:
 ```
 mkdir opencord && cd opencord
-repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos
+repo init -u https://gerrit.opencord.org/manifest -b master
 ```
 
 Fetch the opencord source code
@@ -94,8 +89,8 @@ repo sync
 When this is complete, a listing (`ls`) of this directory should yield output
 similar to:
 ```
-ls
-build		onos-apps
+ls -F
+build/         incubator/     onos-apps/     orchestration/ test/
 ```
 ## Create the Development Machine
 
@@ -169,12 +164,17 @@ this command completes you should be able to see the Docker images that were
 downloaded using the `docker images` command on the development machine:
 ```
 docker images
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-python              2.7-alpine          7fb9bd20d612        13 days ago         71.31 MB
-onosproject/onos    <none>              309088c647cf        12 weeks ago        825.6 MB
-consul              <none>              62f109a3299c        3 months ago        41.05 MB
-swarm               <none>              47dc182ea74b        5 months ago        19.32 MB
-nginx               <none>              3c69047c6034        5 months ago        182.7 MB
+REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
+python                      2.7-alpine          9c8c07c0f9b7        3 weeks ago         72.22 MB
+xosproject/xos-base         <none>              955e6dcdcf36        4 weeks ago         686.1 MB
+redis                       <none>              74b99a81add5        6 weeks ago         182.8 MB
+xosproject/xos-postgres     <none>              95312a611414        6 weeks ago         393.8 MB
+xosproject/cord-app-build   <none>              003a1c20e34a        3 months ago        1.108 GB
+onosproject/onos            <none>              309088c647cf        5 months ago        825.6 MB
+consul                      <none>              62f109a3299c        5 months ago        41.05 MB
+swarm                       <none>              47dc182ea74b        7 months ago        19.32 MB
+nginx                       <none>              3c69047c6034        7 months ago        182.7 MB
+xosproject/vsg              <none>              dd026689aff3        8 months ago        336 MB
 ```
 
 ## Build Images
@@ -217,30 +217,31 @@ CORD artifacts have been built and the Docker images can be viewed by using the
 `docker images` command on the development machine.
 ```
 docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}'
-REPOSITORY               TAG                 SIZE                IMAGE ID
-cord-maas-switchq        latest              781 MB              4736cc8c4f71
-cord-provisioner         latest              814.6 MB            50ab479e4b52
-cord-dhcp-harvester      latest              60.67 MB            88f900d74f19
-cord-maas-bootstrap      latest              367.5 MB            19bde768c786
-cord-maas-automation     latest              366.8 MB            1e2ab7242060
-cord-ip-allocator        latest              324.3 MB            f8f2849107f6
-opencord/mavenrepo       latest              434.2 MB            9d1ad7214262
-cord-test/nose           latest              1.028 GB            67b996f2ad19
-cord-test/quagga         latest              454.4 MB            b46f7dd20bdf
-cord-test/radius         latest              312.1 MB            e09d78aef295
-onosproject/onos         <none>              825.6 MB            309088c647cf
-python                   2.7-alpine          56.45 MB            836fa7aed31d
-golang                   1.6-alpine          282.9 MB            d688f409d292
-golang                   alpine              282.9 MB            d688f409d292
-ubuntu                   14.04               196.6 MB            38c759202e30
-consul                   <none>              41.05 MB            62f109a3299c
-nginx                    latest              182.7 MB            0d409d33b27e
-registry                 2.4.0               171.1 MB            8b162eee2794
-swarm                    <none>              19.32 MB            47dc182ea74b
-nginx                    <none>              182.7 MB            3c69047c6034
-hbouvier/docker-radius   latest              280.9 MB            5d5d3c0a91b0
-abh1nav/dockerui         latest              469.5 MB            6e4d05915b2a
+REPOSITORY                  TAG                 SIZE                IMAGE ID
+opencord/mavenrepo          latest              324 MB              206959c84d14
+cord-maas-switchq           latest              338.2 MB            a04b43800cc7
+cord-provisioner            latest              820.9 MB            708734f3691b
+cord-dhcp-harvester         latest              347.1 MB            77aaa029699b
+config-generator            latest              279 MB              3862c0872ce6
+cord-maas-bootstrap         latest              359.4 MB            5cebf664dfc1
+cord-maas-automation        latest              371.1 MB            a7872c54866e
+cord-ip-allocator           latest              277.1 MB            4c39faeaf29a
+golang                      alpine              241.1 MB            016944b25311
+golang                      1.6-alpine          283.6 MB            2b545aa749b4
+ubuntu                      14.04               187.9 MB            aae2b63c4946
+nginx                       latest              181.5 MB            abf312888d13
+python                      2.7-alpine          72.22 MB            9c8c07c0f9b7
+xosproject/xos-base         <none>              686.1 MB            955e6dcdcf36
+redis                       <none>              182.8 MB            74b99a81add5
+xosproject/xos-postgres     <none>              393.8 MB            95312a611414
+xosproject/cord-app-build   <none>              1.108 GB            003a1c20e34a
+onosproject/onos            <none>              825.6 MB            309088c647cf
+consul                      <none>              41.05 MB            62f109a3299c
+swarm                       <none>              19.32 MB            47dc182ea74b
+nginx                       <none>              182.7 MB            3c69047c6034
+xosproject/vsg              <none>              336 MB              dd026689aff3
 ```
+
 **NOTE:** *Not all the above Docker images were built by the `buildImages`
 command. Some of them, list golang, are used as a base for other Docker
 images; and some, like `abh1nav/dockerui` were downloaded when the development
@@ -278,8 +279,12 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED AT
 We can also query the docker registry on the head node. We should be able to
 observe a list of docker images.
 
+_Note: the example below uses the command `jq`
+to pretty print JSON. If you system doesn't have `jq` installed it can be
+installed using `sudo apt-get install -y jq`._
+
 ```
-curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
+curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .`
 {
   "repositories": [
     "config-generator",
@@ -293,7 +298,12 @@ curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
     "mavenrepo",
     "nginx",
     "onosproject/onos",
-    "swarm"
+    "redis",
+    "swarm",
+    "xosproject/cord-app-build",
+    "xosproject/vsg",
+    "xosproject/xos-base",
+    "xosproject/xos-postgres"
   ]
 }
 ```
@@ -314,7 +324,7 @@ CORD and will be deployed on the head node.
 ```
 
 This task can take some time so be patient. It should complete without errors,
-so if an error is encountered something went Horribly Wrong (tm).  See the
+so if an error is encountered, something has gone Horribly Wrong (tm).  See the
 [Getting Help](#getting-help) section.
 
 ### Complete
@@ -442,8 +452,8 @@ compute nodes must be enabled.*
 
 The compute node will boot, register with MAAS, and then be shut off. After this
 is complete an entry for the node will be in the MAAS UI at
-`http://head-node-ip-address:5240/MAAS/#/nodes`. It will be given a random hostname
-made up, in the Canonical way, of a adjective and an noun, such as
+`http://head-node-ip-address:5240/MAAS/#/nodes`. It will be given a random
+hostname, in the Canonical way, of a adjective and an noun, such as
 `popular-feast.cord.lab`. *The name will be different for every deployment.* The
 new node will be in the `New` state.
 
@@ -454,7 +464,6 @@ through the states of `Commissioning` and `Acquired` to `Deployed`.
 Once the node is in the `Deployed` state, it will be provisioned for use in a
 CORD POD by the execution of an `Ansible` playbook.
 
-
 ### Complete
 Once the compute node is in the `Deployed` state and post deployment provisioning on the compute node is
 complete, this task is complete.
@@ -463,35 +472,22 @@ Logs of the post deployment provisioning of the compute nodes can be found
 in `/etc/maas/ansible/logs` on the head node.
 
 Assitionally, the post deployment provisioning of the compute nodes can be
-queried from the provision service using curl
+queried using the command `cord prov list`
 ```
-curl -sS http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/ | jq '[.[] | { "status": .status, "name": .request.Info.name}]'
-[
-  {
-    "message": "",
-    "name": "steel-ghost.cord.lab",
-    "status": 2
-  },
-  {
-    "message": "",
-    "name": "feline-shirt.cord.lab",
-    "status": 2
-  },
-  {
-    "message": "",
-    "name": "yellow-plot.cord.lab",
-    "status": 2
-  }
-]
+cord prov list
+ID                                         NAME                   MAC                IP          STATUS      MESSAGE
+node-c22534a2-bd0f-11e6-a36d-2c600ce3c239  steel-ghost.cord.lab   2c:60:0c:cb:00:3c  10.6.0.107  Complete
+node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4:2e  10.6.0.108  Complete
+node-c25713c8-bd0f-11e6-96dd-2c600ce3c239  yellow-plot.cord.lab   2c:60:0c:cb:00:f0  10.6.0.109  Complete
 ```
-In the above a "status" of 2 means that the provisioning is complete. The
-other values that status might hold are:
-   - `0` - Pending, the request has been accepted by the provisioner but not yet
+
+The following status values are defined for the provisioning status:
+   - `Pending`-  the request has been accepted by the provisioner but not yet
    started
-   - `1` - Running, the request is being processed and the node is being
+   - `Processing` - the request is being processed and the node is being
    provisioned
-   - `2` - Complete, the provisioning has been completed successfully
-   - `3` - Failed, the provisioning has failed and the `message` will be
+   - `Complete` - the provisioning has been completed successfully
+   - `Error` - the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
@@ -505,42 +501,28 @@ boot and download their boot image from MAAS.
 
 ### Complete
 This step is complete when the command completes successfully. You can verify
-the provisioning of the false switch by querying the provisioning service
-using curl.
+the provisioning of the switches by querying the provisioning service
+using `cord prov list` which will show the status of the switches as well as
+the compute nodes. Switches can be easily identified as their ID will be the
+MAC address of the switch management interface.
 ```
-curl -sS http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/ | jq '[.[] | { "status": .status, "name": .request.Info.name, "message": .message}]'
-[
-  {
-    "message": "",
-    "name": "leaf-1",
-    "status": 2
-  },
-  {
-    "message": "",
-    "name": "leaf-2",
-    "status": 2
-  },
-  {
-    "message": "",
-    "name": "spine-1",
-    "status": 2
-  },
-  {
-    "message": "",
-    "name": "spine-2",
-    "status": 2
-  }
-]
-
+cord prov list
+ID                                         NAME                   MAC                IP          STATUS      MESSAGE
+cc:37:ab:7c:b7:4c                          spine-1                cc:37:ab:7c:b7:4c  10.6.0.23   Complete
+cc:37:ab:7c:ba:58                          leaf-2                 cc:37:ab:7c:ba:58  10.6.0.20   Complete
+cc:37:ab:7c:bd:e6                          onl-x86                cc:37:ab:7c:bd:e6  10.6.0.52   Complete
+cc:37:ab:7c:bf:6c                          spine-2                cc:37:ab:7c:bf:6c  10.6.0.22   Complete
+node-c22534a2-bd0f-11e6-a36d-2c600ce3c239  steel-ghost.cord.lab   2c:60:0c:cb:00:3c  10.6.0.107  Complete
+node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4:2e  10.6.0.108  Complete
+node-c25713c8-bd0f-11e6-96dd-2c600ce3c239  yellow-plot.cord.lab   2c:60:0c:cb:00:f0  10.6.0.109  Complete
 ```
-In the above a "status" of 2 means that the provisioning is complete. The
-other values that status might hold are:
-   - `0` - Pending, the request has been accepted by the provisioner but not yet
+The following status values are defined for the provisioning status:
+   - `Pending`-  the request has been accepted by the provisioner but not yet
    started
-   - `1` - Running, the request is being processed and the node is being
+   - `Processing` - the request is being processed and the node is being
    provisioned
-   - `2` - Complete, the provisioning has been completed successfully
-   - `3` - Failed, the provisioning has failed and the `message` will be
+   - `Complete` - the provisioning has been completed successfully
+   - `Error` - the provisioning has failed and the `message` will be
    populated with the exit message from provisioning.
 
 Please refer to [Re-provision Compute Nodes and Switches
@@ -778,30 +760,90 @@ sudo ip route add 10.6.1.0/24 via 10.6.2.254
 Configuring the switching fabric for use with CORD is documented in the
 [Fabric Configuration Guide](https://wiki.opencord.org/display/CORD/Fabric+Configuration+Guide) on the OpenCORD wiki.
 
-To modify the fabric configuration for your environment, on the head node, login to the XOS VM:
-```
-ssh ubuntu@xos
-```
-Then edit the file `~/xos_services/fabric/config/network-cfg-quickstart.json` as follows:
+On the head node is a service that will generate an ONOS network configuration
+for the leaf/spine network fabric. This configuration is generating by
+querying ONOS for the known switches and compute nodes and producing a JSON
+structure that can be `POST`ed to ONOS to implement the fabric.
 
-  - **Replace the DPID of the leaf-spine switches:**
-  Locate the switches by running the following command on the haed node.
-	```
-	admin@cord-head-1:~$ cat /etc/bind/maas/dhcp_harvest.inc | grep onl
-	onl-x86-CC37AB6182D2    IN A 10.6.0.11 ; cc:37:ab:61:82:d2
-	onl-x86-CC37AB617EC2    IN A 10.6.0.17 ; cc:37:ab:61:7e:c2
-	onl-x86-CC37AB6180CA    IN A 10.6.0.8 ; cc:37:ab:61:80:ca
-		onl-x86-CC37AB618048    IN A 10.6.0.18 ; cc:37:ab:61:80:48
-	```
-	The DPID of the switch is `of:0000` followed by the MAC address.
-	For example, the DPID is `of:0000cc37ab6182d2` for `onl-x86-CC37AB6182D2`
+The configuration generator can be invoked using the `cord generate` command.
+The configuration will be generated to `stdout`.
 
-  - **Modify the MAC address of hosts:** If a compute node has been provisioned by maas correctly,
-    you should be able to find out its MAC address by running the following command on each compute node.
-    ```
-    ifconfig br-int | grep HWaddr | awk {'print $5'}
-    ```
-    A valid MAC address format should look like **00:02:c9:1e:b1:21**
+Before generating a configuration you need to make sure that the instance of
+ONOS controlling the fabric doesn't contain any stale data and has has processed
+a packet from each of the switches and computes nodes. ONOS needs to process a
+packet because it does not have a mechanism to discover the network, thus to be
+aware of a device on the network ONOS needs to first receive a packet from it.
+
+To remove stale data from ONOS, the ONOS CLI `wipe-out` command can be used:
+```
+ssh -p 8101 karaf@onos-fabric wipe-out -r -j please
+Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
+Password authentication
+Password:
+Wiping intents
+Wiping hosts
+Wiping Flows
+Wiping groups
+Wiping devices
+Wiping links
+Wiping UI layouts
+Wiping regions
+```
+
+To ensure ONOS is aware of all the switches and the compute nodes, you must
+have each switch "connect" to the controller and have each compute node ping
+over its fabric interface to the controller.
+
+If the switches are not already connected the following commands will initiate
+a connection.
+
+```shell
+for s in $(cord switch list | grep -v IP | awk '{print $3}'); do
+ssh -qftn root@$s ./connect -bg 2>&1  > $s.log
+done
+```
+
+You can verify ONOS has recognized the devices using the following command:
+
+```shell
+ssh -p 8101 karaf@onos-fabric devices
+Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
+Password authentication
+Password:
+id=of:0000cc37ab7cb74c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.23:58739, managementAddress=10.6.0.23, protocol=OF_13
+id=of:0000cc37ab7cba58, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.20:33326, managementAddress=10.6.0.20, protocol=OF_13
+id=of:0000cc37ab7cbde6, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.52:37009, managementAddress=10.6.0.52, protocol=OF_13
+id=of:0000cc37ab7cbf6c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.22:44136, managementAddress=10.6.0.22, protocol=OF_13
+```
+
+To make sure that ONOS is aware of the compute nodes the follow command will
+a ping over the fabric interface on each of the compute nodes.
+
+```shell
+for h in localhost $(cord prov list | grep "^node" | awk '{print $4}'); do
+ssh -qftn $h ping -c 1 -I fabric 8.8.8.8;
+done
+```
+
+You can verify ONOS has recognized the devices using the following command:
+```shell
+ssh -p 8101 karaf@onos-fabric hosts
+Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
+Password authentication
+Password:
+id=00:16:3E:DF:89:0E/None, mac=00:16:3E:DF:89:0E, location=of:0000cc37ab7cba58/3, vlan=None, ip(s)=[10.6.0.54], configured=false
+id=3C:FD:FE:9E:94:28/None, mac=3C:FD:FE:9E:94:28, location=of:0000cc37ab7cba58/4, vlan=None, ip(s)=[10.6.0.53], configured=false
+id=3C:FD:FE:9E:94:30/None, mac=3C:FD:FE:9E:94:30, location=of:0000cc37ab7cbde6/1, vlan=None, ip(s)=[10.6.1.1], configured=false
+id=3C:FD:FE:9E:98:69/None, mac=3C:FD:FE:9E:98:69, location=of:0000cc37ab7cbde6/2, vlan=None, ip(s)=[10.6.0.5], configured=false
+```
+
+To modify the fabric configuration for your environment, on the head node,
+generate a new network configuration using the following commands:
+
+```
+cp ~/xos_services/fabric/config/network-cfg-quickstart.json{,.$(date +%Y%m%d-%H%M%S)}
+cord generate > ~/xos_services/fabric/config/network-cfg-quickstart.json
+```
 
 Once these steps are done, delete old configuration,
 apply new configuration, and restart apps in ONOS (still in the XOS VM):
@@ -897,14 +939,26 @@ See the	[How to	Contribute to CORD wiki page](https://wiki.opencord.org/display/
 for more information.
 
 ## Re-provision Compute Nodes and Switches
-If something goes wrong and you want to reset a provisioned compute node or switch
+If you would like to re-provision a switch or a compute node the `cord prov delete`
+command can be used. This command takes one or more IDs as parameters and will
+delete the provisioning records for these devices. This will cause the provisioner
+to re-provision them.
 
-1. Run the following command on the head node and find the ID of the switch you want to reset
+You can also use the argument `--all`, which will delete all known provisioning
+records.
+
 ```
-curl -sS http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/ | jq '[.[] | { "status": .status, "id": .request.Info.id, "name": .request.Info.name}]'
+cord prov delete node-c22534a2-bd0f-11e6-a36d-2c600ce3c239
+node-c22534a2-bd0f-11e6-a36d-2c600ce3c239 DELETED
 ```
-2. Delete the state on the provisioner
+
 ```
-curl -sS -XDELETE http://$(docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner):4243/provision/<switch-id>
+cord prov delete --all
+cc:37:ab:7c:b7:4c DELETED
+cc:37:ab:7c:ba:58 DELETED
+cc:37:ab:7c:bd:e6 DELETED
+cc:37:ab:7c:bf:6c DELETED
+node-c22534a2-bd0f-11e6-a36d-2c600ce3c239 DELETED
+node-c238ea9c-bd0f-11e6-8206-2c600ce3c239 DELETED
+node-c25713c8-bd0f-11e6-96dd-2c600ce3c239 DELETED
 ```
-3. The provisioner should try to re-provision the compute node/switch automatically.
