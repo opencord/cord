@@ -4,6 +4,10 @@
     state: present
     update_cache: yes
 
+- name: Upgrade Packages
+  apt:
+    upgrade: yes
+
 - name: Apt packages
   apt:
     name: "{{ item }}"
