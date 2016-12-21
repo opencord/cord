@@ -26,7 +26,7 @@ function bootstrap() {
   cd ~
   sudo apt-get update
   [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
-  sudo dpkg -i vagrant_1.8.5_x86_64.deb
+  dpkg -l vagrant || sudo dpkg -i vagrant_1.8.5_x86_64.deb
   sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential
 
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
@@ -54,8 +54,8 @@ function bootstrap() {
   fi
 
   cd $CORDDIR/build
-  vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
-  vagrant plugin install vagrant-mutate
+  vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
+  vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
   vagrant box list ubuntu/trusty64 | grep virtualbox || vagrant box add ubuntu/trusty64
   vagrant box list ubuntu/trusty64 | grep libvirt || vagrant mutate ubuntu/trusty64 libvirt --input-provider virtualbox
 }
