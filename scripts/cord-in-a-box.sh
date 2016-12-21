@@ -10,9 +10,12 @@ SSHCONFIG=~/.ssh/config
 function cleanup_from_previous_test() {
   echo "## Cleanup ##"
 
-  echo "Destroying all Vagrant VMs"
-  cd $CORDDIR/build
-  sudo su $USER -c 'vagrant destroy'
+  if [ -d $CORDDIR/build ]
+  then
+    echo "Destroying all Vagrant VMs"
+    cd $CORDDIR/build
+    sudo su $USER -c 'vagrant destroy'
+  fi
 
   echo "Removing $CORDDIR"
   cd ~
