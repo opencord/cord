@@ -85,8 +85,7 @@ function cloudlab_setup() {
 function vagrant_vms_up() {
   cd $CORDDIR/build
 
-  sudo su $USER -c 'vagrant up corddev --provider libvirt'
-  sudo su $USER -c 'vagrant up prod --provider libvirt'
+  sudo su $USER -c 'vagrant up corddev prod --provider libvirt'
 
   # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
   # It allows SSH'ing to the machine via 'ssh corddev'
