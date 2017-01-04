@@ -1,6 +1,0 @@
-[gerrit]
-host=gerrit.opencord.org
-port=29418
-project=cord.git
-defaultremote=origin
-defaultbranch=master
