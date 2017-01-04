@@ -1,6 +1,6 @@
 node ('build') {
    stage 'Checkout cord repo'
-   checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
+   checkout changelog: false, poll: false, scm: [$class: 'RepoScm', manifestBranch: env.BRANCH_NAME, currentBranch: true, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
    dir('build') {
         stage 'Redeploy head node and Build Vagrant box'
         try {
