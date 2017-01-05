@@ -1,9 +1,9 @@
-def filename = 'manifest-' + env.BRANCH_NAME + '.xml'
+def filename = 'manifest-' + ${branch} + '.xml'
 
 timeout (time: 240) {
     node ('build') {
        stage 'Checkout cord repo'
-       checkout changelog: false, poll: false, scm: [$class: 'RepoScm', manifestBranch: env.BRANCH_NAME, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
+       checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: ${branch}, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
 
        stage 'Generate and Copy Manifest file'
        sh returnStdout: true, script: 'repo manifest -r -o ' + filename 
