@@ -1,4 +1,4 @@
-def filename = 'manifest-' + ${branch} + '.xml'
+def filename = 'manifest-${branch}.xml'
 
 timeout (time: 240) {
     node ('build') {
