@@ -84,13 +84,13 @@ ext {
 
     // Component table
     comps = [
-            // ONOS 1.8.1.SNAPSHOT from the support branch
+            // ONOS 1.8.1 release
             // This is probably not exactly what we want
             'onosproject/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'onosproject/onos',
-                    'digest':   'sha256:c7308d57bfefddb7a199ca7bd8ad77f837b31d3d853c13af0e98409e60cba229'
+                    'digest':   'sha256:b826025efeaea325117528cdb92c7750da0b2a05e345043b304eb2368f8d2914'
             ],
             'nginx': [
                     'type':     'image',
