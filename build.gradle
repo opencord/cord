@@ -90,7 +90,7 @@ ext {
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'onosproject/onos',
-                    'digest':   'sha256:83aa5b1f43d4bf772929dc5aacf3f57cbd4467a4c7184586b53a35ea8a23226a'
+                    'digest':   'sha256:c7308d57bfefddb7a199ca7bd8ad77f837b31d3d853c13af0e98409e60cba229'
             ],
             'nginx': [
                     'type':     'image',
