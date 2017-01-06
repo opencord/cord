@@ -97,7 +97,7 @@ timeout (time: 240) {
                 }
 
                 stage 'Trigger Build'
-                url = 'https://jenkins.opencord.org/job/release-build/job/' + env.BRANCH_NAME + '/build'
+                url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
                 httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
 
                 currentBuild.result = 'SUCCESS'
