@@ -1,13 +1,17 @@
 def filename = 'manifest-${branch}.xml'
 
+node ('master') {
+       checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
+
+       stage 'Generate and Copy Manifest file'
+       sh returnStdout: true, script: 'repo manifest -r -o ' + filename
+       sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
+}
+
 timeout (time: 240) {
     node ('build') {
        stage 'Checkout cord repo'
        checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
-
-       stage 'Generate and Copy Manifest file'
-       sh returnStdout: true, script: 'repo manifest -r -o ' + filename 
-       sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
 
        dir('build') {
             stage 'Redeploy head node and Build Vagrant box'
