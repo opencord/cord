@@ -255,13 +255,19 @@ To construct a configuration file for yoru physical POD you should copy the
 sample deployment configuration found in `config/sample.yml` and modify the
 values to fit your physical deployment.
 
+Also you can add head-node-ip-address in /etc/hosts file so that you can use 
+head-node-ip-address instead of IP address.
+```
+192.168.15.1	head-node-ip-address
+```
+
 ## Publish
 Publishing consists of *pushing* the build docker images to the Docker
 repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradlew -PdeployConfig=config/podX.yml -PtargetReg=<head-node-ip-address>:5000 publish
+./gradlew -PdeployConfig=config/podX.yml -PtargetReg=head-node-ip-address:5000 publish
 ```
 
 ### Complete
@@ -284,7 +290,7 @@ to pretty print JSON. If you system doesn't have `jq` installed it can be
 installed using `sudo apt-get install -y jq`._
 
 ```
-curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .`
+curl -sS http://head-node-ip-address:5000/v2/_catalog | jq '.'
 {
   "repositories": [
     "config-generator",
