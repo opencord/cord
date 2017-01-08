@@ -165,16 +165,16 @@ downloaded using the `docker images` command on the development machine:
 ```
 docker images
 REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-python                      2.7-alpine          9c8c07c0f9b7        3 weeks ago         72.22 MB
-xosproject/xos-base         <none>              955e6dcdcf36        4 weeks ago         686.1 MB
-redis                       <none>              74b99a81add5        6 weeks ago         182.8 MB
-xosproject/xos-postgres     <none>              95312a611414        6 weeks ago         393.8 MB
-xosproject/cord-app-build   <none>              003a1c20e34a        3 months ago        1.108 GB
-onosproject/onos            <none>              309088c647cf        5 months ago        825.6 MB
-consul                      <none>              62f109a3299c        5 months ago        41.05 MB
-swarm                       <none>              47dc182ea74b        7 months ago        19.32 MB
-nginx                       <none>              3c69047c6034        7 months ago        182.7 MB
-xosproject/vsg              <none>              dd026689aff3        8 months ago        336 MB
+onosproject/onos            <none>              4105e4ee2204        6 hours ago         873.7 MB
+python                      2.7-alpine          c80455665c57        2 weeks ago         71.49 MB
+xosproject/xos-base         <none>              2b791db4def0        3 weeks ago         756.6 MB
+redis                       <none>              74b99a81add5        10 weeks ago        182.9 MB
+xosproject/xos-postgres     <none>              95312a611414        10 weeks ago        393.9 MB
+xosproject/cord-app-build   <none>              003a1c20e34a        4 months ago        1.108 GB
+consul                      <none>              62f109a3299c        6 months ago        41.07 MB
+swarm                       <none>              47dc182ea74b        8 months ago        19.32 MB
+nginx                       <none>              3c69047c6034        8 months ago        182.7 MB
+xosproject/vsg              <none>              dd026689aff3        9 months ago        336.1 MB
 ```
 
 ## Build Images
@@ -218,28 +218,28 @@ CORD artifacts have been built and the Docker images can be viewed by using the
 ```
 docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}'
 REPOSITORY                  TAG                 SIZE                IMAGE ID
-opencord/mavenrepo          latest              324 MB              206959c84d14
-cord-maas-switchq           latest              338.2 MB            a04b43800cc7
-cord-provisioner            latest              820.9 MB            708734f3691b
-cord-dhcp-harvester         latest              347.1 MB            77aaa029699b
-config-generator            latest              279 MB              3862c0872ce6
-cord-maas-bootstrap         latest              359.4 MB            5cebf664dfc1
-cord-maas-automation        latest              371.1 MB            a7872c54866e
-cord-ip-allocator           latest              277.1 MB            4c39faeaf29a
-golang                      alpine              241.1 MB            016944b25311
-golang                      1.6-alpine          283.6 MB            2b545aa749b4
-ubuntu                      14.04               187.9 MB            aae2b63c4946
-nginx                       latest              181.5 MB            abf312888d13
-python                      2.7-alpine          72.22 MB            9c8c07c0f9b7
-xosproject/xos-base         <none>              686.1 MB            955e6dcdcf36
-redis                       <none>              182.8 MB            74b99a81add5
-xosproject/xos-postgres     <none>              393.8 MB            95312a611414
+opencord/mavenrepo          latest              368.8 MB            13ad6bd6950d
+cord-maas-switchq           latest              337.6 MB            98c3975792ae
+cord-provisioner            latest              822.4 MB            25786a57bdda
+cord-dhcp-harvester         latest              346.8 MB            39f6ab1c4e71
+config-generator            latest              278.4 MB            760633dab5d2
+cord-maas-bootstrap         latest              359.5 MB            0744857b8769
+cord-maas-automation        latest              371.9 MB            f6fa9567c7b3
+cord-ip-allocator           latest              276.5 MB            7abb09647321
+onosproject/onos            <none>              873.7 MB            4105e4ee2204
+python                      2.7-alpine          71.49 MB            c80455665c57
+golang                      alpine              240.5 MB            00371bbb49d5
+golang                      1.6-alpine          283 MB              1ea38172de32
+nginx                       latest              181.6 MB            01f818af747d
+xosproject/xos-base         <none>              756.6 MB            2b791db4def0
+ubuntu                      14.04               188 MB              3f755ca42730
+redis                       <none>              182.9 MB            74b99a81add5
+xosproject/xos-postgres     <none>              393.9 MB            95312a611414
 xosproject/cord-app-build   <none>              1.108 GB            003a1c20e34a
-onosproject/onos            <none>              825.6 MB            309088c647cf
-consul                      <none>              41.05 MB            62f109a3299c
+consul                      <none>              41.07 MB            62f109a3299c
 swarm                       <none>              19.32 MB            47dc182ea74b
 nginx                       <none>              182.7 MB            3c69047c6034
-xosproject/vsg              <none>              336 MB              dd026689aff3
+xosproject/vsg              <none>              336.1 MB            dd026689aff3
 ```
 
 **NOTE:** *Not all the above Docker images were built by the `buildImages`
@@ -261,7 +261,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradlew -PdeployConfig=config/podX.yml -PtargetReg=<head-node-ip-address>:5000 publish
+./gradlew -PdeployConfig=config/podX.yml -PtargetReg=head-node-ip-address:5000 publish
 ```
 
 ### Complete
@@ -284,7 +284,7 @@ to pretty print JSON. If you system doesn't have `jq` installed it can be
 installed using `sudo apt-get install -y jq`._
 
 ```
-curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .`
+curl -sS http://head-node-ip-address:5000/v2/_catalog | jq '.'
 {
   "repositories": [
     "config-generator",
@@ -347,6 +347,9 @@ APIKEY=$(sudo maas-region-admin apikey --user=cord)
 maas login cord http://localhost/MAAS/api/1.0 "$APIKEY"
 maas cord boot-resources read | jq 'map(select(.type != "Synced"))'
 ```
+If there shows `locale.Error: unsupported locale setting` and maas command failed,
+then type `locale` to check LC_ALL variable. After setting LC_ALL and rerun maas
+command, it should work fine.
 
 It the output of of the above commands is not a empty list, `[]`, then the
 images have not yet been completely downloaded. depending on your network speed
