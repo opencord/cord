@@ -22,6 +22,30 @@
       "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_243afbcd",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2017-01-09T15:21:09Z",
+      "side": 1,
+      "message": "The idea comes from it\u0027s more more convenient to copy command from quickstart and just past in command line to run. If we set the hostname first then we don\u0027t need to change the hostname to IP address. I\u0027m not sure it is need or not.",
+      "parentUuid": "fa0f191f_6420f39b",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 3
+      },
+      "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
