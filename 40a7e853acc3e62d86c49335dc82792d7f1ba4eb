@@ -46,6 +46,53 @@
       "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_6457d303",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-09T17:13:55Z",
+      "side": 1,
+      "message": "I don\u0027t think this belongs in the quick start guide. Again I can see an edit to the sample file to indicate a hostname can be used.",
+      "parentUuid": "fa0f191f_243afbcd",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 3
+      },
+      "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_445ccf25",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-09T17:13:55Z",
+      "side": 1,
+      "message": "good catch.",
+      "range": {
+        "startLine": 293,
+        "startChar": 5,
+        "endLine": 293,
+        "endChar": 6
+      },
+      "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
