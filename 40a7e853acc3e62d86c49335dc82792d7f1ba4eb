@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_6420f39b",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-09T14:15:53Z",
+      "side": 1,
+      "message": "Not sure about this addition. The above section mentions copying and modifying the sample configuration file. It doesn\u0027t speak to individual settings in this file.\n\nI think it might be a better option to add a comment in the sample deployment configuration for the seed server IP value. Something like the following in that file:\n\n# IP address or hostname of the of the head node\nip: \u002710.90.0.2\u0027\n\nThe the user knows that they can use the IP or the hostname. Not sure we need to instruct them how to define hostnames.",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 3
+      },
+      "revId": "40a7e853acc3e62d86c49335dc82792d7f1ba4eb",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
