@@ -10,3 +10,11 @@
   with_items: "{{ apt_packages }}"
   tags: [buildtools]
 
+- name: Ensure Repo
+  copy:
+    src: repo.bin
+    dest: /usr/local/bin/repo
+    owner: root
+    group: root
+    mode: 0755
+
