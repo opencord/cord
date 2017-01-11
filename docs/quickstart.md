@@ -49,7 +49,7 @@ On the target server, download the script that installs CORD-in-a-Box.  Then run
 saving the screen output to a file called `install.out`:
 
 ```
-curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
+curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/cord-2.0/scripts/cord-in-a-box.sh
 bash ~/cord-in-a-box.sh -t | tee ~/install.out
 ```
 
