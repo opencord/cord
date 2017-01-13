@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_9aba42e0",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-13T14:26:57Z",
+      "side": 1,
+      "message": "I wonder if we should delete the -PtargetReg. This really isn\u0027t needed any more as it is defaulted correctly.",
+      "range": {
+        "startLine": 264,
+        "startChar": 41,
+        "endLine": 264,
+        "endChar": 78
+      },
+      "revId": "f72e4af614fe8023323512ac173c98480cdebe13",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_7abf6ed1",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-13T14:26:57Z",
+      "side": 1,
+      "message": "Does the command still work if this error is displayed? If the command still works. I would change this line to something like.\n\nIf while running the commands the error `locale.Error: unsupported locate setting` is displayed this likely means that the locale is not set in your environment. This is an informational message and the commands still complete successfully. You can eliminate this message by setting the `LC_ALL` environment variable.\n\nIf this error means the commands failed then the message needs to indicate this and that after setting LC_ALL the commands must be re-run.",
+      "revId": "f72e4af614fe8023323512ac173c98480cdebe13",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
