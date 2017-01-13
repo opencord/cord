@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_7a09ae94",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2017-01-13T21:35:47Z",
+      "side": 1,
+      "message": "@David  I did this but didnt push to gerrit . I also update sample.yml file adding information about how to change targetReg .",
+      "parentUuid": "fa0f191f_9aba42e0",
+      "range": {
+        "startLine": 264,
+        "startChar": 41,
+        "endLine": 264,
+        "endChar": 78
+      },
+      "revId": "f72e4af614fe8023323512ac173c98480cdebe13",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_7abf6ed1",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 3
