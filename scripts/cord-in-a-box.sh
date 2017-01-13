@@ -7,6 +7,10 @@ VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
 
+# For CORD version
+REPO_BRANCH="cord-2.0"
+VERSION_STRING="CiaB Version 2.0"
+
 function cleanup_from_previous_test() {
   echo "## Cleanup ##"
 
@@ -43,7 +47,7 @@ function bootstrap() {
     git config --global user.email 'test@null.com'
     git config --global color.ui false
 
-    repo init -u https://gerrit.opencord.org/manifest -b cord-2.0 -g build,onos,orchestration
+    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH -g build,onos,orchestration
     repo sync
 
     # check out gerrit branches using repo
@@ -168,7 +172,7 @@ CLEANUP=0
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdhn:st" opt; do
+while getopts "b:cdhn:stv" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -186,6 +190,7 @@ while getopts "b:cdhn:st" opt; do
       echo "    $0 -n             number of compute nodes to setup. currently max 2 nodes can be supported"
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
+      echo "    $0 -v             print CiaB version and exit"
       exit 0
       ;;
     n ) NUM_COMPUTE_NODES=$OPTARG
@@ -193,6 +198,9 @@ while getopts "b:cdhn:st" opt; do
     s ) SETUP_ONLY=1
       ;;
     t ) RUN_TEST=1
+      ;;
+    v ) echo "$VERSION_STRING ($REPO_BRANCH branch)"
+      exit 0
       ;;
     \? ) echo "Invalid option: -$OPTARG"
       exit 1
@@ -205,6 +213,10 @@ if [[ $CLEANUP -eq 1 ]]
 then
   cleanup_from_previous_test
 fi
+
+echo ""
+echo "Preparing to install $VERSION_STRING ($REPO_BRANCH branch)"
+echo ""
 
 bootstrap
 cloudlab_setup
