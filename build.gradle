@@ -126,7 +126,7 @@ ext {
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'xosproject/xos-base',
-                    'digest':   'sha256:1bc8cc8e9f99ae8e9c40ace4ee513c4278952ad719118aabf8aa6d6cc0a466ba'
+                    'digest':   'sha256:daecc5fb7d95942c5092d480fa22a41a1588896df87829fc371caa5df2a013a7'
             ],
             'redis': [
                     'type':     'image',
