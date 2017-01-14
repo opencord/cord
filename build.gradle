@@ -84,13 +84,12 @@ ext {
 
     // Component table
     comps = [
-            // ONOS 1.8.1 release
-            // This is probably not exactly what we want
-            'onosproject/onos': [
+            // ONOS 1.8.2 from the opencord Dockerhub
+            'opencord/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
-                    'name':     'onosproject/onos',
-                    'digest':   'sha256:b826025efeaea325117528cdb92c7750da0b2a05e345043b304eb2368f8d2914'
+                    'name':     'opencord/onos',
+                    'digest':   'sha256:935da663c381393316e0c658d49dde10d90a7383e3d7c53271b1223cec31d44c'
             ],
             'nginx': [
                     'type':     'image',
