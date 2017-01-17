@@ -126,6 +126,12 @@ function set_up_maas_user() {
   ssh prod "sudo chown -R maas:maas ~maas/.ssh"
 }
 
+function leaf_spine_up() {
+  cd $CORDDIR/build
+
+  sudo su $USER -c 'vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt'
+}
+
 function add_compute_node() {
   echo add_compute_node: $1 $2
 
@@ -230,6 +236,7 @@ fi
 
 install_head_node
 set_up_maas_user
+leaf_spine_up
 
 #Limiting the maximum number of compute nodes that can be supported to 2. If
 #more than 2 compute nodes are needed, this script need to be enhanced to set
