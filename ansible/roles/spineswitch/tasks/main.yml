@@ -1,0 +1,6 @@
+- name: Start ofdatapath
+  command: ofdatapath -i eth2,eth3 -d {{ ansible_eth1.macaddress | hwaddr('bare') }} --no-slicing -D punix:/var/run/cpqd.sock
+
+# /etc/resolv.conf not set up correctly in switches, use controller IP addr instead
+- name: Start ofprotocol
+  command: ofprotocol -D --log-file=/var/log/ofprotocol.log unix:/var/run/cpqd.sock tcp:10.1.0.1:6653
