@@ -1,0 +1,12 @@
+- name: Ensure brctl
+  apt: 
+    name: bridge-utils
+    state: present
+
+- name: Ensure bridge
+  template:
+    src: templates/leafbr.cfg.j2
+    dest: /etc/network/interfaces.d/leafbr.cfg
+
+- name: Ensure bridge is up
+  command: ifup leafbr

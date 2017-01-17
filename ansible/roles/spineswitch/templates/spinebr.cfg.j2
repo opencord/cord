@@ -1,0 +1,7 @@
+auto spinebr
+iface spinebr inet static
+    address {{ net_prefix }}.253
+    network {{ net_prefix }}.0
+    netmask 255.255.255.0
+    broadcast {{ net_prefix }}.255
+    bridge_ports eth2 eth3
