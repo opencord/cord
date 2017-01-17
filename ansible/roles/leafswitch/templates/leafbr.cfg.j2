@@ -1,0 +1,7 @@
+auto leafbr
+iface leafbr inet static
+    address {{ net_prefix }}.254
+    network {{ net_prefix }}.0
+    netmask 255.255.255.0
+    broadcast {{ net_prefix }}.255
+    bridge_ports eth2 eth3 eth4 eth5

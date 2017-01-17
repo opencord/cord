@@ -9,14 +9,6 @@ Vagrant.configure(2) do |config|
     config.vm.synced_folder "..", "/cord"
   end
 
-  #By default, this variable is set to 2, such that Vagrantfile allows creation
-  #of compute nodes up to 2. If the number of compute nodes to be supported more
-  #than 2, set the environment variable NUM_COMPUTE_NODES to the desired value
-  #before executing this Vagrantfile.
-  num_compute_nodes = (ENV['NUM_COMPUTE_NODES'] || 2).to_i
-  compute_ip_base = "10.6.1."
-  compute_ips = num_compute_nodes.times.collect { |n| compute_ip_base + "#{n+2}" }
-
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
@@ -48,10 +40,12 @@ Vagrant.configure(2) do |config|
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.network "private_network",
-        ip: "10.6.1.201", # To set up the 10.6.1.1 IP address on bridge
-        virtualbox__intnet: "cord-fabric-network",
-        libvirt__network_name: "cord-fabric-network",
-        libvirt__forward_mode: "nat",
+        ip: "0.1.0.0",
+        mac: "02420a060101",
+        auto_config: false,
+        virtualbox__intnet: "head-node-leaf-1",
+        libvirt__network_name: "head-node-leaf-1",
+        libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/prod.yml -c local"
@@ -84,6 +78,198 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  config.vm.define "leaf-1" do |s|
+    s.vm.box = "ubuntu/trusty64"
+    s.vm.hostname = "leaf-1"
+    s.vm.network "private_network",
+      #type: "dhcp",
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network",
+      mac: "cc37ab000011"
+    s.vm.network "private_network",
+      ip: "0.1.0.0",
+      auto_config: false,
+      virtualbox__intnet: "head-node-leaf-1",
+      libvirt__network_name: "head-node-leaf-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.2.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-1-leaf-1",
+      libvirt__network_name: "compute-node-1-leaf-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.5.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-1-spine-1",
+      libvirt__network_name: "leaf-1-spine-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.6.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-1-spine-2",
+      libvirt__network_name: "leaf-1-spine-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    if (ENV['FABRIC'] == "1")
+      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+    else
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provider :libvirt do |v|
+        v.memory = 512
+        v.cpus = 1
+    end
+    s.vm.provider "virtualbox" do |v, override|
+        v.memory = 512
+        v.cpus = 1
+    end
+  end
+
+  config.vm.define "leaf-2" do |s|
+    s.vm.box = "ubuntu/trusty64"
+    s.vm.hostname = "leaf-2"
+    s.vm.network "private_network",
+      #type: "dhcp",
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network",
+      mac: "cc37ab000012"
+    s.vm.network "private_network",
+      ip: "0.3.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-2-leaf-2",
+      libvirt__network_name: "compute-node-2-leaf-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.4.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-3-leaf-2",
+      libvirt__network_name: "compute-node-3-leaf-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.7.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-2-spine-1",
+      libvirt__network_name: "leaf-2-spine-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.8.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-2-spine-2",
+      libvirt__network_name: "leaf-2-spine-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    if (ENV['FABRIC'] == "1")
+      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+    else
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provider :libvirt do |v|
+        v.memory = 512
+        v.cpus = 1
+    end
+    s.vm.provider "virtualbox" do |v, override|
+        v.memory = 512
+        v.cpus = 1
+    end
+  end
+
+  config.vm.define "spine-1" do |s|
+    s.vm.box = "ubuntu/trusty64"
+    s.vm.hostname = "spine-1"
+    s.vm.network "private_network",
+      #type: "dhcp",
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network",
+      mac: "cc37ab000021"
+    s.vm.network "private_network",
+      ip: "0.5.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-1-spine-1",
+      libvirt__network_name: "leaf-1-spine-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.7.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-2-spine-1",
+      libvirt__network_name: "leaf-2-spine-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    if (ENV['FABRIC'] == "1")
+      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+    else
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provider :libvirt do |v|
+        v.memory = 512
+        v.cpus = 1
+    end
+    s.vm.provider "virtualbox" do |v, override|
+        v.memory = 512
+        v.cpus = 1
+    end
+  end
+
+  config.vm.define "spine-2" do |s|
+    s.vm.box = "ubuntu/trusty64"
+    s.vm.hostname = "spine-2"
+    s.vm.network "private_network",
+      #type: "dhcp",
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network",
+      mac: "cc37ab000022"
+    s.vm.network "private_network",
+      ip: "0.6.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-1-spine-2",
+      libvirt__network_name: "leaf-1-spine-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.network "private_network",
+      ip: "0.8.0.0",
+      auto_config: false,
+      virtualbox__intnet: "leaf-2-spine-2",
+      libvirt__network_name: "leaf-2-spine-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    if (ENV['FABRIC'] == "1")
+      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+    else
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provider :libvirt do |v|
+        v.memory = 512
+        v.cpus = 1
+    end
+    s.vm.provider "virtualbox" do |v, override|
+        v.memory = 512
+        v.cpus = 1
+    end
+  end
+
   config.vm.define "testbox" do |d|
     d.vm.box = "fgrehm/trusty64-lxc"
     d.ssh.forward_agent = true
@@ -100,41 +286,105 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  num_compute_nodes.times do |n|
-    config.vm.define "compute_node-#{n+1}" do |c|
-      compute_ip = compute_ips[n]
-      compute_index = n+1
-      c.vm.synced_folder '.', '/vagrant', disabled: true
-      c.vm.communicator = "none"
-      c.vm.hostname = "computenode-#{compute_index}"
-      c.vm.network "private_network",
-        adapter: 1,
-        ip: "0.0.0.0",
-        auto_config: false,
-        virtualbox__intnet: "cord-mgmt-network",
-        libvirt__network_name: "cord-mgmt-network"
-      c.vm.network "private_network",
-        adapter: 2,
-        ip: "#{compute_ip}",
-        auto_config: false,
-        virtualbox__intnet: "cord-fabric-network",
-        libvirt__network_name: "cord-fabric-network",
-        libvirt__forward_mode: "nat",
-        libvirt__dhcp_enabled: false
-      c.vm.provider :libvirt do |v|
-        v.memory = 8192
-        v.cpus = 4
-        v.machine_virtual_size = 100
-        v.storage :file, :size => '100G', :type => 'qcow2'
-        v.boot 'network'
-        v.boot 'hd'
-        v.nested = true
-      end
-      c.vm.provider "virtualbox" do |v, override|
-        override.vm.box = "clink15/pxe"
-        v.memory = 1048
-        v.gui = "true"
-      end
+  config.vm.define "compute-node-1" do |c|
+    c.vm.synced_folder '.', '/vagrant', disabled: true
+    c.vm.communicator = "none"
+    c.vm.hostname = "compute-node-1"
+    c.vm.network "private_network",
+      adapter: 1,
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network"
+    c.vm.network "private_network",
+      adapter: 2,         # The fabric interface for each node
+      ip: "0.2.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-1-leaf-1",
+      libvirt__network_name: "compute-node-1-leaf-1",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.provider :libvirt do |v|
+      v.memory = 8192
+      v.cpus = 4
+      v.machine_virtual_size = 100
+      v.storage :file, :size => '100G', :type => 'qcow2'
+      v.boot 'network'
+      v.boot 'hd'
+      v.nested = true
+    end
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "clink15/pxe"
+      v.memory = 1048
+      v.gui = "true"
+    end
+  end
+
+  config.vm.define "compute-node-2" do |c|
+    c.vm.synced_folder '.', '/vagrant', disabled: true
+    c.vm.communicator = "none"
+    c.vm.hostname = "compute-node-2"
+    c.vm.network "private_network",
+      adapter: 1,
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network"
+    c.vm.network "private_network",
+      adapter: 2,         # The fabric interface for each node
+      ip: "0.3.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-2-leaf-2",
+      libvirt__network_name: "compute-node-2-leaf-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.provider :libvirt do |v|
+      v.memory = 8192
+      v.cpus = 4
+      v.machine_virtual_size = 100
+      v.storage :file, :size => '100G', :type => 'qcow2'
+      v.boot 'network'
+      v.boot 'hd'
+      v.nested = true
+    end
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "clink15/pxe"
+      v.memory = 1048
+      v.gui = "true"
+    end
+  end
+
+  config.vm.define "compute-node-3" do |c|
+    c.vm.synced_folder '.', '/vagrant', disabled: true
+    c.vm.communicator = "none"
+    c.vm.hostname = "compute-node-3"
+    c.vm.network "private_network",
+      adapter: 1,
+      ip: "0.0.0.0",
+      auto_config: false,
+      virtualbox__intnet: "cord-mgmt-network",
+      libvirt__network_name: "cord-mgmt-network"
+    c.vm.network "private_network",
+      adapter: 2,         # The fabric interface for each node
+      ip: "0.4.0.0",
+      auto_config: false,
+      virtualbox__intnet: "compute-node-3-leaf-2",
+      libvirt__network_name: "compute-node-3-leaf-2",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.provider :libvirt do |v|
+      v.memory = 8192
+      v.cpus = 4
+      v.machine_virtual_size = 100
+      v.storage :file, :size => '100G', :type => 'qcow2'
+      v.boot 'network'
+      v.boot 'hd'
+      v.nested = true
+    end
+    c.vm.provider "virtualbox" do |v, override|
+      override.vm.box = "clink15/pxe"
+      v.memory = 1048
+      v.gui = "true"
     end
   end
 

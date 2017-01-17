@@ -1,0 +1,10 @@
+- name: Start ofdatapath
+  shell: pgrep ofdatapath || ofdatapath -i eth2,eth3,eth4,eth5 -d {{ ansible_eth1.macaddress | hwaddr('bare') }} --no-slicing -D punix:/var/run/cpqd.sock
+  tags:
+    - skip_ansible_lint # running a sub job
+
+# /etc/resolv.conf not set up correctly in switches, use controller IP addr instead
+- name: Start ofprotocol
+  shell: pgrep ofprotocol || ofprotocol -D --log-file=/var/log/ofprotocol.log unix:/var/run/cpqd.sock tcp:10.1.0.1:6653
+  tags:
+    - skip_ansible_lint # running a sub job

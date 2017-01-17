@@ -1,0 +1,14 @@
+- name: Ensure brctl
+  apt:
+    name: bridge-utils
+    state: present
+
+- name: Ensure bridge
+  template:
+    src: templates/spinebr.cfg.j2
+    dest: /etc/network/interfaces.d/spinebr.cfg
+
+- name: Ensure bridge is up
+  command: ifup spinebr
+  tags:
+    - skip_ansible_lint # running a sub job

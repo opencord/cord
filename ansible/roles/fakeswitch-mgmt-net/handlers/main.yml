@@ -1,0 +1,2 @@
+- name: Bring up eth1
+  command: ifup eth1

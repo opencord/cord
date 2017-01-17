@@ -11,6 +11,11 @@ SSHCONFIG=~/.ssh/config
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
+function add_box() {
+  vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
+  vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
+}
+
 function cleanup_from_previous_test() {
   echo "## Cleanup ##"
 
@@ -60,8 +65,7 @@ function bootstrap() {
   cd $CORDDIR/build
   vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
   vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
-  vagrant box list ubuntu/trusty64 | grep virtualbox || vagrant box add ubuntu/trusty64
-  vagrant box list ubuntu/trusty64 | grep libvirt || vagrant mutate ubuntu/trusty64 libvirt --input-provider virtualbox
+  add_box ubuntu/trusty64
 }
 
 function cloudlab_setup() {
@@ -126,25 +130,58 @@ function set_up_maas_user() {
   ssh prod "sudo chown -R maas:maas ~maas/.ssh"
 }
 
+function turn_off_learning () {
+  NET=$1
+  BRIDGE=`sudo virsh net-info $NET|grep "Bridge:"|awk '{print $2}'`
+  sudo brctl setageing $BRIDGE 0
+  sudo brctl stp $BRIDGE off
+}
+
+function leaf_spine_up() {
+  cd $CORDDIR/build
+
+  if [[ $FABRIC -ne 0 ]]
+  then
+      sudo su $USER -c "FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt"
+  else
+      # Linux bridging seems to be having issues with two spine switches
+      sudo su $USER -c "FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 --provider libvirt"
+  fi
+
+  # Turn off MAC learning on "links" -- i.e., bridges created by libvirt.
+  # Without this, sometimes packets are dropped because the bridges
+  # think they are not local -- this needs further investigation.
+  # A better solution might be to replace the bridges with UDP tunnels, but this
+  # is not supported with the version of libvirt available on Ubuntu 14.04.
+  turn_off_learning head-node-leaf-1
+  turn_off_learning compute-node-1-leaf-1
+  turn_off_learning compute-node-2-leaf-2
+  turn_off_learning compute-node-3-leaf-2
+  turn_off_learning leaf-1-spine-1
+  turn_off_learning leaf-1-spine-2
+  turn_off_learning leaf-2-spine-1
+  turn_off_learning leaf-2-spine-2
+}
+
 function add_compute_node() {
   echo add_compute_node: $1 $2
 
   cd $CORDDIR/build
   sudo su $USER -c "vagrant up $1 --provider libvirt"
 
-  # Change MAC address of bridge to match cord-pod service profile
-  # This change won't survive a reboot
-  BRIDGE=$( route -n | grep 10.6.1.0 | awk '{print $8}' )
-  sudo ifconfig $BRIDGE hw ether 02:42:0a:06:01:01
-
-  ip addr list | grep 10.6.1.129 || sudo ip address add 10.6.1.129 dev $BRIDGE
-  ip addr list | grep 10.6.1.193 || sudo ip address add 10.6.1.193 dev $BRIDGE
-
   # Set up power cycling for the compute node and wait for it to be provisioned
   ssh prod "cd /cord/build/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
 
   echo ""
-  echo "compute_node is fully provisioned!"
+  echo "$1 is fully provisioned!"
+}
+
+function initialize_fabric() {
+  echo "Initializing fabric"
+  ssh prod "cd /cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-refresh-fabric.yml"
+
+  echo "Fabric ping test"
+  ssh prod "cd /cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-fabric-pingtest.yml"
 }
 
 function run_e2e_test () {
@@ -168,11 +205,12 @@ RUN_TEST=0
 SETUP_ONLY=0
 DIAGNOSTICS=0
 CLEANUP=0
+FABRIC=0
 #By default, cord-in-a-box creates 1 compute node. If more than one compute is
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdhn:stv" opt; do
+while getopts "b:cdfhn:stv" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -180,12 +218,15 @@ while getopts "b:cdhn:stv" opt; do
       ;;
     d ) DIAGNOSTICS=1
       ;;
+    f ) FABRIC=1
+      ;;
     h ) echo "Usage:"
       echo "    $0                install OpenStack and prep XOS and ONOS VMs [default]"
       echo "    $0 -b <project:changeset/revision>  checkout a changesets from gerrit. Can"
       echo "                      be used multiple times."
       echo "    $0 -c             cleanup from previous test"
       echo "    $0 -d             run diagnostic collector"
+      echo "    $0 -f             use ONOS fabric (EXPERIMENTAL)"
       echo "    $0 -h             display this help message"
       echo "    $0 -n #           number of compute nodes to setup. Currently max 2 nodes can be supported"
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
@@ -230,21 +271,24 @@ fi
 
 install_head_node
 set_up_maas_user
+leaf_spine_up
 
-#Limiting the maximum number of compute nodes that can be supported to 2. If
-#more than 2 compute nodes are needed, this script need to be enhanced to set
-#the environment variable NUM_COMPUTE_NODES before invoking the Vagrant commands
-if [[ $NUM_COMPUTE_NODES -gt 2 ]]
+if [[ $NUM_COMPUTE_NODES -gt 3 ]]
 then
-   echo "currently max only two compute nodes can be supported..."
-   NUM_COMPUTE_NODES=2
+   echo "currently max only three compute nodes can be supported..."
+   NUM_COMPUTE_NODES=3
 fi
 
 for i in `seq 1 $NUM_COMPUTE_NODES`;
 do
    echo adding the compute node: compute-node-$i
-   add_compute_node compute_node-$i build_compute_node-$i
+   add_compute_node compute-node-$i build_compute-node-$i
 done
+
+if [[ $FABRIC -ne 0 ]]
+then
+  initialize_fabric
+fi
 
 if [[ $RUN_TEST -eq 1 ]]
 then

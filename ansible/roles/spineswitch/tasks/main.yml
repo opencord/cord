@@ -1,0 +1,24 @@
+- name: Ensure interface config files
+  template:
+    src: templates/ethX.cfg.j2
+    dest: /etc/network/interfaces.d/{{ item }}.cfg
+  with_items:
+  - eth2
+  - eth3
+
+- name: Ensure interfaces are up
+  command: ifup {{ item }}
+  with_items:
+  - eth2
+  - eth3
+  tags:
+    - skip_ansible_lint # running a sub job
+
+- name: Ensure fabric configuration
+  include: fabric.yml
+  when: fabric
+
+- name: Ensure bridge configuration
+  include: bridge.yml
+  when: not fabric
+
