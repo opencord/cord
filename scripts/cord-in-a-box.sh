@@ -11,6 +11,11 @@ SSHCONFIG=~/.ssh/config
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
+function add_box() {
+  vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
+  vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
+}
+
 function cleanup_from_previous_test() {
   echo "## Cleanup ##"
 
@@ -60,8 +65,8 @@ function bootstrap() {
   cd $CORDDIR/build
   vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
   vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
-  vagrant box list ubuntu/trusty64 | grep virtualbox || vagrant box add ubuntu/trusty64
-  vagrant box list ubuntu/trusty64 | grep libvirt || vagrant mutate ubuntu/trusty64 libvirt --input-provider virtualbox
+  add_box ubuntu/trusty64
+  add_box opencord/cpqd-switch
 }
 
 function cloudlab_setup() {
@@ -126,6 +131,12 @@ function set_up_maas_user() {
   ssh prod "sudo chown -R maas:maas ~maas/.ssh"
 }
 
+function leaf_spine_up() {
+  cd $CORDDIR/build
+
+  sudo su $USER -c 'vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt'
+}
+
 function add_compute_node() {
   echo add_compute_node: $1 $2
 
@@ -144,7 +155,7 @@ function add_compute_node() {
   ssh prod "cd /cord/build/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
 
   echo ""
-  echo "compute_node is fully provisioned!"
+  echo "$1 is fully provisioned!"
 }
 
 function run_e2e_test () {
@@ -230,20 +241,18 @@ fi
 
 install_head_node
 set_up_maas_user
+leaf_spine_up
 
-#Limiting the maximum number of compute nodes that can be supported to 2. If
-#more than 2 compute nodes are needed, this script need to be enhanced to set
-#the environment variable NUM_COMPUTE_NODES before invoking the Vagrant commands
-if [[ $NUM_COMPUTE_NODES -gt 2 ]]
+if [[ $NUM_COMPUTE_NODES -gt 3 ]]
 then
-   echo "currently max only two compute nodes can be supported..."
-   NUM_COMPUTE_NODES=2
+   echo "currently max only three compute nodes can be supported..."
+   NUM_COMPUTE_NODES=3
 fi
 
 for i in `seq 1 $NUM_COMPUTE_NODES`;
 do
    echo adding the compute node: compute-node-$i
-   add_compute_node compute_node-$i build_compute_node-$i
+   add_compute_node compute-node-$i build_compute-node-$i
 done
 
 if [[ $RUN_TEST -eq 1 ]]
