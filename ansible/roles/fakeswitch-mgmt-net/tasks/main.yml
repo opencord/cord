@@ -1,0 +1,6 @@
+- name: Ensure DHCP on eth1
+  copy:
+    src: files/eth1.cfg
+    dest: /etc/network/interfaces.d/eth1.cfg
+  notify:
+    - Bring up eth1
