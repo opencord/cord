@@ -16,3 +16,14 @@
   command: ifup mgmtbr
   changed_when: true
 
+- name: Ensure fabric bridge
+  copy:
+    src: fabric.cfg
+    dest: /etc/network/interfaces.d/fabric.cfg
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure fabric bridge up
+  command: ifup fabric
+  changed_when: true
