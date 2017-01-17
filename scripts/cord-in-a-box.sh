@@ -106,7 +106,7 @@ function install_head_node() {
   ssh corddev "cd /cord/build; ./gradlew fetch"
   ssh corddev "cd /cord/build; ./gradlew buildImages"
   ssh corddev "cd /cord/build; ping -c 3 prod; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deployBase"
 }
 
 function set_up_maas_user() {
@@ -124,6 +124,12 @@ function set_up_maas_user() {
   ssh prod "sudo mkdir -p ~maas/.ssh"
   ssh prod "sudo cp /tmp/id_rsa ~maas/.ssh/id_rsa"
   ssh prod "sudo chown -R maas:maas ~maas/.ssh"
+}
+
+function leaf_spine_up() {
+  cd $CORDDIR/build
+
+  sudo su $USER -c 'vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt'
 }
 
 function add_compute_node() {
@@ -230,6 +236,7 @@ fi
 
 install_head_node
 set_up_maas_user
+leaf_spine_up
 
 #Limiting the maximum number of compute nodes that can be supported to 2. If
 #more than 2 compute nodes are needed, this script need to be enhanced to set
