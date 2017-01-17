@@ -1,0 +1,12 @@
+- name: Ensure brctl
+  apt: 
+    name: bridge-utils
+    state: present
+
+- name: Ensure bridge
+  copy:
+    src: files/leafbr.cfg
+    dest: /etc/network/interfaces.d/spinebr.cfg
+
+- name: Ensure bridge is up
+  command: ifup spinebr
