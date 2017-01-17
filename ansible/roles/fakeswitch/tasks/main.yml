@@ -18,7 +18,7 @@
 
 - name: Ensure Commands
   become: yes
-  template:
+  copy:
     src: files/{{ item }}
     dest: /usr/bin/{{ item }}
     owner: root
@@ -41,3 +41,11 @@
     name: ssh
     state: restarted
   #failed_when: false
+
+- name: Ensure /mnt/onl/data directory present
+  become: yes
+  file:
+    path: /mnt/onl/data
+    owner: root
+    group: root
+    state: directory
