@@ -22,6 +22,30 @@
       "revId": "e5a5d400652ccc0b04db3ed13ec382d158f96dbc",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_3068f5b9",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-01-18T20:59:00Z",
+      "side": 1,
+      "message": "I changed karaf/karaf to onos/rocks for no good reason.  Both are supported.",
+      "parentUuid": "fa0f191f_90790196",
+      "range": {
+        "startLine": 742,
+        "startChar": 29,
+        "endLine": 742,
+        "endChar": 34
+      },
+      "revId": "e5a5d400652ccc0b04db3ed13ec382d158f96dbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
