@@ -38,12 +38,12 @@ terminating on the leaf at port *n*.
 - *eth3* on the head node is the uplink from the POD to the Internet.
 
 The following assumptions are made about the phyical CORD POD being deployed:
-- The leaf - spine switchs are Accton 6712s
+- The leaf - spine switches are Accton 6712s
 - The compute nodes are using 40G Intel NIC cards
 - The compute node that is to be designated the *head node* has
 **Ubuntu 14.04 LTS** installed. In addition, the user should have **password-less sudo permission**.
 
-**Prerequisite: Vagrant is installed and operationally.**
+**Prerequisite: Vagrant is installed and operational.**
 **Note:** *This quick start guide has only been tested against Vagrant and
 VirtualBox, specially on MacOS.*
 
@@ -57,7 +57,8 @@ The head node is deployed from a host outside the CORD POD (OtP).
 
 ## Install Repo
 
-Make sure you have a bin directory in your home directory and that it is included in your path:
+Make sure you have a bin directory in your home directory and that it is
+included in your path:
 
 ```
 mkdir ~/bin
@@ -79,6 +80,10 @@ To clone the repository, on your OtP build host issue the `git` command:
 mkdir opencord && cd opencord
 repo init -u https://gerrit.opencord.org/manifest -b master
 ```
+**NOTE:** _In the example above the OpenCORD version clones was the `master`
+branch of the source tree. If a different version is desired then `master`
+should be replaced with the name of the desired version, `cord-2.0` for
+example._
 
 Fetch the opencord source code
 ```
@@ -106,10 +111,10 @@ Oracle Java 8.
 cd build
 vagrant up corddev
 ```
-**NOTE:** *The VM will consume 2G RAM and about 12G disk space. Make sure it can obtain sufficient resources.
-It may takes several minutes for the first command `vagrant up
-corddev` to complete as it will include creating the VM as well as downloading
-and installing various software packages.*
+**NOTE:** *The VM will consume 2G RAM and about 12G disk space. Make sure it can obtain
+sufficient resources. It may takes several minutes for the first command
+`vagrant up corddev` to complete as it will include creating the VM as well as
+downloading and installing various software packages.*
 
 ### Complete
 
@@ -157,6 +162,9 @@ command:
 ```
 ./gradlew fetch
 ```
+**NOTE:** *The first time you run `./gradlew` it will download the `gradle`
+binary from the Internet and install it locally. This is a one time operation,
+but may be time consuming depending on the speed of your Internet connection.*
 
 ### Complete
 Once the fetch command has successfully been run, this step is complete. After
@@ -165,16 +173,16 @@ downloaded using the `docker images` command on the development machine:
 ```
 docker images
 REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-python                      2.7-alpine          9c8c07c0f9b7        3 weeks ago         72.22 MB
-xosproject/xos-base         <none>              955e6dcdcf36        4 weeks ago         686.1 MB
-redis                       <none>              74b99a81add5        6 weeks ago         182.8 MB
-xosproject/xos-postgres     <none>              95312a611414        6 weeks ago         393.8 MB
-xosproject/cord-app-build   <none>              003a1c20e34a        3 months ago        1.108 GB
-onosproject/onos            <none>              309088c647cf        5 months ago        825.6 MB
-consul                      <none>              62f109a3299c        5 months ago        41.05 MB
-swarm                       <none>              47dc182ea74b        7 months ago        19.32 MB
-nginx                       <none>              3c69047c6034        7 months ago        182.7 MB
-xosproject/vsg              <none>              dd026689aff3        8 months ago        336 MB
+opencord/onos               <none>              e1ade494f06e        3 days ago          936.5 MB
+python                      2.7-alpine          c80455665c57        2 weeks ago         71.46 MB
+xosproject/xos-base         <none>              2b791db4def0        4 weeks ago         756.4 MB
+redis                       <none>              74b99a81add5        11 weeks ago        182.8 MB
+xosproject/xos-postgres     <none>              95312a611414        11 weeks ago        393.8 MB
+xosproject/cord-app-build   <none>              003a1c20e34a        5 months ago        1.108 GB
+consul                      <none>              62f109a3299c        6 months ago        41.05 MB
+swarm                       <none>              47dc182ea74b        8 months ago        19.32 MB
+nginx                       <none>              3c69047c6034        8 months ago        182.7 MB
+xosproject/vsg              <none>              dd026689aff3        9 months ago        336 MB
 ```
 
 ## Build Images
@@ -191,25 +199,27 @@ container images. These utilities are:
    - cord-maas-provisioner - (directory: `provisioner`) daemon on the head node
    to managing the execution of ansible playbooks against switches and compute
    nodes as they are added to the POD.
-   - cord-ip-allocator - (directr: `ip-allocator`) daemon on the head node used
+   - cord-ip-allocator - (directory: `ip-allocator`) daemon on the head node used
    to allocate IP address for the fabric interfaces.
    - cord-dhcp-harvester - (directory: `harvester`) run on the head node to
    facilitate CORD / DHCP / DNS integration so that all hosts can be resolved
    via DNS
-   - opencord/mavenrepo
-   - cord-test/nose
-   - cord-test/quagga
-   - cord-test/radius
-   - onosproject/onos
+   - opencord/mavenrepo - custom CORD maven repository image to support
+   ONOS application loading from a local repository
+   - cord-test/nose - container from which cord tester test cases originate and
+   validate traffic through the CORD infrastructure
+   - cord-test/quagga - BGP virtual router to support uplink from CORD fabric
+   network to Internet
+   - cord-test/radius - Radius server to support cord-tester capability
+   - opencord/onos - custom version of ONOS for use within the CORD platform #XOSTBD
 
-The images can be built by using the following command. This will build all
-the images.
+The images can be built by using the following command.
 ```
 ./gradlew buildImages
 ```
-
-**NOTE:** *The first time you run `./gradlew` it will download from the Internet
-the `gradle` binary and install it locally. This is a one time operation.*
+**NOTE:** *The first time you run `./gradlew` it will download the `gradle`
+binary from the Internet and install it locally. This is a one time operation,
+but may be time consuming depending on the speed of your Internet connection.*
 
 ### Complete
 Once the `buildImages` command successfully runs this task is complete. The
@@ -218,24 +228,24 @@ CORD artifacts have been built and the Docker images can be viewed by using the
 ```
 docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}'
 REPOSITORY                  TAG                 SIZE                IMAGE ID
-opencord/mavenrepo          latest              324 MB              206959c84d14
-cord-maas-switchq           latest              338.2 MB            a04b43800cc7
-cord-provisioner            latest              820.9 MB            708734f3691b
-cord-dhcp-harvester         latest              347.1 MB            77aaa029699b
-config-generator            latest              279 MB              3862c0872ce6
-cord-maas-bootstrap         latest              359.4 MB            5cebf664dfc1
-cord-maas-automation        latest              371.1 MB            a7872c54866e
-cord-ip-allocator           latest              277.1 MB            4c39faeaf29a
-golang                      alpine              241.1 MB            016944b25311
-golang                      1.6-alpine          283.6 MB            2b545aa749b4
-ubuntu                      14.04               187.9 MB            aae2b63c4946
-nginx                       latest              181.5 MB            abf312888d13
-python                      2.7-alpine          72.22 MB            9c8c07c0f9b7
-xosproject/xos-base         <none>              686.1 MB            955e6dcdcf36
+opencord/mavenrepo          latest              338.2 MB            2e29009df740
+cord-maas-switchq           latest              337.7 MB            73b084b48796
+cord-provisioner            latest              822.4 MB            bd26a7001dd8
+cord-dhcp-harvester         latest              346.8 MB            d3cfa30cf38c
+config-generator            latest              278.4 MB            e58059b1afb2
+cord-maas-bootstrap         latest              359.4 MB            c70c437c6039
+cord-maas-automation        latest              371.8 MB            9757ac34e7f6
+cord-ip-allocator           latest              276.5 MB            0f399f8389aa
+opencord/onos               <none>              936.5 MB            e1ade494f06e
+python                      2.7-alpine          71.46 MB            c80455665c57
+golang                      alpine              240.5 MB            00371bbb49d5
+golang                      1.6-alpine          283 MB              1ea38172de32
+nginx                       latest              181.6 MB            01f818af747d
+xosproject/xos-base         <none>              756.4 MB            2b791db4def0
+ubuntu                      14.04               187.9 MB            3f755ca42730
 redis                       <none>              182.8 MB            74b99a81add5
 xosproject/xos-postgres     <none>              393.8 MB            95312a611414
 xosproject/cord-app-build   <none>              1.108 GB            003a1c20e34a
-onosproject/onos            <none>              825.6 MB            309088c647cf
 consul                      <none>              41.05 MB            62f109a3299c
 swarm                       <none>              19.32 MB            47dc182ea74b
 nginx                       <none>              182.7 MB            3c69047c6034
@@ -249,11 +259,12 @@ machine was created with `vagrant up`.*
 
 ## Deployment Configuration File
 The commands to deploy the POD can be customized via a *deployment configuration
-file*. The file is in [YAML](http://yaml.org/).
+file*. The file is in [YAML](http://yaml.org/) format.
 
-To construct a configuration file for yoru physical POD you should copy the
+To construct a configuration file for your physical POD, copy the
 sample deployment configuration found in `config/sample.yml` and modify the
-values to fit your physical deployment.
+values to fit your physical deployment. Descriptions of the values can be
+found in the sample file.
 
 ## Publish
 Publishing consists of *pushing* the build docker images to the Docker
@@ -261,7 +272,7 @@ repository on the target head node. This step can take a while as it has to
 transfer all the image from the development machine to the target head node.
 This step is started with the following command:
 ```
-./gradlew -PdeployConfig=config/podX.yml -PtargetReg=<head-node-ip-address>:5000 publish
+./gradlew -PdeployConfig=config/podX.yml publish
 ```
 
 ### Complete
@@ -270,21 +281,21 @@ Once the `publish` command successfully runs this task is complete. When this
 step is complete a Docker registry and Docker registry mirror. It can be
 verified that these are running by using the `docker ps` command.
 ```
-docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
+docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
 CONTAINER ID        IMAGE               COMMAND                  CREATED AT
-5f1cbebe7e61        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
-6d3a911e5323        registry:2.4.0      "/bin/registry serve "   2016-07-13 17:03:08 +0000 UTC
+c8dd48fc9d18        registry:2.4.0      "/bin/registry serve "   2016-12-02 11:49:12 -0800 PST
+e983d2e43760        registry:2.4.0      "/bin/registry serve "   2016-12-02 11:49:12 -0800 PST
 ```
 
 We can also query the docker registry on the head node. We should be able to
 observe a list of docker images.
 
-_Note: the example below uses the command `jq`
-to pretty print JSON. If you system doesn't have `jq` installed it can be
-installed using `sudo apt-get install -y jq`._
+_Note: the example below uses the commands `curl` and `jq`
+to retrieve data and pretty print JSON. If you system doesn't have `curl` or
+`jq` installed it can be installed using `sudo apt-get install -y curl jq`._
 
 ```
-curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .`
+curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
 {
   "repositories": [
     "config-generator",
@@ -297,7 +308,7 @@ curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .`
     "cord-provisioner",
     "mavenrepo",
     "nginx",
-    "onosproject/onos",
+    "opencord/onos",
     "redis",
     "swarm",
     "xosproject/cord-app-build",
@@ -324,15 +335,15 @@ CORD and will be deployed on the head node.
 ```
 
 This task can take some time so be patient. It should complete without errors,
-so if an error is encountered, something has gone Horribly Wrong (tm).  See the
+so if an error is encountered, something has gone Horribly Wrong(tm).  See the
 [Getting Help](#getting-help) section.
 
 ### Complete
 
 This step is complete when the command successfully runs. The Web UI for MAAS
 can be viewed by browsing to the target machine using a URL of the form
-`http://head-node-ip-address:5240/MAAS`. To login to the web page, use `cord`
-for username. If you have set a password in the deployment configuration
+`http://head-node-ip-address/MAAS`. To login to the web page, use
+`cord` for username. If you have set a password in the deployment configuration
 password use that, else the password used can be found in your build directory
 under `<base>/build/maas/passwords/maas_user.txt`.
 
@@ -354,69 +365,81 @@ this could take several minutes. Please wait and then attempt the last command
 again until the returned list is empty, `[]`. When the list is empty you can
 proceed.
 
-Browse around the UI and get familiar with MAAS via documentation at `http://maas.io`
+Browse around the UI and get familiar with MAAS via documentation at
+`http://maas.io`
 
 The deployment of XOS includes a deployment of Open Stack.
 
 ## Booting Compute Nodes
 
 ### Network configuration
+The CORD POD uses two core network interfaces, `fabric` and `mgmtbr`. The
+`fabric` interface will be used to bond all interfaces meant to be used for CORD
+data traffic and the `mgmtbr` will be used to bridge all interfaces used for POD
+management (signaling) traffic.
 
-The CORD POD uses two core network interfaces, `fabric` and `mgmtbr`. The `fabric` interface will be used
-to bond all interfaces meant to be used for CORD data traffic and the `mgmtbr` will be used to bridge all
-interfaces used for POD management (signalling) traffic.
+An additional interface of import on the head node is the external interface, or
+the interface through which the management net accesses upstream servers; such
+as the Internet.
 
-An additional interface of import on the head node is the external interface, or the interface through which
-the management net accesses upstream servers; such as the Ineteret.
+How physical interfaces are identified and mapped to either the `fabric` or
+`mgmtbr` interface is a combination of their name, NIC driver, and/or bus type.
 
-How physical interfaces are identified and mapped to either the `fabric` or `mgmtbr` interface is a combination
-of their name, NIC driver, and/or bus type.
+By default any interface that has a module or kernel driver of `tun`, `bridge`,
+`bonding`, or `veth` will be ignored when selecting devices for the `fabric` and
+`mgmtbr` interfaces. As will any interface that is not associated with a bus
+type or has a bus type of `N/A` or `tap`. For your specific deployment you can
+verify the interface information using the `ethtool -i <name>` command on the
+linux prompt.
 
-By default any interface that has a module or kernel driver of `tun`, `bridge`, `bonding`, or `veth` will be
-ignored when selecting devices for the `fabric` and `mgmtbr` interfaces. As will any interface that is not
-associated with a bus type or has a bus type of `N/A` or `tap`. For your specific deployment you can
-verify the interface information using the `ethtool -i <name>` command on the linux prompt.
+All other interfaces that are not ignored will be considered for selection to
+either the `fabric` or `mbmtbr` interface. By default, any interface that has a
+module or kernel driver of `i40e` or `mlx4_en` will be selected to the `fabric`
+interface and all others will be selected to the `mgmtbr` interface.
 
-All other interfaces that are not ignored will be considered for selection to either the `fabric` or
-`mbmtbr` interface. By default, any interface that has a module or kernel driver of `i40e` or `mlx4_en` will
-be selected to the `fabric` interface and all others will be selected to the `mgmtbr` interface.
+As the `fabric` interface is a `bond` the first interface, sorted alpha
+numerically by name, will be used as the primary interface.
 
-As the `fabric` interface is a `bond` the first interface, sorted alpha numberically by name, will be used
-as the primary interface.
-
-Currently the `mgmtbr` interface is a bridge and the physical interfaces will be added as `bridge_ports`
-on the `mgmtbr`. This is likely to change to a `bond` in a future release and at this time the primary
-interface will be selected by alpha numberic sorting.
+For the management network an interface bond, `mgmtbond`, is created to provide
+redundant network for the physical interfaces. The bridge, `mgmtbr`, associates
+this bond interface and various other virtual interfaces together to enable
+management communication between compute nodes, containers, and virtual machines
+that make up the management software for CORD.
 
 #### Customizing Network Configuration
-
-The network configuration can be customized to your deployment using a set of variables that can be set
-in your deployment configuration file, e.g. `podX.yml`. There is a set of include, exclude, and ignore
-variables that operation on the interface name, module type, and bus type. By setting values on these
-variables it is fairly easy to customize the network settings.
+The network configuration can be customized to your deployment using a set of
+variables that can be set in your deployment configuration file, e.g.
+`podX.yml`. There is a set of include, exclude, and ignore variables that
+operation on the interface name, module type, and bus type. By setting values on
+these variables it is fairly easy to customize the network settings.
 
 The options are processed as following:
 
 1. If a given interface matches an ignore option, it is not available to be selected into either the `fabric` or `mgmtbr` interface and will not be modified in the `/etc/network/interface`.
-1. If no include criteria are specified and the given interfaces matches then exclude criteria then the interface will be set as `manual` configuraiton in the `/etc/network/interface` file and will not be `auto` activated
+1. If no include criteria are specified and the given interfaces matches then exclude criteria then the interface will be set as `manual` configuration in the `/etc/network/interface` file and will not be `auto` activated
 1. If no include criteria are specified and the given interface does _NOT_ match the exclude criteria then this interface will be included in either the `frabric` or `mgmtbr` interface
 1. If include criteria are specified and the given interface does not match the criteria then the interface will be ignored and its configuration will _NOT_ be modified
-1. If include criteria are specified and the given interface matches the criteria then if the given interface also matches the exclude criteria then this interface will be set as `manual` configuraiton in the `/etc/network/interface` file and will not be `auto` activated
+1. If include criteria are specified and the given interface matches the criteria then if the given interface also matches the exclude criteria then this interface will be set as `manual` configuration in the `/etc/network/interface` file and will not be `auto` activated
 1. If include criteria are specified and the given interface matches the criteria and if it does _NOT_ match the exclude criteria then this interface will be included in either the `frabric` or `mgmtbr` interface
 
-By default, the only criteria that are specified is the _fabric include module types_ and they are set to `i40e,mlx4_en` (_NOTE: the list is now comma separated and not vertical bar (`|`) separated._)
+By default, the only criteria that are specified is the _fabric include module
+types_ and they are set to `i40e,mlx4_en` (_NOTE: the list is now comma
+separated and not vertical bar (`|`) separated._)
 
-If the _fabric include module types_ is specified and the _management exclude module types_ are not specified, then
-by default the _fabric include module types_ are used as the _management exclude module types_. This ensures that
-by default the `fabric` and the `mgmtbr` do not intersect on interface module types.
+If the _fabric include module types_ is specified and the _management exclude
+module types_ are not specified, then by default the _fabric include module
+types_ are used as the _management exclude module types_. This ensures that by
+default the `fabric` and the `mgmtbr` do not intersect on interface module
+types.
 
-If an external interface is specified in the deployment configuration, this interface will be added to the
-_farbric_ and _management_ _ignore names_ list.
+If an external interface is specified in the deployment configuration, this
+interface will be added to the _farbric_ and _management_ _ignore names_ list.
 
-Each of the criteria is specified as a comma separated list of regular expressions.
-Default
+Each of the criteria is specified as a comma separated list of regular
+expressions. Default
 
-To set the variables you can use the `seedServer.extraVars` section in the deployment config file as follows:
+To set the variables you can use the `seedServer.extraVars` section in the
+deployment config file as follows:
 
 ```
 seedServer:
@@ -441,7 +464,8 @@ seedServer:
     - 'management_ignore_bus_types=<bus1>,<bus2>'
 ```
 
-The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and mgmtbr interfaces.
+The Ansible scripts configure MAAS to support DHCP/DNS/PXE on the eth2 and
+mgmtbr interfaces.
 
 Once it has been verified that the ubuntu boot image has been downloaded the
 compute nodes may be PXE booted.
@@ -465,13 +489,13 @@ Once the node is in the `Deployed` state, it will be provisioned for use in a
 CORD POD by the execution of an `Ansible` playbook.
 
 ### Complete
-Once the compute node is in the `Deployed` state and post deployment provisioning on the compute node is
-complete, this task is complete.
+Once the compute node is in the `Deployed` state and post deployment
+provisioning on the compute node is complete, this task is complete.
 
 Logs of the post deployment provisioning of the compute nodes can be found
 in `/etc/maas/ansible/logs` on the head node.
 
-Assitionally, the post deployment provisioning of the compute nodes can be
+Additionally, the post deployment provisioning of the compute nodes can be
 queried using the command `cord prov list`
 ```
 cord prov list
@@ -510,7 +534,7 @@ cord prov list
 ID                                         NAME                   MAC                IP          STATUS      MESSAGE
 cc:37:ab:7c:b7:4c                          spine-1                cc:37:ab:7c:b7:4c  10.6.0.23   Complete
 cc:37:ab:7c:ba:58                          leaf-2                 cc:37:ab:7c:ba:58  10.6.0.20   Complete
-cc:37:ab:7c:bd:e6                          onl-x86                cc:37:ab:7c:bd:e6  10.6.0.52   Complete
+cc:37:ab:7c:bd:e6                          leaf-1                 cc:37:ab:7c:bd:e6  10.6.0.52   Complete
 cc:37:ab:7c:bf:6c                          spine-2                cc:37:ab:7c:bf:6c  10.6.0.22   Complete
 node-c22534a2-bd0f-11e6-a36d-2c600ce3c239  steel-ghost.cord.lab   2c:60:0c:cb:00:3c  10.6.0.107  Complete
 node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4:2e  10.6.0.108  Complete
@@ -529,18 +553,18 @@ Please refer to [Re-provision Compute Nodes and Switches
 ](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized switch.
 
-## Post Deployment Configuration of XOS / ONOS VTN app
+## Post Deployment Configuration of XOS / ONOS VTN app #XOSTBD
 
-The compute node provisioning process described above (under [Booting Compute Nodes](#booting-compute-nodes))
-will install the servers as OpenStack compute nodes.  You should be able to see them on the CORD head node
-by running the following commands:
+The compute node provisioning process described above (under [Booting Compute Nodes](#booting-compute-nodes)) will install the servers as OpenStack compute
+nodes.  You should be able to see them on the CORD head node by running the
+following commands:
 ```
 source ~/admin-openrc.sh
 nova hypervisor-list
 ```
 
-You will see output like the following (showing each of the nodes you have provisioned):
-
+You will see output like the following (showing each of the nodes you have
+provisioned):
 ```
 +----+-------------------------+
 | ID | Hypervisor hostname     |
@@ -549,10 +573,13 @@ You will see output like the following (showing each of the nodes you have provi
 +----+-------------------------+
 ```
 
-However, after the compute nodes are provisioned, currently some additional manual configuration is required to set up the ONOS
-services in XOS.  We intend to automate this process in the future, but for the time being the following steps must be carried out.
+However, after the compute nodes are provisioned, currently some additional
+manual configuration is required to set up the ONOS services in XOS.  We intend
+to automate this process in the future, but for the time being the following
+steps must be carried out.
 
-To prepare to run these steps, on the CORD head node, login to the XOS VM and change to the `service-profile/cord-pod` directory:
+To prepare to run these steps, on the CORD head node, login to the XOS VM and
+change to the `service-profile/cord-pod` directory:
 
 ```
 ssh ubuntu@xos
@@ -562,37 +589,39 @@ cd service-profile/cord-pod
 All of the steps listed below are run in this directory.
 
 ### Add the Nodes to XOS
-
-To create entries for the newly provisioned nodes in XOS, run the following command:
+To create entries for the newly provisioned nodes in XOS, run the following
+command:
 
 ```
 make new-nodes
 ```
 
 ### VTN Configuration
+XOS maintains the network configuration of the ONOS VTN app and pushes this
+configuration to ONOS.  Information for new nodes must be manually added to XOS.
+XOS will generate the VTN network configuration from this information and push
+it to ONOS.
 
-XOS maintains the network configuration of the ONOS VTN app and pushes this configuration to ONOS.  Information
-for new nodes must be manually added to XOS.  XOS will generate the VTN network configuration
-from this information and push it to ONOS.
-
-A script called `make-vtn-external-yaml.sh` can be used to create a TOSCA template for the VTN
-information maintained by XOS.  To run it:
+A script called `make-vtn-external-yaml.sh` can be used to create a TOSCA
+template for the VTN information maintained by XOS.  To run it:
 
 ```
 rm vtn-external.yaml; make vtn-external.yaml
 ```
 
-This will generate a TOSCA file called `vtn-external.yaml` that is used to store the network
-information required by VTN in XOS.  The information in this TOSCA file closely maps onto the
-fields in the [VTN ONOS app's network configuration](https://wiki.opencord.org/display/CORD/Network+Config+Guide).  For
-example, in `vtn-external.yaml`, under the
-*properties* field of *service#vtn*, you will see fields such as *privateGatewayMac*, *localManagementIp*,
-and *ovsdbPort*; these correspond to the fields of the same name in VTN's network configuration.
+This will generate a TOSCA file called `vtn-external.yaml` that is used to store
+the network information required by VTN in XOS.  The information in this TOSCA
+file closely maps onto the fields in the [VTN ONOS app's network
+configuration](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
+For example, in `vtn-external.yaml`, under the *properties* field of
+*service#vtn*, you will see fields such as *privateGatewayMac*,
+*localManagementIp*, and *ovsdbPort*; these correspond to the fields of the same
+name in VTN's network configuration.
 
-The `vtn-external.yaml` file is generated with the information that applies to the single-node CORD POD.  You
-will need to change the values of some fields in this file for your POD.  For each OpenStack compute
-node (e.g., *nova-compute-1.cord.lab*), you will see the following in `vtn-external.yaml`:
-
+The `vtn-external.yaml` file is generated with the information that applies to
+the single-node CORD POD.  You will need to change the values of some fields in
+this file for your POD.  For each OpenStack compute node (e.g.,
+*nova-compute-1.cord.lab*), you will see the following in `vtn-external.yaml`:
 ```
     nova-compute-1.cord.lab:
       type: tosca.nodes.Node
@@ -645,13 +674,13 @@ The above YAML stores node-specific fields required by VTN:
    - *dataPlaneIntf*: data network interface
    - *dataPlaneIp*: data network IP of the machine
 
-You will need to edit the above values to reflect the desired configuration for each compute node.  For
-more details on the format of VTN's network configuration, see
-[the VTN Network Configuration Guide](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
+You will need to edit the above values to reflect the desired configuration
+for each compute node.  For more details on the format of VTN's network
+configuration, see [the VTN Network Configuration Guide](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
 
 ### Fabric Gateway Configuration
-To configure the fabric gateway, you will need to edit the file `cord-services.yaml`.
-You will see a section that looks like this:
+To configure the fabric gateway, you will need to edit the file
+`cord-services.yaml`. You will see a section that looks like this:
 
 ```
     addresses_vsg:
@@ -662,13 +691,14 @@ You will see a section that looks like this:
           gateway_mac: 02:42:0a:a8:00:01
 ```
 
-Edit this section so that it reflects the fabric's address block assigned to the vSGs, as well
-as the gateway IP and MAC address that the vSGs should use to reach the Internet.
+Edit this section so that it reflects the fabric's address block assigned to the
+vSGs, as well as the gateway IP and MAC address that the vSGs should use to
+reach the Internet.
 
 ### Update Information in XOS
 
-Once the `vtn-external.yaml` and `cord-services.yaml` files have been edited as described above,
-push them to XOS by running the following:
+Once the `vtn-external.yaml` and `cord-services.yaml` files have been edited as
+described above, push them to XOS by running the following:
 
 ```
 make vtn
@@ -685,7 +715,7 @@ To check the VTN configuration maintained by XOS:
       - Username: `padmin@vicci.org`
       - Password: `letmein`
    - Select *VTN_ONOS_app* in the table
-   - Verfy that the *Backend status text* has a green check with the message *successfully enacted*
+   - Verify that the *Backend status text* has a green check with the message *successfully enacted*
    - Select *Attributes* tab
    - Look for the *rest_onos/v1/network/configuration/* attribute.  Verify that its value looks correct for the VTN app's network configuration.
 
@@ -895,11 +925,11 @@ onos> netcfg
 
 ### Update physical host locations in XOS
 
-To correctly configure the fabric when VMs and containers
-are created on a physical host, XOS needs to associate the `location` tag of each physical host (from the fabric configuration)
-with its Node object in XOS.  This step needs to be done after new physical compute nodes are
-provisioned on the POD.  To update the node locations in XOS:
-
+To correctly configure the fabric when VMs and containers are created on a
+physical host, XOS needs to associate the `location` tag of each physical host
+(from the fabric configuration) with its Node object in XOS.  This step needs to
+be done after new physical compute nodes are provisioned on the POD.  To update
+the node locations in XOS:
 ```
 ssh ubuntu@xos
 cd ~/service-profile/cord-pod
