@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_15d843ee",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2017-01-18T09:42:07Z",
+      "side": 1,
+      "message": "There is no other vm for xos . \nI think we should update this part .",
+      "range": {
+        "startLine": 585,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 14
+      },
+      "revId": "d031ed99961292abdf2ccc3972576115645805c5",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_f5e4afad",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2017-01-18T09:42:07Z",
+      "side": 1,
+      "message": "xos is container now . we should remove this part",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 934,
+        "endChar": 14
+      },
+      "revId": "d031ed99961292abdf2ccc3972576115645805c5",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
