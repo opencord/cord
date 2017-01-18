@@ -351,7 +351,7 @@ After the `deployBase` command install `MAAS`, it initiates the download of
 an Ubuntu 14.04 boot image that will be used to boot the other POD servers.
 This download can take some time and the process cannot continue until the
 download is complete. The status of the download can be verified through
-the UI by visiting the URL `http://head-node-ip-address:5240/MAAS/images/`,
+the UI by visiting the URL `http://head-node-ip-address/MAAS/images/`,
 or via the command line from head node via the following commands:
 ```
 APIKEY=$(sudo maas-region-admin apikey --user=cord)
@@ -476,7 +476,7 @@ compute nodes must be enabled.*
 
 The compute node will boot, register with MAAS, and then be shut off. After this
 is complete an entry for the node will be in the MAAS UI at
-`http://head-node-ip-address:5240/MAAS/#/nodes`. It will be given a random
+`http://head-node-ip-address/MAAS/#/nodes`. It will be given a random
 hostname, in the Canonical way, of a adjective and an noun, such as
 `popular-feast.cord.lab`. *The name will be different for every deployment.* The
 new node will be in the `New` state.
@@ -553,7 +553,7 @@ Please refer to [Re-provision Compute Nodes and Switches
 ](#re-provision-compute-nodes-and-switches)
 if you want to restart this process or re-provision a initialized switch.
 
-## Post Deployment Configuration of XOS / ONOS VTN app #XOSTBD
+## Post Deployment Configuration of XOS / ONOS VTN app
 
 The compute node provisioning process described above (under [Booting Compute Nodes](#booting-compute-nodes)) will install the servers as OpenStack compute
 nodes.  You should be able to see them on the CORD head node by running the
@@ -566,119 +566,20 @@ nova hypervisor-list
 You will see output like the following (showing each of the nodes you have
 provisioned):
 ```
-+----+-------------------------+
-| ID | Hypervisor hostname     |
-+----+-------------------------+
-| 1  | nova-compute-1.cord.lab |
-+----+-------------------------+
++----+--------------------------+
+| ID | Hypervisor hostname      |
++----+--------------------------+
+| 1  | sturdy-baseball.cord.lab |
++----+--------------------------+
 ```
 
-However, after the compute nodes are provisioned, currently some additional
-manual configuration is required to set up the ONOS services in XOS.  We intend
-to automate this process in the future, but for the time being the following
-steps must be carried out.
-
-To prepare to run these steps, on the CORD head node, login to the XOS VM and
-change to the `service-profile/cord-pod` directory:
-
-```
-ssh ubuntu@xos
-cd service-profile/cord-pod
-```
-
-All of the steps listed below are run in this directory.
-
-### Add the Nodes to XOS
-To create entries for the newly provisioned nodes in XOS, run the following
-command:
-
-```
-make new-nodes
-```
-
-### VTN Configuration
-XOS maintains the network configuration of the ONOS VTN app and pushes this
-configuration to ONOS.  Information for new nodes must be manually added to XOS.
-XOS will generate the VTN network configuration from this information and push
-it to ONOS.
-
-A script called `make-vtn-external-yaml.sh` can be used to create a TOSCA
-template for the VTN information maintained by XOS.  To run it:
-
-```
-rm vtn-external.yaml; make vtn-external.yaml
-```
-
-This will generate a TOSCA file called `vtn-external.yaml` that is used to store
-the network information required by VTN in XOS.  The information in this TOSCA
-file closely maps onto the fields in the [VTN ONOS app's network
-configuration](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
-For example, in `vtn-external.yaml`, under the *properties* field of
-*service#vtn*, you will see fields such as *privateGatewayMac*,
-*localManagementIp*, and *ovsdbPort*; these correspond to the fields of the same
-name in VTN's network configuration.
-
-The `vtn-external.yaml` file is generated with the information that applies to
-the single-node CORD POD.  You will need to change the values of some fields in
-this file for your POD.  For each OpenStack compute node (e.g.,
-*nova-compute-1.cord.lab*), you will see the following in `vtn-external.yaml`:
-```
-    nova-compute-1.cord.lab:
-      type: tosca.nodes.Node
-
-    # VTN bridgeId field for node nova-compute-1.cord.lab
-    nova-compute-1.cord.lab_bridgeId_tag:
-      type: tosca.nodes.Tag
-      properties:
-          name: bridgeId
-          value: of:0000000000000001
-      requirements:
-          - target:
-              node: nova-compute-1.cord.lab
-              relationship: tosca.relationships.TagsObject
-          - service:
-              node: service#ONOS_CORD
-              relationship: tosca.relationships.MemberOfService
-
-    # VTN dataPlaneIntf field for node nova-compute-1.cord.lab
-    nova-compute-1.cord.lab_dataPlaneIntf_tag:
-      type: tosca.nodes.Tag
-      properties:
-          name: dataPlaneIntf
-          value: fabric
-      requirements:
-          - target:
-              node: nova-compute-1.cord.lab
-              relationship: tosca.relationships.TagsObject
-          - service:
-              node: service#ONOS_CORD
-              relationship: tosca.relationships.MemberOfService
-
-    # VTN dataPlaneIp field for node nova-compute-1.cord.lab
-    nova-compute-1.cord.lab_dataPlaneIp_tag:
-      type: tosca.nodes.Tag
-      properties:
-          name: dataPlaneIp
-          value: 10.168.0.253/24
-      requirements:
-          - target:
-              node: nova-compute-1.cord.lab
-              relationship: tosca.relationships.TagsObject
-          - service:
-              node: service#ONOS_CORD
-              relationship: tosca.relationships.MemberOfService
-```
-
-The above YAML stores node-specific fields required by VTN:
-   - *bridgeId*: the unique device ID of the integration bridge
-   - *dataPlaneIntf*: data network interface
-   - *dataPlaneIp*: data network IP of the machine
-
-You will need to edit the above values to reflect the desired configuration
-for each compute node.  For more details on the format of VTN's network
-configuration, see [the VTN Network Configuration Guide](https://wiki.opencord.org/display/CORD/Network+Config+Guide).
+This step performs a small amount of manual configuration to tell VTN how to
+route external traffic, and verifies that the new nodes were added to the ONOS VTN app by XOS.
 
 ### Fabric Gateway Configuration
+First, login to the CORD head node and change to the
+`service-profile/cord-pod` directory.
+
 To configure the fabric gateway, you will need to edit the file
 `cord-services.yaml`. You will see a section that looks like this:
 
@@ -686,28 +587,26 @@ To configure the fabric gateway, you will need to edit the file
     addresses_vsg:
       type: tosca.nodes.AddressPool
       properties:
-          addresses: 10.168.0.0/24
-          gateway_ip: 10.168.0.1
-          gateway_mac: 02:42:0a:a8:00:01
+        addresses: 10.6.1.128/26
+        gateway_ip: 10.6.1.129
+        gateway_mac: 02:42:0a:06:01:01
 ```
 
 Edit this section so that it reflects the fabric's address block assigned to the
 vSGs, as well as the gateway IP and MAC address that the vSGs should use to
 reach the Internet.
 
-### Update Information in XOS
-
-Once the `vtn-external.yaml` and `cord-services.yaml` files have been edited as
-described above, push them to XOS by running the following:
+Once the `cord-services.yaml` file has been edited as
+described above, push it to XOS by running the following:
 
 ```
-make vtn
 make cord
 ```
 
 ### Complete
 
-This step is complete once you see the new information for the VTN app in XOS and ONOS.
+This step is complete once you see the correct information in the VTN app
+configuration in XOS and ONOS.
 
 To check the VTN configuration maintained by XOS:
    - Go to the "ONOS apps" page in the CORD GUI:
@@ -723,8 +622,8 @@ To check that the network configuration has been successfully pushed
 to the ONOS VTN app and processed by it:
 
    - Log into ONOS from the head node
-      - Command: `ssh -p 8101 karaf@onos-cord`
-      - Password: `karaf`
+      - Command: `ssh -p 8102 onos@onos-cord`
+      - Password: `rocks`
    - Run the `cordvtn-nodes` command
    - Verify that the information for all nodes is correct
    - Verify that the initialization status of all nodes is *COMPLETE*
@@ -732,9 +631,9 @@ to the ONOS VTN app and processed by it:
 This will look like the following:
 
 ```
-$ ssh -p 8101 karaf@onos-cord
+$ ssh -p 8102 onos@onos-cord
 Password authentication
-Password: # the password is 'karaf'
+Password: # the password is 'rocks'
 Welcome to Open Network Operating System (ONOS)!
      ____  _  ______  ____
     / __ \/ |/ / __ \/ __/
@@ -752,7 +651,8 @@ and '[cmd] --help' for help on a specific command.
 Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
 
 onos> cordvtn-nodes
-hostname=nova-compute-1, hostMgmtIp=192.168.122.140/24, dpIp=10.168.0.253/24, br-int=of:0000000000000001, dpIntf=fabric, init=COMPLETE
+Hostname                      Management IP       Data IP             Data Iface     Br-int                  State
+sturdy-baseball               10.1.0.14/24        10.6.1.2/24         fabric         of:0000525400d7cf3c     COMPLETE
 Total 1 nodes
 ```
 
@@ -764,14 +664,14 @@ sudo ovs-vsctl del-br br-int
 ```
 On the head node, run
 ```
-ssh karaf@onos-cord-1 -p 8101
+ssh onos@onos-cord -p 8102
 ```
-(password is karaf)
+(password is 'rocks')
 and then in the ONOS CLI, run
 ```
 cordvtn-node-init <compute-node-name>
 ```
-(name is something like creamy-vegetable)
+(name is something like "sturdy-baseball")
 
 ## Post Deployment Configuration of the ONOS Fabric
 
@@ -806,10 +706,10 @@ aware of a device on the network ONOS needs to first receive a packet from it.
 
 To remove stale data from ONOS, the ONOS CLI `wipe-out` command can be used:
 ```
-ssh -p 8101 karaf@onos-fabric wipe-out -r -j please
+ssh -p 8101 onos@onos-fabric wipe-out -r -j please
 Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
 Password authentication
-Password:
+Password:  # password is 'rocks'
 Wiping intents
 Wiping hosts
 Wiping Flows
@@ -836,10 +736,10 @@ done
 You can verify ONOS has recognized the devices using the following command:
 
 ```shell
-ssh -p 8101 karaf@onos-fabric devices
+ssh -p 8101 onos@onos-fabric devices
 Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
 Password authentication
-Password:
+Password:     # password is 'rocks'
 id=of:0000cc37ab7cb74c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.23:58739, managementAddress=10.6.0.23, protocol=OF_13
 id=of:0000cc37ab7cba58, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.20:33326, managementAddress=10.6.0.20, protocol=OF_13
 id=of:0000cc37ab7cbde6, available=true, role=MASTER, type=SWITCH, mfr=Broadcom Corp., hw=OF-DPA 2.0, sw=OF-DPA 2.0, serial=, driver=ofdpa, channelId=10.6.0.52:37009, managementAddress=10.6.0.52, protocol=OF_13
@@ -857,10 +757,10 @@ done
 
 You can verify ONOS has recognized the devices using the following command:
 ```shell
-ssh -p 8101 karaf@onos-fabric hosts
+ssh -p 8101 onos@onos-fabric hosts
 Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
 Password authentication
-Password:
+Password:     # password is 'rocks'
 id=00:16:3E:DF:89:0E/None, mac=00:16:3E:DF:89:0E, location=of:0000cc37ab7cba58/3, vlan=None, ip(s)=[10.6.0.54], configured=false
 id=3C:FD:FE:9E:94:28/None, mac=3C:FD:FE:9E:94:28, location=of:0000cc37ab7cba58/4, vlan=None, ip(s)=[10.6.0.53], configured=false
 id=3C:FD:FE:9E:94:30/None, mac=3C:FD:FE:9E:94:30, location=of:0000cc37ab7cbde6/1, vlan=None, ip(s)=[10.6.1.1], configured=false
@@ -886,9 +786,9 @@ make reactivate_fabric_apps
 
 To verify that XOS has pushed the configuration to ONOS, log into ONOS in the onos-fabric VM and run `netcfg`:
 ```
-$ ssh -p 8101 karaf@onos-fabric
+$ ssh -p 8101 onos@onos-fabric
 Password authentication
-Password:
+Password:     # password is 'rocks'
 Welcome to Open Network Operating System (ONOS)!
      ____  _  ______  ____
     / __ \/ |/ / __ \/ __/
@@ -929,9 +829,8 @@ To correctly configure the fabric when VMs and containers are created on a
 physical host, XOS needs to associate the `location` tag of each physical host
 (from the fabric configuration) with its Node object in XOS.  This step needs to
 be done after new physical compute nodes are provisioned on the POD.  To update
-the node locations in XOS:
+the node locations in XOS, login to the head node and run the following:
 ```
-ssh ubuntu@xos
 cd ~/service-profile/cord-pod
 rm fabric.yaml
 make fabric.yaml
@@ -946,7 +845,7 @@ make fabric
 ```
 
 ### Connect Switches to the controller
-We need to manually connects the switches to ONOS after the network config is applied.
+We need to manually connect the switches to ONOS after the network config is applied.
 This can be done by running following ansible script on the head node.
 ```
 ansible-playbook /etc/maas/ansible/connect-switch.yml
