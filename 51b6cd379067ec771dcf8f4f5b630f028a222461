@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_d5ee4bb4",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_75e77fe5",
+      "range": {
+        "startLine": 41,
+        "startChar": 19,
+        "endLine": 41,
+        "endChar": 26
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_15f5e382",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-01-18T01:44:51Z",
       "side": 1,
       "message": "Should we directly replace this with cord-2.0 since this commit targets for cord-2.0 branch?",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 9
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_b52bd7ea",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "the decision was not to replace it so that we didn\u0027t have to keep editing this for every release.",
+      "parentUuid": "fa0f191f_15f5e382",
       "range": {
         "startLine": 83,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_9530d357",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_95e213d4",
+      "range": {
+        "startLine": 202,
+        "startChar": 26,
+        "endLine": 202,
+        "endChar": 33
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_d5c08b2c",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2017-01-18T01:35:11Z",
       "side": 1,
       "message": "originate?",
+      "range": {
+        "startLine": 209,
+        "startChar": 66,
+        "endLine": 209,
+        "endChar": 74
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_75353f45",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_d5c08b2c",
       "range": {
         "startLine": 209,
         "startChar": 66,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_553a3b37",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_b5dd1717",
+      "range": {
+        "startLine": 214,
+        "startChar": 52,
+        "endLine": 214,
+        "endChar": 59
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_f5c38f36",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2017-01-18T01:35:11Z",
       "side": 1,
       "message": "XOSTBD?",
+      "range": {
+        "startLine": 345,
+        "startChar": 41,
+        "endLine": 345,
+        "endChar": 47
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_353fc727",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "A marker to allow others to search for areas where i am looking for input.",
+      "parentUuid": "fa0f191f_f5c38f36",
       "range": {
         "startLine": 345,
         "startChar": 41,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_153cc32e",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_55ec7bc7",
+      "range": {
+        "startLine": 379,
+        "startChar": 12,
+        "endLine": 379,
+        "endChar": 22
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_35d107fc",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -174,6 +342,30 @@
       "writtenOn": "2017-01-18T01:35:11Z",
       "side": 1,
       "message": "Internet?",
+      "range": {
+        "startLine": 383,
+        "startChar": 7,
+        "endLine": 383,
+        "endChar": 15
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_f5482fce",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_35d107fc",
       "range": {
         "startLine": 383,
         "startChar": 7,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_d5452bb4",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_15ce035b",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 401,
+        "endChar": 12
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_f5da6f16",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -220,6 +436,30 @@
       "writtenOn": "2017-01-18T01:35:11Z",
       "side": 1,
       "message": "configuration?",
+      "range": {
+        "startLine": 419,
+        "startChar": 138,
+        "endLine": 419,
+        "endChar": 151
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_750c1f95",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_f5da6f16",
       "range": {
         "startLine": 419,
         "startChar": 138,
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_55111bab",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_d5d76bec",
+      "range": {
+        "startLine": 422,
+        "startChar": 188,
+        "endLine": 422,
+        "endChar": 201
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_b504f77e",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -266,6 +530,30 @@
       "writtenOn": "2017-01-18T01:35:11Z",
       "side": 1,
       "message": "Verify?",
+      "range": {
+        "startLine": 718,
+        "startChar": 5,
+        "endLine": 718,
+        "endChar": 10
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_3526a717",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T03:15:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0f191f_b504f77e",
       "range": {
         "startLine": 718,
         "startChar": 5,
