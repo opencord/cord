@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_90790196",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-18T20:44:35Z",
+      "side": 1,
+      "message": "password is always `rocks` now, not `karaf`",
+      "range": {
+        "startLine": 742,
+        "startChar": 29,
+        "endLine": 742,
+        "endChar": 34
+      },
+      "revId": "e5a5d400652ccc0b04db3ed13ec382d158f96dbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
