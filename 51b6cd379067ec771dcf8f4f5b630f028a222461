@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "fa0f191f_15f5e382",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-01-18T01:44:51Z",
+      "side": 1,
+      "message": "Should we directly replace this with cord-2.0 since this commit targets for cord-2.0 branch?",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 9
+      },
+      "revId": "51b6cd379067ec771dcf8f4f5b630f028a222461",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0f191f_95e213d4",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
