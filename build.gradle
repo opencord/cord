@@ -133,6 +133,12 @@ ext {
                     'name':     'redis',
                     'digest':   'sha256:0fe5a7afa2c2154f37c8ab56a9a6c5023cb0405cc0e85b34d8dcc1de6c3f143e'
             ],
+            'node': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'node',
+                    'digest':   'sha256:5757581a8ff7e08041512a54aa3f573d33fecdce81d603e48a759956cd99bdd3'
+            ],
     ]
 }
 
