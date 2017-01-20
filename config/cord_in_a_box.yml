@@ -1,7 +1,7 @@
 # Deployment configuration for VirtualBox based head node.
 #
 # This deployment configuration can be utilized with the head node created
-# via `vargrant up headnode` from the gerrit.opencord.org/maas repository.
+# via `vagrant up headnode` from the gerrit.opencord.org/maas repository.
 ---
 debug: false
 
@@ -10,8 +10,8 @@ seedServer:
 
   # User name and password used by Ansible to connect to the host for remote
   # provisioning
-  user: 'vagrant'
-  password: 'vagrant'
+  ansible_user: 'vagrant'
+  ansible_ssh_pass: 'vagrant'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #
@@ -36,9 +36,10 @@ seedServer:
   # virtualbox_support: 1
   # power_helper_user: 'cord'
 
+  # on_cloudlab: True
+  cord_in_a_box: True
+
   extraVars:
-    #- 'on_cloudlab=True'
-    - 'cord_in_a_box=True'
     - 'fabric_include_names=eth2'
     - 'fabric_include_module_types=omit'
     - 'fabric_exclude_names=eth0,eth1'
