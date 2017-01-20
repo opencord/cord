@@ -10,8 +10,8 @@ seedServer:
 
   # User name and password used by Ansible to connect to the host for remote
   # provisioning
-  user: 'vagrant'
-  password: 'vagrant'
+  ansible_user: 'vagrant'
+  ansible_pass: 'vagrant'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #
@@ -36,14 +36,13 @@ seedServer:
   # virtualbox_support: 1
   # power_helper_user: 'cord'
 
-  extraVars:
-    #- 'on_cloudlab=True'
-    - 'cord_in_a_box=True'
-    - 'fabric_include_names=eth2'
-    - 'fabric_include_module_types=omit'
-    - 'fabric_exclude_names=eth0,eth1'
-    - 'management_include_names=eth1'
-    - 'management_exclude_names=eth0,eth2'
+  # on_cloudlab: True
+  cord_in_a_box: True
+  fabric_include_names: eth2
+  fabric_include_module_types: omit
+  fabric_exclude_names: eth0,eth1
+  management_include_names: eth1
+  management_exclude_names: eth0,eth2
 
 docker:
   imageVersion: candidate

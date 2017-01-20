@@ -187,7 +187,7 @@ while getopts "b:cdhn:stv" opt; do
       echo "    $0 -c             cleanup from previous test"
       echo "    $0 -d             run diagnostic collector"
       echo "    $0 -h             display this help message"
-      echo "    $0 -n             number of compute nodes to setup. currently max 2 nodes can be supported"
+      echo "    $0 -n #           number of compute nodes to setup. Currently max 2 nodes can be supported"
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       echo "    $0 -v             print CiaB version and exit"
