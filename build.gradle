@@ -16,6 +16,7 @@
 
 import org.opencord.gradle.rules.*
 import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.DumperOptions
 
 buildscript {
   repositories {
@@ -31,7 +32,6 @@ buildscript {
 apply plugin: "com.dorongold.task-tree"
 
 evaluationDependsOn(':maas')
-evaluationDependsOn(':platform-install')
 evaluationDependsOn(':onos-apps')
 
 allprojects {
@@ -144,6 +144,33 @@ ext {
 
 // ---------------- Useful tasks ----------------
 
+task copyAnsibleInventory(type: Copy) {
+  from 'platform-install/inventory/templates/single-prod'
+    into 'platform-install/inventory'
+    expand([
+        prod: config.seedServer.ip,
+    ])
+}
+
+task writeYamlConfig {
+  def outvar = config.seedServer
+  def outfilename = "genconfig/deployconf.yml"
+
+  DumperOptions options = new DumperOptions()
+
+  options.setExplicitStart(true);
+  options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+  options.setPrettyFlow(true);
+  options.setIndent(2);
+
+  def yaml = new Yaml(options)
+  Writer outfile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfilename), "utf-8"))
+
+  yaml.dump(outvar, outfile)
+
+  outfile.close()
+}
+
 task fetchUpstreamImages {
     comps.each { name, spec -> if (spec.type == 'image') { dependsOn "fetch" + name } }
 }
@@ -172,13 +199,66 @@ tasks.addRule(new DockerFetchRule(project))
 tasks.addRule(new DockerPublishRule(project, project(':maas').prime))
 tasks.addRule(new DockerTagRule(project))
 
-project('platform-install').deployPlatform.dependsOn project(':maas').deployBase
+task PIprepPlatform(type: Exec) {
+    dependsOn copyAnsibleInventory
+    dependsOn writeYamlConfig
+
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-prep-platform.yml"]
+}
+
+task PIdeployOpenStack (type: Exec) {
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-deploy-openstack.yml"]
+}
+
+task PIdeployONOS (type: Exec) {
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-deploy-onos.yml"]
+}
+
+task PIdeployXOS (type: Exec) {
+
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-deploy-xos.yml"]
+}
+
+task PIsetupAutomation (type: Exec) {
+
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-automation.yml"]
+}
+
+task postDeployTests (type: Exec) {
+
+    executable = "ansible-playbook"
+    args = ["-i", "platform-install/inventory/single-prod", "--extra-vars", "@./genconfig/deployconf.yml", "platform-install/cord-post-deploy-playbook.yml"]
+}
+
 project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
-project('platform-install').deployPlatform.dependsOn project(':onos-apps').deploy
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 
+project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
+project(':onos-apps').deploy.dependsOn project(':maas').deployBase
+
+task PIdeployPlatform {
+     dependsOn project(':onos-apps').deploy
+     dependsOn project(':maas').deployBase
+     dependsOn PIprepPlatform
+     dependsOn PIdeployOpenStack
+     dependsOn PIdeployONOS
+     dependsOn PIdeployXOS
+     dependsOn PIsetupAutomation
+}
+
+PIdeployOpenStack.mustRunAfter PIprepPlatform
+PIdeployONOS.mustRunAfter PIdeployOpenStack
+PIdeployXOS.mustRunAfter PIdeployONOS
+PIsetupAutomation.mustRunAfter PIdeployXOS
+PIdeployPlatform.mustRunAfter project(':onos-apps').deploy
+PIdeployPlatform.mustRunAfter project(':maas').deployBase
 
 task deploy  {
-    dependsOn << project(':platform-install').deployPlatform
+    dependsOn PIdeployPlatform
 }
 
