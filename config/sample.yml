@@ -1,14 +1,13 @@
 # Deployment configuration for a phyical hardware POD
 ---
-seedServer:
-  # IP address of the head node
-  ip: '10.90.0.2'
 
-  # User name, password, and ssh port used by Ansible to connect to the host for remote
-  # provisioning
+headnode:
+  ip: '10.90.0.2'
   ansible_user: 'ubuntu'
   ansible_ssh_pass: 'ubuntu'
   ansible_ssh_port: 22
+
+common:
 
   # Network address information for the head node:
   #
