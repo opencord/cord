@@ -5,14 +5,20 @@
 ---
 debug: false
 
-seedServer:
+# this is used to generate the genconfig/cord-inv file
+headnode:
   ip: '10.100.198.201'
-
-  # User name and password used by Ansible to connect to the host for remote
-  # provisioning
   ansible_user: 'vagrant'
   ansible_ssh_pass: 'vagrant'
   ansible_ssh_port: 22
+
+common:
+  # all of these are written to genconfig/config.yml, and needs a rework
+
+  # set to the "flavor" of cord you want to install
+  cord_profile: 'rcord'
+  cord_dir: '/opt/cord'
+  cord_profile_dir: '/opt/cord_profile'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #
@@ -56,3 +62,4 @@ otherServers:
   fabric:
     network: '10.6.1.1/24'
     management: '10.1.0.0/24'
+

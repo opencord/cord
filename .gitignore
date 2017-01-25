@@ -40,3 +40,6 @@ ansible/*.retry
 # sub repos
 platform-install
 maas
+
+# generated config
+genconfig/*
