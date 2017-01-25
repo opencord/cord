@@ -1,13 +1,15 @@
 # Deployment configuration for a physical hardware POD
 ---
-seedServer:
+
+# this is used to generate the genconfig/cord-inv file
+headnode:
   ip: '10.90.0.251'
-  # User name and password used by Ansible to connect to the host for remote
-  # provisioning. These default values are used for automated testing, change
-  # with care.
   ansible_user: 'cord'
   ansible_ssh_pass: 'cord'
   ansible_ssh_port: 22
+
+common:
+  # all of these are written to genconfig/config.yml, and needs a rework
 
   # Network address information for the head node:
   #
