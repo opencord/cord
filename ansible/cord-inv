@@ -1,0 +1,6 @@
+[head]
+${headnode_ip} ansible_user=${headnode_user} ansible_ssh_pass=${headnode_pass} ansible_port=${headnode_port}
+
+[compute]
+
+
