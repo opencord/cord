@@ -1,5 +1,5 @@
 [head]
-${prod}
+${prod_ip} ansible_user=${prod_user} ansible_ssh_pass=${prod_pass} ansible_port=${prod_port}
 
 [compute]
 
