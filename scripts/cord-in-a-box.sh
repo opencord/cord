@@ -2,7 +2,7 @@
 
 set -e
 
-CORDDIR=~/opencord
+CORDDIR=~/cord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
@@ -107,8 +107,8 @@ function install_head_node() {
   cd $CORDDIR/build
 
   # SSH config saved earlier allows us to connect to VM without running 'vagrant'
-  ssh corddev "cd /cord/build; ./gradlew fetch"
-  ssh corddev "cd /cord/build; ./gradlew buildImages"
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG fetch"
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG buildImages"
   ssh corddev "cd /cord/build; ping -c 3 prod; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
   ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
 }
