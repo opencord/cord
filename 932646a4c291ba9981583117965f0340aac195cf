@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_2b79a32f",
+        "filename": "build.gradle",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-26T18:53:25Z",
+      "side": 1,
+      "message": "what happens if the ansible_ssh_port or ansible_user are not set on seedserver?",
+      "range": {
+        "startLine": 230,
+        "startChar": 25,
+        "endLine": 230,
+        "endChar": 35
+      },
+      "revId": "932646a4c291ba9981583117965f0340aac195cf",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0f191f_0b76df3e",
+        "filename": "config/cord_in_a_box.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-01-26T18:53:25Z",
+      "side": 1,
+      "message": "i don\u0027t think we can rely on these always being set",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "932646a4c291ba9981583117965f0340aac195cf",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
