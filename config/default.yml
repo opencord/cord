@@ -10,8 +10,9 @@ seedServer:
 
   # User name and password used by Ansible to connect to the host for remote
   # provisioning
-  user: 'vagrant'
-  password: 'vagrant'
+  ansible_user: 'vagrant'
+  ansible_ssh_pass: 'vagrant'
+  ansible_ssh_port: 22
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #

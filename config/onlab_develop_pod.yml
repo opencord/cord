@@ -5,8 +5,10 @@ seedServer:
   # User name and password used by Ansible to connect to the host for remote
   # provisioning. These default values are used for automated testing, change
   # with care.
-  user: 'cord'
-  password: 'cord'
+  ansible_user: 'cord'
+  ansible_ssh_pass: 'cord'
+  ansible_ssh_port: 22
+
   # Network address information for the head node:
   #
   # fabric_ip     - the IP address and mask bits to be used to configure the network
