@@ -210,14 +210,14 @@ task CopyCord(type: Exec) {
   dependsOn writeProdInventory
 
   executable = "ansible"
-  args = [ "-i", "genconfig/prod-inv", "-b", "-m", "synchronize", "-a", "src='../../' dest='/opt/cord'", "head" ]
+  args = [ "-i", "genconfig/prod-inv", "-b", "--extra-vars", "@./genconfig/config.yml", "-m", "synchronize", "-a", "src='../../' dest='/opt/cord'", "head" ]
 }
 
 task ChownCord(type: Exec) {
   dependsOn CopyCord
 
   executable = "ansible"
-  args = [ "-i", "genconfig/prod-inv", "-b", "-m", "file", "-a", "state='directory' dest='/opt/cord' recurse='yes' owner='$config.seedServer.ansible_user'", "head" ]
+  args = [ "-i", "genconfig/prod-inv", "-b", "--extra-vars", "@./genconfig/config.yml", "-m", "file", "-a", "state='directory' dest='/opt/cord' recurse='yes' owner='$config.seedServer.ansible_user'", "head" ]
 }
 
 task PIprepPlatform(type: Exec) {

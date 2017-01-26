@@ -6,12 +6,12 @@ seedServer:
 
   # If the head node is being accessed via a tunnel or reponds to SSH on a non-
   # standard port, the port value should be set.
-  # port: '2022'
+  # ansible_ssh_port: '2022'
 
   # User name and password used by Ansible to connect to the host for remote
   # provisioning
-  user: 'ubuntu'
-  password: 'ubuntu'
+  ansible_user: 'ubuntu'
+  ansible_ssh_pass: 'ubuntu'
 
   # Network address information for the head node:
   #
