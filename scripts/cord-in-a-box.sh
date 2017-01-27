@@ -172,8 +172,10 @@ CLEANUP=0
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdhn:stv" opt; do
+while getopts "br:cdhn:stv" opt; do
   case ${opt} in
+    r ) REPO_BRANCH=("$OPTARG")
+      ;;
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
     c ) CLEANUP=1
@@ -208,6 +210,7 @@ while getopts "b:cdhn:stv" opt; do
   esac
 done
 
+echo $REPO_BRANCH
 # What to do
 if [[ $CLEANUP -eq 1 ]]
 then
