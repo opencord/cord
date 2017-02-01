@@ -47,7 +47,7 @@ function bootstrap() {
     git config --global user.email 'test@null.com'
     git config --global color.ui false
 
-    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH -g build,onos,orchestration
+    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH -g build,onos,orchestration,voltha
     repo sync
 
     # check out gerrit branches using repo
