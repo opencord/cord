@@ -5,17 +5,15 @@
 ---
 debug: false
 
-# this is used to generate the genconfig/prod-inv file
-
-prod:
+# this is used to generate the genconfig/cord-inv file
+headnode:
   ip: '10.100.198.201'
   ansible_user: 'vagrant'
   ansible_ssh_pass: 'vagrant'
   ansible_ssh_port: 22
 
-
-seedServer:
-  # this gets written to a genconfig/config.yml, and needs a rework
+common:
+  # all of these are written to genconfig/config.yml, and needs a rework
 
   # set to the "flavor" of cord you want to install
   cord_profile: 'rcord'
@@ -63,3 +61,4 @@ otherServers:
   fabric:
     network: '10.6.1.1/24'
     management: '10.1.0.0/24'
+
