@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0f191f_5195a83e",
+        "filename": "config/cord_in_a_box.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-02-01T20:59:18Z",
+      "side": 1,
+      "message": "delete empty line please",
+      "revId": "9000453a5da29b8733735c235bbbff34161a98f5",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
