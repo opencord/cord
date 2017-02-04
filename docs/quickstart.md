@@ -79,6 +79,16 @@ will check out the `platform-install` repo with changeset 1233, revision 4, and
 
 You can find the project path used by the `repo` tool in the [manifest/default.xml](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml) file.
 
+### Using cord-in-a-box.sh to run the CORD fabric
+
+The `-f` option to cord-in-a-box.sh can be used to configure an ONOS
+fabric for CORD-in-a-Box.  The fabric consists of two leaf and two
+spine switches, each running a [CPqD OpenFlow software
+switch](https://github.com/CPqD/ofsoftswitch13) controlled by ONOS.
+The build process automatically generates a configuration file for the
+fabric and pushes it to ONOS.  *THIS FEATURE IS EXPERIMENTAL AND STILL
+UNDER DEVELOPMENT.*
+
 ## Inspecting CORD-in-a-Box
 
 CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs.
@@ -92,9 +102,14 @@ Current machine states:
 corddev                   running (libvirt)
 prod                      running (libvirt)
 switch                    not created (libvirt)
+leaf-1                    running (libvirt)
+leaf-2                    running (libvirt)
+spine-1                   running (libvirt)
+spine-2                   not created (libvirt)
 testbox                   not created (libvirt)
-compute_node-1            running (libvirt)
-compute_node-2            not created (libvirt)
+compute-node-1            running (libvirt)
+compute-node-2            not created (libvirt)
+compute-node-3            not created (libvirt)
 ```
 
 ### corddev VM
@@ -249,6 +264,13 @@ ubuntu@bony-alley:~$ ssh ubuntu@172.27.0.2
 # Now you're inside the mysite-vsg-1 VM
 ubuntu@mysite-vsg-1:~$
 ```
+
+### leaf-[12] and spine-[12] VMs
+
+These VMs run software switches for the CORD fabric.  In the default configuration
+they run standard Linux bridges.  If you have chosen to run
+cord-in-a-box.sh with the experimental `-f` option, the VMs run CPqD switches controlled
+by ONOS running in the `onosfabric_xos-onos_1` container.
 
 ### MaaS GUI
 
