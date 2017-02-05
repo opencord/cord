@@ -8,11 +8,11 @@ Vagrant.configure(2) do |config|
   else
     config.vm.synced_folder "..", "/cord"
   end
+  config.vm.synced_folder '.', '/vagrant', disabled: true
 
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
-    d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
     d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
@@ -28,7 +28,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "prod" do |d|
     d.vm.box = "ubuntu/trusty64"
-    d.vm.synced_folder '.', '/vagrant', disabled: true
     d.vm.hostname = "prod"
     d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
     d.vm.network "private_network", ip: "10.100.198.201"
@@ -123,9 +122,10 @@ Vagrant.configure(2) do |config|
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
-    s.vm.provider :libvirt do |v|
+    s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
+        override.vm.synced_folder "..", "/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -178,9 +178,10 @@ Vagrant.configure(2) do |config|
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
-    s.vm.provider :libvirt do |v|
+    s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
+        override.vm.synced_folder "..", "/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -219,9 +220,10 @@ Vagrant.configure(2) do |config|
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
-    s.vm.provider :libvirt do |v|
+    s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
+        override.vm.synced_folder "..", "/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -260,9 +262,10 @@ Vagrant.configure(2) do |config|
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
-    s.vm.provider :libvirt do |v|
+    s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
+        override.vm.synced_folder "..", "/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -287,7 +290,6 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "compute-node-1" do |c|
-    c.vm.synced_folder '.', '/vagrant', disabled: true
     c.vm.communicator = "none"
     c.vm.hostname = "compute-node-1"
     c.vm.network "private_network",
@@ -321,7 +323,6 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "compute-node-2" do |c|
-    c.vm.synced_folder '.', '/vagrant', disabled: true
     c.vm.communicator = "none"
     c.vm.hostname = "compute-node-2"
     c.vm.network "private_network",
@@ -355,7 +356,6 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "compute-node-3" do |c|
-    c.vm.synced_folder '.', '/vagrant', disabled: true
     c.vm.communicator = "none"
     c.vm.hostname = "compute-node-3"
     c.vm.network "private_network",
