@@ -10,6 +10,7 @@ SSHCONFIG=~/.ssh/config
 # For CORD version
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
+MANIFEST_URL="https://gerrit.opencord.org/manifest"
 
 function add_box() {
   vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
@@ -210,8 +211,14 @@ FABRIC=0
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdfhn:stv" opt; do
+while getopts "b:u:cdfhn:stv" opt; do
   case ${opt} in
+    u )
+      echo -en "\033[32;41m---------------------------------------------------------------------------------------------------------------------------------- \033[00m \n"
+      echo -en "\033[32;41m  You set the manifest URL to be: $OPTARG, this option is not supported, please use it only if you know what you are doing \033[00m \n"
+      echo -en "\033[32;41m---------------------------------------------------------------------------------------------------------------------------------- \033[00m \n"
+      MANIFEST_URL=("$OPTARG")
+      ;;
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
     c ) CLEANUP=1
