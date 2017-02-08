@@ -210,8 +210,13 @@ FABRIC=0
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdfhn:stv" opt; do
+while getopts "b:u:cdfhn:stv" opt; do
   case ${opt} in
+    u ) REPO_BRANCH=("$OPTARG")
+      echo -en "\033[32;41m---------------------------------------------------------------------------------------------------------------------------------- \033[00m \n"
+      echo -en "\033[32;41m  You set the manifest URL to be: $OPTARG, this option is not supported, please use it only if you know what you are doing \033[00m \n"
+      echo -en "\033[32;41m---------------------------------------------------------------------------------------------------------------------------------- \033[00m \n"
+      ;;
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
     c ) CLEANUP=1
