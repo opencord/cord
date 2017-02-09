@@ -258,6 +258,13 @@ task PIsetupAutomation (type: Exec) {
   args = ["-p", "$config.seedServer.ansible_ssh_port", "$config.seedServer.ansible_user@$config.seedServer.ip", ansible_cmd ]
 }
 
+task PIrunDiag (type: Exec) {
+  def ansible_cmd = "cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml cord-diag-playbook.yml"
+
+  executable = "ssh"
+  args = ["-p", "$config.seedServer.ansible_ssh_port", "$config.seedServer.ansible_user@$config.seedServer.ip", ansible_cmd ]
+}
+
 task postDeployTests (type: Exec) {
 
   def ansible_cmd = "cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml cord-post-deploy-playbook.yml"

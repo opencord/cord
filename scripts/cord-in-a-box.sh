@@ -192,11 +192,7 @@ function run_e2e_test () {
 }
 
 function run_diagnostics() {
-  echo "*** COLLECTING DIAGNOSTIC INFO NOT CURRENTLY IMPLEMENTED"
-  # Need to fix up inventory to collect info from compute nodes
-  # Using juju-ansible is one possibility
-  #echo "*** COLLECTING DIAGNOSTIC INFO - check ~/diag-* on the head node"
-  #ansible-playbook -i $INVENTORY cord-diag-playbook.yml
+  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG PIrunDiag"
 }
 
 # Parse options
@@ -284,6 +280,13 @@ do
    echo adding the compute node: compute-node-$i
    add_compute_node compute-node-$i build_compute-node-$i
 done
+
+# run diagnostics both before/after the fabric/e2e tests
+if [[ $DIAGNOSTICS -eq 1 ]]
+then
+  run_diagnostics
+fi
+
 
 if [[ $FABRIC -ne 0 ]]
 then
