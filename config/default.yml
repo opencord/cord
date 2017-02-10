@@ -14,6 +14,13 @@ headnode:
 
 common:
 
+  # set to the profile of cord you want to install
+  cord_profile: 'rcord'
+
+  # directories on the head node that the cord dir is copied to, and profile is created in
+  cord_dir: '/opt/cord'
+  cord_profile_dir: '/opt/cord_profile'
+
   # Specifies tasks within the head node provisioning not to execute, including:
   #
   # switch_support -   don't download the switch ONL images as there are no

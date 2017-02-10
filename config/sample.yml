@@ -8,6 +8,12 @@ headnode:
   ansible_ssh_port: 22
 
 common:
+  # set to the profile of cord you want to install
+  cord_profile: 'rcord'
+
+  # directories on the head node that the cord dir is copied to, and profile is created in
+  cord_dir: '/opt/cord'
+  cord_profile_dir: '/opt/cord_profile'
 
   # Network address information for the head node:
   #
