@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -e -x
 
 CORDDIR=~/cord
 VMDIR=/cord/build/
@@ -11,9 +11,18 @@ SSHCONFIG=~/.ssh/config
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
+exec > >(tee -i $CORDDIR/install.out)
+exec 2>&1
+
 function add_box() {
   vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
   vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
+}
+
+function run_stage {
+    echo "==> "$1": Starting"
+    $1
+    echo "==> "$1": Complete"
 }
 
 function cleanup_from_previous_test() {
@@ -36,7 +45,8 @@ function bootstrap() {
   sudo apt-get update
   [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
   dpkg -l vagrant || sudo dpkg -i vagrant_1.8.5_x86_64.deb
-  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential
+  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
+  sudo pip install pyparsing python-logstash
 
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 
@@ -96,6 +106,25 @@ function cloudlab_setup() {
       sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
     fi
   fi
+}
+
+function elk_up() {
+  cd $CORDDIR/build
+
+  sudo su $USER -c 'vagrant up elastic --provider libvirt'
+
+  # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
+  # It allows SSH'ing to the machine via 'ssh corddev'
+  sudo su $USER -c "vagrant ssh-config elastic > $SSHCONFIG"
+
+  cd $CORDDIR
+  if [ ! -f /tmp/elk-patch-applied ]; then
+    touch /tmp/elk-patch-applied
+    sh build/scripts/repo-apply.sh build/elk-logger/elk-ciab.diff
+  fi
+
+  sudo chmod +x build/elk-logger/logstash_tail
+  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 & 
 }
 
 function vagrant_vms_up() {
@@ -256,16 +285,17 @@ done
 # What to do
 if [[ $CLEANUP -eq 1 ]]
 then
-  cleanup_from_previous_test
+  run_stage cleanup_from_previous_test
 fi
 
 echo ""
 echo "Preparing to install $VERSION_STRING ($REPO_BRANCH branch)"
 echo ""
 
-bootstrap
-cloudlab_setup
-vagrant_vms_up
+run_stage bootstrap
+run_stage cloudlab_setup
+run_stage elk_up
+run_stage vagrant_vms_up
 
 if [[ $SETUP_ONLY -ne 0 ]]
 then
@@ -273,9 +303,9 @@ then
   exit 0
 fi
 
-install_head_node
-set_up_maas_user
-leaf_spine_up
+run_stage install_head_node
+run_stage set_up_maas_user
+run_stage leaf_spine_up
 
 if [[ $NUM_COMPUTE_NODES -gt 3 ]]
 then
@@ -283,11 +313,13 @@ then
    NUM_COMPUTE_NODES=3
 fi
 
+echo "==> Adding compute nodes: Starting"
 for i in `seq 1 $NUM_COMPUTE_NODES`;
 do
    echo adding the compute node: compute-node-$i
    add_compute_node compute-node-$i build_compute-node-$i
 done
+echo "==> Adding compute nodes: Complete"
 
 # run diagnostics both before/after the fabric/e2e tests
 if [[ $DIAGNOSTICS -eq 1 ]]
@@ -298,17 +330,17 @@ fi
 
 if [[ $FABRIC -ne 0 ]]
 then
-  initialize_fabric
+  run_stage initialize_fabric
 fi
 
 if [[ $RUN_TEST -eq 1 ]]
 then
-  run_e2e_test
+  run_stage run_e2e_test
 fi
 
 if [[ $DIAGNOSTICS -eq 1 ]]
 then
-  run_diagnostics
+  run_stage run_diagnostics
 fi
 
 exit 0

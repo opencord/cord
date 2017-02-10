@@ -10,6 +10,29 @@ Vagrant.configure(2) do |config|
   end
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
+  config.vm.define "elastic" do |d|
+    d.ssh.forward_agent = true
+    d.vm.box = "ubuntu/trusty64"
+    d.vm.synced_folder '.', '/vagrant', disabled: true
+
+    d.vm.network :forwarded_port, guest: 5601, host: 5601, host_ip: '*'
+    d.vm.network :forwarded_port, guest: 80, host: 9080, host_ip: '*'
+    d.vm.network :forwarded_port, guest: 9200, host: 9200, host_ip: '*'
+    d.vm.network :forwarded_port, guest: 5617, host: 5617, host_ip: '*', protocol: "udp"
+
+    d.vm.hostname = "elastic"
+    d.vm.network "private_network", ip: "10.100.198.222"
+    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/elastic.yml -c local"
+    d.vm.provider "virtualbox" do |v|
+      v.memory = 4096
+    end
+    d.vm.provider :libvirt do |v, override|
+      v.memory = 4096
+      override.vm.synced_folder "..", "/cord", type: "nfs"
+    end
+  end
+
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
