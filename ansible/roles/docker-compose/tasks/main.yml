@@ -1,5 +1,6 @@
 - name: Executable is present
   get_url:
-    url: https://github.com/docker/compose/releases/download/1.6.2/docker-compose-Linux-x86_64
+    url: https://github.com/docker/compose/releases/download/1.7.1/docker-compose-Linux-x86_64
+    checksum: "sha256:3166bb74bc648e68c3154bc704fddf6bccf59f03a0c90fc48aefac034535e4ae"
     dest: /usr/local/bin/docker-compose
     mode: 0755
