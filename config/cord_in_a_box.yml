@@ -20,6 +20,14 @@ common:
   cord_dir: '/opt/cord'
   cord_profile_dir: '/opt/cord_profile'
 
+common:
+  # all of these are written to genconfig/config.yml, and needs a rework
+
+  # set to the "flavor" of cord you want to install
+  cord_profile: 'ecord'
+  cord_dir: '/opt/cord'
+  cord_profile_dir: '/opt/cord_profile'
+
   # Specifies tasks within the head node provisioning not to execute, including:
   #
   # switch_support -   don't download the switch ONL images as there are no
