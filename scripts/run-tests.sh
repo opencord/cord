@@ -2,7 +2,7 @@
 
 set -e
 
-CORDDIR=~/opencord
+CORDDIR=~/cord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config

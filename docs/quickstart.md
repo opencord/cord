@@ -95,8 +95,8 @@ CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs.
 You can inspect their current status as follows:
 
 ```
-~$ cd opencord/build/
-~/opencord/build$ vagrant status
+~$ cd cord/build/
+~/cord/build$ vagrant status
 Current machine states:
 
 corddev                   running (libvirt)

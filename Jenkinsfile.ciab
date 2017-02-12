@@ -5,7 +5,7 @@ node ('ciab-build') {
     sh "bash ./cord-in-a-box.sh -c"
 
     stage 'Run end-to-end tests'
-    sh "~/opencord/build/scripts/run-tests.sh"
+    sh "~/cord/build/scripts/run-tests.sh"
 
     currentBuild.result = 'SUCCESS'
   } catch (err) {
