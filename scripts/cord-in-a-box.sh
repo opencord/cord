@@ -77,7 +77,9 @@ function cloudlab_setup() {
     sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/"
 
     # Check that the mount succeeded (sometimes mkextrafs succeeds but device not mounted)
-    mount | grep sdb || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
+    # If it didn't, try one more workaround: remove /dev/sdb entry from /etc/fstab
+    # and run mkextrafs one more time (this seems to work).  If that fails, give up.
+    mount | grep sdb || (sudo sed -i '/sdb/ d' /etc/fstab && sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/") || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
 
     # we'll replace /var/lib/libvirt/images with a symlink below
     [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
