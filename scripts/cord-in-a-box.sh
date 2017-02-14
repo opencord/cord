@@ -69,6 +69,14 @@ function bootstrap() {
 }
 
 function cloudlab_setup() {
+
+  # The watchdog will sometimes reset groups, turn it off
+  if [ -e /usr/local/etc/emulab/watchdog ]
+  then
+    sudo /usr/bin/perl -w /usr/local/etc/emulab/watchdog stop
+    sudo mv /usr/local/etc/emulab/watchdog /usr/local/etc/emulab/watchdog-disabled
+  fi
+
   if [ -e /usr/testbed/bin/mkextrafs ]
   then
     sudo mkdir -p /mnt/extra
