@@ -56,7 +56,7 @@ ext {
 
     // Deployment target config file (yaml format); this can be overwritten from the command line
     // using the -PdeployConfig=<file-path> syntax.
-    deployConfig = project.hasProperty('deployConfig') ? project.getProperty('deployConfig') : '../build/config/default.yml'
+    deployConfig = project.hasProperty('deployConfig') ? project.getProperty('deployConfig') : './config/default.yml'
 
     println "Using deployment config: $deployConfig"
     File configFile = new File(deployConfig)
