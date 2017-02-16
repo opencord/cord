@@ -11,8 +11,6 @@ SSHCONFIG=~/.ssh/config
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
-exec > >(tee -i $CORDDIR/install.out)
-exec 2>&1
 
 function add_box() {
   vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
@@ -58,6 +56,8 @@ function bootstrap() {
   if [ ! -d "$CORDDIR" ]
   then
     mkdir $CORDDIR && cd $CORDDIR
+
+   
     git config --global user.name 'Test User'
     git config --global user.email 'test@null.com'
     git config --global color.ui false
@@ -71,6 +71,9 @@ function bootstrap() {
       repo download ${gerrit_branch/:/ }
     done
   fi
+
+  exec > >(tee -i $CORDDIR/install.out)
+  exec 2>&1
 
   cd $CORDDIR/build
   vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
