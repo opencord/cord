@@ -79,6 +79,7 @@ def report(payload,g):
         payload = {'desc':payload, 'global_tag': g}
 
     send_log(payload)
+    #print payload
 
 def run_logger():
     lst = []
@@ -109,17 +110,19 @@ def run_logger():
             break
 
         inp += l
-        lc += 1
+        lc = len(inp.split('\n'))
 
         if (lc>4):
             top = inp.splitlines()[0]
-            line_idx = inp.index('\n')
-            inp=inp[line_idx+1:]
+            try:
+                line_idx = inp.index('\n')
+                inp=inp[line_idx+1:]
 
-            g,top = extract_global(top)
-            report(top,g)
-
-            lc-=1
+                g,top = extract_global(top)
+                report(top,g)
+                lc = len(inp.split('\n'))
+            except ValueError:
+                pass
 
         try:
             s = xos_logger.scanString(inp)
