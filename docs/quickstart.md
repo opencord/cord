@@ -226,7 +226,7 @@ $ sudo lxc exec testclient bash
 ### compute_node-1 VM
 
 The `compute_node-1` VM is the virtual compute node controlled by OpenStack. This VM can be entered from the `prod` VM.  Run `cord prov list` to get the
-node name (assigned by MaaS).  The node name will be something like `bony-alley.cord.lab', and only `bony-alley' need be used.   Then run:
+node name (assigned by MaaS).  The node name will be something like `bony-alley.cord.lab`, and only `bony-alley` need be used.   Then run:
 
 ```
 $ ssh ubuntu@<compute-node-name>
@@ -234,6 +234,7 @@ $ ssh ubuntu@<compute-node-name>
 
 Virtual machines created via XOS/OpenStack will be instantiated inside the `compute_node`
 VM.  To login to an OpenStack VM, first get the management IP address (172.27.0.x):
+
 
 ```
 vagrant@prod:~$ source ./admin-openrc.sh
@@ -277,17 +278,19 @@ by ONOS running in the `onosfabric_xos-onos_1` container.
 
 You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to the URL
 `http://<target-server>:8080/MAAS/`.  If you are using CORD-in-a-box on CloudLab, your <target-server> is the hostname of your cloudlab node, typically
-node.<experiment-name>.<sitename>.cloudlab.us.  Username is `cord`, and the password is on the main node, in cord/build/maas/passwords/maas_user.txt.  For more
+`node.<experiment-name>.<sitename>.cloudlab.us`.  Username is `cord`, and the password is on the main node, in `cord/build/maas/passwords/maas_user.txt`.  For more
 information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
 `http://<target-server>:8080/xos/`.  Username is `xosadmin@opencord.org` and the password is stored on the prod machine in /opt/cord/build/platform-install/credentials/xosadmin@opencord.org
-...
+
+```
 vagrant@prod:~$ ls /opt/cord/build/platform-install/credentials/
 vagrant@prod:~$ cat /opt/cord/build/platform-install/credentials/xosadmin@opancord.org
-...
+```
+
 The state of the system is that all CORD services have been onboarded to XOS.  You
 can see them in the GUI by clicking _Services_ at left.  Clicking on the name of
 a service will show more details about it.
@@ -395,7 +398,7 @@ $ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployXOS
 $ ./gradlew -PdeployConfig=config/cord_in_a_box.yml setupAutomation
 ```
 
-Manually driving the build following a failure involves looking in the log to 
+Manually driving the build following a failure involves looking in the log to
 figure out the failing task, and then running that task and subsequent tasks
 using the above commands.
 
