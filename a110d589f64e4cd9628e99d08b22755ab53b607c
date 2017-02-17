@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da141535_b9acff8d",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-02-17T01:02:13Z",
+      "side": 1,
+      "message": "maybe use ~ instead of . so command works in any dir",
+      "range": {
+        "startLine": 240,
+        "startChar": 23,
+        "endLine": 240,
+        "endChar": 24
+      },
+      "revId": "a110d589f64e4cd9628e99d08b22755ab53b607c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_39990f6f",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-02-17T01:02:13Z",
+      "side": 1,
+      "message": "mysite_vsg-1 is the VM running on the compute node bony-alley",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 16
+      },
+      "revId": "a110d589f64e4cd9628e99d08b22755ab53b607c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_199e4b57",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-02-17T01:02:13Z",
+      "side": 1,
+      "message": "cloudlab -\u003e CloudLab",
+      "range": {
+        "startLine": 280,
+        "startChar": 127,
+        "endLine": 280,
+        "endChar": 135
+      },
+      "revId": "a110d589f64e4cd9628e99d08b22755ab53b607c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_f9a27799",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-02-17T01:02:13Z",
+      "side": 1,
+      "message": "in the `prod` VM, in `/opt/cord/build/...",
+      "range": {
+        "startLine": 281,
+        "startChar": 90,
+        "endLine": 281,
+        "endChar": 116
+      },
+      "revId": "a110d589f64e4cd9628e99d08b22755ab53b607c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_d99fb34f",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-02-17T01:02:13Z",
+      "side": 1,
+      "message": "in the `prod` VM, \n\nmaybe put backquotes around pathname to match above",
+      "range": {
+        "startLine": 287,
+        "startChar": 100,
+        "endLine": 287,
+        "endChar": 119
+      },
+      "revId": "a110d589f64e4cd9628e99d08b22755ab53b607c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
