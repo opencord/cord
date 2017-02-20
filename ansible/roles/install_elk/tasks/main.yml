@@ -1,54 +1,32 @@
-- name: Add ELK repositories
-  apt_repository: repo={{ item }} state="present"
-  with_items:
-      - deb http://packages.elastic.co/elasticsearch/2.x/debian stable main
-      - deb http://packages.elastic.co/kibana/4.4/debian stable main
-      - deb http://packages.elastic.co/logstash/2.2/debian stable main
-
-- name: Install ELK
-  apt: name={{ item }} state=installed update_cache=yes force=yes
-  with_items:
-      - elasticsearch
-      - kibana
-      - logstash
-
-- name: Configure Logstash
-  copy: src={{ item }} dest=/etc/logstash/conf.d/{{ item }} owner=root group=root mode=0644
-  with_items:
-      - 10-udp-input.conf
-      - 30-elasticsearch-output.conf
-
-- name: Start ELK
-  service: name={{ item }} state=started enabled=yes
-  with_items:
-      - logstash
-      - elasticsearch
-      - kibana
+---
+# install_elk/tasks/main.yml
 
 - name: Add ELK repositories
   apt_repository: repo={{ item }} state="present"
   with_items:
-      - deb http://packages.elastic.co/elasticsearch/2.x/debian stable main
-      - deb http://packages.elastic.co/kibana/4.4/debian stable main
-      - deb http://packages.elastic.co/logstash/2.2/debian stable main
+    - deb http://packages.elastic.co/elasticsearch/2.x/debian stable main
+    - deb http://packages.elastic.co/kibana/4.4/debian stable main
+    - deb http://packages.elastic.co/logstash/2.2/debian stable main
 
 - name: Install ELK
   apt: name={{ item }} state=installed update_cache=yes force=yes
   with_items:
-      - elasticsearch
-      - kibana
-      - logstash
+    - elasticsearch
+    - kibana
+    - logstash
 
 - name: Configure Logstash
   copy: src={{ item }} dest=/etc/logstash/conf.d/{{ item }} owner=root group=root mode=0644
   with_items:
-      - 10-udp-input.conf
-      - 30-elasticsearch-output.conf
+    - 10-udp-input.conf
+    - 11-log4j-input.conf
+    - 12-syslog-input.conf
+    - 30-elasticsearch-output.conf
 
 - name: Start ELK
   service: name={{ item }} state=started enabled=yes
   with_items:
-      - logstash
-      - elasticsearch
-      - kibana
+    - logstash
+    - elasticsearch
+    - kibana
 

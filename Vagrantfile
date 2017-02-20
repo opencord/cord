@@ -19,6 +19,8 @@ Vagrant.configure(2) do |config|
     d.vm.network :forwarded_port, guest: 80, host: 9080, host_ip: '*'
     d.vm.network :forwarded_port, guest: 9200, host: 9200, host_ip: '*'
     d.vm.network :forwarded_port, guest: 5617, host: 5617, host_ip: '*', protocol: "udp"
+    d.vm.network :forwarded_port, guest: 2514, host: 2514, host_ip: '*'
+    d.vm.network :forwarded_port, guest: 4560, host: 4560, host_ip: '*'
 
     d.vm.hostname = "elastic"
     d.vm.network "private_network", ip: "10.100.198.222"
