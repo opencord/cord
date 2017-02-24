@@ -11,6 +11,10 @@
   become: yes
   apt_repository:
     repo: 'ppa:webupd8team/java'
+  register: result
+  until: result | success
+  retries: 3
+  delay: 10
 
 - name: Accept Java 8 license
   become: yes
