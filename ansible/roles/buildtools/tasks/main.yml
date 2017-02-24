@@ -3,6 +3,10 @@
     repo: ppa:git-core/ppa
     state: present
     update_cache: yes
+  register: result
+  until: result | success
+  retries: 3
+  delay: 10
 
 - name: Apt packages
   apt:
