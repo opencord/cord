@@ -11,6 +11,12 @@ SSHCONFIG=~/.ssh/config
 REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
+function finish {
+    set +x
+    python $CORDDIR/build/elk-logger/mixpanel FINISH --finish
+}
+
+trap finish EXIT
 
 function add_box() {
   vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
@@ -18,9 +24,15 @@ function add_box() {
 }
 
 function run_stage {
+    cd $CORDDIR
+    python build/elk-logger/mixpanel $1-start
+
     echo "==> "$1": Starting"
     $1
     echo "==> "$1": Complete"
+
+    cd $CORDDIR
+    python build/elk-logger/mixpanel $1-end
 }
 
 function cleanup_from_previous_test() {
@@ -39,12 +51,13 @@ function cleanup_from_previous_test() {
 }
 
 function bootstrap() {
+  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 > /tmp/cord-build
   cd ~
   sudo apt-get update
   [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
   dpkg -l vagrant || sudo dpkg -i vagrant_1.8.5_x86_64.deb
   sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
-  sudo pip install pyparsing python-logstash
+  sudo pip install pyparsing python-logstash mixpanel
 
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 
@@ -295,7 +308,7 @@ echo ""
 echo "Preparing to install $VERSION_STRING ($REPO_BRANCH branch)"
 echo ""
 
-run_stage bootstrap
+bootstrap
 run_stage cloudlab_setup
 run_stage elk_up
 run_stage vagrant_vms_up
