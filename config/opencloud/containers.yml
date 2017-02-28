@@ -1,0 +1,96 @@
+---
+# CORD container list
+
+branch: opencord/master
+
+docker_build_tag: "candidate"
+
+docker_registry: locahost:5000
+
+# How to use repo_docker_images
+#
+# required:
+#  name: Name of docker image
+#  repo: git repo name (not the path! not what it's renamed in manifest!)
+# optional:
+#  dockerfile: name of Dockerfile. Default: "Dockerfile"
+#  path: path parent dir in repo containing dockerfile. Default: "."
+#  context: build context path, relative to path. Default: "."
+
+repo_docker_images:
+  - name: xosproject/xos-base
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.base"
+
+  - name: xosproject/xos-postgres
+    repo: xos
+    path: "containers/postgresql"
+
+  - name: xosproject/xos
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.xos"
+    context: "../.."
+
+  - name: xosproject/xos-corebuilder
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.corebuilder"
+    context: "../.."
+
+  - name: xosproject/chameleon
+    repo: xos
+    path: "containers/chameleon"
+    dockerfile: "Dockerfile.chameleon"
+
+  - name: xosproject/xos-client
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.client"
+    context: "../.."
+
+  - name: xosproject/xos-synchronizer-base
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.synchronizer-base"
+    context: "../.."
+
+  - name: xosproject/xos-ws
+    repo: xos-rest-gw
+
+  - name: xosproject/xos-gui
+    repo: xos-gui
+
+  - name: xosproject/xos-gui-extension-builder
+    repo: xos-gui
+    dockerfile: "Dockerfile.xos-gui-extension-builder"
+
+  - name: xosproject/gui-extension-vtr
+    repo: vtr
+    path: "xos/gui"
+
+  - name: xosproject/gui-extension-rcord
+    repo: rcord
+    path: "xos/gui"
+
+  - name: xosproject/openstack-synchronizer
+    repo: openstack
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/onos-synchronizer
+    repo: onos-service
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vtn-synchronizer
+    repo: vtn
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/exampleservice-synchronizer
+    repo: exampleservice
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
