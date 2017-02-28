@@ -1,0 +1,7 @@
+---
+# mock-ecord Pod Config
+# Creates a single-node mock E-CORD pod
+
+cord_scenario: mock
+cord_profile: ecord
+
