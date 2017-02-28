@@ -1,9 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
-# OpenCloud-in-a-Box Vagrantfile
+# opencloud Vagrantfile
+
 require 'yaml'
-settings = YAML.load_file('config/opencloud_in_a_box.yaml')
+settings = YAML.load_file('genconfig/config.yml')
 
 Vagrant.configure(2) do |config|
 
@@ -13,8 +14,8 @@ Vagrant.configure(2) do |config|
     h.vm.hostname = "head1"
     h.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
     h.vm.provider :libvirt do |v|
-      v.memory = 16384
-      v.cpus = 8
+      v.memory = settings['head_vm_mem']
+      v.cpus = settings['head_vm_cpu']
       v.machine_virtual_size = 100
       v.management_network_name = settings['public_network_name'] # public network
       v.management_network_address = settings['public_network_cidr']
@@ -22,7 +23,7 @@ Vagrant.configure(2) do |config|
     h.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0", # not used, ignore
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -30,8 +31,8 @@ Vagrant.configure(2) do |config|
   config.vm.define "compute1" do |c|
     c.vm.hostname = "compute1"
     c.vm.provider :libvirt do |v|
-      v.memory = 8192
-      v.cpus = 4
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu'] 
       v.machine_virtual_size = 50
       v.nested = true
       v.management_network_name = settings['public_network_name'] # public network
@@ -40,7 +41,7 @@ Vagrant.configure(2) do |config|
     c.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0",
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -48,8 +49,8 @@ Vagrant.configure(2) do |config|
   config.vm.define "compute2" do |c|
     c.vm.hostname = "compute2"
     c.vm.provider :libvirt do |v|
-      v.memory = 8192
-      v.cpus = 4
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu'] 
       v.machine_virtual_size = 50
       v.nested = true
       v.management_network_name = settings['public_network_name'] # public network
@@ -58,9 +59,10 @@ Vagrant.configure(2) do |config|
     c.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0",
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
 
 end
+
