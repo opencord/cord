@@ -46,3 +46,8 @@ genconfig/*
 
 # GitBook
 _book
+
+# imagebuilder generated files
+ib_actions.yml
+ib_graph.dot
+

@@ -1,0 +1,58 @@
+---
+# local Scenario
+# Brings up a minimal set of containers on the host currently being run on
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+# head = config in local scenario
+head_cord_dir: "{{ config_cord_dir }}"
+head_cord_profile_dir: "{{ config_cord_profile_dir }}"
+
+# make targets
+build_targets:
+  - local-onboard-profile
+
+# local scenario configuration
+frontend_only: True
+create_configdirs_become: False
+use_openstack: False
+xos_images: []
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-rcord"
+  - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vtr"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "redis"
+  - "nginx"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    localhost:
+      ansible_connection: local
+
+  head:
+    localhost:
+      ansible_connection: local
+
+  compute:
+
