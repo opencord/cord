@@ -74,7 +74,7 @@ function bootstrap() {
     sudo dpkg -i /tmp/vagrant.deb
     sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
     sudo adduser $USER libvirtd
-    sudo pip install pyparsing python-logstash
+    sudo pip install pyparsing python-logstash gitpython
 
     run_stage cloudlab_setup
 
@@ -84,6 +84,7 @@ function bootstrap() {
 
     add_box ubuntu/trusty64
   fi
+
 
   if [ ! -d "$CORDDIR" ]
   then
@@ -110,6 +111,21 @@ function bootstrap() {
       repo download ${gerrit_branch/:/ }
     done
   fi
+
+  if [ ! -x "/usr/bin/docker" ]
+  then
+    echo "Installing Devel Tools (docker)..."
+    cd ${CORDDIR}/build/platform-install
+    ansible-playbook -i inventory/localhost devel-tools-playbook.yml
+  fi
+
+  set +x
+  echo "*******************************************************************************"
+  echo "*  IMPORTANT: Logout and login so your account is added to the docker group!  *"
+  echo "*   Then 'cd ${CORDDIR}/build/platform-install' and start your CORD profile.  *"
+  echo "*        Need help?  Check out the wiki at: https://wiki.opencord.org/        *"
+  echo "*******************************************************************************"
+
 }
 
 function cloudlab_setup() {
