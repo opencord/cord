@@ -1,0 +1,18 @@
+; opencloud scenario inventory
+
+[all:vars]
+cord_profile=opencloud
+
+[config]
+localhost ansible_connection=local
+
+[build]
+head1
+
+[head]
+head1
+
+[compute]
+compute1
+compute2
+

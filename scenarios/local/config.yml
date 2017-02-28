@@ -1,0 +1,34 @@
+---
+# local scenario
+# Brings up a minimal set of containers on the host currently being run on
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ playbook_dir ~ '/../..' }}"
+config_cord_profile_dir: "{{ playbook_dir ~ '/../../../cord_profile' }}"
+
+# head = config in local scenario
+head_cord_profile_dir: "{{ config_cord_profile_dir }}"
+
+# mock configuration
+frontend_only: True
+use_openstack: False
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_images:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-rcord"
+  - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vtr"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "redis"
+  - "nginx"
+
