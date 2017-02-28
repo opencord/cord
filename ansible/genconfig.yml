@@ -1,0 +1,47 @@
+---
+# ansible/genconfig.yml
+# Generate configuration files
+
+- name: Load pod and scenario config files
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+
+    - name: Set pod_config_path fact
+      set_fact:
+        pod_config_path:  "{{ cord_podconfig | realpath }}"
+
+    - name: Load pod config
+      include_vars: "{{ pod_config_path }}"
+
+    - name: Set scenario_config_path fact
+      set_fact:
+        scenario_config_path:  "{{ (scenarios_dir ~ '/' ~ cord_scenario ~ '/config.yml') | realpath }}"
+
+    - name: Load scenario config
+      include_vars: "{{ scenario_config_path }}"
+
+    - name: Reload pod config to take precedence
+      include_vars: "{{ pod_config_path }}"
+
+    - name: Load pod and scenario configs into facts
+      set_fact:
+        pod_config: "{{ lookup('file', pod_config_path) | from_yaml }}"
+        scenario_config: "{{ lookup('file', scenario_config_path) | from_yaml }}"
+
+    - name: Combine pod and scenario config into master config
+      set_fact:
+        master_config: "{{ scenario_config | combine(pod_config) }}"
+
+    - name: Print vars
+      debug:
+        var: master_config
+
+- name: Generate config files
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - genconfig
+
