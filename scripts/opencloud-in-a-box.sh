@@ -10,7 +10,7 @@ START_T=$(date -u "+%Y%m%d_%H%M%SZ")
 CORDDIR=~/cord
 CONFIG=${CORDDIR}/config/opencloud_in_a_box.yml
 SSHCONFIG=~/.ssh/config
-VAGRANT_CWD=${CORDDIR}/build/targets/opencloud-in-a-box
+VAGRANT_CWD=${CORDDIR}/build/config/opencloud
 
 # CORD versioning
 REPO_BRANCH="master"
@@ -49,12 +49,10 @@ function bootstrap() {
   then
     echo "Installing Ansible..."
     sudo apt-get update
-    sudo apt-get install -y software-properties-common apt-transport-https
-    #sudo apt-add-repository -y ppa:ansible/ansible  # latest supported version
-    sudo apt-get -y install python-dev libffi-dev python-pip libssl-dev sshpass
-    sudo pip install ansible==2.2.2.0
+    sudo apt-get install -y software-properties-common apt-transport-https python-dev libffi-dev python-pip libssl-dev sshpass
+    sudo apt-add-repository -y ppa:ansible/ansible  # latest supported version
     sudo apt-get update
-    sudo apt-get install -y python-netaddr
+    sudo apt-get install -y ansible python-netaddr
   fi
 
   if [ ! -x "/usr/local/bin/repo" ]
@@ -70,13 +68,13 @@ function bootstrap() {
   if [ ! -x "/usr/bin/vagrant" ]
   then
     echo "Installing vagrant and associated tools..."
-    VAGRANT_SHA256SUM="52ebd6aa798582681d0f1e008982c709136eeccd668a8e8be4d48a1f632de7b8"  # version 1.9.2
-    curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.deb
+    VAGRANT_SHA256SUM="faff6befacc7eed3978b4b71f0dbb9c135c01d8a4d13236bda2f9ed53482d2c4"  # version 1.9.3
+    curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/1.9.3/vagrant_1.9.3_x86_64.deb
     echo "$VAGRANT_SHA256SUM  /tmp/vagrant.deb" | sha256sum -c -
     sudo dpkg -i /tmp/vagrant.deb
     sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip ruby2.0
     sudo adduser $USER libvirtd
-    sudo pip install pyparsing python-logstash
+    sudo pip install pyparsing python-logstash gitpython
 
     run_stage cloudlab_setup
 
@@ -95,6 +93,7 @@ function bootstrap() {
 
     add_box ubuntu/trusty64
   fi
+
 
   if [ ! -d "$CORDDIR" ]
   then
@@ -120,6 +119,26 @@ function bootstrap() {
       echo "Checking out opencord gerrit branch: $gerrit_branch"
       repo download ${gerrit_branch/:/ }
     done
+  fi
+
+  if [ ! -x "/usr/bin/docker" ]
+  then
+    echo "Installing Devel Tools (docker)..."
+    cd ${CORDDIR}/build/platform-install
+    ansible-playbook -i inventory/localhost devel-tools-playbook.yml
+  fi
+
+  set +x
+
+  # exit if not in the libvirtd and docker groups
+  if ! groups | grep -q "libvirtd docker"
+  then
+    echo "*******************************************************************************"
+    echo "*  IMPORTANT: Logout and login so your account is added to the docker group!  *"
+    echo "*   Then 'cd ${CORDDIR}/build/platform-install' and start your CORD profile.  *"
+    echo "*        Need help?  Check out the wiki at: https://wiki.opencord.org/        *"
+    echo "*******************************************************************************"
+    exit 0
   fi
 }
 
@@ -250,6 +269,6 @@ then
 fi
 
 run_stage vagrant_vms_up
-run_stage opencloud_buildhost_prep
+# run_stage opencloud_buildhost_prep
 
 exit 0
