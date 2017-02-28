@@ -1,0 +1,16 @@
+; opencloud-in-a-box inventory
+
+[all:vars]
+cord_profile=opencloud
+virtual_install=True
+
+[head]
+head1
+
+[compute]
+compute1
+compute2
+
+[build]
+head1
+
