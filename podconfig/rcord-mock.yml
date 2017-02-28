@@ -1,0 +1,7 @@
+---
+# mock-rcord Pod Config
+# Creates a single-node mock R-CORD pod
+
+cord_scenario: mock
+cord_profile: rcord
+
