@@ -1,0 +1,7 @@
+---
+# rcord-virtual Pod Config
+# Creates a virtual multi-node R-CORD pod, aka "rcord-in-a-box"
+
+cord_scenario: cord
+cord_profile: rcord
+

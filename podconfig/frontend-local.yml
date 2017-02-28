@@ -1,0 +1,7 @@
+---
+# local-frontend Pod Config
+# Starts a frontend container set in the local environment
+
+cord_scenario: local
+cord_profile: frontend
+
