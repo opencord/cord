@@ -1,0 +1,7 @@
+---
+# opencloud-in-a-box Pod Config
+# Creates a virtual multi-node OpenCloud pod
+
+cord_scenario: opencloud-virt
+cord_profile: opencloud
+
