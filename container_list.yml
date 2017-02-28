@@ -1,0 +1,37 @@
+---
+# CORD container list
+
+branch: opencord/master
+
+docker_build_tag: "candidate"
+
+repo_docker_images:
+  - name: xosproject/xos-base
+    repo: xos
+    path: "containers/xos"
+    context: .
+    dockerfile: "Dockerfile.base"
+  - name: xosproject/xos
+    repo: xos
+    path: "containers/xos/"
+    dockerfile: "Dockerfile.xos"
+  - name: xosproject/chameleon
+    repo: xos
+    path: "containers/chameleon"
+    dockerfile: "Dockerfile.chameleon"
+  - name: xosproject/xos-client
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.client"
+  - name: xosproject/xos-synchronizer-base
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.synchronizer-base"
+  - name: xosproject/xos-rest-gw
+    repo: xos-rest-gw
+  - name: xosproject/xos-gui
+    repo: xos-gui
+  - name: xosproject/xos-gui-extension-builder
+    repo: xos-gui
+    dockerfile: "Dockerfile.xos-gui-extension-builder"
+
