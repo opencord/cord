@@ -43,3 +43,8 @@ maas
 
 # generated config
 genconfig/*
+
+# imagebuilder files
+ib_actions.yml
+ib_graph.dot
+
