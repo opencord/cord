@@ -2,8 +2,9 @@
 # vi: set ft=ruby :
 #
 # OpenCloud-in-a-Box Vagrantfile
+
 require 'yaml'
-settings = YAML.load_file('config/opencloud_in_a_box.yaml')
+settings = YAML.load_file('config/opencloud/config.yml')
 
 Vagrant.configure(2) do |config|
 
