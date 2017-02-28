@@ -1,9 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
-# OpenCloud-in-a-Box Vagrantfile
+# opencloud-virt Vagrantfile
+
 require 'yaml'
-settings = YAML.load_file('config/opencloud_in_a_box.yaml')
+settings = YAML.load_file('config/opencloud/config.yml')
 
 Vagrant.configure(2) do |config|
 
@@ -22,7 +23,7 @@ Vagrant.configure(2) do |config|
     h.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0", # not used, ignore
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -40,7 +41,7 @@ Vagrant.configure(2) do |config|
     c.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0",
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -58,9 +59,10 @@ Vagrant.configure(2) do |config|
     c.vm.network "private_network", # management network, eth1
       ip: "0.1.1.0",
       auto_config: false,
-      libvirt__network_name: settings['mgmt_network'],
+      libvirt__network_name: settings['mgmt_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
 
 end
+

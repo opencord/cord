@@ -1,0 +1,16 @@
+; mock scenario
+
+[all:vars]
+cord_profile=rcord
+
+[config]
+localhost ansible_connection=local
+
+[build]
+headnode
+
+[head]
+headnode
+
+[compute]
+
