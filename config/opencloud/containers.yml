@@ -1,0 +1,116 @@
+---
+# CORD container list
+
+# this is the tag set on every container built/downloaded
+docker_build_tag: "candidate"
+
+# these are downloaded and used with little or no changes
+misc_docker_images:
+  - "gliderlabs/consul-server:0.6"
+  - "gliderlabs/registrator:v7"
+  - "nginx:1.13"
+  - "onosproject/onos:1.8.7"
+  - "redis:3.2"
+
+# How to use repo_docker_images
+#
+# required:
+#  name: Name of docker image
+#  repo: git repo name (not the path! not what it's renamed in manifest!)
+# optional:
+#  dockerfile: name of Dockerfile. Default: "Dockerfile"
+#  path: path parent dir in repo containing dockerfile. Default: "."
+#  context: build context path, relative to path. Default: "."
+#  component: dict of sub-component paths to copy into build context
+#    repo: component repo to copy from (required)
+#    path: path in to copy from. Relative to component repo. Default "."
+#    dest: destination path to copy components to, relative to context
+
+repo_docker_images:
+  - name: xosproject/xos-base
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.base"
+
+  - name: xosproject/xos-postgres
+    repo: xos
+    path: "containers/postgresql"
+
+  - name: xosproject/xos
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.xos"
+    context: "../.."
+
+  - name: xosproject/xos-corebuilder
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.corebuilder"
+    context: "../.."
+
+  - name: xosproject/chameleon
+    repo: xos
+    path: "containers/chameleon"
+    dockerfile: "Dockerfile.chameleon"
+    components:
+      - repo: chameleon
+        dest: tmp.chameleon
+
+  - name: xosproject/xos-client
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.client"
+    context: "../.."
+    components:
+      - repo: chameleon
+        dest: containers/xos/tmp.chameleon
+
+  - name: xosproject/xos-synchronizer-base
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.synchronizer-base"
+    context: "../.."
+
+  - name: xosproject/xos-ws
+    repo: xos-rest-gw
+
+  - name: xosproject/xos-gui
+    repo: xos-gui
+
+  - name: xosproject/xos-gui-extension-builder
+    repo: xos-gui
+    dockerfile: "Dockerfile.xos-gui-extension-builder"
+
+  - name: xosproject/gui-extension-vtr
+    repo: vtr
+    path: "xos/gui"
+
+  - name: xosproject/gui-extension-rcord
+    repo: rcord
+    path: "xos/gui"
+
+  - name: xosproject/openstack-synchronizer
+    repo: openstack
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/onos-synchronizer
+    repo: onos-service
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vrouter-synchronizer
+    repo: vrouter
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vtn-synchronizer
+    repo: vtn
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/exampleservice-synchronizer
+    repo: exampleservice
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
