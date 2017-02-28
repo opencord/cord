@@ -1,0 +1,33 @@
+
+stage('checkout') {
+    node('master'){
+      checkout(changelog: false, poll: false, scm: [$class: 'RepoScm', \
+        manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest.git', \
+        manifestBranch: 'master', currentBranch: true, \
+        manifestFile: 'default.xml', \
+        destinationDir: 'cord', \
+        forceSync: true, resetFirst: true, \
+        quiet: false, jobs: 4, showAllChanges: true])
+   }
+}
+
+stage('imagebuilder'){
+  node('master') {
+    sh '$WORKSPACE/imagebuilder.py -v -b -r cord/ -c cord/docker_images.yml -l image_logs -a ib_actions.yml -g ib_graph.dot'
+  }
+}
+
+stage('push'){
+  node('master'){
+    def ib_actions = readYaml( file:"$WORKSPACE/ib_actions.yml" )
+
+    withDockerRegistry([credentialsId: 'docker-artifact-push-credentials']) {
+      for(image in ib_actions.ib_built){
+        echo "Pushing image: " + image.push_name
+        docker.image(image.push_name).push()
+      }
+    }
+  }
+}
+
+echo "All done"

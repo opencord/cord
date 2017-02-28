@@ -1,0 +1,7 @@
+---
+# local-mcord Pod Config
+# Starts a M-CORD container set in the local environment
+
+cord_scenario: local
+cord_profile: mcord
+

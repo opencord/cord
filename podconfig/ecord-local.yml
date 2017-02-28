@@ -1,0 +1,7 @@
+---
+# local-ecord Pod Config
+# Starts a E-CORD container set in the local environment
+
+cord_scenario: local
+cord_profile: ecord
+

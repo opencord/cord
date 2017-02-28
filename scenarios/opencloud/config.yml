@@ -1,0 +1,95 @@
+---
+# opencloud Scenario
+# For a virtual install, physical does not use VMs
+
+# opencloud profile config
+frontend_only: False
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+build_cord_dir: /opt/cord
+
+buildnode: head1
+headnode: head1
+
+# make build config
+build_targets:
+ - onboard-openstack
+
+vagrant_up_prereqs:
+  - prereqs-check
+
+# have to copy cord and config to physical/virtual nodes
+cord_config_prereqs:
+  - copy-cord
+
+copy_config_prereqs:
+  - cord-config
+
+prep_buildnode_prereqs:
+  - copy-cord
+  - copy-config
+
+# have to run build prep before head prep, when build == head
+prep_headnode_prereqs:
+  - prep-buildnode
+
+# Vagrant VM configuration
+vagrant_vms:
+  - head1
+  - compute1
+
+head_vm_mem: 10240
+head_vm_cpu: 8
+
+compute_vm_mem: 16384
+compute_vm_cpu: 8
+
+mgmt_network_name: cordmgmt
+public_network_name: cordpub
+public_network_cidr: "10.230.100.0/24"
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-rcord"
+  - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vtr"
+  - "xosproject/onos-synchronizer"
+  - "xosproject/openstack-synchronizer"
+  - "xosproject/vrouter-synchronizer"
+  - "xosproject/vtn-synchronizer"
+  - "xosproject/exampleservice-synchronizer"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "redis"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    head1:
+
+  head:
+    head1:
+
+  compute:
+    compute1:
+

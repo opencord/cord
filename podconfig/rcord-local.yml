@@ -1,0 +1,7 @@
+---
+# local-rcord Pod Config
+# Starts a R-CORD container set in the local environment
+
+cord_scenario: local
+cord_profile: rcord
+

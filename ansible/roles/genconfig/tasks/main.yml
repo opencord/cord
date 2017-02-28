@@ -1,0 +1,22 @@
+---
+# genconfig/tasks/main.yml
+
+- name: Create cord_profile file
+  copy:
+    dest: "{{ ( genconfig_dir ~ '/cord_profile' ) | realpath }}"
+    content: "{{ cord_profile }}"
+
+- name: Create cord_scenario file
+  copy:
+    dest: "{{ ( genconfig_dir ~ '/cord_scenario' ) | realpath }}"
+    content: "{{ cord_scenario }}"
+
+- name: Generate config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ ( genconfig_dir ~ '/' ~ item ) | realpath }}"
+  with_items:
+    - inventory.ini
+    - config.mk
+    - config.yml
+

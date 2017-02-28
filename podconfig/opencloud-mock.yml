@@ -1,0 +1,7 @@
+---
+# mock-opencloud Pod Config
+# Creates a single-node mock OpenCloud pod
+
+cord_scenario: mock
+cord_profile: opencloud
+

@@ -1,0 +1,81 @@
+---
+# cord Scenario
+# for both Physical (using a corddev VM) and Virtual (using multiple VMs)
+
+# make build config
+build_targets:
+ - deploy-maas
+ - onboard-openstack
+
+vagrant_vms:
+  - corddev
+  - prod
+
+vagrant_up_prereqs:
+  - prereqs-check
+
+# have to copy cord and config to physical/virtual nodes
+cord_config_prereqs:
+  - copy-cord
+
+copy_config_prereqs:
+  - cord-config
+
+# can prep build and head node simultaneously
+prep_buildnode_prereqs:
+  - copy-cord
+  - copy-config
+
+prep_headnode_prereqs:
+  - copy-cord
+  - copy-config
+
+buildnode: corddev
+headnode: prod
+
+# cord profile config
+frontend_only: False
+
+# docker config
+deploy_docker_tag: "candidate"
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-rcord"
+  - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vtr"
+  - "xosproject/onos-synchronizer"
+  - "xosproject/openstack-synchronizer"
+  - "xosproject/vrouter-synchronizer"
+  - "xosproject/vtn-synchronizer"
+  - "xosproject/exampleservice-synchronizer"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "redis"
+
+# Inventory for ansible, used to generate inventory.ini
+inventory_groups:
+
+  config:
+    corddev:
+
+  build:
+    corddev:
+
+  head:
+    prod:
+
+  compute:
+

@@ -1,0 +1,39 @@
+---
+# rcord-physical-example Pod Config
+# Example configuration for a physical R-CORD pod
+
+cord_scenario: cord
+cord_profile: rcord
+
+# Variables
+credentials_dir: '/opt/credentials'
+pki_dir: '/opt/pki'
+ssh_pki_dir: '/opt/ssh_pki'
+
+fabric_ip: '10.6.1.1/24'
+management_ip: '10.6.0.1/24'
+external_ip: '47.135.132.21/24'
+management_network: 10.6.0.0/24
+
+headnode: headnode.site1.opencord.org
+
+# Inventory for ansible, used to generate inventory.ini
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    localhost:
+      ansible_connection: local
+
+  head:
+    headnode.site1.opencord.org:
+      ansible_host: 10.90.0.2
+      ansible_port: 22
+      ansible_user: ubuntu
+      ansible_ssh_pass: ubuntu
+
+  compute:
+

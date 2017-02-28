@@ -1,0 +1,7 @@
+---
+# opencloud-virtual Pod Config
+# Creates a virtual multi-node OpenCloud pod
+
+cord_scenario: opencloud
+cord_profile: opencloud
+
