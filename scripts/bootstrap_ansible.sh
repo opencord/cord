@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright 2012 the original author or authors.
 #
@@ -17,8 +17,8 @@
 
 set -e
 
-echo "Installing Ansible..."
-apt-get install -y software-properties-common python-netaddr apt-transport-https 
+echo "Installing Ansible using APT (PPA)..."
+apt-get install -y software-properties-common python-netaddr apt-transport-https
 apt-add-repository ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible

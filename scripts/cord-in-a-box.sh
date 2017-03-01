@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
+# cord-in-a-box.sh
 
 set -e -x
 
+# start time, used to name logfiles
+START_T=$(date -u "+%Y%m%d_%H%M%SZ")
+
+# Paths
 CORDDIR=~/cord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
+VAGRANT_CWD=${CORDDIR}/build/targets/cord-in-a-box
 
-# For CORD version
+# CORD versioning
 REPO_BRANCH="master"
-VERSION_STRING="CiaB development version"
+VERSION_STRING="CiaB Devel"
 
 function finish {
     EXIT=$?
@@ -40,7 +46,9 @@ function cleanup_from_previous_test() {
   then
     echo "Destroying all Vagrant VMs"
     cd $CORDDIR/build
-    for i in `seq 12`; do sudo su $USER -c 'vagrant destroy' && break; done
+    for i in `seq 12`; do
+      sudo VAGRANT_CWD=$VAGRANT_CWD vagrant destroy && break
+    done
   fi
 
   echo "Removing $CORDDIR"
@@ -49,50 +57,71 @@ function cleanup_from_previous_test() {
 }
 
 function bootstrap() {
+
   echo "Generating build id"
   rm -f /tmp/cord-build-version
-
   dd bs=18 count=1 if=/dev/urandom | base64 | tr +/ _. > /tmp/cord-build
-  cd ~
-  sudo apt-get update
-  [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
-  dpkg -l vagrant || sudo dpkg -i vagrant_1.8.5_x86_64.deb
-  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
-  sudo pip install pyparsing python-logstash mixpanel
 
+  if [ ! -x "/usr/local/bin/repo" ]
+  then
+    echo "Installing repo..."
+    REPO_SHA256SUM="e147f0392686c40cfd7d5e6f332c6ee74c4eab4d24e2694b3b0a0c037bf51dc5" # not versioned...
+    curl -o /tmp/repo https://storage.googleapis.com/git-repo-downloads/repo
+    echo "$REPO_SHA256SUM  /tmp/repo" | sha256sum -c -
+    sudo mv /tmp/repo /usr/local/bin/repo
+    sudo chmod a+x /usr/local/bin/repo
+  fi
+
+  if [ ! -x "/usr/bin/vagrant" ]
+  then
+    echo "Installing vagrant and associated tools..."
+    VAGRANT_SHA256SUM="faff6befacc7eed3978b4b71f0dbb9c135c01d8a4d13236bda2f9ed53482d2c4"  # version 1.9.3
+    curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/1.9.3/vagrant_1.9.3_x86_64.deb
+    echo "$VAGRANT_SHA256SUM  /tmp/vagrant.deb" | sha256sum -c -
+    sudo apt-get update
+    sudo dpkg -i /tmp/vagrant.deb
+    sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
+    sudo adduser $USER libvirtd
+    sudo pip install pyparsing python-logstash mixpanel
+  fi
+
+  echo "Installing vagrant plugins..."
+  vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
+  vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
+
+  add_box ubuntu/trusty64
+
+  echo "Creating SSH key..."
   [ -e ~/.ssh/id_rsa ] || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-
-  sudo adduser $USER libvirtd
-
-  sudo curl -o /usr/local/bin/repo https://storage.googleapis.com/git-repo-downloads/repo
-  sudo chmod a+x /usr/local/bin/repo
 
   if [ ! -d "$CORDDIR" ]
   then
+    echo "Downloading CORD/XOS..."
+
+    if [ ! -e "~/.gitconfig" ]
+    then
+      echo "No ~/.gitconfig, setting testing defaults"
+      git config --global user.name 'Test User'
+      git config --global user.email 'test@null.com'
+      git config --global color.ui false
+    fi
+
+    # make sure we can find gerrit.opencord.org as DNS failures will fail the build
+    dig +short gerrit.opencord.org || (echo "ERROR: gerrit.opencord.org can't be looked up in DNS" && exit 1)
+
     mkdir $CORDDIR && cd $CORDDIR
-
-
-    git config --global user.name 'Test User'
-    git config --global user.email 'test@null.com'
-    git config --global color.ui false
-
-    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH -g build,onos,orchestration,voltha
+    repo init -u https://gerrit.opencord.org/manifest -b master -g build,onos,orchestration,voltha
     repo sync
 
     # check out gerrit branches using repo
     for gerrit_branch in ${GERRIT_BRANCHES[@]}; do
-      echo "checking out opencord gerrit branch: $gerrit_branch"
+      echo "Checking out opencord gerrit branch: $gerrit_branch"
       repo download ${gerrit_branch/:/ }
     done
   fi
 
   exec > >(tee -i $CORDDIR/install.out)
   exec 2>&1
-
-  cd $CORDDIR/build
-  vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
-  vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
-  add_box ubuntu/trusty64
 
   # Start tracking failures from this point
   trap finish EXIT
@@ -158,13 +187,17 @@ function elk_up() {
 }
 
 function vagrant_vms_up() {
+
+  echo "Bringing up CORD-in-a-Box Vagrant VM's..."
   cd $CORDDIR/build
 
-  sudo su $USER -c 'vagrant up corddev prod --provider libvirt'
+  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant up corddev prod --provider libvirt
 
   # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
   # It allows SSH'ing to the machine via 'ssh corddev'
-  sudo su $USER -c "vagrant ssh-config corddev prod > $SSHCONFIG"
+  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant ssh-config corddev prod > $SSHCONFIG
+
+  sudo chown -R ${USER} ${VAGRANT_CWD}/.vagrant
 
   scp ~/.ssh/id_rsa* corddev:.ssh
   ssh corddev "chmod go-r ~/.ssh/id_rsa"
@@ -209,10 +242,10 @@ function leaf_spine_up() {
 
   if [[ $FABRIC -ne 0 ]]
   then
-      sudo su $USER -c "FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt"
+      sudo VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt
   else
       # Linux bridging seems to be having issues with two spine switches
-      sudo su $USER -c "FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 --provider libvirt"
+      sudo VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 --provider libvirt
   fi
 
   # Turn off MAC learning on "links" -- i.e., bridges created by libvirt.
@@ -234,7 +267,7 @@ function add_compute_node() {
   echo add_compute_node: $1 $2
 
   cd $CORDDIR/build
-  sudo su $USER -c "vagrant up $1 --provider libvirt"
+  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant up $1 --provider libvirt
 
   # Set up power cycling for the compute node and wait for it to be provisioned
   ssh prod "cd /cord/build/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
@@ -347,7 +380,7 @@ echo "==> Adding compute nodes: Starting"
 for i in `seq 1 $NUM_COMPUTE_NODES`;
 do
    echo adding the compute node: compute-node-$i
-   add_compute_node compute-node-$i build_compute-node-$i
+   add_compute_node compute-node-$i cord-in-a-box_compute-node-$i
 done
 echo "==> Adding compute nodes: Complete"
 

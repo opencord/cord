@@ -1,0 +1,5 @@
+---
+# virt-nets/defaults/main.yml
+
+virt_nets: []
+
