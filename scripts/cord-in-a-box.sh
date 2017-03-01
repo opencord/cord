@@ -301,7 +301,7 @@ done
 # What to do
 if [[ $CLEANUP -eq 1 ]]
 then
-  run_stage cleanup_from_previous_test
+  cleanup_from_previous_test
 fi
 
 echo ""
