@@ -69,7 +69,7 @@ function bootstrap() {
   then
     mkdir $CORDDIR && cd $CORDDIR
 
-   
+
     git config --global user.name 'Test User'
     git config --global user.email 'test@null.com'
     git config --global color.ui false
@@ -106,24 +106,41 @@ function cloudlab_setup() {
     sudo mv /usr/local/etc/emulab/watchdog /usr/local/etc/emulab/watchdog-disabled
   fi
 
-  if [ -e /usr/testbed/bin/mkextrafs ]
+  # Mount extra space, if haven't already
+  if [ ! -d /mnt/extra ]
   then
-    sudo mkdir -p /mnt/extra
-
-    # Sometimes this command fails on the first try
-    sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/"
-
-    # Check that the mount succeeded (sometimes mkextrafs succeeds but device not mounted)
-    mount | grep sdb || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
-
-    # we'll replace /var/lib/libvirt/images with a symlink below
-    [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
-
-    sudo mkdir -p /mnt/extra/libvirt_images
-    if [ ! -e /var/lib/libvirt/images ]
+    # for NVME SSD on Utah Cloudlab, not supported by mkextrafs
+    if $(df | grep -q nvme0n1p1) && [ -e /usr/testbed/bin/mkextrafs ]
     then
-      sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
+      sudo mkdir -p /mnt/extra
+
+      # set partition type of 4th partition to Linux, ignore errors
+      echo -e "t\n4\n82\np\nw\nq" | sudo fdisk /dev/nvme0n1 || true
+
+      sudo mkfs.ext4 /dev/nvme0n1p4
+      echo "/dev/nvme0n1p4 /mnt/extra/ ext4 defaults 0 0" | sudo tee -a /etc/fstab
+      sudo mount /mnt/extra
+      mount | grep nvme0n1p4 || (echo "ERROR: NVME mkfs/mount failed, exiting!" && exit 1)
+
+    elif [ -e /usr/testbed/bin/mkextrafs ]  # if on Clemson/Wisconsin Cloudlab
+    then
+      sudo mkdir -p /mnt/extra
+
+      # Sometimes this command fails on the first try
+      sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/" || sudo /usr/testbed/bin/mkextrafs -r /dev/sdb -qf "/mnt/extra/"
+
+      # Check that the mount succeeded (sometimes mkextrafs succeeds but device not mounted)
+      mount | grep sdb || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
     fi
+  fi
+
+  # replace /var/lib/libvirt/images with a symlink
+  [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
+  sudo mkdir -p /mnt/extra/libvirt_images
+
+  if [ ! -e /var/lib/libvirt/images ]
+  then
+    sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
   fi
 }
 
@@ -143,7 +160,7 @@ function elk_up() {
   fi
 
   sudo chmod +x build/elk-logger/logstash_tail
-  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 & 
+  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 &
 }
 
 function vagrant_vms_up() {
