@@ -294,3 +294,14 @@ index a8db7ed..4743d65 100644
  
  [networking]
  use_vtn=True
+
+project orchestration/xos_services/exampleservice/
+diff --git a/xos/synchronizer/exampleservice_config b/xos/synchronizer/exampleservice_config
+index 38f346a..f824730 100644
+--- a/xos/synchronizer/exampleservice_config
++++ b/xos/synchronizer/exampleservice_config
+@@ -24,4 +24,5 @@ proxy_ssh=True
+ proxy_ssh_key=/opt/cord_profile/node_key
+ proxy_ssh_user=root
+ enable_watchers=True
++logstash_hostport=10.100.198.222:5617
