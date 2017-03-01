@@ -1,0 +1,26 @@
+---
+# Opencloud-in-a-Box configuration
+
+public_network: cordpub
+mgmt_network: cordmgmt
+
+virt_nets:
+  - name: cordpub
+    ipv4_prefix: 10.230.100
+    nodes:
+      - name: head1
+        ipv4_last_octet: 100
+      - name: compute1
+        ipv4_last_octet: 101
+      - name: compute2
+        ipv4_last_octet: 102
+  - name: cordmgmt
+    ipv4_prefix: 192.168.200
+    nodes:
+      - name: head1
+        ipv4_last_octet: 1
+      - name: compute1
+        ipv4_last_octet: 201
+      - name: compute2
+        ipv4_last_octet: 202
+
