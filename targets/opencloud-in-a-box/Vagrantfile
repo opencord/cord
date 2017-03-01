@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# OpenCloud-in-a-Box Vagrantfile
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.define "head1" do |h|
+    h.vm.hostname = "head1"
+    h.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
+    h.vm.network "private_network",
+      ip: "10.200.298.200"
+      libvirt__network_name: "pubnet",
+    h.vm.network "private_network",
+      ip: "0.0.0.0",
+      auto_config: false,
+      libvirt__network_name: "ocmgmt",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    h.vm.provider :libvirt do |v, override|
+      v.memory = 16384
+      v.cpus = 8
+      v.machine_virtual_size = 100
+    end
+  end
+
+  config.vm.define "compute1" do |c|
+    c.vm.hostname = "compute1"
+    c.vm.network "private_network",
+      ip: "10.200.298.201"
+      libvirt__network_name: "pubnet",
+    c.vm.network "private_network",
+      ip: "0.0.0.0",
+      auto_config: false,
+      libvirt__network_name: "ocmgmt",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.provider :libvirt do |v|
+      v.memory = 8192
+      v.cpus = 4
+      v.machine_virtual_size = 50
+      v.nested = true
+    end
+  end
+
+  config.vm.define "compute2" do |c|
+    c.vm.hostname = "compute2"
+    c.vm.network "private_network",
+      ip: "10.200.298.202"
+      libvirt__network_name: "pubnet",
+    c.vm.network "private_network",
+      ip: "0.0.0.0",
+      auto_config: false,
+      libvirt__network_name: "ocmgmt",
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.provider :libvirt do |v|
+      v.memory = 8192
+      v.cpus = 4
+      v.machine_virtual_size = 50
+      v.nested = true
+    end
+  end
+
+end
