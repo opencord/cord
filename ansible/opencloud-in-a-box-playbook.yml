@@ -1,0 +1,15 @@
+---
+# opencloud-in-a-box-playbook.yml
+# configures host for running the OpenCloud-in-a-Box
+
+- name: Include vars
+  hosts: localhost
+  tasks:
+    - name: Include vars
+      include_vars: "../config/opencloud_in_a_box.yaml"
+
+- name: Configure libvirt networks
+  hosts: localhost
+  roles:
+    - virt-nets
+
