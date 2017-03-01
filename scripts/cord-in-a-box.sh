@@ -12,8 +12,9 @@ REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
 function finish {
+    EXIT=$?
     set +x
-    python $CORDDIR/build/elk-logger/mixpanel FINISH --finish
+    python $CORDDIR/build/elk-logger/mixpanel FINISH-$EXIT --finish
 }
 
 trap finish EXIT
