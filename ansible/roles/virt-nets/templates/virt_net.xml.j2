@@ -1,0 +1,13 @@
+<network>
+  <name>{{ item.name }}</name>
+  <bridge name="br-{{ item.name }}"/>
+  <forward/>
+  <ip address="{{ item.ipv4_prefix }}.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="{{ item.ipv4_prefix }}.2" end="{{ item.ipv4_prefix }}.254"/>
+{% for node in item.nodes %}
+      <host name='{{ node.name }}' ip='{{ item.ipv4_prefix }}.{{ node.ipv4_last_octet }}'/>
+{% endfor %}
+    </dhcp>
+  </ip>
+</network>
