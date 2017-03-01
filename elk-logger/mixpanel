@@ -2,6 +2,7 @@
 
 from mixpanel import Mixpanel
 
+import argparse
 import sys
 import getpass
 import socket
@@ -9,7 +10,16 @@ import subprocess
 import os
 
 from os.path import expanduser
-home = expanduser("~")
+
+parse = argparse.ArgumentParser(description='Send CORD logs to mixpanel.')
+parse.add_argument('--corddir', dest='corddir', action='store',default=None, help='CORD Directory')
+parse.add_argument('--event', dest='event', action='store',default=None, help='Event Name')
+parse.add_argument('--finish', dest='finish', action='store_true',default=False, help='Finish')
+parse.add_argument('--status', dest='status', action='store',default=None, help='Exit status')
+
+args = parse.parse_args()
+
+corddir = expanduser(args.corddir)
 
 try:
     mp = Mixpanel("7d5ca3b3ff870dbeda89c9d5af59e9e9")
@@ -19,14 +29,17 @@ try:
     context['debian-version'] = open('/etc/debian_version').read().strip()
 
 
-    os.chdir(home+'/cord/orchestration/xos')
+    os.chdir(corddir+'/orchestration/xos')
     p = subprocess.Popen(['git','rev-parse','HEAD'], stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
 
     git_hash,err = p.communicate()
     
     context['last-commit'] = git_hash
 
-    config = open(home + '/cord/build/config/cord_in_a_box.yml').read().splitlines()
+    if (args.status):
+        context['status'] = args.status
+
+    config = open(corddir+'/build/config/cord_in_a_box.yml').read().splitlines()
     for l in config:
         if 'cord_profile:' in l:
             context['profile'] = l.rstrip().rsplit(' ')[-1].replace("'","")
@@ -43,8 +56,8 @@ try:
         context['level-%d'%idx] = name
         idx+=1
 
-    if (len(sys.argv)>2 and 'finish' in sys.argv[2]):
-        logfile = open(home + '/cord/install.out').read().splitlines()
+    if (args.finish):
+        logfile = open(corddir+'/install.out').read().splitlines()
         snapshot = logfile[-20:]
         snapshot = filter(lambda x:x, snapshot)
         context['snapshot'] = snapshot
@@ -53,7 +66,7 @@ try:
         build_id = open('/tmp/cord-build').read().rstrip()
     except:
         build_id = context['user'] + name
-    mp.track(build_id, sys.argv[1], context)
+    mp.track(build_id, args.event, context)
 except Exception,e:
     print str(e)
     pass

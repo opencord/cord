@@ -13,8 +13,7 @@ VERSION_STRING="CiaB development version"
 
 function finish {
     EXIT=$?
-    set +x
-    python $CORDDIR/build/elk-logger/mixpanel FINISH-$EXIT --finish
+    python $CORDDIR/build/elk-logger/mixpanel --event FINISH --corddir $CORDDIR --finish --status $EXIT
 }
 
 function add_box() {
@@ -24,14 +23,14 @@ function add_box() {
 
 function run_stage {
     cd $CORDDIR
-    python build/elk-logger/mixpanel $1-start
+    python build/elk-logger/mixpanel --event $1-start --corddir $CORDDIR
 
     echo "==> "$1": Starting"
     $1
     echo "==> "$1": Complete"
 
     cd $CORDDIR
-    python build/elk-logger/mixpanel $1-end
+    python build/elk-logger/mixpanel --event $1-end --corddir $CORDDIR
 }
 
 function cleanup_from_previous_test() {
