@@ -12,11 +12,10 @@ REPO_BRANCH="master"
 VERSION_STRING="CiaB development version"
 
 function finish {
+    EXIT=$?
     set +x
-    python $CORDDIR/build/elk-logger/mixpanel FINISH --finish
+    python $CORDDIR/build/elk-logger/mixpanel FINISH-$EXIT --finish
 }
-
-trap finish EXIT
 
 function add_box() {
   vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
@@ -51,7 +50,8 @@ function cleanup_from_previous_test() {
 }
 
 function bootstrap() {
-  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 > /tmp/cord-build
+  echo "Generating build id"
+  dd bs=18 count=1 if=/dev/urandom | base64 | tr +/ _. > /tmp/cord-build
   cd ~
   sudo apt-get update
   [ -e vagrant_1.8.5_x86_64.deb ] || wget https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
@@ -92,6 +92,10 @@ function bootstrap() {
   vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
   vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
   add_box ubuntu/trusty64
+
+  # Start tracking failures from this point
+  trap finish EXIT
+
 }
 
 function cloudlab_setup() {
