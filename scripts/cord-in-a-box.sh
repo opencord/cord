@@ -69,7 +69,7 @@ function bootstrap() {
   then
     mkdir $CORDDIR && cd $CORDDIR
 
-   
+
     git config --global user.name 'Test User'
     git config --global user.email 'test@null.com'
     git config --global color.ui false
@@ -106,7 +106,18 @@ function cloudlab_setup() {
     sudo mv /usr/local/etc/emulab/watchdog /usr/local/etc/emulab/watchdog-disabled
   fi
 
-  if [ -e /usr/testbed/bin/mkextrafs ]
+  if $(df | grep -q nvme) # for NVME drives on Utah Cloudlab, not supported by mkextrafs
+  then
+    sudo mkdir -p /mnt/extra
+
+    # set partition type of 4th partition to Linux
+    echo -e "t\n4\n82\np\nw\nq" | sudo fdisk /dev/nvme0n1
+
+    sudo mkfs.ext4 /dev/nvme0n1p4
+    echo "/dev/nvme0n1p4 /mnt/extra/ ext4 defaults 0 0" | sudo tee -a /etc/fstab
+    sudo mount /mnt/extra
+
+  elif [ -e /usr/testbed/bin/mkextrafs ]  # if on Clemson/Wisconsin Cloudlab
   then
     sudo mkdir -p /mnt/extra
 
@@ -115,15 +126,15 @@ function cloudlab_setup() {
 
     # Check that the mount succeeded (sometimes mkextrafs succeeds but device not mounted)
     mount | grep sdb || (echo "ERROR: mkextrafs failed, exiting!" && exit 1)
+  fi
 
-    # we'll replace /var/lib/libvirt/images with a symlink below
-    [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
+  # replace /var/lib/libvirt/images with a symlink
+  [ -d /var/lib/libvirt/images/ ] && [ ! -h /var/lib/libvirt/images ] && sudo rmdir /var/lib/libvirt/images
+  sudo mkdir -p /mnt/extra/libvirt_images
 
-    sudo mkdir -p /mnt/extra/libvirt_images
-    if [ ! -e /var/lib/libvirt/images ]
-    then
-      sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
-    fi
+  if [ ! -e /var/lib/libvirt/images ]
+  then
+    sudo ln -s /mnt/extra/libvirt_images /var/lib/libvirt/images
   fi
 }
 
@@ -143,7 +154,7 @@ function elk_up() {
   fi
 
   sudo chmod +x build/elk-logger/logstash_tail
-  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 & 
+  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 &
 }
 
 function vagrant_vms_up() {
