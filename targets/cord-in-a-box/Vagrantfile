@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     d.vm.box = "ubuntu/trusty64"
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
-    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
@@ -46,7 +46,7 @@ Vagrant.configure(2) do |config|
         libvirt__network_name: "head-node-leaf-1",
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
-    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/prod.yml -c local"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 cd /cord/build/platform-install; ansible-playbook -i inventory/head-localhost deploy-elasticstack-playbook.yml"
     d.vm.provider "virtualbox" do |v|
@@ -70,7 +70,7 @@ Vagrant.configure(2) do |config|
         virtualbox__intnet: "cord-fabric-network",
         libvirt__network_name: "cord-fabric-network",
         mac: "cc37ab000001"
-    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/fakeswitch.yml -c local"
     s.vm.provider "virtualbox" do |v|
       v.memory = 1048
@@ -116,9 +116,9 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-1-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, path: "../..scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
-      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, path: "../../scripts/install.sh", args: "-3f"
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
@@ -172,9 +172,9 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
-      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, path: "../../scripts/install.sh", args: "-3f"
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
@@ -214,9 +214,9 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
-      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, path: "../../scripts/install.sh", args: "-3f"
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
@@ -256,9 +256,9 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    s.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
-      s.vm.provision :shell, path: "scripts/install.sh", args: "-3f"
+      s.vm.provision :shell, path: "../../scripts/install.sh", args: "-3f"
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
       s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
@@ -279,7 +279,7 @@ Vagrant.configure(2) do |config|
     d.ssh.forward_agent = true
     d.vm.hostname = "testbox"
     d.vm.network "private_network", ip: "10.0.3.100", lxc__bridge_name: 'lxcbr0'
-    d.vm.provision :shell, path: "scripts/bootstrap_ansible.sh"
+    d.vm.provision :shell, path: "../../scripts/bootstrap_ansible.sh"
     d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
     config.vm.provider :lxc do |lxc|
         # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
