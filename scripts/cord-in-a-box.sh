@@ -99,6 +99,12 @@ function bootstrap() {
 
 function cloudlab_setup() {
 
+  # See if this is a CloudLab node
+  if [ ! -e /usr/local/etc/emulab ]
+  then
+    return
+  fi
+
   # The watchdog will sometimes reset groups, turn it off
   if [ -e /usr/local/etc/emulab/watchdog ]
   then
