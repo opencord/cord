@@ -25,7 +25,6 @@ parse = argparse.ArgumentParser(description='Convert log file to json.')
 parse.add_argument('--format', dest='format', action='store',default=None, help='Format e.g. Ansible')
 parse.add_argument('--hostport', dest='hostport', action='store',default=None, help='Logstash UDP host:port')
 parse.add_argument('--file', dest='filename', action='store',default=None, help='Filename to follow')
- 
 
 args = parse.parse_args()
 
@@ -95,8 +94,6 @@ def run_logger():
     inp = ''
     lc = 0
 
-    
-
     if (args.filename):
         source = follow(open(args.filename))
 
@@ -108,6 +105,8 @@ def run_logger():
 
         if (l==""):
             break
+        elif len(l)>200:
+            continue
 
         inp += l
         lc = len(inp.split('\n'))
