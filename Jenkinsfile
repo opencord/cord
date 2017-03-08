@@ -9,7 +9,7 @@ node ('master') {
 }
 
 timeout (time: 240) {
-    node ('${devNodeJenkinsName}') {
+    node ("${devNodeJenkinsName}") {
        stage 'Checkout cord repo'
        checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: 'https://gerrit.opencord.org/manifest', quiet: true]
 
