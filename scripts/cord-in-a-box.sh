@@ -40,7 +40,7 @@ function cleanup_from_previous_test() {
   then
     echo "Destroying all Vagrant VMs"
     cd $CORDDIR/build
-    sudo su $USER -c 'vagrant destroy'
+    for i in `seq 12`; do sudo su $USER -c 'vagrant destroy' && break; done
   fi
 
   echo "Removing $CORDDIR"
