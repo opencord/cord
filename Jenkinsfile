@@ -57,14 +57,14 @@ timeout (time: 240) {
                 stage 'Build CORD Images'
                 sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
 
-                stage 'Creating CORD POD configuration'
-                sh 'vagrant ssh -c "echo ${podConfig} > config/podTest.yml" corddev'
+                stage 'Downloading CORD POD configuration'
+                sh 'vagrant ssh -c "cd /cord/build/config; git clone ${podConfigRepoUrl}" corddev'
 
                 stage 'Publish to headnode'
-                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/podTest.yml publish" corddev'
+                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} publish" corddev'
 
                 stage 'Deploy'
-                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/podTest.yml deploy" corddev'
+                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} deploy" corddev'
 
                 stage 'Power cycle compute nodes'
                 parallel(
