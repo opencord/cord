@@ -57,11 +57,14 @@ timeout (time: 240) {
                 stage 'Build CORD Images'
                 sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
 
+                stage 'Creating CORD POD configuration'
+                sh 'vagrant ssh -c "echo ${podConfig} > config/podTest.yml" corddev'
+
                 stage 'Publish to headnode'
-                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/onlab_develop_pod.yml publish" corddev'
+                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/podTest.yml publish" corddev'
 
                 stage 'Deploy'
-                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/onlab_develop_pod.yml deploy" corddev'
+                sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/podTest.yml deploy" corddev'
 
                 stage 'Power cycle compute nodes'
                 parallel(
@@ -107,7 +110,7 @@ timeout (time: 240) {
                 currentBuild.result = 'SUCCESS'
             } catch (err) {
                 currentBuild.result = 'FAILURE'
-                step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'cord-dev@opencord.org', sendToIndividuals: false])
+                step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
             } finally {
                 sh 'vagrant destroy -f corddev'
             }
