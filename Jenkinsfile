@@ -113,6 +113,7 @@ timeout (time: 240) {
                 step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
             } finally {
                 sh 'vagrant destroy -f corddev'
+                sh 'rm -rf config/pod-configs'
             }
             echo "RESULT: ${currentBuild.result}"
        }
