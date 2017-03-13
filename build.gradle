@@ -33,6 +33,7 @@ apply plugin: "com.dorongold.task-tree"
 
 evaluationDependsOn(':maas')
 evaluationDependsOn(':onos-apps')
+evaluationDependsOn(':orchestration:xos')
 
 allprojects {
     apply plugin: 'base'
@@ -218,10 +219,22 @@ task PIinstallPKI(type: Exec) {
     "pki-install-playbook.yml" ]
 }
 
+task PIcreateProfile(type: Exec) {
+  dependsOn PIinstallPKI
+
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "--extra-vars", "deploy_docker_tag="+targetTag,
+    "--extra-vars", "deploy_docker_registry=docker-registry:5000/",
+    "cord-profile-playbook.yml" ]
+}
+
 task PIprepPlatform(type: Exec) {
   dependsOn CopyCord
   dependsOn ChownCord
-  dependsOn PIinstallPKI
+  dependsOn PIcreateProfile
 
   def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml prep-platform-playbook.yml"
 
@@ -237,14 +250,16 @@ task PIdeployOpenStack (type: Exec) {
 }
 
 task PIdeployONOS (type: Exec) {
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml deploy-onos-playbook.yml"
+  def extra_vars = "--extra-vars deploy_docker_tag="+targetTag+" --extra-vars deploy_docker_registry=docker-registry:5000/"
+  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml "+extra_vars+" deploy-onos-playbook.yml"
 
   executable = "ssh"
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
 }
 
 task PIdeployXOS (type: Exec) {
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml deploy-xos-playbook.yml"
+  def extra_vars = "--extra-vars deploy_docker_tag="+targetTag+" --extra-vars deploy_docker_registry=docker-registry:5000/"
+  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml "+extra_vars+" launch-xos-playbook.yml"
 
   executable = "ssh"
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
@@ -277,6 +292,8 @@ project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 
 project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
+
+project(':orchestration:xos').buildImages.dependsOn rootProject."tagxosproject/xos-base"
 
 task PIdeployPlatform {
      dependsOn CopyCord

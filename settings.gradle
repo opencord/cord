@@ -2,3 +2,5 @@ include 'maas'
 include 'platform-install'
 includeFlat 'onos-apps'
 
+include 'orchestration:xos'
+project(':orchestration:xos').projectDir = "$rootDir/../orchestration/xos" as File
