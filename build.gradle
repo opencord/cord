@@ -33,6 +33,7 @@ apply plugin: "com.dorongold.task-tree"
 
 evaluationDependsOn(':maas')
 evaluationDependsOn(':onos-apps')
+evaluationDependsOn(':orchestration:xos')
 
 allprojects {
     apply plugin: 'base'
@@ -181,9 +182,9 @@ task buildImages  {
 }
 
 task publishImages {
-    comps.each { name, spec -> if (spec.type == 'image') { 
-            dependsOn "publish" + name 
-          } 
+    comps.each { name, spec -> if (spec.type == 'image') {
+            dependsOn "publish" + name
+          }
     }
 }
 
@@ -293,4 +294,3 @@ PIdeployPlatform.mustRunAfter project(':maas').deployBase
 task deploy  {
     dependsOn PIdeployPlatform
 }
-
