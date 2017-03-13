@@ -23,7 +23,7 @@
 - name: Debian docker-py is present
   pip:
     name: docker-py
-    version: 1.6.0
+    version: 1.10.6
     state: present
   tags: [docker]
 
@@ -42,4 +42,3 @@
   tags: [docker]
   notify:
     - docker-restart
-
