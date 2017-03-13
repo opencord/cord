@@ -33,6 +33,7 @@ apply plugin: "com.dorongold.task-tree"
 
 evaluationDependsOn(':maas')
 evaluationDependsOn(':onos-apps')
+evaluationDependsOn(':orchestration:xos')
 
 allprojects {
     apply plugin: 'base'
