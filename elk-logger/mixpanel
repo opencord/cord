@@ -29,6 +29,21 @@ try:
     context['debian-version'] = open('/etc/debian_version').read().strip()
 
 
+    os.chdir(corddir)
+    possible_versions = ['master','cord-1.0','cord-2.0']
+
+    version = 'personal'
+    try:
+	for v in possible_versions:
+	    diff = os.popen('repo forall -c "git stash 2>/dev/null 1>/dev/null;git diff opencord/%s 2>/dev/null;git stash pop 2>/dev/null 1>/dev/null"'%v).read()
+	    if (not diff):
+		version = v
+		break
+    except:
+        pass
+        
+    context['version'] = version
+
     os.chdir(corddir+'/orchestration/xos')
     p = subprocess.Popen(['git','rev-parse','HEAD'], stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
 
