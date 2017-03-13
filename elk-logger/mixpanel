@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from mixpanel import Mixpanel
+import pdb
 
 import argparse
 import sys
@@ -20,6 +21,8 @@ parse.add_argument('--status', dest='status', action='store',default=None, help=
 args = parse.parse_args()
 
 corddir = expanduser(args.corddir)
+build_version_file = '/tmp/cord-build'
+cord_version_file = '/tmp/cord-build-version'
 
 try:
     mp = Mixpanel("7d5ca3b3ff870dbeda89c9d5af59e9e9")
@@ -27,7 +30,6 @@ try:
 
     context = {}
     context['debian-version'] = open('/etc/debian_version').read().strip()
-
 
     os.chdir(corddir+'/orchestration/xos')
     p = subprocess.Popen(['git','rev-parse','HEAD'], stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
@@ -63,9 +65,29 @@ try:
         context['snapshot'] = snapshot
 
     try:
-        build_id = open('/tmp/cord-build').read().rstrip()
+        build_id = open(build_version_file).read().rstrip()
     except:
         build_id = context['user'] + name
+
+    # Figure out whether we're in master or what
+    try:
+    	cord_version = open(cord_version_file).read().rstrip()
+    except:
+	os.chdir(corddir)
+	possible_versions = ['master','cord-1.0','cord-2.0']
+
+	cord_version = 'personal'
+	try:
+	    for v in possible_versions:
+		diff = os.popen('repo forall -c "git stash 2>/dev/null 1>/dev/null;git diff -b opencord/%s 2>/dev/null;git stash pop 2>/dev/null 1>/dev/null"'%v).read()
+		if (not diff):
+		    cord_version = v
+		    break
+	except:
+	    pass
+        
+    open(cord_version_file,'w').write(cord_version)
+    context['version'] = cord_version
     mp.track(build_id, args.event, context)
 except Exception,e:
     print str(e)

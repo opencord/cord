@@ -50,6 +50,8 @@ function cleanup_from_previous_test() {
 
 function bootstrap() {
   echo "Generating build id"
+  rm -f /tmp/cord-build-version
+
   dd bs=18 count=1 if=/dev/urandom | base64 | tr +/ _. > /tmp/cord-build
   cd ~
   sudo apt-get update
