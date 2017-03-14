@@ -58,7 +58,7 @@ timeout (time: 240) {
                 sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
 
                 stage 'Downloading CORD POD configuration'
-                sh 'vagrant ssh -c "cd /cord/build/config; git clone ${podConfigRepoUrl}" corddev'
+                sh 'vagrant ssh -c "cd /cord/build/config; git clone ${podConfigRepoUrl} -b ${branch}" corddev'
 
                 stage 'Publish to headnode'
                 sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} publish" corddev'
