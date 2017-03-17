@@ -69,9 +69,9 @@ timeout (time: 240) {
                 stage 'Power cycle compute nodes'
                 parallel(
                     compute_1: {
-                        sh 'ipmitool -U admin -P admin -H ${computeNode1IPMI} power cycle'
+                        sh 'ipmitool -U "${computeNode1IPMIUser}" -P "${computeNode1IPMIPass}" -H ${computeNode1IPMIIP} power cycle'
                     }, compute_2: {
-                        sh 'ipmitool -U admin -P admin -H ${computeNode2IPMI} power cycle'
+                        sh 'ipmitool -U "${computeNode2IPMIUser}" -P "${computeNode2IPMIPass}" -H ${computeNode2IPMIIP} power cycle'
                     }, failFast : true
                 )
 
