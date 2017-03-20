@@ -24,6 +24,8 @@ corddir = expanduser(args.corddir)
 build_version_file = '/tmp/cord-build'
 cord_version_file = '/tmp/cord-build-version'
 
+build_features = []
+
 try:
     mp = Mixpanel("7d5ca3b3ff870dbeda89c9d5af59e9e9")
     hostname = socket.gethostname()
@@ -37,6 +39,7 @@ try:
     git_hash,err = p.communicate()
     
     context['last-commit'] = git_hash
+    context['build-features'] = build_features
 
     if (args.status):
         context['status'] = args.status
