@@ -34,7 +34,7 @@ function cleanup_from_previous_test() {
   then
     echo "Destroying all Vagrant VMs"
     cd $CORDDIR/build
-    VAGRANT_CWD=$VAGRANT_CWD vagrant destroy
+    sudo VAGRANT_CWD=$VAGRANT_CWD vagrant destroy
   fi
 
   echo "Removing $CORDDIR"
