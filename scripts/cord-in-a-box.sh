@@ -159,11 +159,6 @@ function elk_up() {
   sudo su $USER -c "vagrant ssh-config elastic > $SSHCONFIG"
 
   cd $CORDDIR
-  if [ ! -f /tmp/elk-patch-applied ]; then
-    touch /tmp/elk-patch-applied
-    sh build/scripts/repo-apply.sh build/elk-logger/elk-ciab.diff
-  fi
-
   sudo chmod +x build/elk-logger/logstash_tail
   build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 &
 }
