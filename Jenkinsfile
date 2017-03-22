@@ -76,8 +76,8 @@ timeout (time: 240) {
                 )
 
                 stage 'Wait for compute nodes to get deployed'
-                sh 'ssh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R ${headNodeIP}'
-                def cordapikey = sh(returnStdout: true, script: "sshpass -p ${headNodePass} ssh -oStrictHostKeyChecking=no -l ${headNodeUser} ${headNodeIP} sudo maas-region-admin apikey --username cord")
+                sh 'ssh-keygen -f /home/${devNodeUser}/.ssh/known_hosts -R ${headNodeIP}'
+                def cordapikey = sh(returnStdout: true, script: "sshpass -p ${headNodePass} ssh -oStrictHostKeyChecking=no -l ${headNodeUser} ${headNodeIP} sudo maas-region-admin apikey --username ${headNodeUser}")
                 sh "sshpass -p ${headNodePass} ssh -oStrictHostKeyChecking=no -l ${headNodeUser} ${headNodeIP} maas login pod-maas http://${headNodeIP}/MAAS/api/1.0 $cordapikey"
                 timeout(time: 45) {
                     waitUntil {
