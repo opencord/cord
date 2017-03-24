@@ -86,11 +86,19 @@ ext {
     // Component table
     comps = [
             // ONOS 1.8.2 from the opencord Dockerhub
+            // Deprecated - to be removed
             'opencord/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'opencord/onos',
                     'digest':   'sha256:935da663c381393316e0c658d49dde10d90a7383e3d7c53271b1223cec31d44c'
+            ],
+            // ONOS 1.8.4
+            'onosproject/onos': [
+                    'type':     'image',
+                    'upstream': upstreamReg,
+                    'name':     'onosproject/onos',
+                    'digest':   'sha256:898f869aa319b2184d963626053f20192d475735a431100e05a712f556e9321e'
             ],
             'nginx': [
                     'type':     'image',
