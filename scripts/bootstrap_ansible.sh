@@ -18,8 +18,8 @@
 set -e
 
 echo "Installing Ansible..."
-apt-get install -y software-properties-common
+apt-get install -y software-properties-common python-netaddr apt-transport-https 
 apt-add-repository ppa:ansible/ansible
 apt-get update
-apt-get install -y ansible apt-transport-https
+apt-get install -y ansible
 cp /cord/build/ansible/ansible.cfg /etc/ansible/ansible.cfg

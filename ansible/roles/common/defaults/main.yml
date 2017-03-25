@@ -1,7 +1,6 @@
 hosts: [
   { host_ip: "10.100.198.200", host_name: "corddev"},
   { host_ip: "10.100.198.201", host_name: "prod"},
-  { host_ip: "10.100.198.222", host_name: "elastic"},
 ]
 
 use_latest_for:
