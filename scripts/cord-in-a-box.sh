@@ -150,17 +150,11 @@ function cloudlab_setup() {
 }
 
 function elk_up() {
-  cd $CORDDIR/build
-
-  sudo su $USER -c 'vagrant up elastic --provider libvirt'
-
-  # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
-  # It allows SSH'ing to the machine via 'ssh corddev'
-  sudo su $USER -c "vagrant ssh-config elastic > $SSHCONFIG"
 
   cd $CORDDIR
   sudo chmod +x build/elk-logger/logstash_tail
-  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.222:5617 &
+
+  build/elk-logger/logstash_tail --file install.out --hostport 10.100.198.201:5617 &
 }
 
 function vagrant_vms_up() {
@@ -330,8 +324,8 @@ echo ""
 
 bootstrap
 run_stage cloudlab_setup
-run_stage elk_up
 run_stage vagrant_vms_up
+run_stage elk_up
 
 if [[ $SETUP_ONLY -ne 0 ]]
 then
