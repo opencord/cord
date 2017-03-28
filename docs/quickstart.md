@@ -1,15 +1,16 @@
 # CORD-in-a-Box Quick Start Guide
 
-This tutorial guide walks through the steps to bring up a demonstration CORD "POD",
-running in virtual machines on a single physical server (a.k.a. "CORD-in-a-Box"). The purpose
-of this demonstration POD is to enable those interested in understanding how CORD works to
-examine and interact with a running CORD environment.  It is a good place for
-novice CORD users to start.
+This tutorial guide walks through the steps to bring up a demonstration CORD
+"POD", running in virtual machines on a single physical server (a.k.a.
+"CORD-in-a-Box"). The purpose of this demonstration POD is to enable those
+interested in understanding how CORD works to examine and interact with a
+running CORD environment.  It is a good place for novice CORD users to start.
 
-**NOTE:** *This tutorial installs a simplified version of a CORD POD on a single server
-using virtual machines.  If you are looking for instructions on how to install a multi-node POD, you will
-find them in [quickstart_physical.md](./quickstart_physical.md).  For more
-details about the actual build process, look there.*
+**NOTE:** *This tutorial installs a simplified version of a CORD POD on a
+single server using virtual machines.  If you are looking for instructions on
+how to install a multi-node POD, you will find them in
+[quickstart_physical.md](./quickstart_physical.md).  For more details about the
+actual build process, look there.*
 
 ## What you need (Prerequisites)
 
@@ -23,38 +24,43 @@ Target server requirements:
   * 8+ CPU cores
   * 200GB+ disk
 * Access to the Internet
-* Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to install Ubuntu 14.04).
-* User account used to install CORD-in-a-Box has password-less *sudo* capability (e.g., like the `ubuntu` user)
+* Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to
+  install Ubuntu 14.04).
+* User account used to install CORD-in-a-Box has password-less *sudo*
+  capability (e.g., like the `ubuntu` user)
 
 ### Target Server on CloudLab (optional)
 
-If you do not have a target server available that meets the above requirements, you can borrow one on
-[CloudLab](https://www.cloudlab.us).  Sign up for an account using your organization's
-email address and choose "Join Existing Project"; for "Project Name" enter `cord-testdrive`.
+If you do not have a target server available that meets the above requirements,
+you can borrow one on [CloudLab](https://www.cloudlab.us).  Sign up for an
+account using your organization's email address and choose "Join Existing
+Project"; for "Project Name" enter `cord-testdrive`.
 
-**NOTE:** *CloudLab is supporting CORD as a courtesy.  It is expected that you will
-not use CloudLab resources for purposes other than evaluating CORD.  If, after a
-week or two, you wish to continue using CloudLab to experiment with or develop CORD,
-then you must apply for your own separate CloudLab project.*
+**NOTE:** *CloudLab is supporting CORD as a courtesy.  It is expected that you
+will not use CloudLab resources for purposes other than evaluating CORD.  If,
+after a week or two, you wish to continue using CloudLab to experiment with or
+develop CORD, then you must apply for your own separate CloudLab project.*
 
-Once your account is approved, start an experiment using the `OnePC-Ubuntu14.04.5` profile
-on either the Wisconsin or Clemson cluster.  This will provide you with a temporary target server
-meeting the above requirements.
+Once your account is approved, start an experiment using the
+`OnePC-Ubuntu14.04.5` profile on the Wisconsin, Clemson, or Utah clusters.
+This will provide you with a temporary target server meeting the above
+requirements.
 
-Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more information.
+Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more
+information.
 
 ## Download and Run the Script
 
-On the target server, download the script that installs CORD-in-a-Box.  Then run it,
-saving the screen output to a file called `install.out`:
+On the target server, download the script that installs CORD-in-a-Box and run
+it.  The script's output is displayed and also saved to `~/cord/install.out`:
 
 ```
 curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
 bash ~/cord-in-a-box.sh -t
 ```
 
-The script takes a *long time* (at least two hours) to run.  Be patient!  If it hasn't completely
-failed yet, then assume all is well!
+The script takes a *long time* (at least two hours) to run.  Be patient!  If it
+hasn't completely failed yet, then assume all is well!
 
 ### Complete
 
@@ -62,12 +68,13 @@ The script builds the CORD-in-a-Box and runs a couple of tests to ensure that
 things are working as expected.  Once it has finished running, you'll see a
 **BUILD SUCCESSFUL** message.
 
-The file `~/install.out` contains the full output of the build process.
+The file `~/cord/install.out` contains the output of the build process,
+post-bootstrap phase.
 
 ### Using cord-in-a-box.sh to download development code from Gerrit
 
 There is an `-b` option to cord-in-a-box.sh that will checkout a specific
-changset from a gerrit repo during the run.  The syntax for this is `<project
+changeset from a gerrit repo during the run.  The syntax for this is `<project
 path>:<changeset>/<revision>`.  It can be used multiple times - for example:
 
 ```
@@ -91,12 +98,31 @@ UNDER DEVELOPMENT.*
 
 ## Inspecting CORD-in-a-Box
 
-CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs.
-You can inspect their current status as follows:
+CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs, using
+libvirt as a backend.
+
+As access to the libvirt socket depends on being in the `libvirtd` group, you
+may need to to logout and back in to have your shell session gain this group
+membership:
 
 ```
-~$ cd cord/build/
-~/cord/build$ vagrant status
+~$ groups
+xos-PG0 root
+~$ vagrant status
+Call to virConnectOpen failed: Failed to connect socket to '/var/run/libvirt/libvirt-sock': Permission denied
+~$ logout
+~$ ssh node_name.cloudlab.us
+~$ groups
+xos-PG0 root libvirtd
+```
+
+Once you have done this, you can inspect the status of the VM's by setting the
+`VAGRANT_CWD` environmental variable to the path to the cord-in-a-box
+`Vagrantfile`'s parent directory, then run `vagrant status`:
+
+```
+~$ export VAGRANT_CWD=~/cord/build/targets/cord-in-a-box
+~$ vagrant status
 Current machine states:
 
 corddev                   running (libvirt)
@@ -110,24 +136,28 @@ testbox                   not created (libvirt)
 compute-node-1            running (libvirt)
 compute-node-2            not created (libvirt)
 compute-node-3            not created (libvirt)
+
+This environment represents multiple VMs. The VMs are all listed
+above with their current state. For more information about a specific
+VM, run `vagrant status NAME`.
 ```
 
 ### corddev VM
 
-The `corddev` VM is a development machine used by the `cord-in-a-box.sh` script to drive the
-installation.  It downloads and builds Docker containers and publishes them
-to the virtal head node (see below). It then installs MaaS on the virtual head node (for bare-metal
-provisioning) and the ONOS, XOS, and OpenStack services in containers.  This VM
-can be entered as follows:
+The `corddev` VM is a development machine used by the `cord-in-a-box.sh` script
+to drive the installation.  It downloads and builds Docker containers and
+publishes them to the virtual head node (see below). It then installs MaaS on
+the virtual head node (for bare-metal provisioning) and the ONOS, XOS, and
+OpenStack services in containers.  This VM can be entered as follows:
 
 ```
 $ ssh corddev
 ```
 
 The CORD build environment is located in `/cord/build` inside this VM.  It is
-possible to manually run individual steps in the build process here if you wish; see
-[quickstart_physical.md](./quickstart_physical.md) for more information on
-how to run build steps.
+possible to manually run individual steps in the build process here if you
+wish; see [quickstart_physical.md](./quickstart_physical.md) for more
+information on how to run build steps.
 
 ### prod VM
 
@@ -171,9 +201,9 @@ e0a68af23e9c        docker-registry:5000/cord-ip-allocator:candidate      "/go/b
 ```
 
 The above shows Docker containers launched by XOS (image names starting with
-`xosproject`).  Containers starting with `onos` are running ONOS.
-There is also a Docker image registry, a Maven repository containing
-the CORD ONOS apps, and a number of microservices used in bare-metal provisioning.
+`xosproject`).  Containers starting with `onos` are running ONOS.  There is
+also a Docker image registry, a Maven repository containing the CORD ONOS apps,
+and a number of microservices used in bare-metal provisioning.
 
 ```
 vagrant@prod:~$ sudo lxc list
@@ -232,8 +262,9 @@ node name (assigned by MaaS) and then run:
 $ ssh ubuntu@<compute-node-name>
 ```
 
-Virtual machines created via XOS/OpenStack will be instantiated inside the `compute_node`
-VM.  To login to an OpenStack VM, first get the management IP address (172.27.0.x):
+Virtual machines created via XOS/OpenStack will be instantiated inside the
+`compute_node` VM.  To login to an OpenStack VM, first get the management IP
+address (172.27.0.x):
 
 ```
 vagrant@prod:~$ nova list --all-tenants
@@ -253,9 +284,9 @@ vagrant@prod:~$ ssh-agent bash
 vagrant@prod:~$ ssh-add
 ```
 
-SSH to the compute node with the `-A` option and then to the VM using
-the management IP obtained above.  So if the compute node name is `bony-alley`
-and the management IP is 172.27.0.2:
+SSH to the compute node with the `-A` option and then to the VM using the
+management IP obtained above.  So if the compute node name is `bony-alley` and
+the management IP is 172.27.0.2:
 
 ```
 vagrant@prod:~$ ssh -A ubuntu@bony-alley
@@ -267,25 +298,29 @@ ubuntu@mysite-vsg-1:~$
 
 ### leaf-[12] and spine-[12] VMs
 
-These VMs run software switches for the CORD fabric.  In the default configuration
-they run standard Linux bridges.  If you have chosen to run
-cord-in-a-box.sh with the experimental `-f` option, the VMs run CPqD switches controlled
-by ONOS running in the `onosfabric_xos-onos_1` container.
+These VMs run software switches for the CORD fabric.  In the default
+configuration they run standard Linux bridges.  If you have chosen to run
+cord-in-a-box.sh with the experimental `-f` option, the VMs run CPqD switches
+controlled by ONOS running in the `onosfabric_xos-onos_1` container.
 
 ### MaaS GUI
 
-You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to the URL
-`http://<target-server>:8080/MAAS/`.  Username and password are both `cord`.  For more
-information on MaaS, see [the MaaS documentation](http://maas.io/docs).
+You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to
+the URL `http://<target-server>:8080/MAAS/`.  Username and password are both
+`cord`.  For more information on MaaS, see [the MaaS
+documentation](http://maas.io/docs).
 
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
-`http://<target-server>:8080/xos/`.  Username is `padmin@vicci.org` and password is `letmein`.
+`http://<target-server>:8080/xos/`.  Username in most cases is
+`xosadmin@opencord.org`, and the password is automatically generated, and can
+be found in the file
+`~/cord/build/platform-install/credentials/xosadmin@opencord.org`.
 
-The state of the system is that all CORD services have been onboarded to XOS.  You
-can see them in the GUI by clicking _Services_ at left.  Clicking on the name of
-a service will show more details about it.
+The state of the system is that all CORD services have been onboarded to XOS.
+You can see them in the GUI by clicking _Services_ at left.  Clicking on the
+name of a service will show more details about it.
 
 A sample CORD subscriber has also been created.  A nice way to drill down into
 the configuration is to click _Customize_ at left, add the _Diagnostic_
@@ -294,8 +329,17 @@ subscriber in this dashboard, click the green box next to _Subscriber_ and
 select `cordSubscriber-1`.  The dashboard will change to show information
 specific to that subscriber.
 
-## Test results
+### Kibana log viewing GUI
 
+The Kibana web interface to the ElasticStack log aggregation system can be
+found at: `http://<target-server>:8080/kibana/`.
+
+On initial login, you will be asked to create an index for the `logstash-*`
+files - do this and then access the main logging interface under `Discover`.
+More information on using Kibana can be be found [in its
+documentation](https://www.elastic.co/guide/en/kibana/current/index.html).
+
+## Test results
 
 After CORD-in-a-Box was set up, a couple of basic health
 tests were executed on the platform.  The results of these tests can be
@@ -303,17 +347,18 @@ found near the end of `~/install.out`.
 
 ### test-vsg
 
-This tests the E2E connectivity of the POD by performing the following
-steps:
+This tests the E2E connectivity of the POD by performing the following steps:
+
  * Sets up a sample CORD subscriber in XOS
  * Launches a vSG for that subscriber on the CORD POD
- * Creates a test client, corresponding to a device in the subscriber's household
+ * Creates a test client, corresponding to a device in the subscriber's
+   household
  * Connects the test client to the vSG using a simulated OLT
  * Runs `ping` in the client to a public IP address in the Internet
 
-Success means that traffic is flowing between the subscriber
-household and the Internet via the vSG.  If it succeeded, you should see some
-lines like these in the output:
+Success means that traffic is flowing between the subscriber household and the
+Internet via the vSG.  If it succeeded, you should see some lines like these in
+the output:
 
 ```
 TASK [test-vsg : Output from ping test] ****************************************
@@ -335,16 +380,21 @@ ok: [10.100.198.201] => {
 ### test-exampleservice
 
 This test builds on `test-vsg` by loading the *exampleservice* described in the
-[Tutorial on Assembling and On-Boarding Services](https://wiki.opencord.org/display/CORD/Assembling+and+On-Boarding+Services%3A+A+Tutorial).
-The purpose of the *exampleservice* is to demonstrate how new subscriber-facing services
-can be easily deployed to a CORD POD. This test performs the following steps:
- * On-boards *exampleservice* into the CORD POD
- * Creates an *exampleservice* tenant, which causes a VM to be created and Apache to be loaded and configured inside
- * Runs a `curl` from the subscriber test client, through the vSG, to the Apache server.
+[Tutorial on Assembling and On-Boarding
+Services](https://wiki.opencord.org/display/CORD/Assembling+and+On-Boarding+Services%3A+A+Tutorial).
+The purpose of the *exampleservice* is to demonstrate how new subscriber-facing
+services can be easily deployed to a CORD POD. This test performs the following
+steps:
 
-Success means that the Apache server launched by the *exampleservice* tenant is fully configured
-and is reachable from the subscriber client via the vSG.  If it succeeded, you should see some
-lines like these in the output:
+ * On-boards *exampleservice* into the CORD POD
+ * Creates an *exampleservice* tenant, which causes a VM to be created and
+   Apache to be loaded and configured inside
+ * Runs a `curl` from the subscriber test client, through the vSG, to the
+   Apache server.
+
+Success means that the Apache server launched by the *exampleservice* tenant is
+fully configured and is reachable from the subscriber client via the vSG.  If
+it succeeded, you should see some lines like these in the output:
 
 ```
 TASK [test-exampleservice : Output from curl test] *****************************
@@ -360,16 +410,15 @@ ok: [10.100.198.201] => {
 
 ## Troubleshooting
 
-If the CORD-in-a-Box build fails, you may try simply resuming the
-build at the place that failed.  The easiest way is to do is to re-run
-the `cord-in-a-box.sh` script; this will start the build at the
-beginning and skip over the steps that have already been completed.
+If the CORD-in-a-Box build fails, you may try simply resuming the build at the
+place that failed.  The easiest way is to do is to re-run the
+`cord-in-a-box.sh` script; this will start the build at the beginning and skip
+over the steps that have already been completed.
 
-A build can also be resumed manually; this is often quicker than
-re-running the install script, but requires more knowledge about how
-the build works.  The `cord-in-a-box.sh` script drives the build by
-entering the `corddev` VM and executing the following commands in
-`/cord/build`:
+A build can also be resumed manually; this is often quicker than re-running the
+install script, but requires more knowledge about how the build works.  The
+`cord-in-a-box.sh` script drives the build by entering the `corddev` VM and
+executing the following commands in `/cord/build`:
 
 ```
 $ ./gradlew fetch
@@ -390,15 +439,16 @@ $ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployXOS
 $ ./gradlew -PdeployConfig=config/cord_in_a_box.yml setupAutomation
 ```
 
-Manually driving the build following a failure involves looking in the log to 
+Manually driving the build following a failure involves looking in the log to
 figure out the failing task, and then running that task and subsequent tasks
 using the above commands.
 
 ## Congratulations
 
-If you got this far, you successfully built, deployed, and tested your
-first CORD POD.
+If you got this far, you successfully built, deployed, and tested your first
+CORD POD.
 
-You are now ready to bring up a multi-node POD with a real switching
-fabric and multiple physical compute nodes.  The process for doing so is described in
+You are now ready to bring up a multi-node POD with a real switching fabric and
+multiple physical compute nodes.  The process for doing so is described in
 [quickstart_physical.md](./quickstart_physical.md).
+
