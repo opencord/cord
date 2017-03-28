@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "ba092121_6de21dd7",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-03-28T21:06:14Z",
+      "side": 1,
+      "message": "~/cord/install.out",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 71
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba092121_edc62d49",
         "filename": "docs/quickstart.md",
         "patchSetId": 4
