@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba092121_cdda4917",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-03-28T21:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba092121_0dca814f",
+      "range": {
+        "startLine": 54,
+        "startChar": 69,
+        "endLine": 55,
+        "endChar": 64
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba092121_6de21dd7",
         "filename": "docs/quickstart.md",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-28T21:06:14Z",
       "side": 1,
       "message": "~/cord/install.out",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 71
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_2dec25c7",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-03-28T21:18:26Z",
+      "side": 1,
+      "message": "Yep. Log won\u0027t include the bootstrap phase, so I\u0027ll mention that.",
+      "parentUuid": "ba092121_6de21dd7",
       "range": {
         "startLine": 71,
         "startChar": 0,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "ba092121_edcd0d5f",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-03-28T21:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba092121_cdc36937",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 15
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba092121_adc0352b",
         "filename": "docs/quickstart.md",
         "patchSetId": 4
@@ -105,6 +177,30 @@
       "writtenOn": "2017-03-28T21:05:20Z",
       "side": 1,
       "message": "its",
+      "range": {
+        "startLine": 338,
+        "startChar": 53,
+        "endLine": 338,
+        "endChar": 57
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_0dd161fb",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-03-28T21:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba092121_adc0352b",
       "range": {
         "startLine": 338,
         "startChar": 53,
