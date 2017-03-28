@@ -47,7 +47,7 @@ function cleanup_from_previous_test() {
     echo "Destroying all Vagrant VMs"
     cd $CORDDIR/build
     for i in `seq 12`; do
-      sudo VAGRANT_CWD=$VAGRANT_CWD vagrant destroy && break
+      sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD vagrant destroy" && break
     done
   fi
 
@@ -191,13 +191,11 @@ function vagrant_vms_up() {
   echo "Bringing up CORD-in-a-Box Vagrant VM's..."
   cd $CORDDIR/build
 
-  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant up corddev prod --provider libvirt
+  sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD vagrant up corddev prod --provider libvirt"
 
   # This is a workaround for a weird issue with ARP cache timeout breaking 'vagrant ssh'
   # It allows SSH'ing to the machine via 'ssh corddev'
-  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant ssh-config corddev prod > $SSHCONFIG
-
-  sudo chown -R ${USER} ${VAGRANT_CWD}/.vagrant
+  sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD vagrant ssh-config corddev prod > $SSHCONFIG"
 
   scp ~/.ssh/id_rsa* corddev:.ssh
   ssh corddev "chmod go-r ~/.ssh/id_rsa"
@@ -242,10 +240,10 @@ function leaf_spine_up() {
 
   if [[ $FABRIC -ne 0 ]]
   then
-      sudo VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt
+      sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 spine-2 --provider libvirt"
   else
       # Linux bridging seems to be having issues with two spine switches
-      sudo VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 --provider libvirt
+      sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD FABRIC=$FABRIC vagrant up leaf-1 leaf-2 spine-1 --provider libvirt"
   fi
 
   # Turn off MAC learning on "links" -- i.e., bridges created by libvirt.
@@ -267,7 +265,7 @@ function add_compute_node() {
   echo add_compute_node: $1 $2
 
   cd $CORDDIR/build
-  sudo VAGRANT_CWD=$VAGRANT_CWD vagrant up $1 --provider libvirt
+  sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD vagrant up $1 --provider libvirt"
 
   # Set up power cycling for the compute node and wait for it to be provisioned
   ssh prod "cd /cord/build/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
