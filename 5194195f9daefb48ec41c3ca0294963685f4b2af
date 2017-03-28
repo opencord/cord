@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba092121_0dca814f",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-03-28T21:05:20Z",
+      "side": 1,
+      "message": "maybe replace with \"and run it\".  No need to do anything to create install.out any more.",
+      "range": {
+        "startLine": 54,
+        "startChar": 69,
+        "endLine": 55,
+        "endChar": 64
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_edc62d49",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-03-28T21:05:20Z",
+      "side": 1,
+      "message": "delete one \"the\"",
+      "range": {
+        "startLine": 118,
+        "startChar": 75,
+        "endLine": 119,
+        "endChar": 3
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_cdc36937",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-03-28T21:05:20Z",
+      "side": 1,
+      "message": "Give full path?  ~/cord/build/platform-install/...",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 15
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_adc0352b",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-03-28T21:05:20Z",
+      "side": 1,
+      "message": "its",
+      "range": {
+        "startLine": 338,
+        "startChar": 53,
+        "endLine": 338,
+        "endChar": 57
+      },
+      "revId": "5194195f9daefb48ec41c3ca0294963685f4b2af",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
