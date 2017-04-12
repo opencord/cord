@@ -11,7 +11,7 @@ CORDDIR=~/cord
 VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
-VAGRANT_CWD=${CORDDIR}/build/targets/cord-in-a-box
+VAGRANT_CWD=${CORDDIR}/build/
 
 # CORD versioning
 REPO_BRANCH="master"
