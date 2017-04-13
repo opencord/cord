@@ -287,6 +287,11 @@ task postDeployTests (type: Exec) {
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
 }
 
+
+
+project(':maas').prime.dependsOn writeYamlConfig
+project(':maas').prime.dependsOn writeInventory
+
 project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 

@@ -12,6 +12,7 @@ VMDIR=/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
 VAGRANT_CWD=${CORDDIR}/build/
+VAGRANT_VM_PREFIX=build
 
 # CORD versioning
 REPO_BRANCH="master"
@@ -378,7 +379,7 @@ echo "==> Adding compute nodes: Starting"
 for i in `seq 1 $NUM_COMPUTE_NODES`;
 do
    echo adding the compute node: compute-node-$i
-   add_compute_node compute-node-$i cord-in-a-box_compute-node-$i
+   add_compute_node compute-node-$i ${VAGRANT_VM_PREFIX}_compute-node-$i
 done
 echo "==> Adding compute nodes: Complete"
 
