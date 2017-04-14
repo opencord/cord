@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$cordpath = "../../.."
+$cordpath = ".."
 
 Vagrant.configure(2) do |config|
 
