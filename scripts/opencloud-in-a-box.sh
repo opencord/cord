@@ -50,9 +50,11 @@ function bootstrap() {
     echo "Installing Ansible..."
     sudo apt-get update
     sudo apt-get install -y software-properties-common apt-transport-https
-    sudo apt-add-repository -y ppa:ansible/ansible  # latest supported version
+    #sudo apt-add-repository -y ppa:ansible/ansible  # latest supported version
+    sudo apt-get -y install python-dev libffi-dev python-pip libssl-dev sshpass
+    sudo pip install ansible==2.2.2.0
     sudo apt-get update
-    sudo apt-get install -y ansible python-netaddr
+    sudo apt-get install -y python-netaddr
   fi
 
   if [ ! -x "/usr/local/bin/repo" ]
