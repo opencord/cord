@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba092121_d857a225",
+        "filename": "build.gradle",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-04-17T20:11:04Z",
+      "side": 1,
+      "message": "Does the order that the images get published really matter?\n\nAlso the other dependencies appear later in the file.  Maybe move these there to be consistent.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 84
+      },
+      "revId": "81f768ca4a381c92ea5c9ca67dce97938d6644db",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
