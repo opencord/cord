@@ -34,6 +34,10 @@ apply plugin: "com.dorongold.task-tree"
 evaluationDependsOn(':maas')
 evaluationDependsOn(':onos-apps')
 evaluationDependsOn(':orchestration:xos')
+evaluationDependsOn(':platform-install')
+
+project(':platform-install').buildImages.dependsOn project(':orchestration:xos').buildImages
+project(':platform-install').publishImages.dependsOn project(':orchestration:xos').publishImages
 
 allprojects {
     apply plugin: 'base'
