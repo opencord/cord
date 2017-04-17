@@ -34,6 +34,7 @@ apply plugin: "com.dorongold.task-tree"
 evaluationDependsOn(':maas')
 evaluationDependsOn(':onos-apps')
 evaluationDependsOn(':orchestration:xos')
+evaluationDependsOn(':platform-install')
 
 allprojects {
     apply plugin: 'base'
@@ -299,6 +300,8 @@ project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 
 project(':orchestration:xos').buildImages.dependsOn rootProject."tagxosproject/xos-base"
+
+project(':platform-install').buildImages.dependsOn project(':orchestration:xos').buildImages
 
 task PIdeployPlatform {
      dependsOn CopyCord
