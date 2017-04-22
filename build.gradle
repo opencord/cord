@@ -232,10 +232,14 @@ task PIprepPlatform(type: Exec) {
 }
 
 task PIdeployOpenStack (type: Exec) {
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml deploy-openstack-playbook.yml"
 
-  executable = "ssh"
-  args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "--extra-vars", "deploy_docker_tag="+targetTag,
+    "--extra-vars", "deploy_docker_registry=docker-registry:5000/",
+    "deploy-openstack-playbook.yml" ]
 }
 
 task PIdeployONOS (type: Exec) {
