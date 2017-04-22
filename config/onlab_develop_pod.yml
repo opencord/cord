@@ -16,7 +16,9 @@ common:
   # directories on the head node that the cord dir is copied to, and profile is created in
   cord_dir: '/opt/cord'
   cord_profile_dir: '/opt/cord_profile'
-
+  credentials_dir: '/opt/credentials'
+  pki_dir: '/opt/pki'
+  ssh_pki_dir: '/opt/ssh_pki'
 
   # all of these are written to genconfig/config.yml, and needs a rework
 
