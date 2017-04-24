@@ -10,6 +10,7 @@ import git
 import json
 import logging
 import os
+import pprint
 import re
 import string
 import sys
@@ -235,9 +236,25 @@ class DockerImageList():
         # create dict of images, setting defaults
         for image in conf['repo_docker_images']:
 
+            image_name = image['name']
+
+            # all images created by imagebuilder have the build tag
+            tags = [conf['docker_build_tag']]
+
+            # check to see if name has a tag, add it to the tags list
+            name_tag_split = string.split(image_name, ":")
+
+            # strip the conf['docker_build_tag'] that we apply if given
+            if len(name_tag_split) > 1:
+                if name_tag_split[1] == conf['docker_build_tag']:
+                    image_name = name_tag_split[0]
+                else:
+                    tags.append(name_tag_split[1])
+
             repo_d = self.rp.get_repo(image['repo'])
 
-            self.images[image['name']] = {
+            self.images[image_name] = {
+                    "tags": tags,
                     "repo_name": image['repo'],
                     "repo_d": repo_d,
                     "path": image.get('path', '.'),
@@ -279,8 +296,16 @@ class DockerImageList():
 
             if fromline:
                 parent = fromline.group(1)
-                self.images[image_name]["parent"] = parent
 
+                # split name from tag in image name
+                name_tag_split = string.split(parent, ":")
+
+                # strip conf['docker_build_tag'] tag from parent image
+                if len(name_tag_split) > 1:
+                    if name_tag_split[1] == conf['docker_build_tag']:
+                        parent = name_tag_split[0]
+
+                self.images[image_name]["parent"] = parent
                 LOG.debug("Parent image of %s is %s" %
                           (image_name, parent))
 
@@ -407,8 +432,8 @@ class DockerImageList():
 
                     stat_d = json.loads(stat_json)
 
-                    # pp = pprint.PrettyPrinter(indent=4)
-                    # pp.pprint(stat_d)
+                    pp = pprint.PrettyPrinter(indent=4)
+                    pp.pprint(stat_d)
 
                     if 'stream' in stat_d:
                         for stat_l in stat_d['stream'].split('\n'):
@@ -468,6 +493,8 @@ class DockerImageList():
         if self.dc:
             image = self.images[image_name]
 
+            build_tag = "%s:%s" % (image_name, conf['docker_build_tag'])
+
             context_path = os.path.normpath(
                                os.path.join(image['repo_d']['full_path'],
                                             image['path'],
@@ -523,7 +550,7 @@ class DockerImageList():
             try:
                 LOG.info("Building %s with docker" % image_name)
 
-                for stat_d in self.dc.build(tag=image_name,
+                for stat_d in self.dc.build(tag=build_tag,
                                             buildargs=buildargs,
                                             custom_context=True,
                                             fileobj=context_tar,
@@ -534,7 +561,8 @@ class DockerImageList():
                                             stream=True,
                                             decode=True):
 
-                    # stat_d = json.loads(stat_json)
+                    pp = pprint.PrettyPrinter(indent=4)
+                    pp.pprint(stat_d)
 
                     if 'stream' in stat_d:
 
@@ -557,6 +585,10 @@ class DockerImageList():
             except:
                 LOG.exception("Error building docker image")
             else:
+                for tag in image['tags']:
+                    extra_tag = "%s:%s" % (image_name, tag)
+                    self.dc.tag(image=build_tag, tag=extra_tag)
+
                 LOG.debug("Built %s" % (image_name))
             finally:
                 if(bl_fh):
