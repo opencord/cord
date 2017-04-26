@@ -300,6 +300,7 @@ project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 
 project(':orchestration:xos').buildImages.dependsOn rootProject."tagxosproject/xos-base"
+project(':orchestration:xos').buildImages.dependsOn rootProject."tagnginx"
 
 project(':platform-install').buildImages.dependsOn project(':orchestration:xos').buildImages
 
