@@ -55,7 +55,7 @@ On the target server, download the script that installs CORD-in-a-Box and run
 it.  The script's output is displayed and also saved to `~/cord/install.out`:
 
 ```
-curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
+curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/cord-3.0/scripts/cord-in-a-box.sh
 bash ~/cord-in-a-box.sh -t
 ```
 
