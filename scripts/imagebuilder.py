@@ -110,7 +110,90 @@ def load_config():
         sys.exit(1)
 
 
-class RepoParser():
+def split_name(input_name):
+    """ split a docker image name in the format name:tag into components """
+
+    name = input_name
+    tag = None
+
+    # split name:tag if given in combined format
+    name_tag_split = string.split(input_name, ":")
+
+    if len(name_tag_split) > 1:  # has tag, return separated version
+        name = name_tag_split[0]
+        tag = name_tag_split[1]
+
+    return (name, tag)
+
+
+class RepoRepo():
+    """ git repo managed by repo tool"""
+
+    def __init__(self, name, path, remote):
+
+        self.name = name
+        self.path = path
+        self.remote = remote
+        self.git_url = "%s%s" % (remote, name)
+
+        try:
+            self.git_repo_o = git.Repo(self.abs_path())
+            LOG.debug("Repo - %s, path: %s" % (name, path))
+
+            self.head_commit = self.git_repo_o.head.commit.hexsha
+            LOG.debug(" head commit: %s" % self.head_commit)
+
+            commit_t = time.gmtime(self.git_repo_o.head.commit.committed_date)
+            self.head_commit_t = time.strftime("%Y-%m-%dT%H:%M:%SZ", commit_t)
+            LOG.debug(" commit date: %s" % self.head_commit_t)
+
+            self.clean = not self.git_repo_o.is_dirty(untracked_files=True)
+            LOG.debug(" clean: %s" % self.clean)
+
+            # list of untracked files (expensive operation)
+            self.untracked_files = self.git_repo_o.untracked_files
+            for u_file in self.untracked_files:
+                LOG.debug("  Untracked: %s" % u_file)
+
+        except Exception:
+            LOG.exception("Error with git repo: %s" % name)
+            sys.exit(1)
+
+    def abs_path(self):
+        global args
+        return os.path.abspath(os.path.join(args.repo_root, self.path))
+
+    def path_clean(self, test_path, branch=conf['branch']):
+        """ Is working tree on branch and no untracked files in path? """
+
+        LOG.debug("  Looking for changes in path: %s" % test_path)
+
+        p_clean = True
+
+        # diff between branch head and working tree (None)
+        branch_head = self.git_repo_o.commit(branch)
+        diff = branch_head.diff(None, paths=test_path)
+
+        if diff:
+            p_clean = False
+
+        for diff_obj in diff:
+            LOG.debug("  file not on branch: %s" % diff_obj)
+
+        # remove . to compare paths using .startswith()
+        if test_path == ".":
+            test_path = ""
+
+        for u_file in self.untracked_files:
+            if u_file.startswith(test_path):
+                LOG.debug("  untracked file in path: %s" % u_file)
+                p_clean = False
+
+        return p_clean
+
+
+class RepoManifest():
+    """ parses manifest XML file used by repo tool"""
 
     def __init__(self):
         global args
@@ -136,6 +219,8 @@ class RepoParser():
         remote = self.manifest_xml.find('remote')
         self.remote = remote.attrib['review']
 
+        project_repos = []
+
         for project in self.manifest_xml.iter('project'):
             repo_name = project.attrib['name']
             rel_path = project.attrib['path']
@@ -143,228 +228,350 @@ class RepoParser():
                                         project.attrib['path']))
 
             if os.path.isdir(full_path):
-                self.repos[repo_name] = {
-                    "full_path": full_path,
-                    "rel_path": rel_path,
-                    }
+                project_repos[repo_name] = rel_path
             else:
                 LOG.debug("Repo in manifest but not checked out: %s" %
                           repo_name)
 
-        for repo_name in self.repos.keys():
-            try:
-                LOG.debug("Repo - %s, path: %s" %
-                          (repo_name, self.repos[repo_name]["full_path"]))
-
-                c_repo = git.Repo(self.repos[repo_name]["full_path"])
-
-                self.repos[repo_name]['repo'] = c_repo
-
-                self.repos[repo_name]['git_url'] = "%s%s" % (self.remote,
-                                                             repo_name)
-
-                self.repos[repo_name]['commit_hash'] = \
-                    c_repo.head.commit.hexsha
-
-                LOG.debug(" head commit: %s" %
-                          self.repos[repo_name]['commit_hash'])
-
-                commit_dt = time.gmtime(c_repo.head.commit.committed_date)
-                self.repos[repo_name]['commit_date'] = \
-                    time.strftime("%Y-%m-%dT%H:%M:%SZ", commit_dt)
-
-                LOG.debug(" commit date: %s" %
-                          self.repos[repo_name]['commit_date'])
-
-                clean = not c_repo.is_dirty(untracked_files=True)
-                LOG.debug(" clean: %s" % clean)
-                self.repos[repo_name]['clean'] = clean
-
-                # list of untracked files (expensive operation)
-                untracked = c_repo.untracked_files
-                self.repos[repo_name]['untracked'] = untracked
-                for u_file in untracked:
-                    LOG.debug("  Untracked: %s" % u_file)
-
-            except Exception:
-                LOG.exception("Error with git repo")
-                sys.exit(1)
-
-    def path_clean(self, repo_name, path):
-
-        clean = True
-        repo = self.repos[repo_name]['repo']
-
-        # diff between branch head and working tree (None)
-        branch_head = repo.commit(conf['branch'])
-        diff = branch_head.diff(None, paths=path)
-
-        LOG.debug("  build context path: %s" % path)
-
-        if diff:
-            clean = False
-
-        for diff_obj in diff:
-            LOG.debug("  Change: %s" % diff_obj)
-
-        # null path for compare using .startswith()
-        if path == ".":
-            path = ""
-
-        for u_file in self.repos[repo_name]['untracked']:
-            if u_file.startswith(path):
-                LOG.debug("  Untracked file in context: %s" % u_file)
-                clean = False
-
-        return clean
+        for repo_name, repo_path in project_repos.iteritems():
+            self.repos[repo_name] = RepoRepo(repo_name, repo_path, self.remote)
 
     def get_repo(self, repo_name):
         return self.repos[repo_name]
 
 
-class DockerImageList():
+# Docker image status
+S_UNKNOWN = "unknown"
+S_ERROR = "error"
 
-    def __init__(self, repo_parser):
+S_EXISTS = "preexists"
+S_UNNEEDED = "unneeded"
 
-        self.rp = repo_parser
-        self.dc = None  # docker client
-        self.images = {}
-        self.fetch_d = {}
-        self.build_d = {}
-        self.present_d = {}
+S_FETCHABLE = "fetchable"
+S_FETCHING = "fetching"
+S_FETCHED = "fetched"
 
-        # create dict of images, setting defaults
-        for image in conf['repo_docker_images']:
+S_BUILDABLE = "buildable"
+S_BUILDING = "building"
+S_BUILT = "built"
 
-            image_name = image['name']
 
-            # all images created by imagebuilder have the build tag
-            tags = [conf['docker_build_tag']]
+class DockerImage():
 
-            # check to see if name has a tag, add it to the tags list
-            name_tag_split = string.split(image_name, ":")
+    def __init__(self, name, repo_name=None, repo_d=None, path=".",
+                 context=".", dockerfile='Dockerfile', labels={},
+                 tags=[], image_id=None, status=S_UNKNOWN, ):
 
-            # strip the conf['docker_build_tag'] that we apply if given
-            if len(name_tag_split) > 1:
-                if name_tag_split[1] == conf['docker_build_tag']:
-                    image_name = name_tag_split[0]
-                else:
-                    tags.append(name_tag_split[1])
+        # These should all be set
+        self.repo_name = repo_name
+        self.repo_d = repo_d
+        self.status = status
+        self.path = path
+        self.context = context
+        self.dockerfile = dockerfile
+        self.parent_name = ''  # set by _find_parent_name()
+        self.parent = None  # pointer to object
+        self.children = []   # list of child objects
 
-            repo_d = self.rp.get_repo(image['repo'])
+        # name as provided to init
+        self.raw_name = name
 
-            self.images[image_name] = {
-                    "tags": tags,
-                    "repo_name": image['repo'],
-                    "repo_d": repo_d,
-                    "path": image.get('path', '.'),
-                    "context": image.get('context', '.'),
-                    "dockerfile": image.get('dockerfile', 'Dockerfile'),
-                }
+        # split name:tag if given in combined format
+        (image_name, image_tag) = split_name(name)
+        if image_tag:  # has tag
+            self.name = image_name
+            tags.append(image_tag)
+        else:  # no tag
+            self.name = image_name
 
-        self._evaluate_images()
+        # split names from tag list
+        for tag in tags:
+            thistag = ""
+            (tag_name, tag_tag) = split_name(tag)
+            if tag_tag:  # has name, split off
+                thistag = tag_tag
+            else:  # just a bare tag
+                thistag = tag_name
 
-        LOG.info("Images to fetch: %s" % ", ".join(self.fetch_d.keys()))
-        LOG.info("Images to build: %s" % ", ".join(self.build_d.keys()))
+            if thistag not in tags:  # don't duplicate tags
+                tags.append(thistag)
 
-        if not args.dry_run:
-            self._docker_connect()
+        if not labels:
+            self._create_labels()
 
-        self._process_images()
+        self._find_parent_name()
 
-    def _evaluate_images(self):
+    def __str__(self):
+        return self.name
 
-        for image_name, image_attr in self.images.iteritems():
+    def __eq__(self, other):
+        """ Comparison of containers based on label-schema.org labels """
 
-            LOG.debug("Evaluating image: %s" % image_name)
+        comparable_labels = [
+                "org.label-schema.name",
+                "org.label-schema.vcs-url",
+                "org.label-schema.vcs-ref",
+                ]
 
-            # determine if build context is dirty
-            self.images[image_name]['clean'] = self._context_clean(image_name)
+        for cl in comparable_labels:
+            if cl in self.labels \
+                 and cl in other.labels \
+                 and self.labels[cl] != other.lables[cl]:
+                pass
+            else:
+                return False
 
-            # construct path to Dockerfile
-            df_path = os.path.join(image_attr['repo_d']['full_path'],
-                                   image_attr['path'],
-                                   image_attr['dockerfile'])
+        return True
 
+    def _create_labels(self):
+        """ Create label-schema.org labels to be applied to images """
+
+        if self.buildable():
+            self.labels['org.label-schema.name'] = self.name
+            self.labels['org.label-schema.version'] = "1.0"
+
+            # org.label-schema.build-date
+            time_now = datetime.datetime.utcnow()
+            build_date = time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
+            self.labels['org.label-schema.build-date'] = build_date
+
+            # git related labels
+            self.labels['org.label-schema.vcs-url'] = self.repo_d['git_url']
+
+            if self.clean:
+                self.labels['org.label-schema.version'] = conf['branch']
+                self.labels['org.label-schema.vcs-ref'] = \
+                    self.repo_d['commit_hash']
+                self.labels['org.opencord.vcs-commit-date'] = \
+                    self.repo_d['commit_date']
+            else:
+                self.labels['org.label-schema.version'] = "dirty"
+
+    def _find_parent_name(self):
+        """ set self.parent to name of parent image on Dockerfile FROM line """
+
+        if self.buildable():
             # read contents of Dockerfile into df
-            with open(df_path) as dfh:
+            with open(self.dockerfile_abs_path()) as dfh:
                 df = dfh.read()
 
             # find FROM line to determine image parent
             frompatt = re.compile(r'^FROM\s+(.*)$', re.MULTILINE)
             fromline = re.search(frompatt, df)
 
-            if fromline:
-                parent = fromline.group(1)
+            self.parent = fromline.group(1)  # note - not split, may have tag
 
-                # split name from tag in image name
-                name_tag_split = string.split(parent, ":")
+    def _context_clean(self):
+        """ determine if build context is clean """
+        if self.buildable():
+            context_path = os.path.normpath(
+                                os.path.join(self.path, self.context))
+            clean = self.repo_o.path_clean(context_path)
+            LOG.debug("  context is clean?: %s", clean)
+            return clean
 
-                # strip conf['docker_build_tag'] tag from parent image
-                if len(name_tag_split) > 1:
-                    if name_tag_split[1] == conf['docker_build_tag']:
-                        parent = name_tag_split[0]
+    def buildable(self):
+        """ is this image have a repo to be built from """
+        if self.repo_name:  # has a git repo to be built from
+            return True
+        return False
 
-                self.images[image_name]["parent"] = parent
-                LOG.debug("Parent image of %s is %s" %
-                          (image_name, parent))
+    def dockerfile_abs_path(self):
+        """ returns absolute path to Dockerfile for this image """
 
-                if parent in self.images:
-                    self.images[image_name]["internal_parent"] = True
-                else:
-                    self.images[image_name]["internal_parent"] = False
+        if self.buildable():
+            return os.path.abspath(os.path.join(self.repo_d['full_path'],
+                                   self.path, self.dockerfile))
+        else:
+            return None
 
-                LOG.debug("Do we create the parent image?: %s" %
-                          self.images[image_name]["internal_parent"])
+    def dockerfile_rel_path(self):
+        """ returns the path relative to the context of the Dockerfile """
 
+        if self.buildable():
+            if self.context is ".":
+                return self.dockerfile
             else:
-                LOG.error("Couldn't find a parent image for %s in %s" %
-                          (image_name, df_path))
-                sys.exit(1)
+                return os.path.normpath(os.path.join(self.path,
+                                                     self.dockerfile))
+        else:
+            return None
 
-        # now that we know parents/cleanliness of images,
-        # decide whether to build or fetch them
-        for image_name, image_attr in self.images.iteritems():
+    def context_tarball(self):
+        """ returns a filehandle to a tarball (tempfile) for the image """
 
-            if args.build_force:
-                self.build_d[image_name] = True
-                if not image_attr['internal_parent']:
-                    self.fetch_d[image_attr['parent']] = True
+        if self.buildable():
 
-            elif args.fetch_force:
-                self.fetch_d[image_name] = True
+            context_path = os.path.normpath(
+                               os.path.join(self.repo_d['full_path'],
+                                            self.path, self.context))
 
-            else:
-                if image_attr['clean'] and self._parent_clean(image_name):
-                    self.fetch_d[image_name] = True
-                else:
-                    self.build_d[image_name] = True
-                    if not image_attr['internal_parent']:
-                        self.fetch_d[image_attr['parent']] = True
+            LOG.info("Creating context tarball of path: %s" % context_path)
 
-    def _context_clean(self, image_name):
+            t_fh = tempfile.NamedTemporaryFile()
+            t = tarfile.open(mode='w', fileobj=t_fh, dereference=True)
 
-        image = self.images[image_name]
-        context_path = os.path.normpath(os.path.join(image['path'],
-                                                     image['context']))
-        clean = self.rp.path_clean(image['repo_name'], context_path)
+            # see docker-py source for context
+            exclusion_list = ['.git']
+            for path in sorted(
+                    docker.utils.exclude_paths(context_path, exclusion_list)):
+                t.add(os.path.join(context_path, path),
+                      arcname=path,
+                      recursive=False)
 
-        LOG.debug("  context is clean?: %s", clean)
+            # t.list()  # prints all files in tarball
+            t.close()
+            t_fh.seek(0)
+            return t_fh
 
-        return clean
+        else:
+            return None
 
-    def _parent_clean(self, image_name):
+    def buildargs(self):
+        """
+        returns array of labels in docker buildargs compliant format
+        """
+        ba_a = {}
 
-        # externally parented images are clean
-        if not self.images[image_name]["internal_parent"]:
+        for lbl in self.labels:
+            ba_re = re.compile(r'\W')  # non alpha/num/_ chars
+            ba_lbl = ba_re.sub('_', lbl)
+            ba_a[ba_lbl] = self.labels[lbl]
+
+        return ba_a
+
+
+class DockerBuilder():
+
+    def __init__(self, repo_manifest):
+
+        self.rm = repo_manifest
+        self.dc = None  # Docker Client
+
+        self.images = []
+        self.prexisting = []
+
+        # create dict of images, setting defaults
+        for image in conf['repo_docker_images']:
+
+            repo_d = self.rm.get_repo(image['repo'])
+
+            img_o = DockerImage(image['name'], image['repo'], repo_d,
+                                image.get('path', '.'),
+                                image.get('context', '.'),
+                                image.get('dockerfile', 'Dockerfile'))
+
+            self.images.append(img_o)
+
+        if not args.dry_run:
+            self._docker_connect()
+
+        self.evaluate_images()
+        self._list_preexisting()
+
+        LOG.info("Images to fetch: %s" % ", ".join(self.list_fetch_needed()))
+        LOG.info("Images to build: %s" % ", ".join(self.list_build_needed()))
+
+        self._process_images()
+
+    def _docker_connect(self):
+        """ Connect to docker daemon """
+
+        self.dc = docker.from_env()
+
+        if self.dc.ping():
+            LOG.debug("Docker server is responding")
+        else:
+            LOG.error("Unable to ping docker server")
+            sys.exit(1)
+
+    def _list_preexisting(self):
+        """ Created a list of images that already exist in Docker """
+
+        if self.dc:
+            LOG.info("Evaluating images that preexist in Docker")
+
+            # get list of images from docker
+            pe_imgs = self.dc.images()
+
+            for pe_img in pe_imgs:
+                raw_tags = pe_img['RepoTags']
+
+                LOG.info(" Preexisting Image - ID: %s, tags: %s" %
+                         (pe_img['Id'], ",".join(raw_tags)))
+
+                # ignoring all <none>:<none> images, reasonable?
+                if "<none>:<none>" not in raw_tags:
+                    img_o = DockerImage(raw_tags[0], tags=raw_tags,
+                                        labels=pe_img["Labels"],
+                                        image_id=pe_img['Id'], )
+
+                    self.preexisting.append(img_o)
+
+    def find_image(self, image_name):
+        """ return image object matching name """
+        for image in self.images:
+            if image.name == image_name:
+                return image
+        return None
+
+    def find_preexisting(self, image_name):
+        """ return preexisting image object matching name """
+        for image in self.preexisting:
+            if image.name == image_name:
+                return image
+        return None
+
+    def _image_clean(self, image_name):
+        """ determine if an image and it's parents are clean """
+        image = self.find_image(image_name)
+
+        if not image.parent:
+            # images with no parent are external/clean
             return True
         else:
-            # check parental cleanliness
-            parent = self.images[image_name]['parent']
-            if self._parent_clean(parent) and self.images[parent]['clean']:
+            # clean if self and parent is recursively clean
+            if image.clean and self._image_clean(image.parent_name):
                 return True
 
         return False
+
+    def _evaluate_images(self):
+        """ determine which images should be built vs fetched """
+
+        # list of all parent image names, with dupes
+        parents_with_dupes = [img.parent_name for img in self.images]
+
+        # remove duplicate
+        parents = list(set(parents_with_dupes))
+
+        # list of "external parents", ones not built internally
+        external_parents = []
+
+        for parent_name in parents:
+            internal_parent = False
+
+            # match on p_name, without tag
+            (p_name, p_tag) = split_name(parent_name)
+
+            for image in self.images:
+                if p_name == image.name:  # internal image is a parent
+                    internal_parent = True
+                    break
+
+            if not internal_parent:  # parent is external
+                external_parents.append(parent_name)
+
+        # add external parents to image list
+        for e_p_name in external_parents:
+            img_o = DockerImage(parent_name)
+            self.images.append(img_o)
+
+        # now that all images (including parents) are in list, associate them
+        for image in self.images:
+            parent = self.find_image(image.parent_name)
+            image.parent = parent
+            parent.children.append(image)
 
     def _process_images(self):
 
@@ -402,16 +609,6 @@ class DockerImageList():
                   ", ".join(self.build_d.keys()))
         sys.exit(1)
 
-    def _docker_connect(self):
-
-        self.dc = docker.from_env()
-
-        if self.dc.ping():
-            LOG.debug("Docker server is responding")
-        else:
-            LOG.error("Unable to ping docker server")
-            sys.exit(1)
-
     def _fetch_image(self, image_name, tag):
 
         LOG.info("Attempting to fetch docker image for %s, tag: %s" %
@@ -423,6 +620,8 @@ class DockerImageList():
         else:
             pulltag = "latest"
 
+        image_id = ''
+
         if self.dc:
             try:
 
@@ -432,14 +631,15 @@ class DockerImageList():
 
                     stat_d = json.loads(stat_json)
 
-                    pp = pprint.PrettyPrinter(indent=4)
-                    pp.pprint(stat_d)
-
                     if 'stream' in stat_d:
                         for stat_l in stat_d['stream'].split('\n'):
                             LOG.debug(stat_l)
 
                     if 'status' in stat_d:
+                        if stat_d['status'].startswith('Pull Complete'):
+                            image_id = stat_d['id']
+                            LOG.info("Image ID: %s" % image_id)
+
                         for stat_l in stat_d['status'].split('\n'):
                             noisy = ["Extracting", "Downloading",
                                      "Download complete", "Pulling fs layer",
@@ -463,83 +663,30 @@ class DockerImageList():
         else:
             tagged_image_name = image_name
 
-        self.present_d[tagged_image_name] = True
-
-    def _tar_context(self, context_path):
-
-        LOG.info("Creating context tarball of path: %s" % context_path)
-
-        t_fh = tempfile.NamedTemporaryFile()
-        t = tarfile.open(mode='w', fileobj=t_fh, dereference=True)
-
-        # see docker-py source for context
-        for path in sorted(
-                docker.utils.exclude_paths(context_path, ['.git'])):
-            t.add(os.path.join(context_path, path),
-                  arcname=path,
-                  recursive=False)
-
-        # t.list()  # prints all files in tarball
-
-        t.close()
-        t_fh.seek(0)
-
-        return t_fh
-
-    def _build_image(self, image_name):
-
-        LOG.info("Building docker image for %s" % image_name)
-
-        if self.dc:
-            image = self.images[image_name]
-
-            build_tag = "%s:%s" % (image_name, conf['docker_build_tag'])
-
-            context_path = os.path.normpath(
-                               os.path.join(image['repo_d']['full_path'],
-                                            image['path'],
-                                            image['context']))
-
-            # handle dockerfiles with supplied contexts
-            if image['context'] is ".":
-                dockerfile = image['dockerfile']
-            else:
-                dockerfile = os.path.normpath(
-                                 os.path.join(image['path'],
-                                              image['dockerfile']))
-
-            LOG.info("Dockerfile path: %s" % dockerfile)
-
-            context_tar = self._tar_context(context_path)
-
-            time_now = datetime.datetime.utcnow()
-            build_date = time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-            # docker variables can only contain [_a-zA-Z], so map others to _
-            buildargs = {
-                "org_label_schema_schema_version": "1.0",
-                "org_label_schema_name": image_name,
-                "org_label_schema_build_date": build_date,
-                "org_label_schema_vcs_url": image['repo_d']['git_url'],
-                "org_opencord_vcs_commit_date":
-                    image['repo_d']['commit_date'],
+        self.present_d[tagged_image_name] = {
+            "present": True,
+            "image_id": image_id,
             }
 
-            if image['clean']:
-                # if image context clean, label with version/commit
-                buildargs["org_label_schema_version"] = conf['branch']
-                buildargs["org_label_schema_vcs_ref"] = \
-                    image['repo_d']['commit_hash']
-            else:
-                # otherwise, label dirty
-                buildargs["org_label_schema_version"] = "dirty"
+    def _build_image(self, image):
+
+        LOG.info("Building docker image for %s" % image)
+
+        if self.dc:
+
+            build_tag = "%s:%s" % (image.name, conf['docker_build_tag'])
+
+            buildargs = image.buildargs()
+            context_tar = image.context_tar()
+            dockerfile = image.dockerfile_rel_path()
 
             for key, val in buildargs.iteritems():
                 LOG.info("Buildarg - %s : %s" % (key, val))
 
+            time_now = datetime.datetime.utcnow()
             if(args.build_log_dir):
                 bl_name = "%s_%s" % (time_now.strftime("%Y%m%dT%H%M%SZ"),
-                                     re.sub(r'\W', '_', image_name))
+                                     re.sub(r'\W', '_', image.name))
                 bl_path = os.path.join(args.build_log_dir, bl_name)
 
                 LOG.info("Build log: %s" % bl_path)
@@ -548,7 +695,7 @@ class DockerImageList():
                 bl_fh = None
 
             try:
-                LOG.info("Building %s with docker" % image_name)
+                LOG.info("Building %s with docker" % image)
 
                 for stat_d in self.dc.build(tag=build_tag,
                                             buildargs=buildargs,
@@ -572,6 +719,10 @@ class DockerImageList():
                         for stat_l in stat_d['stream'].split('\n'):
                             if(stat_l):
                                 LOG.debug(stat_l)
+                        if stat_d['stream'].startswith("Successfully built "):
+                            image_id = stat_d['stream'].split(' ')[2]
+                            image.image_id = image_id
+                            LOG.info("Image id: %s" % image_id)
 
                     if 'status' in stat_d:
                         for stat_l in stat_d['status'].split('\n'):
@@ -585,17 +736,22 @@ class DockerImageList():
             except:
                 LOG.exception("Error building docker image")
             else:
-                for tag in image['tags']:
-                    extra_tag = "%s:%s" % (image_name, tag)
-                    self.dc.tag(build_tag, build_tag, tag=extra_tag)
 
-                LOG.debug("Built %s" % (image_name))
+                # apply additional tags
+                for tag in image.tags:
+                    extra_tag = "%s:%s" % (image.name, tag)
+                    repository = "localhost"
+
+                    if(extra_tag != build_tag):
+                        LOG.info("Tagging id: '%s', repo: '%s', tag: '%s'" %
+                                 (image_id, repository, extra_tag))
+                        self.dc.tag(image_id, repository, tag=extra_tag)
+
+                LOG.debug("Built %s" % (image.name))
+
             finally:
                 if(bl_fh):
                     bl_fh.close()
-
-        self.present_d[image_name] = True
-        self.build_d.pop(image_name)
 
 
 if __name__ == "__main__":
@@ -610,5 +766,5 @@ if __name__ == "__main__":
             LOG.error("Unable to load python docker module (-d ?)")
             sys.exit(1)
 
-    rp = RepoParser()
-    dil = DockerImageList(rp)
+    rm = RepoManifest()
+    db = DockerBuilder(rm)
