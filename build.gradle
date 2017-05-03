@@ -111,18 +111,6 @@ ext {
                     'name':     'xosproject/vsg',
                     'digest':   'sha256:18d1c6ef9767d8a41c9b51948776052d024d4e3294e5d1d6dde1a49112175d91'
             ],
-            'xosproject/xos-postgres': [
-                    'type':     'image',
-                    'upstream': upstreamReg,
-                    'name':     'xosproject/xos-postgres',
-                    'digest':   'sha256:f2d31a50b8af7434ab07b1e54e99c1ff1e10d77d16a46e5d6933d3c0528f4820'
-            ],
-            'xosproject/xos-base': [
-                    'type':     'image',
-                    'upstream': upstreamReg,
-                    'name':     'xosproject/xos-base',
-                    'digest':   'sha256:b1248f0ffea9d80a6e5849d57d3ea012abd49ff0197cfcdb5c28988fca6dd14a'
-            ],
             'redis': [
                     'type':     'image',
                     'upstream': upstreamReg,
@@ -299,9 +287,10 @@ project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 project('onos-apps').publishMavenRepoImage.dependsOn project(':maas').prime
 project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 
-project(':orchestration:xos').buildImages.dependsOn rootProject."tagxosproject/xos-base"
+# Ensure nginx:candidate exists
 project(':orchestration:xos').buildImages.dependsOn rootProject."tagnginx"
 
+# For corebuilder
 project(':platform-install').buildImages.dependsOn project(':orchestration:xos').buildImages
 
 task PIdeployPlatform {
