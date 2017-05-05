@@ -256,17 +256,19 @@ $ sudo lxc exec testclient bash
 
 The `compute_node-1` VM is the virtual compute node controlled by OpenStack.
 This VM can be entered from the `prod` VM.  Run `cord prov list` to get the
-node name (assigned by MaaS) and then run:
+node name (assigned by MaaS).  The node name will be something like
+`bony-alley.cord.lab`; in this case, to login you'd run:
 
 ```
-$ ssh ubuntu@<compute-node-name>
+$ ssh ubuntu@bony-alley
 ```
 
-Virtual machines created via XOS/OpenStack will be instantiated inside the
-`compute_node` VM.  To login to an OpenStack VM, first get the management IP
+Virtual machines created via XOS/OpenStack will be instantiated on this
+compute node.  To login to an OpenStack VM, first get the management IP
 address (172.27.0.x):
 
 ```
+vagrant@prod:~$ source /opt/cord_profile/admin-openrc.sh
 vagrant@prod:~$ nova list --all-tenants
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
 | ID                                   | Name                    | Status | Task State | Power State | Networks                                          |
@@ -276,8 +278,8 @@ vagrant@prod:~$ nova list --all-tenants
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
 ```
 
-Then run `ssh-agent` and add the default key -- this key loaded into the VM when
-it was created:
+The VM hosting the vSG is called `mysite_vsg-1` and we see it has a management IP of 172.27.0.2.
+Then run `ssh-agent` and add the default key (used to access the OpenStack VMs):
 
 ```
 vagrant@prod:~$ ssh-agent bash
@@ -306,16 +308,16 @@ controlled by ONOS running in the `onosfabric_xos-onos_1` container.
 ### MaaS GUI
 
 You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to
-the URL `http://<target-server>:8080/MAAS/`.  Username and password are both
-`cord`.  For more information on MaaS, see [the MaaS
-documentation](http://maas.io/docs).
+the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on CloudLab,
+your `<target-server>` is the hostname of your CloudLab node.
+The username is `cord` and the auto-generated password is found in `~/cord/build/maas/passwords/maas_user.txt`.
+For more information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
-`http://<target-server>:8080/xos/`.  Username in most cases is
-`xosadmin@opencord.org`, and the password is automatically generated, and can
-be found in the file
+`http://<target-server>:8080/xos/`.  THe username is
+`xosadmin@opencord.org` and the auto-generated password is found in
 `~/cord/build/platform-install/credentials/xosadmin@opencord.org`.
 
 The state of the system is that all CORD services have been onboarded to XOS.
@@ -408,6 +410,38 @@ ok: [10.100.198.201] => {
 }
 ```
 
+## Development Workflow
+
+CORD-in-a-Box is a useful environment for integration testing and
+debugging.  A typical scenario is to find a problem, and then rebuild and redeploy
+some XOS containers (e.g., a service synchronizer) to verify a fix.  A
+workflow for quickly rebuilding and redeploying the XOS containers from source is:
+
+ * Make changes in your source tree, under `~/cord/orchestration/xos*`
+ * Login to the `corddev` VM and `cd /cord/build`
+ * `./gradlew :platform-install:buildImages`
+ * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :platform-install:publish`
+ * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :orchestration:xos:publish`
+
+Now the new XOS images should be published to the registry on `prod`.  To bring them up:
+
+ * Login to the `prod` VM and `cd /opt/cord_profile`
+ * `docker-compose -p rcord pull`
+
+The above workflow preserves the existing XOS database.  If your goal is to
+remove the XOS database and reinitialize XOS, change the above steps on the
+`prod` VM as follows (the `corddev` steps remain the same):
+
+ * Login to the `prod` VM
+ * Define these aliases:
+```
+$ alias xos-teardown="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml teardown-playbook.yml; popd"
+$ alias xos-launch="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml launch-xos-playbook.yml; popd"
+$ alias compute-node-refresh="pushd /opt/cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory --extra-vars=@/opt/cord/build/genconfig/config.yml compute-node-refresh-playbook.yml; popd"
+```
+ * Run: `xos-teardown; xos-launch; compute-node-refresh`
+
+
 ## Troubleshooting
 
 If the CORD-in-a-Box build fails, you may try simply resuming the build at the
@@ -415,33 +449,12 @@ place that failed.  The easiest way is to do is to re-run the
 `cord-in-a-box.sh` script; this will start the build at the beginning and skip
 over the steps that have already been completed.
 
-A build can also be resumed manually; this is often quicker than re-running the
-install script, but requires more knowledge about how the build works.  The
-`cord-in-a-box.sh` script drives the build by entering the `corddev` VM and
-executing the following commands in `/cord/build`:
+If that doesn't work, the next thing to try is running `cord-in-a-box.sh -c` (specify
+the `-c` flag).  This causes the script to clean up the previous installation
+and start from scratch.
 
-```
-$ ./gradlew fetch
-$ ./gradlew buildImages
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml -PtargetReg=10.100.198.201:5000 publish
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deploy
-```
-
-The final `deploy` task is the longest one and so failures are most likely to
-happen here.  It can be broken up into the following ordered sub-tasks:
-
-```
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployBase
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml prepPlatform
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployOpenStack
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployONOS
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml deployXOS
-$ ./gradlew -PdeployConfig=config/cord_in_a_box.yml setupAutomation
-```
-
-Manually driving the build following a failure involves looking in the log to
-figure out the failing task, and then running that task and subsequent tasks
-using the above commands.
+If running `cord-in-a-box.sh -c` repeatedly fails for you, please tell us
+about it on the [CORD Slack channel](https://slackin.opencord.org/)!
 
 ## Congratulations
 
