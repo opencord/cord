@@ -316,7 +316,7 @@ For more information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
-`http://<target-server>:8080/xos/`.  THe username is
+`http://<target-server>:8080/xos/`.  The username is
 `xosadmin@opencord.org` and the auto-generated password is found in
 `~/cord/build/platform-install/credentials/xosadmin@opencord.org`.
 
@@ -423,10 +423,12 @@ workflow for quickly rebuilding and redeploying the XOS containers from source i
  * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :platform-install:publish`
  * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :orchestration:xos:publish`
 
-Now the new XOS images should be published to the registry on `prod`.  To bring them up:
+Now the new XOS images should be published to the registry on `prod`.  To bring them up,
+run the following commands, substituting the name of your profile for `rcord`:
 
  * Login to the `prod` VM and `cd /opt/cord_profile`
  * `docker-compose -p rcord pull`
+ * `docker-compose -p rcord up -d`
 
 The above workflow preserves the existing XOS database.  If your goal is to
 remove the XOS database and reinitialize XOS, change the above steps on the
