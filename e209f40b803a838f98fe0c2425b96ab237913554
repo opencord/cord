@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba092121_de7d43b3",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2017-05-08T15:36:17Z",
+      "side": 1,
+      "message": "are we going to eliminate this in favor of /opt/cord_profile/admin-openrc.sh ?",
+      "range": {
+        "startLine": 271,
+        "startChar": 16,
+        "endLine": 271,
+        "endChar": 40
+      },
+      "revId": "e209f40b803a838f98fe0c2425b96ab237913554",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_be4a8f81",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000016
+      },
+      "writtenOn": "2017-05-08T15:36:17Z",
+      "side": 1,
+      "message": "These aliases have a pushd, but no corresponding popd.",
+      "range": {
+        "startLine": 438,
+        "startChar": 22,
+        "endLine": 438,
+        "endChar": 60
+      },
+      "revId": "e209f40b803a838f98fe0c2425b96ab237913554",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
