@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba092121_b92629b9",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-05-08T16:09:26Z",
+      "side": 1,
+      "message": "Fixed in 3819",
+      "parentUuid": "ba092121_fe2ec7a4",
+      "range": {
+        "startLine": 319,
+        "startChar": 37,
+        "endLine": 319,
+        "endChar": 40
+      },
+      "revId": "1fd42931268c821ade8fedab46874a0a3fcdbbe4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba092121_de2b0393",
         "filename": "docs/quickstart.md",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-08T15:50:39Z",
       "side": 1,
       "message": "is it enough to pull or we should also \"docker compose -p rcord restart\"?\nI would also set a note on \"rcord\" being the profile name",
+      "range": {
+        "startLine": 429,
+        "startChar": 1,
+        "endLine": 429,
+        "endChar": 33
+      },
+      "revId": "1fd42931268c821ade8fedab46874a0a3fcdbbe4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_992b6582",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-05-08T16:09:26Z",
+      "side": 1,
+      "message": "Whoops.  Fixed in 3819",
+      "parentUuid": "ba092121_de2b0393",
       "range": {
         "startLine": 429,
         "startChar": 1,
