@@ -1,3 +1,8 @@
+- name: Update Ubuntu repositories
+  apt:
+    update_cache: yes
+  tags: [common]
+
 - name: JQ is present
   apt:
     name: jq
