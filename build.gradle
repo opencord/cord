@@ -86,12 +86,12 @@ ext {
 
     // Component table
     comps = [
-            // ONOS 1.8.6 from DockerHub
+            // ONOS 1.8.7 from DockerHub
             'onosproject/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'onosproject/onos',
-                    'digest':   'sha256:815f0d01afcdfa4ca3c5a2a4cdb4f42cf54be33fe8127d22e668ad7aaf3b090c'
+                    'digest':   'sha256:57e1244ea9df04a5a3e2ac8dcb7f27901389223d0967e91f7834954416f50998'
             ],
             'nginx': [
                     'type':     'image',
