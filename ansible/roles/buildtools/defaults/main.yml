@@ -1,4 +1,4 @@
 apt_packages:
   - maven
-  - git=1:2.11*
+  - git=1:2.13*
   - libxml-xpath-perl
