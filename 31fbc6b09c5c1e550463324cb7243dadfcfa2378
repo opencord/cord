@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba092121_67afc7e4",
+        "filename": "config/cord_in_a_box.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-05-18T21:03:58Z",
+      "side": 1,
+      "message": "Will things still work correctly if the config file doesn\u0027t contain any values for these variables?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 29
+      },
+      "revId": "31fbc6b09c5c1e550463324cb7243dadfcfa2378",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
