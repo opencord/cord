@@ -22,6 +22,30 @@
       "revId": "31fbc6b09c5c1e550463324cb7243dadfcfa2378",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba092121_e7e9971b",
+        "filename": "config/cord_in_a_box.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-05-18T22:00:23Z",
+      "side": 1,
+      "message": "It should - there should be defaults for all of these set where necessary in the 3635 patch to `platform-install`.",
+      "parentUuid": "ba092121_67afc7e4",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 29
+      },
+      "revId": "31fbc6b09c5c1e550463324cb7243dadfcfa2378",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
