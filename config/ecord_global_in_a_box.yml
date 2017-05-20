@@ -17,8 +17,6 @@ common:
 
   # set to the "flavor" of cord you want to install
   cord_profile: 'ecord-global'
-  cord_dir: '/opt/cord'
-  cord_profile_dir: '/opt/cord_profile'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #

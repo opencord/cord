@@ -11,9 +11,7 @@ common:
   # set to the profile of cord you want to install
   cord_profile: 'rcord'
 
-  # directories on the head node that the cord dir is copied to, and profile is created in
-  cord_dir: '/opt/cord'
-  cord_profile_dir: '/opt/cord_profile'
+  # cord dir is shared to corddev VM, causing permissions issues if these aren't set
   credentials_dir: '/opt/credentials'
   pki_dir: '/opt/pki'
   ssh_pki_dir: '/opt/ssh_pki'
