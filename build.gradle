@@ -197,31 +197,9 @@ tasks.addRule(new DockerFetchRule(project))
 tasks.addRule(new DockerPublishRule(project, project(':maas').prime))
 tasks.addRule(new DockerTagRule(project))
 
-task CopyCord(type: Exec) {
+task PIcreateConfig(type: Exec) {
   dependsOn writeYamlConfig
   dependsOn writeInventory
-
-  executable = "ansible"
-  args = [ "-i", "genconfig/cord-inv", "-b", "--extra-vars", "@./genconfig/config.yml", "-m", "synchronize", "-a", "src='../../' dest='$config.common.cord_dir'", "head" ]
-}
-
-task ChownCord(type: Exec) {
-  dependsOn CopyCord
-
-  executable = "ansible"
-  args = [ "-i", "genconfig/cord-inv", "-b", "--extra-vars", "@./genconfig/config.yml", "-m", "file", "-a", "state='directory' dest='$config.common.cord_dir' recurse='yes' owner='$config.headnode.ansible_user'", "head" ]
-}
-
-task PIinstallPKI(type: Exec) {
-  workingDir "platform-install"
-  executable = "ansible-playbook"
-  args = [ "-i", "../genconfig/cord-inv",
-    "--extra-vars", "@../genconfig/config.yml",
-    "pki-install-playbook.yml" ]
-}
-
-task PIcreateProfile(type: Exec) {
-  dependsOn PIinstallPKI
 
   workingDir "platform-install"
   executable = "ansible-playbook"
@@ -229,18 +207,39 @@ task PIcreateProfile(type: Exec) {
     "--extra-vars", "@../genconfig/config.yml",
     "--extra-vars", "deploy_docker_tag="+targetTag,
     "--extra-vars", "deploy_docker_registry=docker-registry:5000/",
-    "cord-profile-playbook.yml" ]
+    "cord-config-playbook.yml" ]
+}
+
+task PIcopyCord(type: Exec) {
+  dependsOn PIcreateConfig
+
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "copy-cord-playbook.yml" ]
+}
+
+task PIcopyProfile(type: Exec) {
+  dependsOn PIcreateConfig
+
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "copy-profile-playbook.yml" ]
 }
 
 task PIprepPlatform(type: Exec) {
-  dependsOn CopyCord
-  dependsOn ChownCord
-  dependsOn PIcreateProfile
+  dependsOn PIcreateConfig
+  dependsOn PIcopyCord
+  dependsOn PIcopyProfile
 
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml prep-platform-playbook.yml"
-
-  executable = "ssh"
-  args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "prep-platform-playbook.yml" ]
 }
 
 task PIdeployOpenStack (type: Exec) {
@@ -255,23 +254,26 @@ task PIdeployOpenStack (type: Exec) {
 }
 
 task PIdeployONOS (type: Exec) {
-  def extra_vars = "--extra-vars deploy_docker_tag="+targetTag+" --extra-vars deploy_docker_registry=docker-registry:5000/"
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml "+extra_vars+" deploy-onos-playbook.yml"
 
-  executable = "ssh"
-  args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
+  workingDir "platform-install"
+  executable = "ansible-playbook"
+  args = [ "-i", "../genconfig/cord-inv",
+    "--extra-vars", "@../genconfig/config.yml",
+    "--extra-vars", "deploy_docker_tag="+targetTag,
+    "--extra-vars", "deploy_docker_registry=docker-registry:5000/",
+    "deploy-onos-playbook.yml" ]
 }
 
 task PIdeployXOS (type: Exec) {
   def extra_vars = "--extra-vars deploy_docker_tag="+targetTag+" --extra-vars deploy_docker_registry=docker-registry:5000/"
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml "+extra_vars+" launch-xos-playbook.yml"
+  def ansible_cmd = "cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml "+extra_vars+" launch-xos-playbook.yml"
 
   executable = "ssh"
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
 }
 
 task PIsetupAutomation (type: Exec) {
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml cord-automation-playbook.yml"
+  def ansible_cmd = "cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml cord-automation-playbook.yml"
 
   executable = "ssh"
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
@@ -286,13 +288,11 @@ task PIrunDiag (type: Exec) {
 
 task postDeployTests (type: Exec) {
 
-  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml pod-test-playbook.yml"
+  def ansible_cmd = "cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml pod-test-playbook.yml"
 
   executable = "ssh"
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
 }
-
-
 
 project(':maas').prime.dependsOn writeYamlConfig
 project(':maas').prime.dependsOn writeInventory
@@ -306,12 +306,14 @@ project(':onos-apps').deploy.dependsOn project(':maas').deployBase
 // Ensure nginx:candidate exists
 project(':orchestration:xos').buildImages.dependsOn rootProject."tagnginx"
 
+// make PI config tasks run before maas deploy
+project(':maas').deployBase.dependsOn PIcopyProfile
+
 // For corebuilder
 project(':platform-install').buildImages.dependsOn project(':orchestration:xos').buildImages
 
 task PIdeployPlatform {
-     dependsOn CopyCord
-     dependsOn ChownCord
+     dependsOn PIcopyCord
      dependsOn project(':onos-apps').deploy
      dependsOn project(':maas').deployBase
      dependsOn PIprepPlatform
@@ -321,8 +323,7 @@ task PIdeployPlatform {
      dependsOn PIsetupAutomation
 }
 
-ChownCord.mustRunAfter CopyCord
-PIprepPlatform.mustRunAfter ChownCord
+PIprepPlatform.mustRunAfter PIcopyCord
 PIdeployOpenStack.mustRunAfter PIprepPlatform
 PIdeployONOS.mustRunAfter PIdeployOpenStack
 PIdeployXOS.mustRunAfter PIdeployONOS
