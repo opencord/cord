@@ -18,12 +18,13 @@ common:
   # set to the "flavor" of cord you want to install
   cord_profile: 'rcord'
 
-  # set paths to appropriate values
-  cord_dir: '/opt/cord'
-  cord_profile_dir: '/opt/cord_profile'
+  # cord dir is shared to corddev VM, may need redirection to work
   credentials_dir: '/opt/credentials'
   pki_dir: '/opt/pki'
   ssh_pki_dir: '/opt/ssh_pki'
+
+  # for cord in a box, config = build, so set config_cord_dir to /opt/cord
+  config_cord_dir: '/cord'
 
   # Specifies tasks within the head node provisioning not to execute, including:
   #
