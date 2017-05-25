@@ -123,7 +123,7 @@ ext {
                     'name':     'node',
                     'digest':   'sha256:5757581a8ff7e08041512a54aa3f573d33fecdce81d603e48a759956cd99bdd3'
             ],
-            'consul': [
+            'consul-server': [
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'gliderlabs/consul-server',
