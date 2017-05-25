@@ -123,18 +123,6 @@ ext {
                     'name':     'node',
                     'digest':   'sha256:5757581a8ff7e08041512a54aa3f573d33fecdce81d603e48a759956cd99bdd3'
             ],
-            'consul': [
-                    'type':     'image',
-                    'upstream': upstreamReg,
-                    'name':     'gliderlabs/consul-server',
-                    'digest':   'sha256:37e194c7c941e37cf20b0cc5080541cfde9d31bf62a874905d0d51b3945f88c9'
-            ],
-            'registrator': [
-                    'type':     'image',
-                    'upstream': upstreamReg,
-                    'name':     'gliderlabs/registrator',
-                    'digest':   'sha256:6e708681dd52e28f4f39d048ac75376c9a762c44b3d75b2824173f8364e52c10'
-            ]
     ]
 }
 
