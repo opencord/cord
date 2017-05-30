@@ -121,7 +121,7 @@ function bootstrap() {
     dig +short gerrit.opencord.org || (echo "ERROR: gerrit.opencord.org can't be looked up in DNS" && exit 1)
 
     mkdir $CORDDIR && cd $CORDDIR
-    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH -g build,onos,orchestration,voltha
+    repo init -u https://gerrit.opencord.org/manifest -b $REPO_BRANCH
     repo sync
 
     # check out gerrit branches using repo
