@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0e1d27_4009642b",
+        "filename": "ansible/roles/docker-compose/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-05-31T15:39:35Z",
+      "side": 1,
+      "message": "We\u0027re using 1.9 in other places:\n\nhttps://github.com/opencord/platform-install/blob/master/roles/docker-install/tasks/main.yml#L40\n\nGoing beyond 1.9 involves updating docker-py to version 2, which breaks ansible before 2.3",
+      "range": {
+        "startLine": 5,
+        "startChar": 13,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "776801dd6e2825bf0a0869385fead97bf2e7b851",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
