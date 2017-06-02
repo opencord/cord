@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0e1d27_4bdd0542",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-06-02T20:46:40Z",
+      "side": 1,
+      "message": "we are running swarm as a separate container as opposed to in the daemon? what are we doing with swarm?",
+      "range": {
+        "startLine": 190,
+        "startChar": 5,
+        "endLine": 190,
+        "endChar": 27
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_2be2d103",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-06-02T20:46:40Z",
+      "side": 1,
+      "message": "this feels like there are more images here than might exist on a standalone clean install.",
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
