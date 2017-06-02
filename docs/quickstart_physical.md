@@ -95,7 +95,7 @@ When this is complete, a listing (`ls`) of this directory should yield output
 similar to:
 ```
 ls -F
-build/         incubator/     onos-apps/     orchestration/ test/
+build/         component/     incubator/     onos-apps/     orchestration/ test/
 ```
 ## Create the Development Machine
 
@@ -173,16 +173,25 @@ downloaded using the `docker images` command on the development machine:
 ```
 docker images
 REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-opencord/onos               <none>              e1ade494f06e        3 days ago          936.5 MB
-python                      2.7-alpine          c80455665c57        2 weeks ago         71.46 MB
-xosproject/xos-base         <none>              2b791db4def0        4 weeks ago         756.4 MB
-redis                       <none>              74b99a81add5        11 weeks ago        182.8 MB
-xosproject/xos-postgres     <none>              95312a611414        11 weeks ago        393.8 MB
-xosproject/cord-app-build   <none>              003a1c20e34a        5 months ago        1.108 GB
-consul                      <none>              62f109a3299c        6 months ago        41.05 MB
-swarm                       <none>              47dc182ea74b        8 months ago        19.32 MB
-nginx                       <none>              3c69047c6034        8 months ago        182.7 MB
-xosproject/vsg              <none>              dd026689aff3        9 months ago        336 MB
+REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
+xosproject/xos-postgres    candidate           c17f15922d35        20 hours ago        348MB
+xosproject/xos-postgres    latest              c17f15922d35        20 hours ago        348MB
+nginx                      candidate           958a7ae9e569        3 days ago          109MB
+nginx                      latest              958a7ae9e569        3 days ago          109MB
+xosproject/xos-base        candidate           4a6b75a0f05a        6 days ago          932MB
+xosproject/xos-base        latest              4a6b75a0f05a        6 days ago          932MB
+python                     2.7-alpine          3dd614730c9c        7 days ago          72MB
+onosproject/onos           <none>              e41f6f8b2570        2 weeks ago         948MB
+gliderlabs/consul-server   candidate           7ef15b0d1bdb        4 months ago        29.2MB
+gliderlabs/consul-server   latest              7ef15b0d1bdb        4 months ago        29.2MB
+node                       <none>              c09e81cac06c        4 months ago        650MB
+redis                      <none>              74b99a81add5        7 months ago        183MB
+consul                     <none>              62f109a3299c        11 months ago       41.1MB
+swarm                      <none>              47dc182ea74b        13 months ago       19.3MB
+nginx                      <none>              3c69047c6034        13 months ago       183MB
+gliderlabs/registrator     candidate           3b59190c6c80        13 months ago       23.8MB
+gliderlabs/registrator     latest              3b59190c6c80        13 months ago       23.8MB
+xosproject/vsg             <none>              dd026689aff3        13 months ago       336MB
 ```
 
 ## Build Images
@@ -228,34 +237,64 @@ CORD artifacts have been built and the Docker images can be viewed by using the
 ```
 docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}'
 REPOSITORY                  TAG                 SIZE                IMAGE ID
-opencord/mavenrepo          latest              338.2 MB            2e29009df740
-cord-maas-switchq           latest              337.7 MB            73b084b48796
-cord-provisioner            latest              822.4 MB            bd26a7001dd8
-cord-dhcp-harvester         latest              346.8 MB            d3cfa30cf38c
-config-generator            latest              278.4 MB            e58059b1afb2
-cord-maas-bootstrap         latest              359.4 MB            c70c437c6039
-cord-maas-automation        latest              371.8 MB            9757ac34e7f6
-cord-ip-allocator           latest              276.5 MB            0f399f8389aa
-opencord/onos               <none>              936.5 MB            e1ade494f06e
-python                      2.7-alpine          71.46 MB            c80455665c57
-golang                      alpine              240.5 MB            00371bbb49d5
-golang                      1.6-alpine          283 MB              1ea38172de32
-nginx                       latest              181.6 MB            01f818af747d
-xosproject/xos-base         <none>              756.4 MB            2b791db4def0
-ubuntu                      14.04               187.9 MB            3f755ca42730
-redis                       <none>              182.8 MB            74b99a81add5
-xosproject/xos-postgres     <none>              393.8 MB            95312a611414
-xosproject/cord-app-build   <none>              1.108 GB            003a1c20e34a
-consul                      <none>              41.05 MB            62f109a3299c
-swarm                       <none>              19.32 MB            47dc182ea74b
-nginx                       <none>              182.7 MB            3c69047c6034
-xosproject/vsg              <none>              336 MB              dd026689aff3
+xosproject/xos-ui                        candidate           943MB               23a2e5523279
+xosproject/exampleservice-synchronizer   candidate           940MB               b7cd75514f65
+xosproject/fabric-synchronizer           candidate           940MB               2b183b0504fd
+xosproject/vtr-synchronizer              candidate           940MB               f2955d88bf63
+xosproject/vsg-synchronizer              candidate           940MB               680b400ba627
+xosproject/vrouter-synchronizer          candidate           940MB               332cb7817586
+xosproject/onos-synchronizer             candidate           940MB               12fe520e29ae
+xosproject/openstack-synchronizer        candidate           940MB               6a2e9b56ecba
+xosproject/vtn-synchronizer              candidate           940MB               5edf77bcd615
+xosproject/gui-extension-rcord           candidate           1.02GB              0cf6c1defba5
+xosproject/gui-extension-vtr             candidate           1.02GB              c78d602c5359
+xosproject/xos-corebuilder               candidate           932MB               c73eab2918c2
+xosproject/xos-gui-extension-builder     candidate           1.02GB              78fe07e95ba9
+xosproject/xos-gui                       candidate           652MB               e57d903b9766
+xosproject/xos-ws                        candidate           682MB               39cefcaa50bc
+xosproject/xos-synchronizer-base         candidate           940MB               a914ae0d1aba
+xosproject/xos-client                    candidate           940MB               667948589bc9
+xosproject/chameleon                     candidate           936MB               cdb9d6996401
+xosproject/xos                           candidate           942MB               11f37fd19b0d
+xosproject/xos-postgres                  candidate           345MB               f038a31b50be
+opencord/mavenrepo                       latest              271MB               2df1c4d790bf
+cord-maas-switchq                        candidate           14MB                8a44d3070ffd
+cord-maas-switchq                        build               252MB               77d7967c14e4
+cord-provisioner                         candidate           96.7MB              de87aa48ffc4
+cord-provisioner                         build               250MB               beff949ff60b
+cord-dhcp-harvester                      candidate           18.8MB              79780c133469
+cord-dhcp-harvester                      build               254MB               c7950fc044dd
+config-generator                         candidate           12.2MB              37a51b0acdb2
+config-generator                         build               249MB               3d1f1faaf5e1
+cord-maas-automation                     candidate           13.6MB              2af5474082d4
+cord-maas-automation                     build               251MB               420d5328dc11
+cord-ip-allocator                        candidate           12.1MB              6d8aed37cb91
+cord-ip-allocator                        build               249MB               7235cbd3d771
+ubuntu                                   14.04.5             188MB               132b7427a3b4
+xosproject/xos-postgres                  latest              348MB               c17f15922d35
+golang                                   1.7-alpine          241MB               e40088237856
+nginx                                    latest              109MB               958a7ae9e569
+xosproject/xos-base                      candidate           932MB               4a6b75a0f05a
+xosproject/xos-base                      latest              932MB               4a6b75a0f05a
+python                                   2.7-alpine          72MB                3dd614730c9c
+alpine                                   3.5                 3.99MB              75b63e430bd1
+onosproject/onos                         <none>              948MB               e41f6f8b2570
+node                                     7.9.0               665MB               90223b3d894e
+gliderlabs/consul-server                 candidate           29.2MB              7ef15b0d1bdb
+gliderlabs/consul-server                 latest              29.2MB              7ef15b0d1bdb
+node                                     <none>              650MB               c09e81cac06c
+redis                                    <none>              183MB               74b99a81add5
+consul                                   <none>              41.1MB              62f109a3299c
+swarm                                    <none>              19.3MB              47dc182ea74b
+nginx                                    candidate           183MB               3c69047c6034
+gliderlabs/registrator                   candidate           23.8MB              3b59190c6c80
+gliderlabs/registrator                   latest              23.8MB              3b59190c6c80
+xosproject/vsg                           <none>              336MB               dd026689aff3
 ```
 
 **NOTE:** *Not all the above Docker images were built by the `buildImages`
 command. Some of them, list golang, are used as a base for other Docker
-images; and some, like `abh1nav/dockerui` were downloaded when the development
-machine was created with `vagrant up`.*
+images.*
 
 ## Deployment Configuration File
 The commands to deploy the POD can be customized via a *deployment configuration
@@ -303,19 +342,38 @@ curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
     "cord-dhcp-harvester",
     "cord-ip-allocator",
     "cord-maas-automation",
-    "cord-maas-bootstrap",
     "cord-maas-switchq",
     "cord-provisioner",
+    "gliderlabs/consul-server",
+    "gliderlabs/registrator",
     "mavenrepo",
     "nginx",
-    "opencord/onos",
+    "node",
+    "onosproject/onos",
     "redis",
     "swarm",
-    "xosproject/cord-app-build",
+    "xosproject/chameleon",
+    "xosproject/exampleservice-synchronizer",
+    "xosproject/fabric-synchronizer",
+    "xosproject/gui-extension-rcord",
+    "xosproject/gui-extension-vtr",
+    "xosproject/onos-synchronizer",
+    "xosproject/openstack-synchronizer",
+    "xosproject/vrouter-synchronizer",
     "xosproject/vsg",
-    "xosproject/xos-base",
-    "xosproject/xos-postgres"
+    "xosproject/vsg-synchronizer",
+    "xosproject/vtn-synchronizer",
+    "xosproject/vtr-synchronizer",
+    "xosproject/xos",
+    "xosproject/xos-client",
+    "xosproject/xos-corebuilder",
+    "xosproject/xos-gui",
+    "xosproject/xos-postgres",
+    "xosproject/xos-synchronizer-base",
+    "xosproject/xos-ui",
+    "xosproject/xos-ws"
   ]
+}
 }
 ```
 
@@ -578,7 +636,7 @@ route external traffic, and verifies that the new nodes were added to the ONOS V
 
 ### Fabric Gateway Configuration
 First, login to the CORD head node and change to the
-`service-profile/cord-pod` directory.
+`/opt/cord_profile` directory.
 
 To configure the fabric gateway, you will need to edit the file
 `cord-services.yaml`. You will see a section that looks like this:
@@ -596,11 +654,12 @@ Edit this section so that it reflects the fabric's address block assigned to the
 vSGs, as well as the gateway IP and MAC address that the vSGs should use to
 reach the Internet.
 
-Once the `cord-services.yaml` file has been edited as
+Once the `cord-services.yaml` TOSCA file has been edited as
 described above, push it to XOS by running the following:
 
 ```
-make cord
+cd /opt/cord_profile
+docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/cord-services.yaml
 ```
 
 ### Complete
@@ -610,13 +669,11 @@ configuration in XOS and ONOS.
 
 To check the VTN configuration maintained by XOS:
    - Go to the "ONOS apps" page in the CORD GUI:
-      - URL: `http://<head-node>/admin/onos/onosapp/`
-      - Username: `padmin@vicci.org`
-      - Password: `letmein`
+      - URL: `http://<head-node>/xos#/onos/onosapp/`
+      - Username: `xosadmin@opencord.org`
+      - Password:  (contents of `/opt/cord/build/platform-install/credentials/xosadmin@opencord.org`)
    - Select *VTN_ONOS_app* in the table
-   - Verify that the *Backend status text* has a green check with the message *successfully enacted*
-   - Select *Attributes* tab
-   - Look for the *rest_onos/v1/network/configuration/* attribute.  Verify that its value looks correct for the VTN app's network configuration.
+   - Verify that the *Backend status* is *1 - OK*
 
 To check that the network configuration has been successfully pushed
 to the ONOS VTN app and processed by it:
@@ -626,34 +683,23 @@ to the ONOS VTN app and processed by it:
       - Password: `rocks`
    - Run the `cordvtn-nodes` command
    - Verify that the information for all nodes is correct
-   - Verify that the initialization status of all nodes is *COMPLETE*
-
-This will look like the following:
-
+   - Verify that the initialization status of all nodes is *COMPLETE*  This will look like the following:
 ```
-$ ssh -p 8102 onos@onos-cord
-Password authentication
-Password: # the password is 'rocks'
-Welcome to Open Network Operating System (ONOS)!
-     ____  _  ______  ____
-    / __ \/ |/ / __ \/ __/
-   / /_/ /    / /_/ /\ \
-   \____/_/|_/\____/___/
-
-Documentation: wiki.onosproject.org
-Tutorials:     tutorials.onosproject.org
-Mailing lists: lists.onosproject.org
-
-Come help out! Find out how at: contribute.onosproject.org
-
-Hit '<tab>' for a list of available commands
-and '[cmd] --help' for help on a specific command.
-Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
-
 onos> cordvtn-nodes
 Hostname                      Management IP       Data IP             Data Iface     Br-int                  State
 sturdy-baseball               10.1.0.14/24        10.6.1.2/24         fabric         of:0000525400d7cf3c     COMPLETE
 Total 1 nodes
+```
+   - Run the `netcfg` command.  Verify that the updated gateway information is present under `publicGateways`:
+```
+        "publicGateways" : [ {
+          "gatewayIp" : "10.6.1.193",
+          "gatewayMac" : "02:42:0a:06:01:01"
+        }, {
+          "gatewayIp" : "10.6.1.129",
+          "gatewayMac" : "02:42:0a:06:01:01"
+        } ],
+
 ```
 
 ### Troubleshoot
@@ -771,41 +817,26 @@ To modify the fabric configuration for your environment, on the head node,
 generate a new network configuration using the following commands:
 
 ```
-cp ~/xos_services/fabric/config/network-cfg-quickstart.json{,.$(date +%Y%m%d-%H%M%S)}
-cord generate > ~/xos_services/fabric/config/network-cfg-quickstart.json
+cd /opt/cord_profile
+cp fabric-network-cfg.json{,.$(date +%Y%m%d-%H%M%S)}
+cord generate > fabric-network-cfg.json
 ```
 
-Once these steps are done, delete old configuration,
-apply new configuration, and restart apps in ONOS (still in the XOS VM):
+Once these steps are done, delete the old configuration,
+load the new configuration into XOS, and restart the apps in ONOS:
 ```
-cd ~/service-profile/cord-pod
-make delete_fabric_config
-make fabric
-make reactivate_fabric_apps
+sudo pip install httpie
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/
+docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
+http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
+http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 ```
 
 To verify that XOS has pushed the configuration to ONOS, log into ONOS in the onos-fabric VM and run `netcfg`:
 ```
-$ ssh -p 8101 onos@onos-fabric
+$ ssh -p 8101 onos@onos-fabric netcfg
 Password authentication
 Password:     # password is 'rocks'
-Welcome to Open Network Operating System (ONOS)!
-     ____  _  ______  ____
-    / __ \/ |/ / __ \/ __/
-   / /_/ /    / /_/ /\ \
-   \____/_/|_/\____/___/
-
-Documentation: wiki.onosproject.org
-Tutorials:     tutorials.onosproject.org
-Mailing lists: lists.onosproject.org
-
-Come help out! Find out how at: contribute.onosproject.org
-
-Hit '<tab>' for a list of available commands
-and '[cmd] --help' for help on a specific command.
-Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
-
-onos> netcfg
 {
   "hosts" : {
     "00:00:00:00:00:04/None" : {
@@ -828,21 +859,22 @@ onos> netcfg
 To correctly configure the fabric when VMs and containers are created on a
 physical host, XOS needs to associate the `location` tag of each physical host
 (from the fabric configuration) with its Node object in XOS.  This step needs to
-be done after new physical compute nodes are provisioned on the POD.  To update
-the node locations in XOS, login to the head node and run the following:
-```
-cd ~/service-profile/cord-pod
-rm fabric.yaml
-make fabric.yaml
-```
+be done after a new physical compute node is provisioned on the POD.
 
-Edit `fabric.yaml`, updating the `value` field under `<hostname>_location_tag` to
-reflect the `location` of the host from the fabric configuration created in the
-previous step.  Then run:
+To update the node location in XOS, login to the XOS GUI and perform the following steps:
 
-```
-make fabric
-```
+ * Expand *Core* at left and select *Nodes*
+ * Make a note of the *Id* of the new node
+ * Select *Tags* at left
+ * Click on the *Add* button at upper right
+ * Fill in the following information:
+   * Backend status: *0*
+   * Name: *location_tag*
+   * Value: *(location of the node in the fabric configuration created above)*
+   * Content type: *core.node*
+   * Object id: *(the Id of the new node)*
+   * Service id: *ONOS_Fabric*
+ * Click _Save_ button at bottom.  You should see a message that the location_tag was successfully saved.
 
 ### Connect Switches to the controller
 We need to manually connect the switches to ONOS after the network config is applied.
