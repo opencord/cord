@@ -39,6 +39,29 @@
       "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_a65178da",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-06-05T18:03:37Z",
+      "side": 1,
+      "message": "Is this still the same in the new XOS?",
+      "range": {
+        "startLine": 875,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 3
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
