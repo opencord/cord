@@ -128,6 +128,30 @@
       "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_b1b53033",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-06T15:08:06Z",
+      "side": 1,
+      "message": "Fixed in the latest draft.  The fabric.yaml file was not brought over to CORD 3.0 when service-profile was deprecated.  It was never exactly what we wanted anyhow.  To fill the gap, I\u0027ve described how to use the XOS GUI to add the location_tag to the node.",
+      "parentUuid": "9a0e1d27_5157f402",
+      "range": {
+        "startLine": 875,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 3
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
