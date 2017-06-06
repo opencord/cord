@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a0e1d27_3125a0ab",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-06T14:08:36Z",
+      "side": 1,
+      "message": "I don\u0027t think we are doing anything with swarm.  This image is fetched and published by the build.gradle file: https://github.com/opencord/cord/blob/master/build.gradle#L102-L107\n\nWe will get rid of this image in the build refactoring.",
+      "parentUuid": "9a0e1d27_4bdd0542",
+      "range": {
+        "startLine": 190,
+        "startChar": 5,
+        "endLine": 190,
+        "endChar": 27
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0e1d27_2be2d103",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "9a0e1d27_914d8c75",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-06T14:08:36Z",
+      "side": 1,
+      "message": "I think this is from a clean install of 3.0.  However some of these images (at least the XOS ones) are bases for building other images and are not published to the registry.",
+      "parentUuid": "9a0e1d27_2be2d103",
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0e1d27_a65178da",
         "filename": "docs/quickstart_physical.md",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2017-06-05T18:03:37Z",
       "side": 1,
       "message": "Is this still the same in the new XOS?",
+      "range": {
+        "startLine": 875,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 3
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_5157f402",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-06T14:08:36Z",
+      "side": 1,
+      "message": "No I\u0027m still working on updating this piece.",
+      "parentUuid": "9a0e1d27_a65178da",
       "range": {
         "startLine": 875,
         "startChar": 0,
