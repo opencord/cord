@@ -152,6 +152,30 @@
       "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_f19f284f",
+        "filename": "docs/quickstart_physical.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2017-06-06T19:49:25Z",
+      "side": 1,
+      "message": "OK. Thanks.",
+      "parentUuid": "9a0e1d27_b1b53033",
+      "range": {
+        "startLine": 875,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 3
+      },
+      "revId": "5fbe0b1ac425227325a4b56875fb15c732f1a009",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
