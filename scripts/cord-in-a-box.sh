@@ -129,6 +129,10 @@ function bootstrap() {
       echo "Checking out opencord gerrit branch: $gerrit_branch"
       repo download ${gerrit_branch/:/ }
     done
+    # Change config files to build specific cord project
+    cd $CORDDIR/build/config
+    sed -i s/rcord/"$PROJECT_NAME"/g cord_in_a_box.yml
+    sed -i s/rcord/"$PROJECT_NAME"/g default.yml
   fi
 
   exec > >(tee -i $CORDDIR/install.out)
@@ -311,11 +315,12 @@ SETUP_ONLY=0
 DIAGNOSTICS=0
 CLEANUP=0
 FABRIC=0
+PROJECT_NAME=
 #By default, cord-in-a-box creates 1 compute node. If more than one compute is
 #needed, use -n option
 NUM_COMPUTE_NODES=1
 
-while getopts "b:cdfhn:stv" opt; do
+while getopts "b:cdfhn:stvp:" opt; do
   case ${opt} in
     b ) GERRIT_BRANCHES+=("$OPTARG")
       ;;
@@ -337,6 +342,7 @@ while getopts "b:cdfhn:stv" opt; do
       echo "    $0 -s             run initial setup phase only (don't start building CORD)"
       echo "    $0 -t             do install, bring up cord-pod configuration, run E2E test"
       echo "    $0 -v             print CiaB version and exit"
+      echo "    $0 -p             Specific which project you want to build.(rcord, mcord, or ecord)"
       exit 0
       ;;
     n ) NUM_COMPUTE_NODES=$OPTARG
@@ -348,9 +354,11 @@ while getopts "b:cdfhn:stv" opt; do
     v ) echo "$VERSION_STRING ($REPO_BRANCH branch)"
       exit 0
       ;;
-    \? ) echo "Invalid option: -$OPTARG"
-      exit 1
+    p ) PROJECT_NAME=$OPTARG
       ;;
+    \? ) echo "Invalid option: -$OPTARG"
+        exit 1
+        ;;
   esac
 done
 
