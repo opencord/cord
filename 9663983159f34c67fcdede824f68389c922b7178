@@ -16,6 +16,24 @@
       "revId": "9663983159f34c67fcdede824f68389c922b7178",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_234b152d",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000200
+      },
+      "writtenOn": "2017-06-12T18:11:23Z",
+      "side": 1,
+      "message": "Maybe I can try create a mcord-in-a-box.yml file, just seems like ecord.",
+      "parentUuid": "9a0e1d27_83d54145",
+      "revId": "9663983159f34c67fcdede824f68389c922b7178",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
