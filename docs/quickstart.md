@@ -59,6 +59,12 @@ curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/maste
 bash ~/cord-in-a-box.sh -t
 ```
 
+**NOTE:** *If you are connecting to a remote target server, it is highly
+recommended that you run the `cord-in-a-box.sh` script in a `tmux` session, or
+use `mosh` to connect to the target rather than `ssh`.  Without one of these,
+interrupted connectivity between your local machine and the remote server
+may cause the CiaB install to hang.*
+
 The script takes a *long time* (at least two hours) to run.  Be patient!  If it
 hasn't completely failed yet, then assume all is well!
 
