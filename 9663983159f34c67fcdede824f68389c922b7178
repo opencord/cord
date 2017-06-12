@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0e1d27_83d54145",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2017-06-12T17:51:31Z",
+      "side": 1,
+      "message": "Often modifying a checked-in file like this due to build or run can cause problems, particularly when this file changes and you update to a newer commit. It would be better to find a way to truly parameterize that configuration.",
+      "revId": "9663983159f34c67fcdede824f68389c922b7178",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
