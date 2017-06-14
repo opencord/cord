@@ -220,7 +220,6 @@ container images. These utilities are:
    - cord-test/quagga - BGP virtual router to support uplink from CORD fabric
    network to Internet
    - cord-test/radius - Radius server to support cord-tester capability
-   - opencord/onos - custom version of ONOS for use within the CORD platform #XOSTBD
 
 The images can be built by using the following command.
 ```
@@ -861,20 +860,18 @@ physical host, XOS needs to associate the `location` tag of each physical host
 (from the fabric configuration) with its Node object in XOS.  This step needs to
 be done after a new physical compute node is provisioned on the POD.
 
-To update the node location in XOS, login to the XOS GUI and perform the following steps:
+To update the node location in XOS, perform the following steps:
 
- * Expand *Core* at left and select *Nodes*
- * Make a note of the *Id* of the new node
- * Select *Tags* at left
- * Click on the *Add* button at upper right
+ * Login to the XOS admin GUI at `http://<head-node-ip>/admin/`
+ * Navigate to `/admin/core/node/`
+ * Select the node to change
+ * Select the *Tags* tab for the node
+ * Click on *Add another tag*
  * Fill in the following information:
-   * Backend status: *0*
-   * Name: *location_tag*
+   * Service: *ONOS_Fabric*
+   * Name: *location*
    * Value: *(location of the node in the fabric configuration created above)*
-   * Content type: *core.node*
-   * Object id: *(the Id of the new node)*
-   * Service id: *ONOS_Fabric*
- * Click _Save_ button at bottom.  You should see a message that the location_tag was successfully saved.
+ * Click _Save_ button at bottom.
 
 ### Connect Switches to the controller
 We need to manually connect the switches to ONOS after the network config is applied.
