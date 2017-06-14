@@ -1,68 +1,115 @@
-# Deployment configuration for a phyical hardware POD
+# CORD POD - sample configuration
 ---
 
+# Head node access information:
+#
+# ip			- The address that the dev node uses to reach the head node
+#
+# ansible_user		- A valid sudoer user on the head node
+#
+# ansible_ssh_pass	- The password of the sudoer user on the head node
+#
+# ansible_ssh_port	- The SSH port that the dev node should use to reach the head node
+#
 headnode:
-  ip: '10.90.0.2'
-  ansible_user: 'ubuntu'
-  ansible_ssh_pass: 'ubuntu'
+  ip: '192.168.100.100'
+  ansible_user: 'admin'
+  ansible_ssh_pass: 'admin'
   ansible_ssh_port: 22
 
+# Other passwords:
+#
+# Password are optional. If not set, random passwords will be generated.
+#
+passwords:
+  #compute_node: ubuntu
+  #maas_admin: admin
+  #maas_user: cord
+
+# Docker settings:
+#
+docker:
+  imageVersion: candidate
+
 common:
-  # set to the profile of cord you want to install
+  # Set to the profile of CORD you'd like to install (for default, leave rcord)
+  #
   cord_profile: 'rcord'
 
-  # cord dir is shared to corddev VM, causing permissions issues if these aren't set
+  # Credentials and PKI settings:
+  #
   credentials_dir: '/opt/credentials'
   pki_dir: '/opt/pki'
   ssh_pki_dir: '/opt/ssh_pki'
 
-  # Network address information for the head node:
+  # Head node: external network configuration:
   #
-  # fabric_ip     - the IP address and mask bits to be used to configure the network
-  #                 interface connected to the leaf - spine fabric
+  # external_iface	- The name of the interface that connects the head node to the
+  #                   	  Internet (optional)
+  # external_ip     	- The IP address and mask bits to be used to configure the network
+  #                 	  interface connecting the head node (and the POD) to the
+  #                 	  Internet. All traffic in the POD to external hosts will be
+  #                 	  NAT-ed through this interface
+  # external_gw         - The IP address of the external network gateway, used to reach
+  #			  the Internet
+  #external_iface: 'eth2'
+  external_ip: '192.168.1.1/24'
+  external_gw: '192.168.1.254'
+
+  # Head node: internal (management) network configuration:
   #
-  # management_ip - the IP address and mask bits to be used to configure the network
-  #                 interface connecting the head node to the POD internal
-  #                 management network. The head node will deliver DHCP addresses to
-  #                 the other compute nodes over this interface
-  #
-  # external_ip   - the IP address and mask bits to be used to configure the network
-  #                 interface connecting the head node (and the POD) to the
-  #                 Internet. All traffic in the POD to external hosts will be
-  #                 NAT-ed through this interface
-  # external_iface   - the name of the interface that connects the head node to the
-  #                    Internet
-  # management_network - the network and mask bits to used for hosts on the management
-  #                      network
-  fabric_ip: '10.6.1.1/24'
-  #fabric_range_low: '10.6.1.2'
-  #fabric_range_high: '10.6.1.100'
+  # management_network     - The network and mask bits to used for hosts on the management
+  #                          network
+  # management_ip 	   - The IP address and mask bits to be used to configure the network
+  #                 	     interface connecting the head node to the POD internal
+  #                 	     management network. The head node will deliver DHCP addresses to
+  #                 	     the other compute nodes over this interface
+  # management_range_low   - The lowest IP to be assigned on the internal management network 
+  #			     (optional)
+  # management_range_high  - The highest IP to be assigned on the internal management network
+  #			     (optional)
+  management_network: 10.6.0.0/24
   management_ip: '10.6.0.1/24'
   #management_range_low: '10.6.0.2'
   #management_range_high: '10.6.0.127'
-  external_ip: '47.135.132.21/24'
-  #external_iface: 'eth2'
-  management_network: 10.6.0.0/24
 
-  # the skipTags options allow various part of the deployment to be skipped
-  # switch_support - does not deploy switch boot images to the PXE server
+  # Head node: fabric network configuartion:
   #
-  # reboot - will not reboot the head node after updating its network configuration
-  #          this may mean the network configuration will not take effect, but will
-  #          also prevent you from being locked out of the server if there is a
-  #          network configuration error.
+  # fabric_ip     	   - The IP address and mask bits to be used to configure the network
+  #                 	     interface connected to the leaf - spine fabric
+  # fabric_range_low	   - The lowest IP to be assigned to the fabric switches (optional)
   #
-  # interface_config - will not modify the network configuration of the head node,
-  #                    including the consistent naming of the network interfaces
+  # fabric_range_high	   - The highest IP to be assigned to the fabric switches (optional)
+  #
+  fabric_ip: '10.6.1.1/24'
+  #fabric_range_low: '10.6.1.2'
+  #fabric_range_high: '10.6.1.100'
+
+  # SkipTags options
+  #
+  # Allow various part of the deployment to be skipped.
+  #
+  # switch_support	   - does not deploy switch boot images to the PXE server (optional)
+  #
+  # reboot		   - will not reboot the head node after updating its network configuration
+  #          		     this may mean the network configuration will not take effect, but will
+  #          		     also prevent you from being locked out of the server if there is a
+  #          		     network configuration error (optional)
+  #
+  # interface_config 	    - will not modify the network configuration of the head node,
+  #                    	      including the consistent naming of the network interfaces (optional)
   skipTags:
   #  - 'switch_support'
   #  - 'reboot'
   #  - 'interface_config'
 
+  # Extra vars:
+  #
   # The following variable settings can be used to customize how the network interfaces
   # are selected into the fabric and management bridge interface or ignored/excluded.
-  # See the documentation docs/quickstart_physical.md for more information about how
-  # to set these variables.
+  # See the documentation for more information about how to set these variables.
+  # All extra vars are optional.
+  #
   extraVars:
   #  - 'fabric_include_names=<name1>,<name2>,...'
   #  - 'fabric_include_module_types=<mtype1>,<mtype2>,...'
@@ -91,11 +138,3 @@ common:
   #  - dell_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/linux.dell.com/repo/community trusty openmanage"
   #  - juju_apt_repo="deb [arch=amd64] http://10.1.0.1:8889/mirror/ppa.launchpad.net/juju/stable/ubuntu trusty main"
 
-# If passwords are not set, random passwords will be generated
-passwords:
-  #compute_node: ubuntu
-  #maas_admin: admin
-  #maas_user: cord
-
-docker:
-  imageVersion: candidate
