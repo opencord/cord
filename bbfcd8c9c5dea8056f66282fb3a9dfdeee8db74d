@@ -22,6 +22,30 @@
       "revId": "bbfcd8c9c5dea8056f66282fb3a9dfdeee8db74d",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_7631c9a1",
+        "filename": "config/sample.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-06-14T14:51:16Z",
+      "side": 1,
+      "message": "yes I can and it\u0027s a very good point! I\u0027ll do this as first thing tomorrow CET, together with a little bit more docs for the cord_profile. Thanks Murat!",
+      "parentUuid": "9a0e1d27_b6ff61aa",
+      "range": {
+        "startLine": 25,
+        "startChar": 17,
+        "endLine": 25,
+        "endChar": 23
+      },
+      "revId": "bbfcd8c9c5dea8056f66282fb3a9dfdeee8db74d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
