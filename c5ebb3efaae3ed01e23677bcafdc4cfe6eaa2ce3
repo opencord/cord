@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0e1d27_d61f75b6",
+        "filename": "scripts/cord-in-a-box.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-14T21:20:05Z",
+      "side": 1,
+      "message": "I think it would be good to explicitly handle the case where \"rcord\" is specified.  Also if an invalid project is specified.",
+      "range": {
+        "startLine": 363,
+        "startChar": 8,
+        "endLine": 366,
+        "endChar": 10
+      },
+      "revId": "c5ebb3efaae3ed01e23677bcafdc4cfe6eaa2ce3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
