@@ -92,6 +92,30 @@
       "revId": "bbfcd8c9c5dea8056f66282fb3a9dfdeee8db74d",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_f964aae6",
+        "filename": "config/sample.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000116
+      },
+      "writtenOn": "2017-06-15T11:30:44Z",
+      "side": 1,
+      "message": "other options are ecord, ecord_global, mcord (if i\u0027m not mistaken) but you need to specify also the branch/manifest for repo",
+      "parentUuid": "9a0e1d27_16204d48",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 3
+      },
+      "revId": "bbfcd8c9c5dea8056f66282fb3a9dfdeee8db74d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
