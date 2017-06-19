@@ -423,25 +423,31 @@ workflow for quickly rebuilding and redeploying the XOS containers from source i
  * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :platform-install:publish`
  * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :orchestration:xos:publish`
 
-Now the new XOS images should be published to the registry on `prod`.  To bring them up,
-run the following commands, substituting the name of your profile for `rcord`:
+Additionally, if you made any changes to a profile (e.g., you added a new service), you'll need to re-sync the configuration from the build node to the head node.  To do this run:
 
- * Login to the `prod` VM and `cd /opt/cord_profile`
- * `docker-compose -p rcord pull`
- * `docker-compose -p rcord up -d`
+ * `./gradlew -PdeployConfig=config/cord_in_a_box.yml PIprepPlatform`
 
-The above workflow preserves the existing XOS database.  If your goal is to
-remove the XOS database and reinitialize XOS, change the above steps on the
-`prod` VM as follows (the `corddev` steps remain the same):
+Now the new XOS images should be published to the registry on `prod`.  To bring them up, login to the `prod` VM and define these aliases:
 
- * Login to the `prod` VM
- * Define these aliases:
 ```
-$ alias xos-teardown="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml teardown-playbook.yml; popd"
-$ alias xos-launch="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml launch-xos-playbook.yml; popd"
-$ alias compute-node-refresh="pushd /opt/cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory --extra-vars=@/opt/cord/build/genconfig/config.yml compute-node-refresh-playbook.yml; popd"
+CORD_PROFILE=$( cat /opt/cord_profile/profile_name )
+alias xos-pull="docker-compose -p $CORD_PROFILE -f /opt/cord_profile/docker-compose.yml pull"
+alias xos-up="docker-compose -p $CORD_PROFILE -f /opt/cord_profile/docker-compose.yml up -d"
+alias xos-teardown="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml teardown-playbook.yml; popd"
+alias compute-node-refresh="pushd /opt/cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory --extra-vars=@/opt/cord/build/genconfig/config.yml compute-node-refresh-playbook.yml; popd"
 ```
- * Run: `xos-teardown; xos-launch; compute-node-refresh`
+
+To pull new images from the database and launch the containers, while retaining the existing XOS database, run:
+
+```
+$ xos-pull; xos-up
+```
+
+Alternatively, to remove the XOS database and reinitialize XOS from scratch, run:
+
+```
+$ xos-teardown; xos-pull; xos-launch; compute-node-refresh
+```
 
 
 ## Troubleshooting
