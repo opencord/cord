@@ -211,9 +211,6 @@ function vagrant_vms_up() {
   # copy host SSH key to corddev, allow it access on prod (vagrant ssh key already has access)
   scp ~/.ssh/id_rsa* corddev:.ssh
   ssh corddev "chmod go-r ~/.ssh/id_rsa"
-
-  scp ~/.ssh/id_rsa.pub prod:/tmp/install_id_rsa.pub
-  ssh prod "cat /tmp/install_id_rsa.pub >> ~/.ssh/authorized_keys"
 }
 
 function install_head_node() {
