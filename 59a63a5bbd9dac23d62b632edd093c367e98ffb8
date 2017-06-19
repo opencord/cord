@@ -22,6 +22,30 @@
       "revId": "59a63a5bbd9dac23d62b632edd093c367e98ffb8",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_94945538",
+        "filename": "config/sample.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-06-19T07:33:58Z",
+      "side": 1,
+      "message": "Indeed, I don\u0027t...let\u0027s ask David. I\u0027ll forward him the last notification I received from you through Gerrit for this message.",
+      "parentUuid": "9a0e1d27_d4bacd09",
+      "range": {
+        "startLine": 118,
+        "startChar": 23,
+        "endLine": 118,
+        "endChar": 32
+      },
+      "revId": "59a63a5bbd9dac23d62b632edd093c367e98ffb8",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
