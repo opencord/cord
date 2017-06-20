@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0e1d27_0f3cb02e",
+        "filename": "Makefile",
+        "patchSetId": 81
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-20T14:26:55Z",
+      "side": 1,
+      "message": "VAGRANT_CWD",
+      "range": {
+        "startLine": 36,
+        "startChar": 34,
+        "endLine": 36,
+        "endChar": 44
+      },
+      "revId": "8cbf6f44b908e03cdc52aae308dd5ddc63d3a8cc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0e1d27_ef485cce",
+        "filename": "Makefile",
+        "patchSetId": 81
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-06-20T14:26:55Z",
+      "side": 1,
+      "message": "--provider",
+      "range": {
+        "startLine": 104,
+        "startChar": 30,
+        "endLine": 104,
+        "endChar": 39
+      },
+      "revId": "8cbf6f44b908e03cdc52aae308dd5ddc63d3a8cc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
