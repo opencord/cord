@@ -23,9 +23,6 @@ common:
   pki_dir: '/opt/pki'
   ssh_pki_dir: '/opt/ssh_pki'
 
-  # for cord in a box, config = build, so set config_cord_dir to /opt/cord
-  config_cord_dir: '/cord'
-
   # Specifies tasks within the head node provisioning not to execute, including:
   #
   # switch_support -   don't download the switch ONL images as there are no
