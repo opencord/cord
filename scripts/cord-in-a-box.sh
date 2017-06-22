@@ -8,7 +8,7 @@ START_T=$(date -u "+%Y%m%d_%H%M%SZ")
 
 # Paths
 CORDDIR=~/cord
-VMDIR=/cord/build/
+VMDIR=/opt/cord/build/
 CONFIG=config/cord_in_a_box.yml
 SSHCONFIG=~/.ssh/config
 VAGRANT_CWD=${CORDDIR}/build/
@@ -217,10 +217,10 @@ function install_head_node() {
   cd $CORDDIR/build
 
   # SSH config saved earlier allows us to connect to VM without running 'vagrant'
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG fetch"
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG buildImages"
-  ssh corddev "cd /cord/build; ping -c 3 prod; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
+  ssh corddev "cd $VMDIR; ./gradlew -PdeployConfig=$VMDIR/$CONFIG fetch"
+  ssh corddev "cd $VMDIR; ./gradlew -PdeployConfig=$VMDIR/$CONFIG buildImages"
+  ssh corddev "cd $VMDIR; ping -c 3 prod; ./gradlew -PdeployConfig=$VMDIR/$CONFIG -PtargetReg=10.100.198.201:5000 publish"
+  ssh corddev "cd $VMDIR; ./gradlew -PdeployConfig=$VMDIR/$CONFIG deploy"
 }
 
 function set_up_maas_user() {
@@ -280,7 +280,7 @@ function add_compute_node() {
   sudo su $USER -c "VAGRANT_CWD=$VAGRANT_CWD vagrant up $1 --provider libvirt"
 
   # Set up power cycling for the compute node and wait for it to be provisioned
-  ssh prod "cd /cord/build/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
+  ssh prod "cd $VMDIR/ansible; ansible-playbook maas-provision.yml --extra-vars \"maas_user=maas vagrant_name=$2\""
 
   echo ""
   echo "$1 is fully provisioned!"
@@ -288,21 +288,21 @@ function add_compute_node() {
 
 function initialize_fabric() {
   echo "Initializing fabric"
-  ssh prod "cd /cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-refresh-fabric.yml"
+  ssh prod "cd $VMDIR/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-refresh-fabric.yml"
 
   echo "Fabric ping test"
-  ssh prod "cd /cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-fabric-pingtest.yml"
+  ssh prod "cd $VMDIR/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory cord-fabric-pingtest.yml"
 }
 
 function run_e2e_test () {
   cd $CORDDIR/build
 
   # User has been added to the lbvirtd group, but su $USER to be safe
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG postDeployTests"
+  ssh corddev "cd $VMDIR; ./gradlew -PdeployConfig=$VMDIR/$CONFIG postDeployTests"
 }
 
 function run_diagnostics() {
-  ssh corddev "cd /cord/build; ./gradlew -PdeployConfig=$VMDIR/$CONFIG PIrunDiag"
+  ssh corddev "cd $VMDIR; ./gradlew -PdeployConfig=$VMDIR/$CONFIG PIrunDiag"
 }
 
 # Parse options
