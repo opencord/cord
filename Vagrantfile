@@ -6,9 +6,9 @@ $cordpath = ".."
 Vagrant.configure(2) do |config|
 
   if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-    config.vm.synced_folder $cordpath, "/cord", mount_options: ["dmode=700,fmode=600"]
+    config.vm.synced_folder $cordpath, "/opt/cord", mount_options: ["dmode=700,fmode=600"]
   else
-    config.vm.synced_folder $cordpath, "/cord"
+    config.vm.synced_folder $cordpath, "/opt/cord"
   end
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
@@ -18,13 +18,13 @@ Vagrant.configure(2) do |config|
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
     d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/corddev.yml -c local"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
     d.vm.provider :libvirt do |v, override|
       v.memory = 2048
-      override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+      override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
     end
   end
 
@@ -49,8 +49,8 @@ Vagrant.configure(2) do |config|
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/prod.yml -c local"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 cd /cord/build/platform-install; ansible-playbook -i inventory/head-localhost deploy-elasticstack-playbook.yml"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/prod.yml -c local"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 cd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost deploy-elasticstack-playbook.yml"
     d.vm.provider "virtualbox" do |v|
       v.memory = 2048
     end
@@ -58,8 +58,8 @@ Vagrant.configure(2) do |config|
       v.memory = 24576
       v.cpus = 8
       v.storage :file, :size => '100G', :type => 'qcow2'
-      override.vm.synced_folder $cordpath, "/cord", type: "nfs"
-      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/add-extra-drive.yml -c local"
+      override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
+      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/add-extra-drive.yml -c local"
     end
   end
 
@@ -73,7 +73,7 @@ Vagrant.configure(2) do |config|
         libvirt__network_name: "cord-fabric-network",
         mac: "cc37ab000001"
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/fakeswitch.yml -c local"
+    s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/fakeswitch.yml -c local"
     s.vm.provider "virtualbox" do |v|
       v.memory = 1048
       v.name = "fakeswitch"
@@ -121,14 +121,14 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -177,14 +177,14 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -219,14 +219,14 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -261,14 +261,14 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
         v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        override.vm.synced_folder $cordpath, "/opt/cord", type: "nfs"
     end
     s.vm.provider "virtualbox" do |v, override|
         v.memory = 512
@@ -282,7 +282,7 @@ Vagrant.configure(2) do |config|
     d.vm.hostname = "testbox"
     d.vm.network "private_network", ip: "10.0.3.100", lxc__bridge_name: 'lxcbr0'
     d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
+    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/cord/build/ansible/corddev.yml -c local"
     config.vm.provider :lxc do |lxc|
         # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
         lxc.customize 'cgroup.memory.limit_in_bytes', '2048M'
