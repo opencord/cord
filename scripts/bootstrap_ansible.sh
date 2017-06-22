@@ -25,4 +25,4 @@ apt-get update
 apt-get -y install python-dev libffi-dev python-pip libssl-dev sshpass
 pip install ansible==2.2.2.0
 mkdir -p /etc/ansible
-cp /cord/build/ansible/ansible.cfg /etc/ansible/ansible.cfg
+
