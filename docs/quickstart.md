@@ -127,7 +127,7 @@ Once you have done this, you can inspect the status of the VM's by setting the
 `Vagrantfile`'s parent directory, then run `vagrant status`:
 
 ```
-~$ export VAGRANT_CWD=~/cord/build/targets/cord-in-a-box
+~$ export VAGRANT_CWD=~/cord/build
 ~$ vagrant status
 Current machine states:
 
