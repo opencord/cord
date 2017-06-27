@@ -55,23 +55,23 @@ node ("${devNodeJenkinsName}") {
                 }
 
                 stage ("Fetch CORD packages") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew fetch" corddev'
+                    sh 'vagrant ssh -c "cd /opt/cord/build; ./gradlew fetch" corddev'
                 }
 
                 stage ("Build CORD Images") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
+                    sh 'vagrant ssh -c "cd /opt/cord/build; ./gradlew buildImages" corddev'
                 }
 
                 stage ("Downloading CORD POD configuration") {
-                    sh 'vagrant ssh -c "cd /cord/build/config; git clone ${podConfigRepoUrl}" corddev'
+                    sh 'vagrant ssh -c "cd /opt/cord/build/config; git clone ${podConfigRepoUrl}" corddev'
                 }
 
                 stage ("Publish to headnode") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} publish" corddev'
+                    sh 'vagrant ssh -c "cd /opt/cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} publish" corddev'
                 }
 
                 stage ("Deploy") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} deploy" corddev'
+                    sh 'vagrant ssh -c "cd /opt/cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} deploy" corddev'
                 }
 
                 stage ("Power cycle compute nodes") {
