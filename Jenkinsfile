@@ -1,5 +1,6 @@
 def filename = 'manifest-${branch}.xml'
 def manifestUrl = 'https://gerrit.opencord.org/manifest'
+def config = null;
 
 node ('master') {
     checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
@@ -8,25 +9,32 @@ node ('master') {
         sh returnStdout: true, script: 'repo manifest -r -o ' + filename
         sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
     }
+
+    stage ("Parse deployment configuartion file") {
+        sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
+        sh returnStdout: true, script: 'git clone ${configRepoUrl}'
+        config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
+    }
 }
 
-node ("${devNodeJenkinsName}") {
+node ("${config.dev_node.name}") {
     timeout (time: 240) {
-       stage 'Checkout cord repo'
-       checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
+        stage ('Checkout cord repo') {
+            checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
+        }
 
-       dir('build') {
+        dir('build') {
             try {
                 stage ("Re-deploy head node and Build Vagrant box") {
                     parallel(
                         maasOps: {
-                            sh "maas login maas http://${maasHeadIP}/MAAS/api/2.0 ${apiKey}"
-                            sh "maas maas machine release ${headNodeMAASSystemId}"
+                            sh "maas login maas http://${config.maas.ip}/MAAS/api/2.0 ${config.maas.api_key}"
+                            sh "maas maas machine release ${config.maas.head_system_id}"
 
                             timeout(time: 15) {
                                 waitUntil {
                                    try {
-                                        sh "maas maas machine read ${headNodeMAASSystemId} | grep Ready"
+                                        sh "maas maas machine read ${config.maas.head_system_id} | grep Ready"
                                         return true
                                     } catch (exception) {
                                         return false
@@ -35,12 +43,12 @@ node ("${devNodeJenkinsName}") {
                             }
 
                             sh 'maas maas machines allocate'
-                            sh "maas maas machine deploy ${headNodeMAASSystemId}"
+                            sh "maas maas machine deploy ${config.maas.head_system_id}"
 
                             timeout(time: 30) {
                                 waitUntil {
                                    try {
-                                        sh "maas maas machine read ${headNodeMAASSystemId} | grep Deployed"
+                                        sh "maas maas machine read ${config.maas.head_system_id} | grep Deployed"
                                         return true
                                     } catch (exception) {
                                         return false
@@ -55,43 +63,48 @@ node ("${devNodeJenkinsName}") {
                 }
 
                 stage ("Fetch CORD packages") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew fetch" corddev'
+                    sh "vagrant ssh -c \"cd /cord/build; ./gradlew fetch\" corddev"
                 }
 
                 stage ("Build CORD Images") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew buildImages" corddev'
+                    sh "vagrant ssh -c \"cd /cord/build; ./gradlew buildImages\" corddev"
                 }
 
                 stage ("Downloading CORD POD configuration") {
-                    sh 'vagrant ssh -c "cd /cord/build/config; git clone ${podConfigRepoUrl}" corddev'
+                    sh "vagrant ssh -c \"cd /cord/build/config; git clone ${config.pod_config.repo_url}\" corddev"
                 }
 
                 stage ("Publish to headnode") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} publish" corddev'
+                    sh "vagrant ssh -c \"cd /cord/build; ./gradlew -PtargetReg=${config.head.ip}:5000 -PdeployConfig=config/pod-configs/${config.pod_config.file_name} publish\" corddev"
                 }
 
                 stage ("Deploy") {
-                    sh 'vagrant ssh -c "cd /cord/build; ./gradlew -PtargetReg=${headNodeIP}:5000 -PdeployConfig=config/pod-configs/${podConfigFileName} deploy" corddev'
+                    sh "vagrant ssh -c \"cd /cord/build; ./gradlew -PtargetReg=${config.head.ip}:5000 -PdeployConfig=config/pod-configs/${config.pod_config.file_name} deploy\" corddev"
                 }
 
                 stage ("Power cycle compute nodes") {
-                    parallel(
-                        compute_1: {
-                            sh 'ipmitool -U ${computeNode1IPMIUser} -P ${computeNode1IPMIPass} -H ${computeNode1IPMIIP} power cycle'
-                        }, compute_2: {
-                            sh 'ipmitool -U ${computeNode2IPMIUser} -P ${computeNode2IPMIPass} -H ${computeNode2IPMIIP} power cycle'
-                        }, failFast : true
-                    )
+                    for(int i=0; i < config.compute_nodes.size(); i++) {
+                        sh "ipmitool -U ${config.compute_nodes[i].ipmi.user} -P ${config.compute_nodes[i].ipmi.pass} -H ${config.compute_nodes[i].ipmi.ip} power cycle"
+                    }
                 }
 
                 stage ("Wait for compute nodes to get deployed") {
-                    sh 'ssh-keygen -f /home/${devNodeUser}/.ssh/known_hosts -R ${headNodeIP}'
-                    def cordapikey = runHeadCmd("sudo maas-region-admin apikey --username ${headNodeUser}")
-                    runHeadCmd("maas login pod-maas http://${headNodeIP}/MAAS/api/1.0 $cordapikey")
+                    sh "ssh-keygen -f /home/${config.dev_node.user}/.ssh/known_hosts -R ${config.head.ip}"
+                    def cordApiKey = runCmd("${config.head.ip}",
+                                            "${config.head.user}",
+                                            "${config.head.pass}",
+                                            "sudo maas-region-admin apikey --username ${config.head.user}")
+                    runCmd("${config.head.ip}",
+                           "${config.head.user}",
+                           "${config.head.pass}",
+                           "maas login pod-maas http://${config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
                     timeout(time: 45) {
                         waitUntil {
                             try {
-                                num = runHeadCmd("maas pod-maas nodes list | grep -i deployed | wc -l").trim()
+                                num = runCmd("${config.head.ip}",
+                                             "${config.head.user}",
+                                             "${config.head.pass}",
+                                             "maas pod-maas nodes list | grep -i deployed | wc -l").trim()
                                 return num == '2'
                             } catch (exception) {
                                 return false
@@ -101,11 +114,17 @@ node ("${devNodeJenkinsName}") {
                 }
 
                 stage ("Wait for computes nodes to be provisioned") {
-                    ip = runHeadCmd("docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner").trim()
+                    ip = runCmd("${config.head.ip}",
+                                "${config.head.user}",
+                                "${config.head.pass}",
+                                "docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner").trim()
                     timeout(time:45) {
                         waitUntil {
                             try {
-                                out = runHeadCmd("curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(2))'").trim()
+                                out = runCmd("${config.head.ip}",
+                                             "${config.head.user}",
+                                             "${config.head.pass}",
+                                             "curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(2))'").trim()
                                 return out != ""
                             } catch (exception) {
                                 return false
@@ -114,39 +133,58 @@ node ("${devNodeJenkinsName}") {
                     }
                 }
 
-                def fabricConfExists = true
-                try {
-                    print "${fabricMACs}"
-                } catch (err) {
-                    fabricConfExists = false
-                }
-                if (fabricConfExists) {
-                    def fabric_macs = multiStringToArray("${fabricMACs}")
-                    def fabric_ips = multiStringToArray("${fabricIPs}")
-
+                if (config.fabric_switches != null) {
                     stage("Reserve IPs for fabric switches and restart maas-dhcp service") {
-                        for(int i=0; i < fabric_macs.length; i++) {
+                        for(int i=0; i < config.fabric_switches.size(); i++) {
                             def append = "";
                             if (i!=0) {
                                 append = "-a";
                             }
-                            def str = createMACIPbindingStr(i+1, fabric_macs[i], fabric_ips[i])
-                            runHeadCmd("echo -e $str '|' sudo tee $append /etc/dhcp/dhcpd.reservations > /dev/null")
+                            def str = createMACIPbindingStr(i+1,
+                                                           "${config.fabric_switches[i].mac}",
+                                                           "${config.fabric_switches[i].ip}")
+                            runCmd("${config.head.ip}",
+                                    "${config.head.user}",
+                                    "${config.head.pass}",
+                                    "echo -e $str '|' sudo tee $append /etc/dhcp/dhcpd.reservations > /dev/null")
                         }
-                        runHeadCmd("sudo restart maas-dhcpd")
-                        runHeadCmd("cord harvest go")
+                        runCmd("${config.head.ip}",
+                               "${config.head.user}",
+                               "${config.head.pass}",
+                               "sudo restart maas-dhcpd")
+
+                        runCmd("${config.head.ip}",
+                               "${config.head.user}",
+                               "${config.head.pass}",
+                               "cord harvest go")
                     }
 
                     stage ("Wait for fabric switches to get deployed") {
-                        for(int i=0; i < fabric_ips.length; i++) {
-                            runFabricCmd("${fabric_ips[i]}", "sudo onl-onie-boot-mode install")
-                            runFabricCmd("${fabric_ips[i]}", "sudo reboot")
+                        for(int i=0; i < config.fabric_switches.size(); i++) {
+                            runFabricCmd("${config.head.ip}",
+                                         "${config.head.user}",
+                                         "${config.head.pass}",
+                                         "${config.fabric_switches[i].ip}",
+                                         "${config.fabric_switches[i].user}",
+                                         "${config.fabric_switches[i].pass}",
+                                         "sudo onl-onie-boot-mode install")
+
+                            runFabricCmd("${config.head.ip}",
+                                         "${config.head.user}",
+                                         "${config.head.pass}",
+                                         "${config.fabric_switches[i].ip}",
+                                         "${config.fabric_switches[i].user}",
+                                         "${config.fabric_switches[i].pass}",
+                                         "sudo reboot")
                         }
                         timeout(time: 45) {
                             waitUntil {
                                 try {
-                                    def harvestCompleted = runHeadCmd("cord harvest list '|' grep -i fabric '|' wc -l").trim()
-                                    return harvestCompleted == fabric_macs.length.toString()
+                                    def harvestCompleted = runCmd("${config.head.ip}",
+                                                                  "${config.head.user}",
+                                                                  "${config.head.pass}",
+                                                                  "cord harvest list '|' grep -i fabric '|' wc -l").trim()
+                                    return harvestCompleted == config.fabric_switches.size().toString()
                                 } catch (exception) {
                                     return false
                                 }
@@ -159,13 +197,14 @@ node ("${devNodeJenkinsName}") {
                             waitUntil {
                                 try {
                                     def provCompleted = 0
-                                    for(int i=0; i < fabric_ips.length; i++) {
-                                        def count = runHeadCmd("cord prov list '|' grep -i ${fabric_ips[i]} '|' grep -i complete '|' wc -l").trim()
-                                        print "Count: ${count}"
+                                    for(int i=0; i < config.fabric_switches.size(); i++) {
+                                        def count = runCmd("${config.head.ip}",
+                                                           "${config.head.user}",
+                                                           "${config.head.pass}",
+                                                           "cord prov list '|' grep -i ${config.fabric_switches[i].ip} '|' grep -i complete '|' wc -l").trim()
                                         provCompleted = provCompleted + count.toInteger()
-                                        print "New prov completed: ${provCompleted}"
                                     }
-                                    return provCompleted == fabric_ips.length
+                                    return provCompleted == config.fabric_switches.size()
                                 } catch (exception) {
                                     return false
                                 }
@@ -174,9 +213,11 @@ node ("${devNodeJenkinsName}") {
                     }
                 }
 
-                stage ("Trigger Build") {
-                    url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
-                    httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
+                if (config.make_release == true) {
+                    stage ("Trigger Build") {
+                        url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
+                        httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
+                    }
                 }
 
                 currentBuild.result = 'SUCCESS'
@@ -193,17 +234,6 @@ node ("${devNodeJenkinsName}") {
 }
 
 /**
- * Transforms a multiline string into an array.
- * Each line is a value of the array.
- *
- * @param the multiline string to transform
- * @return the computed array
- */
-def multiStringToArray(str) {
-    return str.split("\\r?\\n") as String[]
-}
-
-/**
  * Returns a string used to bind IPs and MAC addresses, substituting the values
  * given.
  *
@@ -216,22 +246,33 @@ def createMACIPbindingStr(counter, mac, ip) {
 }
 
 /**
- * Runs a command on the head node.
+ * Runs a command on a remote host using sshpass.
  *
- * @param command the command to run on the head node
+ * @param ip      the node IP address
+ * @param user    the node user name
+ * @param pass    the node password
+ * @param command the command to run
  * @return the output of the command
  */
-def runHeadCmd(command) {
-    return sh(returnStdout: true, script: "sshpass -p ${headNodePass} ssh -oStrictHostKeyChecking=no -l ${headNodeUser} ${headNodeIP} ${command}")
+def runCmd(ip, user, pass, command) {
+    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}")
 }
 
 /**
  * Runs a command on a fabric switch.
  *
+ * @param headIp         the head node IP address
+ * @param headUser       the head node user name
+ * @param headPass       the head node password
  * @param ip             the mgmt IP of the fabric switch, reachable from the head node
- * @param fabric_command the command to run on the fabric switch
+ * @param user           the mgmt user name of the fabric switch
+ * @param pass           the mgmt password of the fabric switch
+ * @param command        the command to run on the fabric switch
  * @return the output of the command
  */
-def runFabricCmd(ip, command) {
-    return runHeadCmd("sshpass -p ${fabricPass} ssh -oStrictHostKeyChecking=no -l ${fabricUser} ${ip} ${command}")
+def runFabricCmd(headIp, headUser, headPass, user, pass, command) {
+    return runCmd("${haedIp}",
+                  "${headUser}",
+                  "${headPass}",
+                  "sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}")
 }
