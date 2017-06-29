@@ -2,5 +2,4 @@
   become: yes
   pip:
     name: docker-compose
-    version: 1.9
     state: present
