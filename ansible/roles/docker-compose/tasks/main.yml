@@ -1,6 +1,7 @@
+---
+
 - name: docker-compose is present
   become: yes
   pip:
-    name: docker-compose
-    version: 1.9
+    name: "docker-compose>=1.14.0"
     state: present

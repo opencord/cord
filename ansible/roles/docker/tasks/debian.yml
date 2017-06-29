@@ -1,18 +1,19 @@
+---
+
 - name: Trust docker apt key
   apt_key:
     data={{ lookup('file', 'docker_apt_key.gpg') }}
 
 - name: Debian add Docker repository and update apt cache
   apt_repository:
-    repo: deb https://apt.dockerproject.org/repo ubuntu-{{ debian_version }} main
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
     update_cache: yes
     state: present
   tags: [docker]
 
-- name: Debian Docker is present
+- name: Install docker-ce using apt
   apt:
-    name: docker-engine
-    state: latest
+    name: docker-ce=17.06.*
     force: yes
   tags: [docker, skip_ansible_lint]
 
@@ -20,10 +21,9 @@
   apt: name=python-pip state=present
   tags: [docker]
 
-- name: Debian docker-py is present
+- name: docker python package present
   pip:
-    name: docker-py
-    version: 1.10.6
+    name: "docker>=2.4.2"
     state: present
   tags: [docker]
 
