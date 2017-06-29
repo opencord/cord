@@ -17,10 +17,10 @@
 
 set -e
 
-echo "Installing Ansible using pip..."
-apt-get install -y software-properties-common python-netaddr apt-transport-https
+echo "Installing Ansible using apt..."
+apt-get install -y software-properties-common ca-certificates
+apt-add-repository ppa:ansible/ansible
 apt-get update
-apt-get -y install python-dev libffi-dev python-pip libssl-dev sshpass
-pip install ansible==2.2.2.0
+apt-get install -y ansible
 mkdir -p /etc/ansible
 

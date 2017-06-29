@@ -20,10 +20,9 @@
   apt: name=python-pip state=present
   tags: [docker]
 
-- name: Debian docker-py is present
+- name: docker python package present
   pip:
-    name: docker-py
-    version: 1.10.6
+    name: "docker>=2.4.2"
     state: present
   tags: [docker]
 
