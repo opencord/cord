@@ -270,7 +270,7 @@ def runCmd(ip, user, pass, command) {
  * @param command        the command to run on the fabric switch
  * @return the output of the command
  */
-def runFabricCmd(headIp, headUser, headPass, user, pass, command) {
+def runFabricCmd(headIp, headUser, headPass, ip, user, pass, command) {
     return runCmd("${haedIp}",
                   "${headUser}",
                   "${headPass}",
