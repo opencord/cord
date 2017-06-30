@@ -276,7 +276,13 @@ task postDeployTests (type: Exec) {
   args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
 }
 
+task createMonitoringService (type: Exec) {
 
+  def ansible_cmd = "cd $config.common.cord_dir/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @$config.common.cord_dir/build/genconfig/config.yml instantiate-monitoringservice-playbook.yml"
+
+  executable = "ssh"
+  args = ["-p", "$config.headnode.ansible_ssh_port", "$config.headnode.ansible_user@$config.headnode.ip", ansible_cmd ]
+}
 
 project(':maas').prime.dependsOn writeYamlConfig
 project(':maas').prime.dependsOn writeInventory
