@@ -12,7 +12,7 @@ node ('master') {
 
     stage ("Parse deployment configuartion file") {
         sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
-        sh returnStdout: true, script: 'git clone ${configRepoUrl}'
+        sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
         config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
     }
 }
@@ -71,7 +71,7 @@ node ("${config.dev_node.name}") {
                 }
 
                 stage ("Downloading CORD POD configuration") {
-                    sh "vagrant ssh -c \"cd /cord/build/config; git clone ${config.pod_config.repo_url}\" corddev"
+                    sh "vagrant ssh -c \"cd /cord/build/config; git clone -b ${branch} ${config.pod_config.repo_url}\" corddev"
                 }
 
                 stage ("Publish to headnode") {
