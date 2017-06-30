@@ -88,6 +88,19 @@ node ("${config.dev_node.name}") {
                     }
                 }
 
+                try {
+                    def provCompleted = 0
+                    for(int i=0; i < config.fabric_switches.size(); i++) {
+                        def count = runCmd("${config.head.ip}",
+                                           "${config.head.user}",
+                                           "${config.head.pass}",
+                                           "cord prov list '|' grep -i ${config.fabric_switches[i].ip} '|' grep -i complete '|' wc -l").trim()
+                        provCompleted = provCompleted + count.toInteger()
+                    }
+                    return provCompleted == config.fabric_switches.size()
+                } catch (exception) {
+                    return false
+                }
                 stage ("Wait for compute nodes to get deployed") {
                     sh "ssh-keygen -f /home/${config.dev_node.user}/.ssh/known_hosts -R ${config.head.ip}"
                     def cordApiKey = runCmd("${config.head.ip}",
@@ -270,7 +283,7 @@ def runCmd(ip, user, pass, command) {
  * @param command        the command to run on the fabric switch
  * @return the output of the command
  */
-def runFabricCmd(headIp, headUser, headPass, user, pass, command) {
+def runFabricCmd(headIp, headUser, headPass, ip, user, pass, command) {
     return runCmd("${haedIp}",
                   "${headUser}",
                   "${headPass}",
