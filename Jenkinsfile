@@ -268,7 +268,7 @@ def createMACIPbindingStr(counter, mac, ip) {
  * @return the output of the command
  */
 def runCmd(ip, user, pass, command) {
-    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}")
+    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -o UserKnownHostsFile=/dev/null -l ${user} ${ip} ${command}")
 }
 
 /**
