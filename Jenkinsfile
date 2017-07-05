@@ -90,14 +90,14 @@ node ("${config.dev_node.name}") {
 
                 try {
                     def provCompleted = 0
-                    for(int i=0; i < config.fabric_switches.size(); i++) {
+                    for(int i=0; i < config.compute_nodes.size(); i++) {
                         def count = runCmd("${config.head.ip}",
                                            "${config.head.user}",
                                            "${config.head.pass}",
-                                           "cord prov list '|' grep -i ${config.fabric_switches[i].ip} '|' grep -i complete '|' wc -l").trim()
+                                           "cord prov list '|' grep -i ${config.compute_nodes[i].ip} '|' grep -i complete '|' wc -l").trim()
                         provCompleted = provCompleted + count.toInteger()
                     }
-                    return provCompleted == config.fabric_switches.size()
+                    return provCompleted == config.compute_nodes.size()
                 } catch (exception) {
                     return false
                 }
