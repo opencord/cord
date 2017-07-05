@@ -316,8 +316,9 @@ This step is started with the following command:
 ### Complete
 
 Once the `publish` command successfully runs this task is complete. When this
-step is complete a Docker registry and Docker registry mirror. It can be
-verified that these are running by using the `docker ps` command.
+step is complete a Docker registry and Docker registry mirror will be running
+on the head node. This can be verified using the `docker ps` command on the
+head node:
 ```
 docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
 CONTAINER ID        IMAGE               COMMAND                  CREATED AT
@@ -668,7 +669,7 @@ configuration in XOS and ONOS.
 
 To check the VTN configuration maintained by XOS:
    - Go to the "ONOS apps" page in the CORD GUI:
-      - URL: `http://<head-node>/xos#/onos/onosapp/`
+      - URL: `http://<head-node>/xos#/onos/onosapps/`
       - Username: `xosadmin@opencord.org`
       - Password:  (contents of `/opt/cord/build/platform-install/credentials/xosadmin@opencord.org`)
    - Select *VTN_ONOS_app* in the table
