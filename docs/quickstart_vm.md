@@ -1,9 +1,7 @@
 # CORD Quick Start Guide using Virtual Machine Nodes
 
-[*This description is for bringing up a CORD POD on virtual
-machines on a single physical host. The purpose of this solution
-is to give the user an experience of bring up a CORD on bare
-metal.*]
+[*This tutortial is obsolete. Instead see information about CORD-in-a-Box,
+as outlined in the [Quick Start Tutorial](quickstart.md).*]
 
 This guide is meant to enable the user to quickly exercise the capabilities
 provided by the artifacts of this repository. There are three high level tasks

@@ -1,4 +1,4 @@
-# CORD Quick Start Guide using Physical Nodes
+# Physical POD: Quick Start Guide
 
 This guide is meant to enable the user to utilize the artifacts of this
 repository to to deploy CORD on to a physical hardware rack. The artifacts in
@@ -7,9 +7,9 @@ according to the **best practices** as defined in this document.
 
 **NOTE:** *If you are new to CORD, you should start by bringing up a development
 POD on a single physical server to get familiar with the CORD deployment
-process.  Instructions to do so are in [quickstart.md](./quickstart.md).*
+process.  Instructions to do so can be found [here](./quickstart.md).*
 
-## Physical configuration
+## Physical Configuration
 ![Physical Hardware Connectivity](images/physical.png)
 
 As depicted in the diagram above the base model for the CORD POD deployment

@@ -1,4 +1,8 @@
 # Offline (local repository) CORD Install
+
+[*This document is out-of-date. It contains helpful suggestions about how one
+might do an offline install, but it is not current with the latest CORD release.*]
+
 It is possible to install CORD using a local Ubuntu application
 repository. This can be useful for several use cases including
 
