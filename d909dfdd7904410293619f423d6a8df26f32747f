@@ -183,6 +183,29 @@
       "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_e4f524cc",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 104
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:44:43Z",
+      "side": 1,
+      "message": "Can we make this /opt/cord to make things consistent with recent changes I made?",
+      "range": {
+        "startLine": 12,
+        "startChar": 19,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
