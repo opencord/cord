@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_24b0bcf3",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T22:49:38Z",
+      "side": 1,
+      "message": "Never mind.  It\u0027s probably best to have fewer options rather than more.",
+      "parentUuid": "5a202591_04e70014",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 53
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_04c4a090",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "Should I change the `-d` to `-l` (for local, installs docker) and `-v` (for virtual/mock, installs vagrant)?\n\nDo we still need the \"print CORD version and exit\" that\u0027s the `-v` param?",
       "parentUuid": "5a202591_044b802c",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_a49bac71",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T22:49:38Z",
+      "side": 1,
+      "message": "If I understand the proposal, running with no args will install Ansible and repo and source, `-l` will install Docker as well, and `-v` installs Vagrant as well?  I think that sounds good.\n\nI don\u0027t think we need the old `-v` functionality any more.",
+      "parentUuid": "5a202591_84baf0df",
       "range": {
         "startLine": 14,
         "startChar": 4,
@@ -378,6 +426,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_8488b023",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 104
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T22:49:38Z",
+      "side": 1,
+      "message": "Do we also need to add all possible synchronizer images, for all profiles, to the docker_image_whitelist?",
+      "parentUuid": "5a202591_242b1c32",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 54
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_e4f524cc",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 104
@@ -413,6 +485,30 @@
       "side": 1,
       "message": "Would that work for `local` scenarios, or where the user doesn\u0027t have write permissions on /opt?\n\nMaybe the comment should be \"Location of `cord` checked out by repo\", so it\u0027s obvious that it isn\u0027t the one inside the VM/container?",
       "parentUuid": "5a202591_e4f524cc",
+      "range": {
+        "startLine": 12,
+        "startChar": 19,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_648d9431",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 104
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T22:49:38Z",
+      "side": 1,
+      "message": "I guess I was confused.  Changing the comment in the way you suggest should work.",
+      "parentUuid": "5a202591_44ddf841",
       "range": {
         "startLine": 12,
         "startChar": 19,
