@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_a4edecf1",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_0496e094",
+      "range": {
+        "startLine": 5,
+        "startChar": 31,
+        "endLine": 5,
+        "endChar": 41
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_e4d9a484",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-06T19:42:55Z",
       "side": 1,
       "message": "What about allowing the user to type \u0027make bootstrap\u0027 if the source tree is already checked out? I think we can assume that make is already installed.",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 53
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_04e70014",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "I planned for two scenarios: \"do everything for someone via bootstrap script\" and \"here\u0027s how to do the same as the bootstrap script manually\".\n\nIs what you wanted here an option for the bootstrap script to install repo and download the `cord` directory, then install ansible/docker/vagrant via the `make bootstrap` or other more fine grained targets?",
+      "parentUuid": "5a202591_e4d9a484",
       "range": {
         "startLine": 6,
         "startChar": 18,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_c4f0e8cb",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_04c4a090",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_044b802c",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -82,6 +154,30 @@
       "writtenOn": "2017-07-06T19:42:55Z",
       "side": 1,
       "message": "Maybe add some text on which flag you need to specify in order to bootstrap for different scenarios.  E.g., -d for the local scenario.  Also you may need to logout and login again after running the bootstrap.",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_84baf0df",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Should I change the `-d` to `-l` (for local, installs docker) and `-v` (for virtual/mock, installs vagrant)?\n\nDo we still need the \"print CORD version and exit\" that\u0027s the `-v` param?",
+      "parentUuid": "5a202591_044b802c",
       "range": {
         "startLine": 14,
         "startChar": 4,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_04cee083",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Agreed.  I\u0027ll document the utility targets, and give examples of their use.",
+      "parentUuid": "5a202591_24143cf4",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 29
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_24467c24",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -128,6 +248,30 @@
       "writtenOn": "2017-07-06T19:42:55Z",
       "side": 1,
       "message": "rcord-mock.yml",
+      "range": {
+        "startLine": 82,
+        "startChar": 55,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_24b9dce9",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_24467c24",
       "range": {
         "startLine": 82,
         "startChar": 55,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_44b4d8f1",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_440f38e2",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 3
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_84e9d01c",
         "filename": "scenarios/mock/config.yml",
         "patchSetId": 104
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_242b1c32",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 104
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Sure, we can create one.  It might be as easy as setting `frontend_only: False` in a scenario nearly identical to this one.",
+      "parentUuid": "5a202591_84e9d01c",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 54
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_e4f524cc",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 104
@@ -197,6 +389,30 @@
       "writtenOn": "2017-07-06T19:44:43Z",
       "side": 1,
       "message": "Can we make this /opt/cord to make things consistent with recent changes I made?",
+      "range": {
+        "startLine": 12,
+        "startChar": 19,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_44ddf841",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 104
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-06T22:22:19Z",
+      "side": 1,
+      "message": "Would that work for `local` scenarios, or where the user doesn\u0027t have write permissions on /opt?\n\nMaybe the comment should be \"Location of `cord` checked out by repo\", so it\u0027s obvious that it isn\u0027t the one inside the VM/container?",
+      "parentUuid": "5a202591_e4f524cc",
       "range": {
         "startLine": 12,
         "startChar": 19,
