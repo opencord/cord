@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a202591_0496e094",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 5,
+        "startChar": 31,
+        "endLine": 5,
+        "endChar": 41
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_e4d9a484",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "What about allowing the user to type \u0027make bootstrap\u0027 if the source tree is already checked out? I think we can assume that make is already installed.",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 53
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_04c4a090",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "rcord-mock.yml",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_044b802c",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "Maybe add some text on which flag you need to specify in order to bootstrap for different scenarios.  E.g., -d for the local scenario.  Also you may need to logout and login again after running the bootstrap.",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_24143cf4",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "It would be useful to have a section on workflows.  I.e., I edit some code and now I want to build and deploy new containers.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 29
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_24467c24",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "rcord-mock.yml",
+      "range": {
+        "startLine": 82,
+        "startChar": 55,
+        "endLine": 82,
+        "endChar": 66
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_440f38e2",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "###",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 3
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_84e9d01c",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 104
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-06T19:42:55Z",
+      "side": 1,
+      "message": "Do we have a scenario that can be used to bring up core containers + synchronizers, but nothing else?  This would be useful for verifying that synchronizer containers can build, and that the correct-looking Ansible playbooks are generated.",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 54
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
