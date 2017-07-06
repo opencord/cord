@@ -1,18 +1,19 @@
-# CORD-in-a-Box Quick Start Guide
+# CORD-in-a-Box: Quick Start Guide
 
-This tutorial guide walks through the steps to bring up a demonstration CORD
+This guide walks through the steps to bring up a demonstration CORD
 "POD", running in virtual machines on a single physical server (a.k.a.
 "CORD-in-a-Box"). The purpose of this demonstration POD is to enable those
 interested in understanding how CORD works to examine and interact with a
 running CORD environment.  It is a good place for novice CORD users to start.
 
-**NOTE:** *This tutorial installs a simplified version of a CORD POD on a
+**NOTE:** *This guide describes how to install
+a simplified version of a CORD POD on a
 single server using virtual machines.  If you are looking for instructions on
-how to install a multi-node POD, you will find them in
-[quickstart_physical.md](./quickstart_physical.md).  For more details about the
+how to install a multi-node POD, you will find them in the
+[Physical POD Guide](./quickstart_physical.md).  For more details about the
 actual build process, look there.*
 
-## What you need (Prerequisites)
+## What You Need (Prerequisites)
 
 You will need a *target server*, which will run both a development environment
 in a Vagrant VM (used to deploy CORD) as well as CORD-in-a-Box itself.
@@ -162,7 +163,7 @@ $ ssh corddev
 
 The CORD build environment is located in `/cord/build` inside this VM.  It is
 possible to manually run individual steps in the build process here if you
-wish; see [quickstart_physical.md](./quickstart_physical.md) for more
+wish; see the [Physical POD Guide](./quickstart_physical.md) for more
 information on how to run build steps.
 
 ### prod VM
@@ -347,7 +348,7 @@ files - do this and then access the main logging interface under `Discover`.
 More information on using Kibana can be be found [in its
 documentation](https://www.elastic.co/guide/en/kibana/current/index.html).
 
-## Test results
+## Test Results
 
 After CORD-in-a-Box was set up, a couple of basic health
 tests were executed on the platform.  The results of these tests can be
@@ -476,6 +477,6 @@ If you got this far, you successfully built, deployed, and tested your first
 CORD POD.
 
 You are now ready to bring up a multi-node POD with a real switching fabric and
-multiple physical compute nodes.  The process for doing so is described in
-[quickstart_physical.md](./quickstart_physical.md).
+multiple physical compute nodes.  The process for doing so is
+described in the [Physical POD Guide](./quickstart_physical.md).
 
