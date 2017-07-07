@@ -105,7 +105,7 @@ node ("${config.dev_node.name}") {
                                              "${config.head.user}",
                                              "${config.head.pass}",
                                              "maas pod-maas nodes list | grep -i deployed | wc -l").trim()
-                                return num == '2'
+                                return num.toInteger() == config.compute_nodes.size()
                             } catch (exception) {
                                 return false
                             }
@@ -124,7 +124,7 @@ node ("${config.dev_node.name}") {
                                 out = runCmd("${config.head.ip}",
                                              "${config.head.user}",
                                              "${config.head.pass}",
-                                             "curl -sS http://$ip:4243/provision/ | jq -c '.[] | select(.status | contains(2))'").trim()
+                                             "curl -sS http://$ip:4243/provision/ | jq -c \".[] | select(.status | contains(${config.compute_nodes.size()}))\"".trim())
                                 return out != ""
                             } catch (exception) {
                                 return false
@@ -184,7 +184,7 @@ node ("${config.dev_node.name}") {
                                                                   "${config.head.user}",
                                                                   "${config.head.pass}",
                                                                   "cord harvest list '|' grep -i fabric '|' wc -l").trim()
-                                    return harvestCompleted == config.fabric_switches.size().toString()
+                                    return harvestCompleted.toInteger() == config.fabric_switches.size()
                                 } catch (exception) {
                                     return false
                                 }
@@ -255,7 +255,7 @@ def createMACIPbindingStr(counter, mac, ip) {
  * @return the output of the command
  */
 def runCmd(ip, user, pass, command) {
-    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -o UserKnownHostsFile=/dev/null -l ${user} ${ip} ${command}")
+    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}")
 }
 
 /**
@@ -271,8 +271,5 @@ def runCmd(ip, user, pass, command) {
  * @return the output of the command
  */
 def runFabricCmd(headIp, headUser, headPass, ip, user, pass, command) {
-    return runCmd("${haedIp}",
-                  "${headUser}",
-                  "${headPass}",
-                  "sshpass -p ${pass} ssh -o UserKnownHostsFile=/dev/null -l ${user} ${ip} ${command}")
+    return sh(returnStdout: true, script: "sshpass -p ${headPass} ssh -oStrictHostKeyChecking=no -l ${headUser} ${headIp} \"sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}\"")
 }
