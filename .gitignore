@@ -43,3 +43,6 @@ maas
 
 # generated config
 genconfig/*
+
+# GitBook
+_book
