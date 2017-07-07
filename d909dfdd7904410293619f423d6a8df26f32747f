@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_e4ac0438",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-07T21:18:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_24b0bcf3",
+      "range": {
+        "startLine": 6,
+        "startChar": 18,
+        "endLine": 6,
+        "endChar": 53
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_04c4a090",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -238,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_cf1c816d",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-07T21:18:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_a49bac71",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 20
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_24143cf4",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 104
@@ -273,6 +321,30 @@
       "side": 1,
       "message": "Agreed.  I\u0027ll document the utility targets, and give examples of their use.",
       "parentUuid": "5a202591_24143cf4",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 29
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_0f13995d",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 104
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-07T21:18:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_04cee083",
       "range": {
         "startLine": 77,
         "startChar": 0,
@@ -450,6 +522,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_44b6188c",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 104
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-07T21:18:30Z",
+      "side": 1,
+      "message": "That\u0027s correct (and I don\u0027t particularly like that).\n\nBuilding the image list dynamically in some way is probably worth looking into - the problem is that it cuts across the profile and scenario.",
+      "parentUuid": "5a202591_8488b023",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 54
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_e4f524cc",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 104
@@ -509,6 +605,30 @@
       "side": 1,
       "message": "I guess I was confused.  Changing the comment in the way you suggest should work.",
       "parentUuid": "5a202591_44ddf841",
+      "range": {
+        "startLine": 12,
+        "startChar": 19,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "d909dfdd7904410293619f423d6a8df26f32747f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_24bb1c74",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 104
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-07T21:18:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a202591_648d9431",
       "range": {
         "startLine": 12,
         "startChar": 19,
