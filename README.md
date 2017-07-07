@@ -3,7 +3,7 @@
 This is the main entry point for building and installing CORD.
 
 If this is your first encounter with CORD, we suggest you start by
-bringing up an emulated version called CORD-in-a-Box.
+bringing up an emulated version called _CORD-in-a-Box_.
 It installs CORD on a set of virtual machines running on a single
 physical server. Just follow our [CORD-in-a-Box Guide](docs/quickstart.md).
 
@@ -14,7 +14,7 @@ that target hardware. Just follow our
 
 For additional information about the CORD Project, see:
 
-* [Project Home](http://opencord.org)
+* [Website](http://opencord.org)
 * [Wiki](http://wiki.opencord.org)
 * [Jira](http://jira.opencord.org)
 * [Gerrit](http://gerrit.opencord.org)
