@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a202591_8f9b29c9",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2017-07-08T14:37:40Z",
+      "side": 1,
+      "message": "+synchronizer_name:vtr_synchronizer AND +@timestamp:[now-1h TO now]",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "011eded181833ef278663f4e621235f68660615d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_4fa51103",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2017-07-08T14:37:40Z",
+      "side": 1,
+      "message": "Network",
+      "range": {
+        "startLine": 37,
+        "startChar": 13,
+        "endLine": 37,
+        "endChar": 20
+      },
+      "revId": "011eded181833ef278663f4e621235f68660615d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_0faf19e5",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2017-07-08T14:37:40Z",
+      "side": 1,
+      "message": "Network",
+      "range": {
+        "startLine": 45,
+        "startChar": 13,
+        "endLine": 45,
+        "endChar": 20
+      },
+      "revId": "011eded181833ef278663f4e621235f68660615d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_efabbdd4",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2017-07-08T14:37:40Z",
+      "side": 1,
+      "message": "pk",
+      "range": {
+        "startLine": 45,
+        "startChar": 26,
+        "endLine": 45,
+        "endChar": 35
+      },
+      "revId": "011eded181833ef278663f4e621235f68660615d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_2faad5d4",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2017-07-08T14:37:40Z",
+      "side": 1,
+      "message": "vtr-synchronizer",
+      "range": {
+        "startLine": 53,
+        "startChar": 20,
+        "endLine": 53,
+        "endChar": 36
+      },
+      "revId": "011eded181833ef278663f4e621235f68660615d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
