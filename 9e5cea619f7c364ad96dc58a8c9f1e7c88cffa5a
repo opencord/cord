@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a202591_6f632db2",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-07-10T17:42:21Z",
+      "side": 1,
+      "message": "The point of Imagebuilder wasn\u0027t to understand which image should be rebuilt? In the case shouldn\u0027t we run it all the time?",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 76
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_4f5871fa",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-07-10T17:42:21Z",
+      "side": 1,
+      "message": "Do we need to teardown XOS to update the containers? Can\u0027t we rebuild them and then run the equivalent of \"docker-compose up -d\"?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 17
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
