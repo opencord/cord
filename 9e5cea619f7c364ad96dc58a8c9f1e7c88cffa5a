@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_4f0f51e2",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-10T18:49:49Z",
+      "side": 1,
+      "message": "I see with and agree with your logic, but this target was created due to how make orders the build process.\n\nTo preserve the overall build order, we need to create a milestone file during the imagebuilder step so steps that depend on the containers it creates exist before they are run. All this utility target does is remove that milestone.\n\nimagebuilder has logic to know which images need to be rebuilt, and in the case where no images need to be rebuilt it takes \u003c15 seconds, so if we could figure out a way to run it every time it wouldn\u0027t slow down the overall build process appreciably.",
+      "parentUuid": "5a202591_6f632db2",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 76
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_4f5871fa",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 108
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-10T17:42:21Z",
       "side": 1,
       "message": "Do we need to teardown XOS to update the containers? Can\u0027t we rebuild them and then run the equivalent of \"docker-compose up -d\"?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 17
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_2f1415f4",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-10T18:49:49Z",
+      "side": 1,
+      "message": "I think this is a a heavy handed \"wipe the database and reset everything\" version of that process.\n\nWe could definitely create targets that do as you describe.",
+      "parentUuid": "5a202591_4f5871fa",
       "range": {
         "startLine": 262,
         "startChar": 0,
