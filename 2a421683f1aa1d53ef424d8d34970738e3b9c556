@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a202591_2fbbf573",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-11T19:11:20Z",
+      "side": 1,
+      "message": "Can you wrap these lines like the surrounding docs?",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 157
+      },
+      "revId": "2a421683f1aa1d53ef424d8d34970738e3b9c556",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_0fb0398a",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-11T19:11:20Z",
+      "side": 1,
+      "message": "detangled?  or rearranged?\n\nMaybe \"you can organize the nodes by dragging them around\"?",
+      "range": {
+        "startLine": 337,
+        "startChar": 47,
+        "endLine": 337,
+        "endChar": 56
+      },
+      "revId": "2a421683f1aa1d53ef424d8d34970738e3b9c556",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
