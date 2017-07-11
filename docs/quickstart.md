@@ -328,15 +328,16 @@ You can access the XOS GUI by pointing your browser to URL
 `~/cord/build/platform-install/credentials/xosadmin@opencord.org`.
 
 The state of the system is that all CORD services have been onboarded to XOS.
-You can see them in the GUI by clicking _Services_ at left.  Clicking on the
-name of a service will show more details about it.
+You can see them in the `Service Graph` represented in the `Home` page. 
+If you want to see more details about the services you navigate to `Core > Services`, 
+or searching for `Service` in the top bar (you start searching just pressing `f`)
 
-A sample CORD subscriber has also been created.  A nice way to drill down into
-the configuration is to click _Customize_ at left, add the _Diagnostic_
-dashboard, and then click _Diagnostic_ at left.  To see the details of the
-subscriber in this dashboard, click the green box next to _Subscriber_ and
-select `cordSubscriber-1`.  The dashboard will change to show information
-specific to that subscriber.
+A sample CORD subscriber has also been created. You can see the `Service Graph` 
+for subscribers by selecting the `Service Graph` item in the left navigation.
+
+Here is a sample output:
+![subscriber-service-graph.png](subscriber-service-graph.png)
+_NOTE that the `Service Graph` will need to be detangled. You can organize the nodes by dragging them around._
 
 ### Kibana log viewing GUI
 
