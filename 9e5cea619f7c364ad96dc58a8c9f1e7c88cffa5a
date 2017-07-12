@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a202591_aa5ed310",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-12T05:05:58Z",
+      "side": 1,
+      "message": "After further thought, I changed the `xos-teardown` target to invoke the `clean-images` target every time it\u0027s run, reducing the number of commands that need to be run.   \n\nIt\u0027s still a standalone target as well, in the case where someone is working on image builds.",
+      "parentUuid": "5a202591_4f0f51e2",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 76
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a202591_4f5871fa",
         "filename": "docs/quickstart_make.md",
         "patchSetId": 108
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I think this is a a heavy handed \"wipe the database and reset everything\" version of that process.\n\nWe could definitely create targets that do as you describe.",
       "parentUuid": "5a202591_4f5871fa",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 17
+      },
+      "revId": "9e5cea619f7c364ad96dc58a8c9f1e7c88cffa5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_ca610fd5",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 108
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-12T05:05:58Z",
+      "side": 1,
+      "message": "In a later patchset, I added a `xos-update-images` target, which will go through the same steps as the previous `redeploy-xos-playbook.yml`.",
+      "parentUuid": "5a202591_2f1415f4",
       "range": {
         "startLine": 262,
         "startChar": 0,
