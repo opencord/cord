@@ -49,6 +49,12 @@ buildable_images:
     dockerfile: "Dockerfile.xos"
     context: "../.."
 
+  - name: xosproject/xos-libraries
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.libraries"
+    context: "../.."
+
   - name: xosproject/xos-corebuilder
     repo: xos
     path: "containers/xos"
@@ -77,6 +83,9 @@ buildable_images:
     path: "containers/xos"
     dockerfile: "Dockerfile.synchronizer-base"
     context: "../.."
+
+  - name: xosproject/xos-tosca
+    repo: xos-tosca
 
   - name: xosproject/xos-ws
     repo: xos-rest-gw
