@@ -15,16 +15,16 @@
     "versions": {
       "options": [
         {
-          "value": "http://guide.opencord.org/cord-4.0",
-          "text": "4.0"
+          "value": "/",
+          "text": "Master (Devel)"
         },
         {
-          "value": "http://guide.opencord.org",
-          "text": "Master"
+          "value": "/cord-4.0",
+          "text": "4.0 (Stable)"
         },
         {
-          "value": "http://wiki.opencord.org",
-          "text": "3.0 and older"
+          "value": "http://wiki.opencord.org/",
+          "text": "3.0 and previous (old wiki)"
         }
       ]
     }
