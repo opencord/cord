@@ -41,7 +41,7 @@ vagrant_vms:
   - head1
   - compute1
 
-head_vm_mem: 10240
+head_vm_mem: 16384
 head_vm_cpu: 8
 
 compute_vm_mem: 16384
