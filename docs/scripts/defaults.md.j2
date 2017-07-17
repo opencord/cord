@@ -1,0 +1,22 @@
+# Build System Variable Glossary
+
+{{ def_docs['frontmatter']['description'] }}
+
+{% for key, val in def_docs|dictsort %}
+### {{ key }}
+
+{{ val['description'] }}
+
+Default value:
+```
+{{ val['defval_pp'] }}
+```
+
+Used in:
+
+{% for file in val['reflist']|sort(attribute='path') -%}
+ - [{{ file.path }}]({{ file.link }})
+{% endfor -%}
+
+{% endfor %}
+

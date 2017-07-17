@@ -5,12 +5,12 @@ with the goal of improving the developer experience. A full listing of
 Epics and Stories completed for Shared-Delusion (pulled from Jira) is
 available [here](sd-jira.md), with the highlights summarized below.
 
-#### XOS Modeling Framework
+## XOS Modeling Framework
 
 Completed the XOS modeling framework for on-boarding
 services. Specific features include:
 
-* A new modeling langugae (*xproto*) and generative toolchain
+* A new modeling language (*xproto*) and generative toolchain
   (*xosgen*).
 
 * Support for specifying and enforcing security policies.
@@ -31,20 +31,24 @@ services. Specific features include:
 
 * Removed hand-crafted APIs and eliminated the `xos-gui` container.
 
-> Information on migrating services to Shared-Delusion can be found 
-> [here](../xos/migrate-4.0.md).
+> Information on migrating services to Shared-Delusion can be found in the
+> [CORD-4.0 Service Migration Guide](../xos/migrate-4.0.md).
 
-#### Build System
+## Build System
 
 Redesigned build system to streamline and unify the developer
 workflow. Specific features include:
 
-* Uses `make` and transitions away from `gradle`, providing better
-support for incremental builds.
+* Uses `make` and transitions away from `gradle`, providing better support for
+  incremental builds and unifying the development process.
+
+* Added a *scenario* system that encompasses the *mock* functionality
+  previously available but doesn't require multiple profiles to be maintained.
 
 * Implemented an XOS configuration module.
 
-* Supports building and pushing tagged images to Docker Hub.
+* Supports building and pushing tagged images to Docker Hub, and downloading
+  images that match the code that is checked out.
 
 * Added configure targets that generate credentials for each build layer.
 
@@ -52,23 +56,19 @@ support for incremental builds.
 
 * Added make targets to install versioned POD or CiaB
 
-* Added *mock* targets to master Makefile in support of
-   simpler build environments.
+* Updated `ansible` and `docker-compose` versions.
 
-* Updated `Ansible` and `docker-compose` versions.
+> The new (Make-based) and old (Gradle-based) build systems will co-exist for a
+> while, but the latter is being deprecated. Users are strongly encouraged to
+> [use the new system](../install.md).
 
-> The new (Make-based) and old (Gradle-based) build systems will
-> co-exist for a while, but the latter is being deprecated. Users are
-> strongly encouraged to start using the system, as documented
-> [here](../build_internals.md).
-
-#### Physical POD Deployment
+## Physical POD Deployment
 
 Automated the physical POD deployment system. Specific items
 include:
 
-* Supports fabric configuration in ONOS and load POD
-    configuration files in `pod-configs` repo.
+* Supports fabric configuration in ONOS and load POD configuration files in
+  `pod-configs` repo.
 
 * Automated switch software installation.
 
@@ -76,16 +76,15 @@ include:
   file instead of Jenkins variables, and to parameterize methods
   for commonly used functions.
 
-#### Logging Support
+## Logging Support
 
-Added a comprehensive logging facility that integrates logs across
-multiple components. The logging facility uses ELK Stack and
-can be accessed using Kibana.
+Added a comprehensive logging facility that integrates logs across multiple
+components. The logging facility uses ELK Stack and can be accessed using
+Kibana.
 
-> Most services have not been upgraded to use the new logging
-> system.
+> Most services have not been upgraded to use the new logging system.
 
-#### QA and Testing
+## QA and Testing
 
 Improved test coverage, including:
 
@@ -99,7 +98,7 @@ Improved test coverage, including:
 
 * Developed scaling tests for subscribers, vRouter, IGMP, vSG and vCPE.
 
-#### Fabric Enhancements
+## Fabric Enhancements
 
 Continued to add features to the fabric, including:
 
@@ -117,22 +116,17 @@ Continued to add features to the fabric, including:
 
 * Refactored DHCP relay
 
-#### Performance Optimizations
+## Performance Optimizations
 
 Optimized DPDK and OvS performance, including:
 
-* Bound fabric interfaces to DPDK 
+* Bound fabric interfaces to DPDK
 
-* Added portbindings to `networking_onos` Neutron plugin 
+* Added portbindings to `networking_onos` Neutron plugin
 
 * Modified JuJu charms to configure optimizations into OpenStack.
 
-* Changed kernel boot options for nodes 
+* Changed kernel boot options for nodes
 
 > This is a beta feature, and is not automatically included in a build.
-
-
-
-
-
 

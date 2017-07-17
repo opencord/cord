@@ -1,4 +1,9 @@
+# NOTE - do not put any .md files or directories that contain .md files that
+# gitbook needs to access in this file, or they won't be shown - upstream bugs:
+# https://github.com/GitbookIO/gitbook/issues/931
+# https://github.com/GitbookIO/gitbook/issues/1845
+
 node_modules/
 venv-xosdocs/
 xos/_book/
-xos/swagger/
+scripts/
