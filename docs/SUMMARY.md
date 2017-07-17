@@ -12,6 +12,7 @@
         * [vSG Configuration](appendix_vsg.md)
     * [Connecting to Upstream Networks](vrouter.md)
     * [Build System Internals](build_internals.md)
+    * [Build System Variable Glossary](glossary.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Powering Up a POD](operate/power_up.md)
 # My understanding is that ELK Stack is not working right now
@@ -29,6 +30,7 @@
         * [Implementation Details](xos/dev/sync_impl.md)
     * [Migrating Models to 4.0](xos/migrate_4.0.md)
 * [Developing for CORD](develop.md)
+<<<<<<< HEAD
     * [Getting the Source Code](cord_repo.md)
     * [Workflow: Mock Configuration](xos/dev/workflow_mock.md)
     * [Workflow: Cord-in-a-Box](xos/dev/workflow_ciab.md)
