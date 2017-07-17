@@ -10,6 +10,7 @@
         * [Appendix: Container Images](appendix_images.md)
         * [Appendix: vSG Configuration](appendix_vsg.md)
     * [Build System Internals](build_internals.md)
+    * [Build System Variable Glossary](glossary.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Configuring XOS: xosconfig](xos/modules/xosconfig.md)
     * [Powering Up a POD](operate/power_up.md)

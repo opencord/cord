@@ -4,5 +4,5 @@
   "structure": {
     "summary": "SUMMARY.md"
   },
-  "plugins": ["toggle-chapters"]
+  "plugins": ["toggle-chapters", "navigator"]
 }
