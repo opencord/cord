@@ -82,7 +82,7 @@ help:
 	@echo "Please specify a target (config, build, teardown, ...)"
 
 # Config file generation
-config: $(CONFIG_FILES)
+config: $(CONFIG_FILES) $(PODCONFIG_PATH)
 
 $(CONFIG_FILES):
 	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)'" $(BUILD)/ansible/genconfig.yml $(LOGCMD)
@@ -99,13 +99,6 @@ build: $(BUILD_TARGETS)
 
 # Utility targets
 
-xos-teardown: xos-update-images
-	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
-	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
-
-xos-update-images: clean-images
-	rm -f $(M)/start-xos $(M)/local-start-xos
-
 ansible-ping:
 	$(ANSIBLE) -m ping all $(LOGCMD)
 
@@ -118,13 +111,8 @@ collect-diag:
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 
-vagrant-destroy:
-	$(VAGRANT) destroy $(LOGCMD)
-	rm -f $(M)/vagrant-up
-
 clean-images:
 	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
-
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -138,9 +126,19 @@ clean-all: vagrant-destroy clean-profile clean-genconfig
 
 clean-local: clean-profile clean-genconfig
 	rm -f $(LOCAL_MILESTONES)
-
 local-ubuntu-dev-env:
 	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
+
+vagrant-destroy:
+	$(VAGRANT) destroy $(LOGCMD)
+	rm -f $(M)/vagrant-up
+
+xos-teardown: xos-update-images
+	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
+	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
+
+xos-update-images: clean-images
+	rm -f $(M)/start-xos $(M)/local-start-xos
 
 
 # == PREREQS == #
@@ -162,6 +160,10 @@ SETUP_AUTOMATION_PREREQS ?=
 # Prep targets
 $(M)/prereqs-check:
 	$(ANSIBLE_PB) $(PI)/prereqs-check-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/devel-ssh-key:
+	$(ANSIBLE_PB) $(BUILD)/ansible/devel-ssh-key.yml $(LOGCMD)
 	touch $@
 
 $(M)/build-local-bootstrap:
