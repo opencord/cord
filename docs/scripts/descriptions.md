@@ -1,0 +1,208 @@
+## cord_profile
+
+The CORD profile to use. Corresponds to a filename in the `profile_manifests` directory
+
+## frontend_only
+
+`frontend_only` suppresses starting synchronzier containers as a part of the
+XOS container set. It is used in testing scenarios where synchronizers aren't
+needed.
+
+## apt_cacher_name
+
+DNS name for the apt-cacher-ng server used by compute nodes and LXC containers on head node.
+
+## apt_cacher_port
+
+Port # for apt-cacher-ng
+
+## apt_ssl_sites
+
+Sites that use SSL.  These bypass apt-cacher-ng
+
+## build_cord_dir
+
+Directory on the `build` node that the `cord` directory (root directory checked out by `repo`) is checked out into.
+
+## build_docker_tag
+
+Tag applied to all built (and downloaded standalone) Docker images.
+
+## ca_digest
+
+Name of the digest (aka "hash") algorithm used when creating SSL certificates.
+
+## ca_im_days
+
+Length of time in days that an Intermediate Certificate Authority cert will be valid for.
+
+## ca_im_phrase
+
+The passphrase (password) used to encrypt the Intermediate Certificate Authority's private key.
+
+## ca_im_subj
+
+The subject (name in the certificate) of the Intermediate Certificate Authority.
+
+## ca_root_days
+
+Length of time in days that the Root Certificate Authority cert will be valid for.
+
+## ca_root_phrase
+
+The passphrase (password) used to encrypt the Root Certificate Authority's private key.
+
+## ca_root_subj
+
+The subject (name in the certificate) of the Root Certificate Authority.
+
+## ca_size
+
+Size of the keys used in generating the certificate, in bits.
+
+## cert_days
+## cert_digest
+## cert_size
+
+## charm_versions
+
+List of Juju charms and the versions used.
+
+## client_certs
+
+List of client SSL certificates to generate
+
+## cloudlab_extrafs
+
+
+
+## cloudlab_links
+
+
+
+## compute_external_interfaces
+
+Name of the interfaces on the
+
+## config_cord_dir
+
+Location of the
+
+See also #(
+
+## config_cord_profile_dir
+## cord_app_version
+## cord_in_a_box
+## credentials_dir
+## delete_cord_profile_dir
+## deploy_docker_registry
+## deploy_docker_tag
+## deployment_flavors
+## deployment_type
+## dhcpd_subnets
+## disable_minidashboard
+## dns_check_domain
+## dns_check_ipv4
+## dns_search
+## dns_servers
+## dns_ttl
+## docker_apt_repo
+## enabled_gui_extensions
+## fabric_network_cfg_json
+## frontend_only
+## gerrit_changesets
+## gui_api_endpoint
+## gui_background
+## gui_branding_bg
+## gui_branding_favicon
+## gui_branding_icon
+## gui_branding_name
+## gui_favicon
+## gui_logo
+## gui_payoff
+## gui_project_name
+## gui_routes
+## gui_service_view_class
+## gui_websocket
+## gw_port
+## head_cord_dir
+## head_cord_profile_dir
+## head_lxd_list
+## head_onos_cord_dir
+## head_onos_fabric_dir
+## hwaddr_prefix
+## image_dir
+## juju_config_path
+## keystone_admin_password
+## kvm_check
+## log4j_port
+## logging_host
+## management_hosts_net_cidr
+## management_hosts_net_range_xos_high
+## management_hosts_net_range_xos_low
+## management_network_cidr
+## mgmt_interface
+## mgmt_ipv4_first_octets
+## mgmtbr_ext_interface
+## mgmtbr_nat_interface
+## min_memtotal_mb
+## min_processor_vcpus
+## nsd_conf
+## nsd_group
+## nsd_ip
+## nsd_zones
+## nsd_zonesdir
+## onos_docker_image
+## onos_log_level
+## physical_node_list
+## pki_dir
+## pod_sshkey_name
+## profile_library
+## repo_checksum
+## repo_dl_url
+## repo_manifest_url
+## run_dist_upgrade
+## server_certs
+## site_humanname
+## site_name
+## site_suffix
+## ssh_ca_phrase
+## ssh_client_genkeys
+## ssh_host_genkeys
+## ssh_keysize
+## ssh_keytype
+## ssh_pki_dir
+## trust_store_pw
+## unbound_conf
+## unbound_group
+## unbound_interfaces
+## unbound_listen_all
+## unbound_listen_on_default
+## use_apt_cache
+## use_fabric
+## use_maas
+## use_management_hosts
+## use_openstack
+## use_redis
+## use_vtn
+## volt_devices
+## vtn_management_host_net_interface
+## xos_admin_first
+## xos_admin_last
+## xos_admin_pass
+## xos_admin_user
+## xos_bootstrap_ui_port
+## xos_db_name
+## xos_db_password
+## xos_db_username
+## xos_dir
+## xos_docker_networks
+## xos_images
+## xos_libraries
+## xos_logging_channels
+## xos_logging_level
+## xos_other_templates
+## xos_services
+## xos_tosca_config_templates
+## xos_ui_port
+## xos_users
