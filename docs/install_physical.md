@@ -1,10 +1,13 @@
 # Installing a Physical POD
 
-The following is a detailed, step-by-step recipe for installing a physical POD.
+The following is a detailed, step-by-step recipe for installing a physical POD
+with multiple physical servers and switches.
 
->NOTE: Looking for a quick list of essential build commands? You can find it [here](quickstarts.md)
+If you are new to CORD and would like to get familiar with it, you should start
+by [bringing up a virtual POD on a single physical server](install_virtual.md).
 
->NOTE: If you are new to CORD and would like to get familiar with it, you should start by bringing up a development POD on a single physical server, called [CORD-in-a-Box](install_ciab.md).
+>NOTE: Looking for a quick list of essential build commands? You can find it
+>[here](install_quickstarts.md).
 
 ## Overview of a CORD POD
 

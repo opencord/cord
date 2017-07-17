@@ -46,9 +46,11 @@ genconfig/*
 
 # GitBook
 _book
-docs/xos
+docs/build_glossary.md
+docs/platform-install
 docs/profiles
 docs/test
+docs/xos
 docs/xos-gui
 docs/xos-tosca
 
