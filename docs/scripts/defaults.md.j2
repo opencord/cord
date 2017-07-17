@@ -1,0 +1,22 @@
+# Build System Variable Glossary
+
+{% for key, val in def_docs|dictsort -%}
+## {{ key }}
+{% if val['defval_type'] == 'dict' -%}
+Default value:
+```
+{{ val['defval_pp'] }}
+```
+{% else -%}
+Default value: `{{ val['defval_pp'] }}`
+{% endif -%}
+
+{{ val['description'] }}
+
+Used in:
+{% for file in val['reflist']|sort -%}
+ - {{ file }}
+{% endfor -%}
+
+{% endfor %}
+
