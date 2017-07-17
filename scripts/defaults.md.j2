@@ -1,0 +1,27 @@
+# Glossary of build system variables
+
+
+*Index*
+
+{% for key, val in def_docs|dictsort %}
+ - [{{ key }}](#{{ key }})
+{% endfor %}
+
+{% for key, val in def_docs|dictsort %}
+## {{ key }}
+
+Default value:
+```
+{{ val['defval_pp'] }}
+```
+
+{{ val['description'] }}
+
+Used in:
+
+{% for file in val['reflist']|sort -%}
+ - {{ file }}
+{% endfor -%}
+
+{% endfor %}
+
