@@ -11,6 +11,7 @@ BUILD            ?= .
 CORD             ?= ..
 PI               ?= $(BUILD)/platform-install
 MAAS             ?= $(BUILD)/maas
+ONOS_APPS        ?= $(CORD)/onos-apps
 
 # Configuration paths
 PODCONFIG_D      ?= $(BUILD)/podconfig
@@ -205,7 +206,12 @@ $(M)/onboard-profile: | $(M)/start-xos
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-profile-playbook.yml" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/start-xos $(M)/docker-images
+$(M)/build-onos-apps: | $(M)/prep-buildnode
+	$(SSH_BUILD) "cd /opt/cord/onos-apps; make images" $(LOGCMD)
+	touch $@
+
+$(M)/deploy-onos: | $(M)/start-xos $(M)/docker-images $(M)/build-onos-apps
+	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
 
