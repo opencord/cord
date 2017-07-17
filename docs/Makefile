@@ -1,26 +1,39 @@
 default: book
 
-build:
-	ln -s ../platform-install/docs platform-install && \
-	ln -s ../../test/cord-tester/docs test && \
-	ln -s ../../orchestration/xos/docs xos && \
-	ln -s ../../orchestration/xos-gui/docs xos-gui && \
-	ln -s ../../orchestration/profiles profiles && \
-	gitbook init && gitbook install && gitbook build
-
 book: clean build
 	gitbook serve
+
+GENERATED_DOCS = glossary.md
+
+build: platform-install test profiles xos xos-gui $(GENERATED_DOCS)
+	gitbook init
+	gitbook install
+	gitbook build
+
+platform-install:
+	ln -s ../platform-install/docs platform-install
+
+test:
+	ln -s ../../test/cord-tester/docs test
+
+profiles:
+	ln -s ../../orchestration/profiles profiles
+
+xos:
+	ln -s ../../orchestration/xos/docs xos
+
+xos-gui:
+	ln -s ../../orchestration/xos-gui/docs xos-gui
+
+glossary.md: scripts/descriptions.md scripts/defaults.md.j2 scripts/defaultsdoc.py
+	python scripts/defaultsdoc.py -o glossary.md > /dev/null
+
+ubuntu-tools:
+	sudo apt-get install nodejs npm
+
 clean:
-	rm -rf _book; \
-	rm -rf node_modules; \
-	rm platform-install; \
-	rm test; \
-	rm profiles; \
-	rm xos; \
-	rm xos-gui; \
-	rm -f ../platform-install/docs/docs; \
-	rm -f ../../test/cord-tester/docs/docs; \
-	rm -f ../../orchestration/xos/docs/docs; \
-	rm -f ../../orchestration/xos-gui/docs/docs; \
-	rm -f ../../orchestration/profiles/profiles
+	rm -rf $(GENERATED_DOCS)
+	rm -rf _book
+	rm -rf node_modules
+	rm -f platform-install test profiles xos xos-gui
 
