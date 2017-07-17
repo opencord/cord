@@ -318,9 +318,14 @@ For Docker images built by imagebuilder, the docker build logs are located in
 the `image_logs` directory on the build host, which may differ between
 scenarios.
 
-The full list of all buildable images is in `docker_images.yml`, and the set of
-images pulled in a particular build is controlled by the
-`docker_image_whitelist` variable that is set on a per-scenario basis.
+The full list of all images to build or pull is in `docker_images.yml`. There
+is documentation in that file that details how to add a new container image to
+the system, whether it needs to be built or just pulled.  If a specific image
+is needed, the image version tags are added in this file.
+
+The set of images pulled in a particular build is controlled by the
+`docker_image_whitelist` variable that is set on a per-scenario basis. Items in
+this list should not contain tags that specify versions.
 
 This script is in charge of guaranteeing that the code that has been checked
 out and containers used by the system have the same code in them.  This is a
