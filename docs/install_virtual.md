@@ -1,20 +1,17 @@
-# Installing CORD-in-a-Box
+# Installing a Virtual Pod (CORD-in-a-Box)
 
-This guide walks through the steps to bring up a virtual CORD
-POD, running in virtual machines on a single physical server. This
-version is also known as *CORD-in-a-Box* (or just *CiaB*).
-The purpose of this virtual POD is to enable those interested in
-understanding how CORD works to examine and interact with
-a running CORD environment. It also serves as a common
-[development environment](develop.md).
+This guide walks through the steps to bring up a simplified virtual CORD POD,
+running in multiple virtual machines on a single physical server.  For
+instructions on setting up a full physical pod with multiple servers, please
+see [Install a Physical Pod](install_physical.md).
 
->NOTE: Looking for a quick list of essential build commands?
->You can find it [here](quickstarts.md)
+The virtual pod is also known as *CORD-in-a-Box* (or just *CiaB*).  The purpose
+of this virtual POD is to enable those interested in understanding how CORD
+works to examine and interact with a running CORD environment. It also serves
+as a common [development environment](develop.md).
 
->NOTE: This guide describes how to install a simplified version
->of a CORD POD on a single server using virtual machines.
->If you are looking for instructions on how to install a physical
->POD, you can find it [here](install_pod.md).
+> NOTE: Looking for a quick list of essential build commands?
+> You can find it [here](install_quickstarts.md)
 
 ## What you need (prerequisites)
 
@@ -23,12 +20,12 @@ in a Vagrant VM (used to deploy CORD) as well as CiaB itself.
 
 ### Target server requirements:
 
-* 64-bit server, with
+* 64-bit AMD64/x86_64 server, with:
   * 48GB+ RAM
   * 12+ CPU cores
   * 200GB+ disk
 * Access to the Internet (no enterprise proxies)
-* Ubuntu 14.04 LTS freshly installed
+* Ubuntu 14.04.5 LTS freshly installed with updates
 * User account used to install CORD-in-a-Box has password-less *sudo*
   capability (e.g., like the `ubuntu` user)
 
@@ -57,7 +54,8 @@ information.
 
 There are three main steps to building CiaB:
 
-* Bootstrap the server by installing software dependencies and checking out the CORD code
+* Bootstrap the server by installing software dependencies and checking out the
+  CORD code
 * Customize the source and configuration if desired
 * Run `make` commands to build and deploy the CORD software, and run tests
 
@@ -65,15 +63,18 @@ There are three main steps to building CiaB:
 
 On the target server, download the script that bootstraps the build process and run it:
 
-<pre><code>cd ~ && \
+```
+cd ~ && \
 wget https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh && \
 chmod +x cord-bootstrap.sh && \
-~/cord-bootstrap.sh -v</code></pre>
+~/cord-bootstrap.sh -v
+```
 
-This script installs software dependencies (e.g., Ansible, Vagrant) as well as the CORD source code (in `~/cord`).
-One of the dependencies installed is `libvirt`.  As access to the libvirt socket depends on being in the `libvirtd` group, you
-may need to to logout and back in to have your shell session gain this group
-membership:
+This script installs software dependencies (e.g., Ansible, Vagrant) as well as
+the CORD source code (in `~/cord`).  One of the dependencies installed is
+`libvirt`.  As access to the libvirt socket depends on being in the `libvirtd`
+group, you may need to to logout and back in to have your shell session gain
+this group membership:
 
 ```
 ~$ groups
@@ -88,7 +89,8 @@ xos-PG0 root libvirtd
 
 ### Customize the source and configuration
 
-CiaB can be used as an integration testing platform for patchsets in Gerrit.  There is a `-p` option to `cord-bootstrap.sh` that will checkout a specific
+CiaB can be used as an integration testing platform for patchsets in Gerrit.
+There is a `-p` option to `cord-bootstrap.sh` that will checkout a specific
 changeset from a gerrit repo during the run.  The syntax for this is `<project
 path>:<changeset>/<revision>`.  It can be used multiple times - for example:
 
@@ -105,7 +107,8 @@ You can find the project path used by the `repo` tool in the [manifest/default.x
 
 ### Build and deploy the software
 
-Once the system has been bootstrapped, run the following `make` commands to launch the build:
+Once the system has been bootstrapped, run the following `make` commands to
+launch the build:
 
 ```
 cd ~/cord/build
@@ -122,12 +125,13 @@ use `mosh` to connect to the target rather than `ssh`.  Without one of these,
 interrupted connectivity between your local machine and the remote server
 may cause the CiaB install to hang.
 
-The `make -j4 build` step takes a *long time* (at least 1 hour) to run.  Be patient!  If it
-hasn't completely failed yet, then assume all is well!
+The `make -j4 build` step takes a *long time* (at least 1 hour) to run.  Be
+patient!  If it hasn't completely failed yet, then assume all is well!
 
 ### Run basic E2E tests
 
-If the build completed without errors, you can use the following command to run basic end-to-end tests:
+If the build completed without errors, you can use the following command to run
+basic end-to-end tests:
 
 ```
 cd ~/cord/build
@@ -138,9 +142,10 @@ The output of the tests will be displayed, as well as stored in `~/cord/build/lo
 
 ## Inspecting CiaB
 
-CiaB creates a virtual CORD POD running inside Vagrant VMs, using
-libvirt as a backend.  You can inspect the status of the VM's by setting the
-`VAGRANT_CWD` environmental variable to `~/cord/build/scenarios/cord` and running `vagrant status`:
+CiaB creates a virtual CORD POD running inside Vagrant VMs, using libvirt as a
+backend.  You can inspect the status of the VM's by setting the `VAGRANT_CWD`
+environmental variable to `~/cord/build/scenarios/cord` and running `vagrant
+status`:
 
 ```
 ~$ cd cord/build
@@ -161,11 +166,11 @@ VM, run `vagrant status NAME`.
 
 ### corddev VM
 
-The `corddev` VM is a build machine used
-to drive the installation.  It downloads and builds Docker containers and
-publishes them to the virtual head node (see below). It then installs MAAS on
-the virtual head node (for bare-metal provisioning) and the ONOS, XOS, and
-OpenStack services in containers.  This VM can be entered as follows:
+The `corddev` VM is a build machine used to drive the installation.  It
+downloads and builds Docker containers and publishes them to the virtual head
+node (see below). It then installs MAAS on the virtual head node (for
+bare-metal provisioning) and the ONOS, XOS, and OpenStack services in
+containers.  This VM can be entered as follows:
 
 ```
 $ ssh corddev
@@ -221,8 +226,8 @@ bec8d53ebe12        storage                               docker-registry:5000/c
 21289d8b63ff        registry-mirror                       registry:2.4.0
 ```
 
-The above shows Docker containers launched by XOS (container names starting with
-`rcord`).  Containers starting with `onos` are running ONOS.  There is
+The above shows Docker containers launched by XOS (container names starting
+with `rcord`).  Containers starting with `onos` are running ONOS.  There is
 also a Docker image registry, a Maven repository containing the CORD ONOS apps,
 and a number of microservices used in bare-metal provisioning.
 
@@ -299,8 +304,9 @@ vagrant@head1:~$ nova list --all-tenants
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
 ```
 
-The VM hosting the vSG is called `mysite_vsg-1` and we see it has a management IP of 172.27.0.2.
-Then run `ssh-agent` and add the default key (used to access the OpenStack VMs):
+The VM hosting the vSG is called `mysite_vsg-1` and we see it has a management
+IP of 172.27.0.2.  Then run `ssh-agent` and add the default key (used to access
+the OpenStack VMs):
 
 ```
 vagrant@head1:~$ ssh-agent bash
@@ -308,8 +314,8 @@ vagrant@head1:~$ ssh-add
 ```
 
 SSH to the compute node with the `-A` option and then to the VM using the
-management IP obtained above.  So if the compute node name is `bony-alley.cord.lab` and
-the management IP is 172.27.0.2:
+management IP obtained above.  So if the compute node name is
+`bony-alley.cord.lab` and the management IP is 172.27.0.2:
 
 ```
 vagrant@head1:~$ ssh -A ubuntu@bony-alley.cord.lab
@@ -323,22 +329,24 @@ ubuntu@mysite-vsg-1:~$
 ### MAAS GUI
 
 You can access the MAAS (Metal-as-a-Service) GUI by pointing your browser to
-the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on CloudLab,
-your `<target-server>` is the hostname of your CloudLab node.
-The username is `cord` and the auto-generated password is found in `~/cord/build/maas/passwords/maas_user.txt` on the CiaB server.
-For more information on MAAS, see [the MAAS documentation](http://maas.io/docs).
+the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on
+CloudLab, your `<target-server>` is the hostname of your CloudLab node.  The
+username is `cord` and the auto-generated password is found in
+`~/cord/build/maas/passwords/maas_user.txt` on the CiaB server.  For more
+information on MAAS, see [the MAAS documentation](http://maas.io/docs).
 
 ### XOS GUI
 
 You can access the XOS GUI by pointing your browser to URL
-`http://<target-server>:8080/xos/`.  The username is
-`xosadmin@opencord.org` and the auto-generated password is found in
+`http://<target-server>:8080/xos/`.  The username is `xosadmin@opencord.org`
+and the auto-generated password is found in
 `/opt/credentials/xosadmin@opencord.org` on the head node.
 
 The state of the system is that all CORD services have been onboarded to XOS.
-You can see them in the `Service Graph` represented in the `Home` page.
-If you want to see more details about the services you navigate to `Core > Services`,
-or searching for `Service` in the top bar (you start searching just pressing `f`)
+You can see them in the `Service Graph` represented in the `Home` page.  If you
+want to see more details about the services you navigate to `Core > Services`,
+or searching for `Service` in the top bar (you start searching just pressing
+`f`)
 
 A sample CORD subscriber has also been created. You can see the `Service Graph`
 for subscribers by selecting the `Service Graph` item in the left navigation.
@@ -346,7 +354,8 @@ for subscribers by selecting the `Service Graph` item in the left navigation.
 Here is a sample output:
 ![subscriber-service-graph.png](subscriber-service-graph.png)
 
->NOTE: the `Service Graph` will need to be detangled. You can organize the nodes by dragging them around.
+> NOTE: the `Service Graph` will need to be detangled. You can organize the
+> nodes by dragging them around.
 
 ### Kibana Logging GUI
 
@@ -440,7 +449,8 @@ place that failed.  The easiest way is to do is to re-run the
 If you need to force `make build` to re-run steps that have already completed,
 remove the appropriate file in the `milestones` directory prior to re-running.
 
-For more information about how the build works, see [the build internals guide](./build_internals.md).
+For more information about how the build works, see [the build internals
+guide](build_internals.md).
 
 ## Congratulations
 
@@ -449,5 +459,5 @@ If you got this far, you successfully built, deployed, and tested your first
 
 You are now ready to bring up a multi-node POD with a real switching fabric and
 multiple physical compute nodes.  The process for doing so is
-described in the [Physical POD Guide](./quickstart_physical.md).
+described in [Installing a Physical POD](install_physical.md).
 
