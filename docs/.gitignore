@@ -1,5 +1,7 @@
 node_modules/
+platform-install
 profiles
 test
 xos
 xos-gui
+glossary.md
