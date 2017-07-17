@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,27 +13,68 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # rcord-physical-example Pod Config
 # Example configuration for a physical R-CORD pod
 
 cord_scenario: cord
 cord_profile: rcord
 
+# Bring up the corddev VM. This is the `build` node as specified in ansible
+# inventory below.
+vagrant_vms:
+ - 'corddev'
+
+# Location of the cord_profile directory to be mounted in the `corddev` VM by
+# Vagrant.
+#
+# host_cord_profile_dir: "/path_to/cord_profile"
+
+# Set these directory paths if the defaults aren't suitable, or if deploying
+# multiple pods from the same source tree where the credentials, keys, and
+# profile should differ.
+#
+# credentials_dir: '/path_to/credentials'
+# pki_dir: '/path_to/pki'
+# ssh_pki_dir: '/path_to/ssh_pki'
+
 # Variables
-credentials_dir: '/opt/credentials'
-pki_dir: '/opt/pki'
-ssh_pki_dir: '/opt/ssh_pki'
-
+# IP address used for the ONOS Fabric
 fabric_ip: '10.6.1.1/24'
-management_ip: '10.6.0.1/24'
-external_ip: '47.135.132.21/24'
-management_network: 10.6.0.0/24
 
-headnode: headnode.site1.opencord.org
+# IP and range of the management network, which MaaS serves DHCP
+management_ip: '10.6.0.1/24'
+management_network: '10.6.0.0/24'
+
+# External gateway IP address and range that the head node is on
+external_ip: '10.80.1.1/24'
+
+# name or IP of the POD head node, used to SSH to the head node. You can also
+# specify the head node user here in user@hostname format.  This could also be
+# `cord@headnode.site1.opencord.org` as specified later in inventory, if
+# external DNS is set up.
+headnode: 'cord@10.80.1.200'
+
+# the external IP on the head node and docker registry (on the head node)
+external_gw: '10.80.1.200'
+deploy_docker_registry: "10.80.1.200:5000"
+
+# Makefile targets
+# primary build target (the final MaaS build step in this case)
+build_targets:
+  - 'setup-automation'
+
+copy_cord_prereqs:
+  - 'config-ssh-key'
+
+skipTags:
+  - 'set_compute_node_password'
+
+# Wait until headnode prepped before building containers, for consistent DNS
+docker_images_prereqs:
+  - 'prep-headnode'
 
 # Inventory for ansible, used to generate inventory.ini
+# There must be a config, build, head, and compute sections
 inventory_groups:
 
   config:
@@ -41,15 +82,14 @@ inventory_groups:
       ansible_connection: local
 
   build:
-    localhost:
-      ansible_connection: local
+    corddev:
 
   head:
     headnode.site1.opencord.org:
-      ansible_host: 10.90.0.2
+      ansible_host: 10.80.1.200
       ansible_port: 22
-      ansible_user: ubuntu
-      ansible_ssh_pass: ubuntu
+      ansible_user: cord
+      ansible_ssh_pass: cordpass
 
   compute:
 
