@@ -1,23 +1,30 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$cordpath = ".."
+require 'yaml'
+settings = YAML.load_file('genconfig/config.yml')
+
+$cordpath = "../../.."
+$ciab_dir = "/opt/ciab"
 
 Vagrant.configure(2) do |config|
+
+  config.vm.synced_folder '.', '/vagrant', disabled: true
 
   config.vm.define "corddev" do |d|
     d.ssh.forward_agent = true
     d.vm.box = "ubuntu/trusty64"
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
-    d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
-    d.vm.provider "virtualbox" do |v|
-      v.memory = 2048
+    d.vm.synced_folder $cordpath, settings['build_cord_dir']
+    d.vm.provider :virtualbox do |v|
+      v.memory = settings['dev_vm_mem']
+      v.cpus = settings['dev_vm_cpu']
     end
     d.vm.provider :libvirt do |v, override|
-      v.memory = 2048
-      override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+      v.memory = settings['dev_vm_mem']
+      v.cpus = settings['dev_vm_cpu']
+      override.vm.synced_folder $cordpath, $build_cord_dir, type: "nfs"
     end
   end
 
@@ -26,62 +33,46 @@ Vagrant.configure(2) do |config|
     d.vm.hostname = "prod"
     d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
     d.vm.network "private_network", ip: "10.100.198.201"
+    d.vm.synced_folder $cordpath, $ciab_dir
     d.vm.network "private_network",
-        ip: "0.0.0.0",
+        ip: "0.0.0.0", # not used, ignore
         auto_config: false,
-        virtualbox__intnet: "cord-mgmt-network",
-        libvirt__network_name: "cord-mgmt-network",
+        virtualbox__intnet: settings['mgmt_network_name'],
+        libvirt__network_name: settings['mgmt_network_name'],
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.network "private_network",
-        ip: "0.1.0.0",
+        ip: "0.1.0.0", # not used, ignore
         mac: "02420a060101",
         auto_config: false,
         virtualbox__intnet: "head-node-leaf-1",
         libvirt__network_name: "head-node-leaf-1",
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
-    d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/prod.yml -c local"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 cd /cord/build/platform-install; ansible-playbook -i inventory/head-localhost deploy-elasticstack-playbook.yml"
-    d.vm.provider "virtualbox" do |v|
-      v.memory = 2048
+    d.vm.provider :virtualbox do |v|
+      v.memory = settings['dev_vm_mem']
+      v.cpus = settings['dev_vm_cpu']
     end
     d.vm.provider :libvirt do |v, override|
-      v.memory = 24576
-      v.cpus = 8
+      v.memory = settings['dev_vm_mem']
+      v.cpus = settings['dev_vm_cpu']
       v.storage :file, :size => '100G', :type => 'qcow2'
-      override.vm.synced_folder $cordpath, "/cord", type: "nfs"
-      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/add-extra-drive.yml -c local"
-    end
-  end
-
-  config.vm.define "switch" do |s|
-    s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "fakeswitch"
-    s.vm.network "private_network", ip: "10.100.198.253"
-    s.vm.network "private_network",
-        type: "dhcp",
-        virtualbox__intnet: "cord-fabric-network",
-        libvirt__network_name: "cord-fabric-network",
-        mac: "cc37ab000001"
-    s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/fakeswitch.yml -c local"
-    s.vm.provider "virtualbox" do |v|
-      v.memory = 1048
-      v.name = "fakeswitch"
+      override.vm.provision :ansible do |ansible|
+        ansible.playbook = $cordpath + "/build/ansible/add-extra-drive.yml" # Needs testing
+      end
     end
   end
 
   config.vm.define "leaf-1" do |s|
     s.vm.box = "ubuntu/trusty64"
     s.vm.hostname = "leaf-1"
+    s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network",
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name'],
       mac: "cc37ab000011"
     s.vm.network "private_network",
       ip: "0.1.0.0",
@@ -111,33 +102,37 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-1-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    if (ENV['FABRIC'] == "1")
+    if (settings['enable_fabric'])
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
-    else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provision :ansible do |ansible|
+      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
+      ansible.extra_vars = {
+        fabric: settings['enable_fabric'],
+        net_prefix: "10.6.1"
+      }
     end
     s.vm.provider :libvirt do |v, override|
-        v.memory = 512
-        v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
+        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
     end
-    s.vm.provider "virtualbox" do |v, override|
-        v.memory = 512
-        v.cpus = 1
+    s.vm.provider :virtualbox do |v, override|
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
     end
   end
 
   config.vm.define "leaf-2" do |s|
     s.vm.box = "ubuntu/trusty64"
     s.vm.hostname = "leaf-2"
+    s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network",
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name'],
       mac: "cc37ab000012"
     s.vm.network "private_network",
       ip: "0.3.0.0",
@@ -167,33 +162,37 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    if (ENV['FABRIC'] == "1")
+    if (settings['enable_fabric'])
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
-    else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provision :ansible do |ansible|
+      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
+      ansible.extra_vars = {
+        fabric: settings['enable_fabric'],
+        net_prefix: "10.6.1"
+      }
     end
     s.vm.provider :libvirt do |v, override|
-        v.memory = 512
-        v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
+        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
     end
-    s.vm.provider "virtualbox" do |v, override|
-        v.memory = 512
-        v.cpus = 1
+    s.vm.provider :virtualbox do |v, override|
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
     end
   end
 
   config.vm.define "spine-1" do |s|
     s.vm.box = "ubuntu/trusty64"
     s.vm.hostname = "spine-1"
+    s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network",
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name'],
       mac: "cc37ab000021"
     s.vm.network "private_network",
       ip: "0.5.0.0",
@@ -209,33 +208,37 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    if (ENV['FABRIC'] == "1")
+    if (settings['enable_fabric'])
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
-    else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provision :ansible do |ansible|
+      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
+      ansible.extra_vars = {
+        fabric: settings['enable_fabric'],
+        net_prefix: "10.6.1"
+      }
     end
     s.vm.provider :libvirt do |v, override|
-        v.memory = 512
-        v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
+        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
     end
-    s.vm.provider "virtualbox" do |v, override|
-        v.memory = 512
-        v.cpus = 1
+    s.vm.provider :virtualbox do |v, override|
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
     end
   end
 
   config.vm.define "spine-2" do |s|
     s.vm.box = "ubuntu/trusty64"
     s.vm.hostname = "spine-2"
+    s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network",
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name'],
       mac: "cc37ab000022"
     s.vm.network "private_network",
       ip: "0.6.0.0",
@@ -251,37 +254,24 @@ Vagrant.configure(2) do |config|
       libvirt__network_name: "leaf-2-spine-2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
-    s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    if (ENV['FABRIC'] == "1")
+    if (settings['enable_fabric'])
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
-    else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+    end
+    s.vm.provision :ansible do |ansible|
+      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
+      ansible.extra_vars = {
+        fabric: settings['enable_fabric'],
+        net_prefix: "10.6.1"
+      }
     end
     s.vm.provider :libvirt do |v, override|
-        v.memory = 512
-        v.cpus = 1
-        override.vm.synced_folder $cordpath, "/cord", type: "nfs"
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
+        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
     end
-    s.vm.provider "virtualbox" do |v, override|
-        v.memory = 512
-        v.cpus = 1
-    end
-  end
-
-  config.vm.define "testbox" do |d|
-    d.vm.box = "fgrehm/trusty64-lxc"
-    d.ssh.forward_agent = true
-    d.vm.hostname = "testbox"
-    d.vm.network "private_network", ip: "10.0.3.100", lxc__bridge_name: 'lxcbr0'
-    d.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
-    d.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /cord/build/ansible/corddev.yml -c local"
-    config.vm.provider :lxc do |lxc|
-        # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
-        lxc.customize 'cgroup.memory.limit_in_bytes', '2048M'
-        lxc.customize 'aa_profile', 'unconfined'
-        lxc.customize 'cgroup.devices.allow', 'b 7:* rwm'
-        lxc.customize 'cgroup.devices.allow', 'c 10:237 rwm'
+    s.vm.provider :virtualbox do |v, override|
+        v.memory = settings['switch_vm_mem']
+        v.cpus = settings['switch_vm_cpu']
     end
   end
 
@@ -292,8 +282,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network"
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.2.0.0",
@@ -303,17 +293,18 @@ Vagrant.configure(2) do |config|
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
-      v.memory = 8192
-      v.cpus = 4
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.machine_virtual_size = 100
       v.storage :file, :size => '100G', :type => 'qcow2'
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
     end
-    c.vm.provider "virtualbox" do |v, override|
+    c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
-      v.memory = 1048
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.gui = "true"
     end
   end
@@ -325,8 +316,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network"
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.3.0.0",
@@ -336,17 +327,18 @@ Vagrant.configure(2) do |config|
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
-      v.memory = 8192
-      v.cpus = 4
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.machine_virtual_size = 100
       v.storage :file, :size => '100G', :type => 'qcow2'
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
     end
-    c.vm.provider "virtualbox" do |v, override|
+    c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
-      v.memory = 1048
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.gui = "true"
     end
   end
@@ -358,8 +350,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: "cord-mgmt-network",
-      libvirt__network_name: "cord-mgmt-network"
+      virtualbox__intnet: settings['mgmt_network_name'],
+      libvirt__network_name: settings['mgmt_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.4.0.0",
@@ -369,17 +361,18 @@ Vagrant.configure(2) do |config|
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
-      v.memory = 8192
-      v.cpus = 4
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.machine_virtual_size = 100
       v.storage :file, :size => '100G', :type => 'qcow2'
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
     end
-    c.vm.provider "virtualbox" do |v, override|
+    c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
-      v.memory = 1048
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
       v.gui = "true"
     end
   end
