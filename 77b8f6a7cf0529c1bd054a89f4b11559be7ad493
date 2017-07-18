@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3a1d315d_1ab51dcd",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-18T14:21:49Z",
+      "side": 1,
+      "message": "My intention was for the prep-buildnode-playbook.yml to do all the prep on the build node.\n\nThat playbook currently installs docker, but not ansible - adding ansible to it wouldn\u0027t be that hard as it\u0027s done in the `head-prep` role, which could be split out into head-only tasks and ansible install tasks.",
+      "parentUuid": "3a1d315d_7ab651de",
+      "range": {
+        "startLine": 19,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a1d315d_5abb95c4",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 5
@@ -60,6 +84,30 @@
       "writtenOn": "2017-07-18T14:06:22Z",
       "side": 1,
       "message": "Zack: Is this OK with you?  Otherwise Vagrant throws an error during the corddev VM provisioning.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 10
+      },
+      "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1d315d_fac9415b",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-18T14:21:49Z",
+      "side": 1,
+      "message": "That seems fine, although see the other comment about the build node install in general.",
+      "parentUuid": "3a1d315d_5abb95c4",
       "range": {
         "startLine": 240,
         "startChar": 4,
