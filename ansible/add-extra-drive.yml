@@ -1,5 +1,6 @@
-- hosts: localhost
-  remote_user: vagrant
+- name: Set up extra drive in the Vagrant VM
+  hosts: all
+  become: yes
   serial: 1
   roles:
     - extra-drive

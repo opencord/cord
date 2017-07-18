@@ -56,7 +56,7 @@ Vagrant.configure(2) do |config|
       v.cpus = 8
       v.storage :file, :size => '100G', :type => 'qcow2'
       override.vm.synced_folder $cordpath, "/opt/ciab", type: "nfs"
-      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/add-extra-drive.yml -c local"
+      override.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/add-extra-drive.yml -c local -i localhost,"
     end
   end
 
@@ -102,9 +102,9 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1' -i localhost,"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1' -i localhost,"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
@@ -159,9 +159,9 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'fabric=true net_prefix=10.6.1' -i localhost,"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/leafswitch.yml -c local -e 'net_prefix=10.6.1' -i localhost,"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
@@ -202,9 +202,9 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1' -i localhost,"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1' -i localhost,"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512
@@ -245,9 +245,9 @@ Vagrant.configure(2) do |config|
     s.vm.provision :shell, path: $cordpath + "/build/scripts/bootstrap_ansible.sh"
     if (ENV['FABRIC'] == "1")
       s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'fabric=true net_prefix=10.6.1' -i localhost,"
     else
-      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1'"
+      s.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 ansible-playbook /opt/ciab/build/ansible/spineswitch.yml -c local -e 'net_prefix=10.6.1' -i localhost,"
     end
     s.vm.provider :libvirt do |v, override|
         v.memory = 512

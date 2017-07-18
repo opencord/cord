@@ -30,8 +30,27 @@ prep_headnode_prereqs:
   - copy-cord
   - copy-config
 
+build_cord_dir: "/home/vagrant/cord"
+
 buildnode: corddev
 headnode: prod
+
+dev_vm_mem: 2048
+dev_vm_cpu: 1
+
+head_vm_mem: 16384
+head_vm_cpu: 8
+
+compute_vm_mem: 16384
+compute_vm_cpu: 8
+
+switch_vm_mem: 512
+switch_vm_cpu: 1
+
+mgmt_network_name: cordmgmt
+
+# Enable experimental fabric
+enable_fabric: False
 
 # cord profile config
 frontend_only: False
