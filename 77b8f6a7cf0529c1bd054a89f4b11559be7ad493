@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1d315d_7a8f7124",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-18T13:24:55Z",
+      "side": 1,
+      "message": "Will this create another copy of the `cord` directory structure?\n\nWhat is this supposed to do?",
+      "range": {
+        "startLine": 19,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
