@@ -22,6 +22,53 @@
       "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1d315d_7ab651de",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-18T14:06:22Z",
+      "side": 1,
+      "message": "It won\u0027t create a new copy of \u0027cord\u0027 because the $cordpath is mounted in /home/vagrant/cord in the corddev VM.\n\nThe intention is to bootstrap the corddev VM with Ansible and Docker so that we can build the Docker images there.  Previously this was done through a custom playbook.  It would be good if we were able to use the same bootstrap script in every environment.",
+      "parentUuid": "3a1d315d_7a8f7124",
+      "range": {
+        "startLine": 19,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a1d315d_5abb95c4",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-07-18T14:06:22Z",
+      "side": 1,
+      "message": "Zack: Is this OK with you?  Otherwise Vagrant throws an error during the corddev VM provisioning.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 240,
+        "endChar": 10
+      },
+      "revId": "77b8f6a7cf0529c1bd054a89f4b11559be7ad493",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
