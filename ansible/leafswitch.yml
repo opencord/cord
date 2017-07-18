@@ -1,5 +1,5 @@
-- hosts: localhost
-  remote_user: vagrant
+- hosts: all
+  become: yes
   serial: 1
   roles:
     - common
