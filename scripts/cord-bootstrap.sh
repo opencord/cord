@@ -237,7 +237,7 @@ then
 
   if [[ $HAS_NEEDED_GROUPS -ne 0 ]];
   then
-    exit 1
+    exit 0
   fi
 fi
 
