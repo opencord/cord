@@ -26,7 +26,7 @@ LOGS             ?= $(BUILD)/logs
 
 ALL_MILESTONES   ?= $(M)/prereqs-check $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/elasticstack $(M)/prep-computenode $(M)/glance-images $(M)/deploy-openstack $(M)/deploy-maas $(M)/deploy-computenode $(M)/docker-images $(M)/core-image $(M)/start-xos $(M)/onboard-profile $(M)/deploy-onos $(M)/onboard-openstack
 
-LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
+LOCAL_MILESTONES ?= $(M)/local-ubuntu-dev-env $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
 
 # Configuration files
 MASTER_CONFIG    ?= $(GENCONFIG_D)/config.yml
@@ -122,6 +122,8 @@ clean-all: vagrant-destroy clean-profile clean-genconfig
 
 clean-local: clean-profile clean-genconfig
 	rm -f $(LOCAL_MILESTONES)
+
+local-ubuntu-dev-env: $(M)/local-ubuntu-dev-env
 
 # == PREREQS == #
 VAGRANT_UP_PREREQS     ?=
@@ -224,6 +226,10 @@ pod-test: $(M)/onboard-openstack
 	$(ANSIBLE_PB) $(PI)/pod-test-playbook.yml $(LOGCMD)
 
 # Local Targets, bring up XOS containers without a VM
+
+$(M)/local-ubuntu-dev-env:
+	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
+	touch $@
 
 $(M)/local-cord-config:
 	$(ANSIBLE_PB) $(PI)/cord-config-playbook.yml $(LOGCMD)
