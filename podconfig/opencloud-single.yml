@@ -1,0 +1,7 @@
+---
+# opencloud-single Pod Config
+# Creates a single-node OpenCloud pod w/synchronizers
+
+cord_scenario: single
+cord_profile: opencloud
+
