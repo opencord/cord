@@ -38,4 +38,10 @@ PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}
 {% if prep_headnode_prereqs is defined %}
 PREP_HEADNODE_PREREQS   = $(M)/{{ prep_headnode_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if start_xos_prereqs is defined %}
+START_XOS_PREREQS       = $(M)/{{ start_xos_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if deploy_onos_prereqs is defined %}
+DEPLOY_ONOS_PREREQS     = $(M)/{{ deploy_onos_prereqs | join(" $(M)/") }}
+{% endif %}
 
