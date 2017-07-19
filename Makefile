@@ -123,6 +123,9 @@ clean-all: vagrant-destroy clean-profile clean-genconfig
 clean-local: clean-profile clean-genconfig
 	rm -f $(LOCAL_MILESTONES)
 
+local-ubuntu-dev-env:
+	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
+
 # == PREREQS == #
 VAGRANT_UP_PREREQS     ?=
 CORD_CONFIG_PREREQS    ?=
