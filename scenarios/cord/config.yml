@@ -2,26 +2,33 @@
 # cord Scenario
 # for both Physical (using a corddev VM) and Virtual (using multiple VMs)
 
+# cord profile config
+frontend_only: False
+
+build_cord_dir: "/home/vagrant/cord"
+
+buildnode: corddev
+headnode: prod
+
+# docker config
+deploy_docker_tag: "candidate"
+
 # make build config
 build_targets:
  - deploy-maas
  - onboard-openstack
 
-vagrant_vms:
-  - corddev
-  - prod
-
 vagrant_up_prereqs:
   - prereqs-check
 
-# have to copy cord and config to physical/virtual nodes
+# Copy cord and config to physical/virtual nodes
 cord_config_prereqs:
   - copy-cord
 
 copy_config_prereqs:
   - cord-config
 
-# can prep build and head node simultaneously
+# Can prep build and head node simultaneously
 prep_buildnode_prereqs:
   - copy-cord
   - copy-config
@@ -30,10 +37,17 @@ prep_headnode_prereqs:
   - copy-cord
   - copy-config
 
-build_cord_dir: "/home/vagrant/cord"
+# Start elasticstack before XOS/ONOS, which log to it
+start_xos_prereqs:
+  - deploy-elasticstack
 
-buildnode: corddev
-headnode: prod
+deploy_onos_prereqs:
+  - deploy-elasticstack
+
+# Vagrant VM configuration
+vagrant_vms:
+  - corddev
+  - prod
 
 dev_vm_mem: 2048
 dev_vm_cpu: 1
@@ -47,16 +61,10 @@ compute_vm_cpu: 8
 switch_vm_mem: 512
 switch_vm_cpu: 1
 
-mgmt_network_name: cordmgmt
+vm_management_network_name: cordmgmt
 
 # Enable experimental fabric
 enable_fabric: False
-
-# cord profile config
-frontend_only: False
-
-# docker config
-deploy_docker_tag: "candidate"
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
@@ -69,22 +77,33 @@ docker_image_whitelist:
   - "xosproject/xos-libraries"
   - "xosproject/xos-postgres"
   - "xosproject/xos-tosca"
-  - "xosproject/xos-synchronizer-base"
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
   - "xosproject/gui-extension-rcord"
   - "xosproject/gui-extension-sample"
   - "xosproject/gui-extension-vtr"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/exampleservice-synchronizer"
+  - "xosproject/fabric-synchronizer"
   - "xosproject/onos-synchronizer"
   - "xosproject/openstack-synchronizer"
+  - "xosproject/volt-synchronizer"
   - "xosproject/vrouter-synchronizer"
+  - "xosproject/vsg-synchronizer"
   - "xosproject/vtn-synchronizer"
-  - "xosproject/exampleservice-synchronizer"
+  - "xosproject/vtr-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
   - "redis"
+
+# node topology
+physical_node_list:
+  - name: prod
+    ipv4_last_octet: 1
+    aliases:
+      - head
 
 # Inventory for ansible, used to generate inventory.ini
 inventory_groups:
