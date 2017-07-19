@@ -37,8 +37,8 @@ Vagrant.configure(2) do |config|
     d.vm.network "private_network",
         ip: "0.0.0.0", # not used, ignore
         auto_config: false,
-        virtualbox__intnet: settings['mgmt_network_name'],
-        libvirt__network_name: settings['mgmt_network_name'],
+        virtualbox__intnet: settings['vm_management_network_name'],
+        libvirt__network_name: settings['vm_management_network_name'],
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.network "private_network",
@@ -71,8 +71,8 @@ Vagrant.configure(2) do |config|
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name'],
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
       mac: "cc37ab000011"
     s.vm.network "private_network",
       ip: "0.1.0.0",
@@ -131,8 +131,8 @@ Vagrant.configure(2) do |config|
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name'],
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
       mac: "cc37ab000012"
     s.vm.network "private_network",
       ip: "0.3.0.0",
@@ -191,8 +191,8 @@ Vagrant.configure(2) do |config|
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name'],
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
       mac: "cc37ab000021"
     s.vm.network "private_network",
       ip: "0.5.0.0",
@@ -237,8 +237,8 @@ Vagrant.configure(2) do |config|
       #type: "dhcp",
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name'],
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
       mac: "cc37ab000022"
     s.vm.network "private_network",
       ip: "0.6.0.0",
@@ -282,8 +282,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name']
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.2.0.0",
@@ -316,8 +316,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name']
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.3.0.0",
@@ -350,8 +350,8 @@ Vagrant.configure(2) do |config|
       adapter: 1,
       ip: "0.0.0.0",
       auto_config: false,
-      virtualbox__intnet: settings['mgmt_network_name'],
-      libvirt__network_name: settings['mgmt_network_name']
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name']
     c.vm.network "private_network",
       adapter: 2,         # The fabric interface for each node
       ip: "0.4.0.0",

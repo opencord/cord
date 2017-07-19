@@ -24,7 +24,7 @@ GENCONFIG_D      ?= $(BUILD)/genconfig
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-ALL_MILESTONES   ?= $(M)/prereqs-check $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/elasticstack $(M)/prep-computenode $(M)/glance-images $(M)/deploy-openstack $(M)/deploy-maas $(M)/deploy-computenode $(M)/docker-images $(M)/core-image $(M)/start-xos $(M)/onboard-profile $(M)/deploy-onos $(M)/onboard-openstack
+ALL_MILESTONES   ?= $(M)/prereqs-check $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode $(M)/glance-images $(M)/deploy-openstack $(M)/deploy-maas $(M)/deploy-computenode $(M)/docker-images $(M)/core-image $(M)/start-xos $(M)/onboard-profile $(M)/deploy-onos $(M)/onboard-openstack
 
 LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
 
@@ -98,7 +98,7 @@ xos-teardown: xos-update-images
 	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
 
 xos-update-images: clean-images
-	rm -f $(M)/core-image $(M)/start-xos $(M)/local-core-image $(M)local-start-xos
+	rm -f $(M)/start-xos $(M)/local-start-xos
 
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
@@ -108,7 +108,7 @@ vagrant-destroy:
 	rm -f $(M)/vagrant-up
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -132,6 +132,8 @@ CORD_CONFIG_PREREQS    ?=
 COPY_CONFIG_PREREQS    ?=
 PREP_BUILDNODE_PREREQS ?=
 PREP_HEADNODE_PREREQS  ?=
+START_XOS_PREREQS      ?=
+DEPLOY_ONOS_PREREQS    ?=
 
 # == MILESTONES == #
 # empty target files are touched in the milestones dir to indicate completion
@@ -169,7 +171,7 @@ $(M)/prep-headnode: | $(M)/vagrant-up $(M)/cord-config $(PREP_HEADNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-headnode-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/elasticstack: | $(M)/prep-headnode
+$(M)/deploy-elasticstack: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/deploy-elasticstack-playbook.yml $(LOGCMD)
 	touch $@
 
@@ -181,7 +183,7 @@ $(M)/glance-images: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/glance-images-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-openstack: | $(M)/elasticstack $(M)/prep-headnode $(M)/prep-computenode
+$(M)/deploy-openstack: | $(M)/deploy-elasticstack $(M)/prep-headnode $(M)/prep-computenode
 	$(ANSIBLE_PB) $(PI)/deploy-openstack-playbook.yml $(LOGCMD)
 	touch $@
 
@@ -201,7 +203,7 @@ $(M)/core-image: | $(M)/docker-images $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/build-core-image-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/start-xos: | $(M)/prep-headnode $(M)/core-image
+$(M)/start-xos: | $(M)/prep-headnode $(M)/core-image $(START_XOS_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/start-xos-playbook.yml" $(LOGCMD)
 	touch $@
 
@@ -213,7 +215,7 @@ $(M)/build-onos-apps: | $(M)/prep-buildnode
 	$(SSH_BUILD) "cd /opt/cord/onos-apps; make images" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/start-xos $(M)/docker-images $(M)/build-onos-apps
+$(M)/deploy-onos: | $(M)/prep-headnode $(M)/docker-images $(M)/build-onos-apps $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@

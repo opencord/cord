@@ -14,14 +14,14 @@ build_cord_dir: /opt/cord
 buildnode: head1
 headnode: head1
 
-# make build config
+# Make build config
 build_targets:
  - onboard-openstack
 
 vagrant_up_prereqs:
   - prereqs-check
 
-# have to copy cord and config to physical/virtual nodes
+# Copy cord and config to physical/virtual nodes
 cord_config_prereqs:
   - copy-cord
 
@@ -32,9 +32,27 @@ prep_buildnode_prereqs:
   - copy-cord
   - copy-config
 
-# have to run build prep before head prep, when build == head
+# Run build prep before head prep, when build == head
 prep_headnode_prereqs:
   - prep-buildnode
+
+# Start elasticstack before XOS/ONOS, which log to it
+start_xos_prereqs:
+  - deploy-elasticstack
+
+deploy_onos_prereqs:
+  - deploy-elasticstack
+
+# node topology, used to bring up management interfaces
+physical_node_list:
+  - name: head1
+    ipv4_last_octet: 1
+    aliases:
+      - head
+  - name: compute1
+    ipv4_last_octet: 20
+  - name: compute2
+    ipv4_last_octet: 21
 
 # Vagrant VM configuration
 vagrant_vms:
@@ -47,9 +65,9 @@ head_vm_cpu: 8
 compute_vm_mem: 16384
 compute_vm_cpu: 8
 
-mgmt_network_name: cordmgmt
-public_network_name: cordpub
-public_network_cidr: "10.230.100.0/24"
+vm_management_network_name: cordmgmt
+vm_public_network_name: cordpub
+vm_public_network_cidr: "10.230.100.0/24"
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
@@ -62,22 +80,24 @@ docker_image_whitelist:
   - "xosproject/xos-libraries"
   - "xosproject/xos-postgres"
   - "xosproject/xos-tosca"
-  - "xosproject/xos-synchronizer-base"
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
   - "xosproject/gui-extension-rcord"
   - "xosproject/gui-extension-sample"
   - "xosproject/gui-extension-vtr"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/exampleservice-synchronizer"
   - "xosproject/onos-synchronizer"
   - "xosproject/openstack-synchronizer"
   - "xosproject/vrouter-synchronizer"
   - "xosproject/vtn-synchronizer"
-  - "xosproject/exampleservice-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
   - "redis"
+
+
 
 # Ansible Inventory
 inventory_groups:

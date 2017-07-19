@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# single Scenario Vagrantfile
+
+require 'yaml'
+settings = YAML.load_file('genconfig/config.yml')
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+
+  # sync these folders with VM
+  config.vm.synced_folder "../../../", "/opt/cord/", create: true
+  config.vm.synced_folder "../../../../cord_profile/", "/opt/cord_profile/", create: true
+  config.vm.synced_folder "../../platform-install/credentials/", "/opt/credentials/", create: true
+
+  # set the headnode VM
+  config.vm.define "headnode" do |d|
+    d.vm.hostname = "headnode"
+    d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
+    d.vm.network "private_network",
+      ip: settings['head_vm_ip']
+    d.vm.provider :virtualbox do |vb|
+      vb.memory = settings['head_vm_mem']
+      vb.cpus = settings['head_vm_cpu']
+    end
+    d.vm.provider :libvirt do |v|
+      v.memory = settings['head_vm_mem']
+      v.cpus = settings['head_vm_cpu']
+    end
+  end
+
+end
+
