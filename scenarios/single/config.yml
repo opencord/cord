@@ -1,0 +1,88 @@
+---
+# single head-node scenario
+# Brings up a VM with synchronizers, for more complicated testing without OpenStack
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..') | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+build_cord_dir: /opt/cord
+
+# Vagrant VM configuration
+head_vm_mem: 4096
+head_vm_cpu: 8
+head_vm_ip: "192.168.46.100"
+
+vagrant_vms:
+  - headnode
+
+buildnode: headnode
+headnode: headnode
+
+physical_node_list:
+  - name: headnode
+    ipv4_last_octet: 1
+    aliases:
+      - head
+
+# make targets
+build_targets:
+  - onboard-profile
+
+prep_headnode_prereqs:
+  - prep-buildnode
+
+# single scenario configuration
+frontend_only: False
+use_maas: False
+use_apt_cache: False
+use_openstack: False
+xos_images: []
+
+# whitelist of images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-libraries"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-rcord"
+  - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vtr"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/exampleservice-synchronizer"
+  - "xosproject/fabric-synchronizer"
+  - "xosproject/onos-synchronizer"
+  - "xosproject/openstack-synchronizer"
+  - "xosproject/volt-synchronizer"
+  - "xosproject/vrouter-synchronizer"
+  - "xosproject/vsg-synchronizer"
+  - "xosproject/vtn-synchronizer"
+  - "xosproject/vtr-synchronizer"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "redis"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    headnode:
+
+  head:
+    headnode:
+
+  compute:
+
