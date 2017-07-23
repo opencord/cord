@@ -77,7 +77,6 @@ help:
 # Config file generation
 config: $(CONFIG_FILES)
 
-
 $(CONFIG_FILES):
 	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)'" $(BUILD)/ansible/genconfig.yml $(LOGCMD)
 
@@ -99,6 +98,9 @@ xos-teardown: xos-update-images
 
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
+
+collect-diag:
+	$(ANSIBLE_PB) $(PI)/collect-diag-playbook.yml $(LOGCMD)
 
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
@@ -225,7 +227,7 @@ $(M)/onboard-openstack: | $(M)/deploy-computenode $(M)/glance-images $(M)/deploy
 	touch $@
 
 # Testing targets
-pod-test: $(M)/onboard-openstack
+pod-test: $(M)/onboard-openstack collect-diag
 	$(ANSIBLE_PB) $(PI)/pod-test-playbook.yml $(LOGCMD)
 
 # Local Targets, bring up XOS containers without a VM
