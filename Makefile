@@ -100,6 +100,9 @@ xos-teardown: xos-update-images
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
 
+collect-diag:
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB) $(PI)/collect-diag-playbook.yml" $(LOGCMD)
+
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 

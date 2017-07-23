@@ -209,6 +209,9 @@ There are various utility targets:
 
  - `xos-teardown`: Stop and remove a running set of XOS docker containers
 
+ - `collect-diag`: Collect detailed diagnostic information on a deployed head
+   and compute nodes, into `diag-<datestamp>` directory on the head node.
+
  - `compute-node-refresh`: Reload compute nodes brought up by MaaS into XOS,
    useful in the cord virtual and physical scenarios
 
