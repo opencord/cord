@@ -5,4 +5,4 @@
   serial: 1
   roles:
     - common
-    - prod
+    - head-net
