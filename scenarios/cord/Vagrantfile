@@ -24,13 +24,13 @@ Vagrant.configure(2) do |config|
     d.vm.provider :libvirt do |v, override|
       v.memory = settings['dev_vm_mem']
       v.cpus = settings['dev_vm_cpu']
-      override.vm.synced_folder $cordpath, $build_cord_dir, type: "nfs"
+      override.vm.synced_folder $cordpath, settings['build_cord_dir'], type: "nfs"
     end
   end
 
-  config.vm.define "prod" do |d|
+  config.vm.define "head1" do |d|
     d.vm.box = "ubuntu/trusty64"
-    d.vm.hostname = "prod"
+    d.vm.hostname = "head1"
     d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
     d.vm.network "private_network", ip: "10.100.198.201"
     d.vm.synced_folder $cordpath, $ciab_dir
@@ -45,17 +45,20 @@ Vagrant.configure(2) do |config|
         ip: "0.1.0.0", # not used, ignore
         mac: "02420a060101",
         auto_config: false,
-        virtualbox__intnet: "head-node-leaf-1",
-        libvirt__network_name: "head-node-leaf-1",
+        virtualbox__intnet: "head1-leaf1",
+        libvirt__network_name: "head1-leaf1",
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
     d.vm.provider :virtualbox do |v|
-      v.memory = settings['dev_vm_mem']
-      v.cpus = settings['dev_vm_cpu']
+      v.memory = settings['head_vm_mem']
+      v.cpus = settings['head_vm_cpu']
+    end
+    d.vm.provision :ansible do |ansible|
+      ansible.playbook = $cordpath + "/build/ansible/head-net.yml"
     end
     d.vm.provider :libvirt do |v, override|
-      v.memory = settings['dev_vm_mem']
-      v.cpus = settings['dev_vm_cpu']
+      v.memory = settings['head_vm_mem']
+      v.cpus = settings['head_vm_cpu']
       v.storage :file, :size => '100G', :type => 'qcow2'
       override.vm.provision :ansible do |ansible|
         ansible.playbook = $cordpath + "/build/ansible/add-extra-drive.yml" # Needs testing
@@ -63,9 +66,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "leaf-1" do |s|
+  config.vm.define "leaf1" do |s|
     s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "leaf-1"
+    s.vm.hostname = "leaf1"
     s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
@@ -77,29 +80,29 @@ Vagrant.configure(2) do |config|
     s.vm.network "private_network",
       ip: "0.1.0.0",
       auto_config: false,
-      virtualbox__intnet: "head-node-leaf-1",
-      libvirt__network_name: "head-node-leaf-1",
+      virtualbox__intnet: "head1-leaf1",
+      libvirt__network_name: "head1-leaf1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.2.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-1-leaf-1",
-      libvirt__network_name: "compute-node-1-leaf-1",
+      virtualbox__intnet: "compute1-leaf1",
+      libvirt__network_name: "compute1-leaf1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.5.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-1-spine-1",
-      libvirt__network_name: "leaf-1-spine-1",
+      virtualbox__intnet: "leaf1-spine1",
+      libvirt__network_name: "leaf1-spine1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.6.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-1-spine-2",
-      libvirt__network_name: "leaf-1-spine-2",
+      virtualbox__intnet: "leaf1-spine2",
+      libvirt__network_name: "leaf1-spine2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     if (settings['enable_fabric'])
@@ -123,9 +126,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "leaf-2" do |s|
+  config.vm.define "leaf2" do |s|
     s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "leaf-2"
+    s.vm.hostname = "leaf2"
     s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
@@ -137,29 +140,29 @@ Vagrant.configure(2) do |config|
     s.vm.network "private_network",
       ip: "0.3.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-2-leaf-2",
-      libvirt__network_name: "compute-node-2-leaf-2",
+      virtualbox__intnet: "compute2-leaf2",
+      libvirt__network_name: "compute2-leaf2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.4.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-3-leaf-2",
-      libvirt__network_name: "compute-node-3-leaf-2",
+      virtualbox__intnet: "compute3-leaf2",
+      libvirt__network_name: "compute3-leaf2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.7.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-2-spine-1",
-      libvirt__network_name: "leaf-2-spine-1",
+      virtualbox__intnet: "leaf2-spine1",
+      libvirt__network_name: "leaf2-spine1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.8.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-2-spine-2",
-      libvirt__network_name: "leaf-2-spine-2",
+      virtualbox__intnet: "leaf2-spine2",
+      libvirt__network_name: "leaf2-spine2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     if (settings['enable_fabric'])
@@ -183,9 +186,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "spine-1" do |s|
+  config.vm.define "spine1" do |s|
     s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "spine-1"
+    s.vm.hostname = "spine1"
     s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
@@ -197,15 +200,15 @@ Vagrant.configure(2) do |config|
     s.vm.network "private_network",
       ip: "0.5.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-1-spine-1",
-      libvirt__network_name: "leaf-1-spine-1",
+      virtualbox__intnet: "leaf1-spine1",
+      libvirt__network_name: "leaf1-spine1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.7.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-2-spine-1",
-      libvirt__network_name: "leaf-2-spine-1",
+      virtualbox__intnet: "leaf2-spine1",
+      libvirt__network_name: "leaf2-spine1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     if (settings['enable_fabric'])
@@ -229,9 +232,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "spine-2" do |s|
+  config.vm.define "spine2" do |s|
     s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "spine-2"
+    s.vm.hostname = "spine2"
     s.vm.synced_folder $cordpath, $ciab_dir
     s.vm.network "private_network",
       #type: "dhcp",
@@ -243,15 +246,15 @@ Vagrant.configure(2) do |config|
     s.vm.network "private_network",
       ip: "0.6.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-1-spine-2",
-      libvirt__network_name: "leaf-1-spine-2",
+      virtualbox__intnet: "leaf1-spine2",
+      libvirt__network_name: "leaf1-spine2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     s.vm.network "private_network",
       ip: "0.8.0.0",
       auto_config: false,
-      virtualbox__intnet: "leaf-2-spine-2",
-      libvirt__network_name: "leaf-2-spine-2",
+      virtualbox__intnet: "leaf2-spine2",
+      libvirt__network_name: "leaf2-spine2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     if (settings['enable_fabric'])
@@ -275,9 +278,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "compute-node-1" do |c|
+  config.vm.define "compute1" do |c|
     c.vm.communicator = "none"
-    c.vm.hostname = "compute-node-1"
+    c.vm.hostname = "compute1"
     c.vm.network "private_network",
       adapter: 1,
       ip: "0.0.0.0",
@@ -288,8 +291,8 @@ Vagrant.configure(2) do |config|
       adapter: 2,         # The fabric interface for each node
       ip: "0.2.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-1-leaf-1",
-      libvirt__network_name: "compute-node-1-leaf-1",
+      virtualbox__intnet: "compute1-leaf1",
+      libvirt__network_name: "compute1-leaf1",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
@@ -309,9 +312,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "compute-node-2" do |c|
+  config.vm.define "compute2" do |c|
     c.vm.communicator = "none"
-    c.vm.hostname = "compute-node-2"
+    c.vm.hostname = "compute2"
     c.vm.network "private_network",
       adapter: 1,
       ip: "0.0.0.0",
@@ -322,8 +325,8 @@ Vagrant.configure(2) do |config|
       adapter: 2,         # The fabric interface for each node
       ip: "0.3.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-2-leaf-2",
-      libvirt__network_name: "compute-node-2-leaf-2",
+      virtualbox__intnet: "compute2-leaf2",
+      libvirt__network_name: "compute2-leaf2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
@@ -343,9 +346,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "compute-node-3" do |c|
+  config.vm.define "compute3" do |c|
     c.vm.communicator = "none"
-    c.vm.hostname = "compute-node-3"
+    c.vm.hostname = "compute3"
     c.vm.network "private_network",
       adapter: 1,
       ip: "0.0.0.0",
@@ -356,8 +359,8 @@ Vagrant.configure(2) do |config|
       adapter: 2,         # The fabric interface for each node
       ip: "0.4.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute-node-3-leaf-2",
-      libvirt__network_name: "compute-node-3-leaf-2",
+      virtualbox__intnet: "compute3-leaf2",
+      libvirt__network_name: "compute3-leaf2",
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
     c.vm.provider :libvirt do |v|
