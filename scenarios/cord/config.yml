@@ -5,31 +5,59 @@
 # cord profile config
 frontend_only: False
 
-build_cord_dir: "/home/vagrant/cord"
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
 
-buildnode: corddev
-headnode: prod
+build_cord_dir: "/opt/cord"
+
+buildnode: head1
+headnode: head1
 
 # docker config
+deploy_docker_registry: "docker-registry:5000"  # IP address of head node giving errors
 deploy_docker_tag: "candidate"
+pull_docker_registry: "docker-registry:5000/"
+pull_docker_tag: "candidate"
+
+# Variables required by MAAS
+fabric_ip: '10.6.1.1/24'
+management_ip: '10.1.0.1/24'
+external_iface: 'eth0'
+management_network: '10.1.0.0/24'
+#ansible_ssh_user: "vagrant"  # wtf
+
+# Other old config carried over
+skipTags:
+  - 'set_compute_node_password'
+  - 'switch_support'
+  - 'reboot'
+  - 'interface_config'
+cord_in_a_box: True # what is this for?
+fabric_include_names: eth2
+fabric_include_module_types: omit
+fabric_exclude_names: eth0,eth1
+management_include_names: eth1
+management_exclude_names: eth0,eth2
 
 # make build config
 build_targets:
- - deploy-maas
- - onboard-openstack
+ - prereqs-check
+ - prep-headnode
+ - setup-automation
+ - compute1-up
 
 vagrant_up_prereqs:
   - prereqs-check
 
-# Copy cord and config to physical/virtual nodes
 cord_config_prereqs:
   - copy-cord
 
 copy_config_prereqs:
   - cord-config
 
-# Can prep build and head node simultaneously
 prep_buildnode_prereqs:
+  - prep-headnode
   - copy-cord
   - copy-config
 
@@ -44,14 +72,22 @@ docker_images_prereqs:
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-elasticstack
+  - deploy-maas
+  - publish-docker-images
+
+deploy_openstack_prereqs:
+  - deploy-maas
 
 deploy_onos_prereqs:
-  - deploy-elasticstack
+  - deploy-maas
+  - deploy-mavenrepo
+
+setup_automation_prereqs:
+  - deploy-openstack
 
 # Vagrant VM configuration
 vagrant_vms:
-  - corddev
-  - prod
+  - head1
 
 dev_vm_mem: 2048
 dev_vm_cpu: 1
@@ -69,6 +105,10 @@ vm_management_network_name: cordmgmt
 
 # Enable experimental fabric
 enable_fabric: False
+
+# Apt cache depends on DNS provided by MAAS
+# MAAS isn't installed when prep-headnode runs
+use_apt_cache: False
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
@@ -105,7 +145,7 @@ docker_image_whitelist:
 
 # node topology
 physical_node_list:
-  - name: prod
+  - name: head1
     ipv4_last_octet: 1
     aliases:
       - head
@@ -114,13 +154,14 @@ physical_node_list:
 inventory_groups:
 
   config:
-    corddev:
+    localhost:
+      ansible_connection: local
 
   build:
-    corddev:
+    head1:
 
   head:
-    prod:
+    head1:
 
   compute:
 
