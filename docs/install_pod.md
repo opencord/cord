@@ -1,6 +1,6 @@
-#Installing a CORD POD
+#Installing a Physical POD
 
-This section gives a detailed, step-by-step recipe for installing a physical POD.
+The following is a detailed, step-by-step recipe for installing a physical POD.
 
 >NOTE: If you are new to CORD and would like to get familiar with it, you should 
 >start by bringing up a development POD on a single physical server, called 

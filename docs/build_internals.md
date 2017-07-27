@@ -1,19 +1,23 @@
-# CORD Quickstart (Makefile edition)
+# Build System Internals
 
-## TL;DR Version
+The following describes the internals of the build system, which (in
+brief) walks through the following four steps:
 
- - Setup your build environment. On a bare Ubuntu 14.04 system, this can be
-   done by running `scripts/cord-bootstrap.sh` or manually.
- - Pick a Pod Config, such as `rcord-mock.yml` from the podconfig directory.
- - Run `make PODCONFIG=podconfig.yml config` (see 'podconfig' directory for
+* Setup your build environment. On a bare Ubuntu 14.04 system, this can be
+done by running `scripts/cord-bootstrap.sh` or manually.
+
+* Pick a POD Config, such as `rcord-mock.yml` from the `podconfig` directory.
+
+* Run `make PODCONFIG=podconfig.yml config` (see `podconfig` directory for
    filenames) to generate a configuration into the `genconfig/` directory.
- - Run `make build` to build CORD.
 
-## Setup the build environment
+* Run `make build` to build CORD.
 
-### Bootstrap script
+## Setup the Build Environment
 
-There's a script `scripts/cord-bootstrap.sh` that will bootstrap an Ubuntu
+### Bootstrap Script
+
+The script `scripts/cord-bootstrap.sh` bootstraps an Ubuntu
 14.04 system (such as a CloudLab node) by installing the proper tools and
 checkout the codebase with repo.
 
@@ -35,15 +39,15 @@ Usage for ./cord-bootstrap.sh:
   -v                           Install Vagrant for mock/virtual/physical scenarios.
 ```
 
-The `-p` option will download a patch from gerrit, and the syntax for this is
-`<project path>:<changeset>/<revision>`.  It can be used multiple times - for
-example:
+The `-p` option downloads a patch from gerrit, and the syntax for this is
+`<project path>:<changeset>/<revision>`.  It can be used multiple
+time. For example:
 
 ```
 ./cord-bootstrap.sh -p build/platform-install:1233/4 -p orchestration/xos:1234/2
 ```
 
-will check out the `platform-install` repo with changeset 1233, patchset 4, and
+checks out the `platform-install` repo with changeset 1233, patchset 4, and
 `xos` repo changeset 1234, revision 2.
 
 You can find the project path in the `repo` manifest file: [manifest/default.xml](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml).
@@ -56,13 +60,14 @@ You are not in the group: libvirtd, please logout/login.
 You are not in the group: docker, please logout/login.
 ```
 
-In those cases, please logout and login to the system to gain the proper group
+In such cases, please logout and login to the system to gain the proper group
 membership. Note that any patches specified will be downloaded, but no make
 targets will be run if you're not in the right groups.
 
-#### cord-boostrap.sh Examples
+#### Examples: cord-boostrap.sh
 
-Download sourcecode and prep for a local build by installing docker
+Download source code and prep for a local build by installing docker
+
 ```
 ./cord-bootstrap.sh -d
 ```
@@ -88,7 +93,7 @@ the `libvirtd` group:
 ./cord-bootstrap.sh -v -t "PODCONFIG=rcord-virtual.yml config" -t "build" -t "pod-test"
 ```
 
-### Manual setup
+### Manual Setup
 
 The following tools are required to get started up CORD:
 
@@ -107,17 +112,17 @@ repo sync
 
 The build system can be found in the `cord/build/` directory.
 
-## Configuring a build
+## Configuring a Build
 
-### Pod Config
+### POD Config
 
-Configuration for a specific pod, specified in a YAML file that is used to
+Configuration for a specific build, specified in a YAML file that is used to
 generate other configuration files.  These also specify the scenario and
 profile to be used, allow for override the configuration in various ways, such
 as hostnames, passwords, and other ansible inventory specific items. These
 are specified in the `podconfigs` directory.
 
-A minimal Pod Config file must define:
+A minimal POD Config file must define:
 
 `cord_scenario` - the name of the scenario to use, which is defined in a
 directory under `scenarios`.
@@ -145,35 +150,36 @@ of a `config.yaml` file and possibly VM's specified in a `Vagrantfile`.
 
 ### Profile
 
-The set of CORD services brought into XOS, the service graph, and other
-per-profile configuration for a CORD deployment. These are located in
-`platform-install/profile_manifests`.
+The set of services that XOS on-boards into CORD -- the  _Service
+Graph_, and other per-profile configuration for a CORD deployment.
+These are located in `platform-install/profile_manifests`.
 
-## Config generation overview
+## Config Generation Overview
 
 When a command to generate config such as `make PODCONFIG=rcord-mock.yml
 config` is run, the following steps happen:
 
-1. The Pod Config file is read, in this case `genconfig/rcord-mock.yml`, which
+1. The POD Config file is read, in this case `genconfig/rcord-mock.yml`, which
    specifies the scenario and profile.
 2. The Scenario config file is read, in this case `scenario/mock/config.yml`.
 3. The contents of these files are combined into a master config variable, with
-   the Pod Config overwriting any config set in the Scenario.
+   the POD Config overwriting any config set in the Scenario.
 4. The entire master config is written to `genconfig/config.yml`.
 5. The `inventory_groups` variable is used to generate an ansible inventory
    file and put in `genconfig/inventory.ini`.
 6. Various variables are used to generate the makefile config file
    `genconfig/config.mk`. This sets the targets invoked by `make build`
 
-Note that the combination of the Pod and Scenaro config in step #3 is not a
-merge - if you define an item in the root of the Pod Config that has subkeys,
+Note that the combination of the POD and Scenaro config in step #3 is not a
+merge. If you define an item in the root of the POD Config that has subkeys,
 it will overwrite every subkey defined in the Scenario.  This is most noticable
-when setting the `inventory_groups` or `docker_image_whitelist` variable - if
-changing either in a Pod Config, you must recreate the entire structure or
-list. This may seem inconvenient, but other list or tree merging strategies
-lack a way to remove items from a tree structure.
+when setting the `inventory_groups` or `docker_image_whitelist`
+variable. If changing either in a POD Config, you must recreate the
+entire structure or list. This may seem inconvenient, but other list
+or tree merging strategies lack a way to remove items from a tree
+structure.
 
-## Build process overview
+## Build Process Overview
 
 The build process is driven by running `make`. The two most common makefile
 targets are `config` and `build`, but there are also utility targets that are
@@ -186,7 +192,7 @@ handy to use during development.
 claiming an invalid config, you probably didn't set it, or set it to a filename
 that doesn't exist.
 
-#### `make config` Examples
+#### Examples: `make config`
 
 `make PODCONFIG=rcord-local.yml config`
 
@@ -240,16 +246,16 @@ The `clean-*` utility targets should modify the contents of the milestones
 directory appropriately to cause the steps they clean up after to be rerun on
 the next `make build` cycle.
 
-### Target logging
+### Target Logging
 
 `make` targets that are built will create a per-target log file in the `logs`
 directory. These are prefixed with a datestamp which is the same for every
 target in a single run of make - re-running make will result in additional sets
 of logs, even for the same target.
 
-### Tips and tricks
+### Tips and Tricks
 
-#### Debugging make failures
+#### Debugging Make Failures
 
 If you have a build failure and want to know which targets completed, running:
 
@@ -260,7 +266,7 @@ ls -ltr milestones ; ls -ltr logs
 And looking for logfiles without a corresponding milestone will point you to
 the make target(s) that failed.
 
-#### Update XOS container images
+#### Update XOS Container Images
 
 To rebuild and update XOS container images, run:
 
@@ -308,7 +314,7 @@ make -j4 build
 If you want to use both in combination, make sure to run the ElasticStack
 target first, so ONOS can send logs to ElasticStack.
 
-### Building docker images with imagebuilder.py
+### Building Docker Images with imagebuilder.py
 
 For docker images for XOS (and possibly others in the future) the build system
 uses the imagebuilder script.  Run `imagebuilder.py -h` for a list of arguments
