@@ -207,6 +207,9 @@ Most of the build targets in the Makefile don't leave artifacts behind, so we
 write a placeholder file (aka "sentinels" or "empty targets") in the
 `milestones` directory.
 
+_If you are deploying a `mock` profile and you are using `Virtualbox` use 
+`make VAGRANT_PROVIDER=virtualbox build`_
+
 ### Utility make targets
 
 There are various utility targets:
