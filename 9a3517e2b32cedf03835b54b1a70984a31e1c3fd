@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_82e9c41c",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T22:51:35Z",
+      "side": 1,
+      "message": "text wrap to 80 columns?",
+      "revId": "9a3517e2b32cedf03835b54b1a70984a31e1c3fd",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_a28cc080",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T22:51:35Z",
+      "side": 1,
+      "message": "For correctness, we should ignore lines that start with `#`, per:\nhttps://docs.docker.com/engine/reference/builder/#dockerignore-file",
+      "revId": "9a3517e2b32cedf03835b54b1a70984a31e1c3fd",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
