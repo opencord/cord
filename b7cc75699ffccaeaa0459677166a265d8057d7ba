@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_c7ac6e8f",
+        "filename": "docs/quickstart_make.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T05:34:36Z",
+      "side": 1,
+      "message": "Is \"POD\" an acronym? If so is it this one, which the more unusual PoD capitalization: \nhttps://en.wikipedia.org/wiki/Point_of_delivery_(networking)\n\nk8s uses a different etymology and all-lowercase \"pod\" except where normal capitalization rules apply: https://kubernetes.io/docs/concepts/workloads/pods/pod/",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 7
+      },
+      "revId": "b7cc75699ffccaeaa0459677166a265d8057d7ba",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
