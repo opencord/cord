@@ -207,6 +207,9 @@ Most of the build targets in the Makefile don't leave artifacts behind, so we
 write a placeholder file (aka "sentinels" or "empty targets") in the
 `milestones` directory.
 
+_If you are deploying a `mock` profile and you are using `Virtualbox` use 
+`make VAGRANT_PROVIDER=virtualbox build`_
+
 ### Utility make targets
 
 There are various utility targets:
@@ -288,6 +291,20 @@ make -j4 build
 
 This will teardown the XOS container set, tell the build system to rebuild
 images, then perform a build and reload the profile.
+
+#### Apply configuration changes without rebuilding the containers
+
+If you're working on the profiles, for example changing the data loaded via TOSCA, you don't need to rebuild your container again, but you need to tear everything down and redeploy. In this case you can:
+```
+make clean-profile
+make -j4 build
+```
+
+Note that this workflow will not destroy the containers, so if you need a clean state you can remove them using:
+```
+docker-compose -p <cord_profile> stop
+docker-compose -p <cord_profile> rm
+```
 
 #### Use ElasticStack or ONOS with the `single` scenario
 

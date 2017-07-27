@@ -5,6 +5,7 @@
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..') | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+create_configdirs_become: False
 
 build_cord_dir: /opt/cord
 
