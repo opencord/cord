@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_47e73ee5",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T07:55:38Z",
+      "side": 1,
+      "message": "We might be defining this twice, with different names: https://github.com/opencord/platform-install/blob/master/roles/cord-profile/defaults/main.yml#L120\n\nIs this the the \"MANAGEMENT_HOST\" VTN network?",
+      "revId": "64a338c5264e211554a86610173d1a9381f7bc8b",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_67e23ad7",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T07:55:38Z",
+      "side": 1,
+      "message": "In addition to your comment, this variable name is deprecated in all ansible versions \u003e2.0",
+      "revId": "64a338c5264e211554a86610173d1a9381f7bc8b",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_27ec42c7",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T07:55:38Z",
+      "side": 1,
+      "message": "How interfaces are brought up needs work, as it\u0027s currently a shell script that generates the legacy /etc/network/interfaces file\n\nI\u0027m doing a jinja2 implementation of that config file generation for OpenCloud that can probably be reused.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 40
+      },
+      "revId": "64a338c5264e211554a86610173d1a9381f7bc8b",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
