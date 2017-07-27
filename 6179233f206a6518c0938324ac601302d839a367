@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_c2e69c44",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-27T23:00:18Z",
+      "side": 1,
+      "message": "The spec seems to only allow comments at the beginning of lines:\n\n\"If a line in .dockerignore file starts with # in column 1, then this line is considered as a comment and is ignored before interpreted by the CLI.\"\n\nso would `line[0] \u003d\u003d \u0027#\u0027` be a better test?",
+      "revId": "6179233f206a6518c0938324ac601302d839a367",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
