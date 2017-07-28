@@ -99,6 +99,12 @@ xos-teardown: xos-update-images
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
 
+ansible-ping:
+	$(ANSIBLE) -m ping all $(LOGCMD)
+
+ansible-setup:
+	$(ANSIBLE) -m setup all $(LOGCMD)
+
 collect-diag:
 	$(ANSIBLE_PB) $(PI)/collect-diag-playbook.yml $(LOGCMD)
 
@@ -134,6 +140,7 @@ CORD_CONFIG_PREREQS    ?=
 COPY_CONFIG_PREREQS    ?=
 PREP_BUILDNODE_PREREQS ?=
 PREP_HEADNODE_PREREQS  ?=
+DOCKER_IMAGES_PREREQS  ?=
 START_XOS_PREREQS      ?=
 DEPLOY_ONOS_PREREQS    ?=
 
@@ -165,8 +172,8 @@ $(M)/copy-config: | $(COPY_CONFIG_PREREQS)
 
 $(M)/prep-buildnode: | $(M)/vagrant-up $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-buildnode-playbook.yml $(LOGCMD)
-	@echo Waiting 10 seconds to timeout SSH ControlPersist, and so future ansible commands gain docker group membership
-	sleep 10
+	@echo Waiting 20 seconds to timeout SSH ControlPersist, and so future ansible commands gain docker group membership
+	sleep 20
 	touch $@
 
 $(M)/prep-headnode: | $(M)/vagrant-up $(M)/cord-config $(PREP_HEADNODE_PREREQS)
@@ -197,7 +204,7 @@ $(M)/deploy-computenode: | $(M)/deploy-openstack
 	$(ANSIBLE_PB) $(PI)/deploy-computenode-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/docker-images: | $(M)/prep-buildnode
+$(M)/docker-images: | $(M)/prep-buildnode $(DOCKER_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd /opt/cord/build; $(IMAGEBUILDER) -f $(MASTER_CONFIG) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml " $(LOGCMD)
 	touch $@
 
@@ -209,10 +216,6 @@ $(M)/start-xos: | $(M)/prep-headnode $(M)/core-image $(START_XOS_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/start-xos-playbook.yml" $(LOGCMD)
 	touch $@
 
-$(M)/onboard-profile: | $(M)/start-xos
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-profile-playbook.yml" $(LOGCMD)
-	touch $@
-
 $(M)/build-onos-apps: | $(M)/prep-buildnode
 	$(SSH_BUILD) "cd /opt/cord/onos-apps; make images" $(LOGCMD)
 	touch $@
@@ -220,6 +223,14 @@ $(M)/build-onos-apps: | $(M)/prep-buildnode
 $(M)/deploy-onos: | $(M)/prep-headnode $(M)/docker-images $(M)/build-onos-apps $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/onboard-profile: | $(M)/start-xos $(M)/deploy-onos
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-profile-playbook.yml" $(LOGCMD)
+	touch $@
+
+$(M)/onos-debug: | $(M)/onboard-profile
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onos-debug-playbook.yml" $(LOGCMD)
 	touch $@
 
 $(M)/onboard-openstack: | $(M)/deploy-computenode $(M)/glance-images $(M)/deploy-onos $(M)/onboard-profile
