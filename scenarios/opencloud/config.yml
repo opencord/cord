@@ -36,6 +36,10 @@ prep_buildnode_prereqs:
 prep_headnode_prereqs:
   - prep-buildnode
 
+# Wait until headnode prepped before building containers, for consistent DNS
+docker_images_prereqs:
+  - prep-headnode
+
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-elasticstack
