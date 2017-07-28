@@ -16,6 +16,24 @@
       "revId": "6179233f206a6518c0938324ac601302d839a367",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_e22198b5",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-07-28T19:46:05Z",
+      "side": 1,
+      "message": "what if you have a space before the #? Anyway given the spec, any line containing an # is a comment, so doesn\u0027t really matter if you check the position or not",
+      "parentUuid": "1a1a2d67_c2e69c44",
+      "revId": "6179233f206a6518c0938324ac601302d839a367",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
