@@ -6,6 +6,7 @@
 {% if inventory_groups[groupname] %}
 {% for g_key, g_val in inventory_groups[groupname].iteritems() %}
 {{ g_key }}{% if g_val %} {% for key, val in g_val.iteritems() %}{{ key ~ "=" ~ val }}{% endfor %}{% endif %}
+
 {% endfor %}
 {% endif %}
 {% endmacro %}

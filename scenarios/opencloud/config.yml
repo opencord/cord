@@ -16,6 +16,7 @@ headnode: head1
 
 # Make build config
 build_targets:
+ - onos-debug
  - onboard-openstack
 
 vagrant_up_prereqs:
@@ -36,6 +37,10 @@ prep_buildnode_prereqs:
 prep_headnode_prereqs:
   - prep-buildnode
 
+# Wait until headnode prepped before building containers, for consistent DNS
+docker_images_prereqs:
+  - prep-headnode
+
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-elasticstack
@@ -50,14 +55,15 @@ physical_node_list:
     aliases:
       - head
   - name: compute1
-    ipv4_last_octet: 20
+    ipv4_last_octet: 250
   - name: compute2
-    ipv4_last_octet: 21
+    ipv4_last_octet: 251
 
 # Vagrant VM configuration
 vagrant_vms:
   - head1
   - compute1
+  - compute2
 
 head_vm_mem: 16384
 head_vm_cpu: 8
@@ -114,4 +120,5 @@ inventory_groups:
 
   compute:
     compute1:
+    compute2:
 
