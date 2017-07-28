@@ -32,11 +32,15 @@ build_targets:
 prep_headnode_prereqs:
   - prep-buildnode
 
+docker_images_prereqs:
+  - prep-headnode
+
 # mock profile configuration
 frontend_only: True
 use_maas: False
 use_apt_cache: False
 use_openstack: False
+create_configdirs_become: False
 xos_images: []
 
 # whitelist of images for imagebuilder to build/pull (tagged elsewhere)
