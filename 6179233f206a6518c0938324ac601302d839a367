@@ -34,6 +34,24 @@
       "revId": "6179233f206a6518c0938324ac601302d839a367",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_0dc4c590",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-07-29T07:20:19Z",
+      "side": 1,
+      "message": "I think I\u0027m taking a stricter reading of the spec - if a whitespace character was the first character on the line (\"column 1\"), that line wouldn\u0027t be considered a comment.",
+      "parentUuid": "1a1a2d67_e22198b5",
+      "revId": "6179233f206a6518c0938324ac601302d839a367",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
