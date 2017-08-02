@@ -17,6 +17,10 @@ clean:
 	rm test; \
 	rm profiles; \
 	rm xos; \
-	rm xos-gui
-
+	rm xos-gui; \
+	rm -f ../platform-install/docs/docs; \
+	rm -f ../../test/cord-tester/docs/docs; \
+	rm -f ../../orchestration/xos/docs/docs; \
+	rm -f ../../orchestration/xos-gui/docs/docs; \
+	rm -f ../../orchestration/profiles/profiles
 
