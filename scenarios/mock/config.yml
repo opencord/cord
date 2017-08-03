@@ -63,6 +63,7 @@ docker_image_whitelist:
   - "gliderlabs/registrator"
   - "nginx"
   - "redis"
+  - "node"
 
 # Ansible Inventory
 inventory_groups:

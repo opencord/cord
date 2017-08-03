@@ -74,6 +74,7 @@ docker_image_whitelist:
   - "nginx"
   - "onosproject/onos"
   - "redis"
+  - "node"
 
 # Ansible Inventory
 inventory_groups:

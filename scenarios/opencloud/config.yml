@@ -102,6 +102,7 @@ docker_image_whitelist:
   - "nginx"
   - "onosproject/onos"
   - "redis"
+  - "node"
 
 
 
