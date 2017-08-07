@@ -38,6 +38,9 @@ physical_node_list:
 build_targets:
   - onboard-profile
 
+config_ssh_key_prereqs:
+  - vagrant-ssh-install
+
 cord_config_prereqs:
   - vagrant-ssh-install
 
