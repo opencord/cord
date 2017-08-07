@@ -143,14 +143,15 @@ local-ubuntu-dev-env:
 
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS     ?=
-CORD_CONFIG_PREREQS    ?=
-COPY_CONFIG_PREREQS    ?=
-PREP_BUILDNODE_PREREQS ?=
-PREP_HEADNODE_PREREQS  ?=
-DOCKER_IMAGES_PREREQS  ?=
-START_XOS_PREREQS      ?=
-DEPLOY_ONOS_PREREQS    ?=
+VAGRANT_UP_PREREQS       ?=
+CORD_CONFIG_PREREQS      ?=
+COPY_CONFIG_PREREQS      ?=
+PREP_BUILDNODE_PREREQS   ?=
+PREP_HEADNODE_PREREQS    ?=
+DOCKER_IMAGES_PREREQS    ?=
+START_XOS_PREREQS        ?=
+DEPLOY_ONOS_PREREQS      ?=
+DEPLOY_MAVENREPO_PREREQS ?=
 DEPLOY_OPENSTACK_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
 
@@ -217,9 +218,8 @@ $(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config
 	$(ANSIBLE_PB) $(MAAS)/head-node.yml $(LOGCMD)
 	touch $@
 
-
 # ONOS targets
-$(M)/build-onos-apps: | $(M)/prep-buildnode $(BUILD_ONOS_APPS_PREREQS)
+$(M)/build-onos-apps: | $(M)/prep-buildnode
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
@@ -227,14 +227,13 @@ $(M)/publish-onos-apps: | $(M)/maas-prime $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps
+$(M)/deploy-mavenrepo: | $(M)/build-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
+$(M)/deploy-onos: | $(M)/docker-images $(M)/deploy-mavenrepo $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
-
 
 # XOS targets
 $(M)/docker-images: | $(M)/prep-buildnode $(DOCKER_IMAGES_PREREQS)
@@ -270,10 +269,6 @@ $(M)/deploy-openstack: | $(M)/deploy-elasticstack $(M)/prep-headnode $(M)/prep-c
 
 $(M)/deploy-computenode: | $(M)/deploy-openstack
 	$(ANSIBLE_PB) $(PI)/deploy-computenode-playbook.yml $(LOGCMD)
-	touch $@
-
-$(M)/onboard-profile: | $(M)/start-xos $(M)/deploy-onos
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-profile-playbook.yml" $(LOGCMD)
 	touch $@
 
 $(M)/onos-debug: | $(M)/onboard-profile
