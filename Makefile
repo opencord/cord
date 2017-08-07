@@ -64,14 +64,15 @@ VIRSH_CORDDEV_DOMAIN ?= cord_corddev
 
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
+EXTRA_VARS       ?= --extra-vars "@/opt/cord_profile/genconfig/config.yml"
 
 # Commands
 SHELL            = bash -o pipefail
 VAGRANT          ?= VAGRANT_CWD=$(VAGRANT_CWD) vagrant
 ANSIBLE          ?= ansible -i $(INVENTORY)
 ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG)
-ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost --extra-vars "@/opt/cord_profile/genconfig/config.yml"
-ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory --extra-vars "@/opt/cord_profile/genconfig/config.yml"
+ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
+ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py
 LOGCMD           ?= 2>&1 | tee -a $(LOGS)/$(TS)_$(@F)
 SSH_HEAD         ?= ssh $(HEADNODE)
@@ -97,9 +98,18 @@ printconfig:
 	@echo "Scenario: '$(SCENARIO)'"
 	@echo "Profile: '$(PROFILE)'"
 
-# Primary Targets
+# == BUILD TARGET == #
+# This is entirely determined by the podconfig/scenario, and should generally
+# be set to only one value - everything else should be a dependency
 build: $(BUILD_TARGETS)
 
+# == UTILITY TARGETS == #
+xos-teardown: xos-update-images
+	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
+	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
+
+xos-update-images: clean-images
+	rm -f $(M)/start-xos $(M)/local-start-xos
 
 # Utility targets
 ansible-ping:
@@ -109,7 +119,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -162,21 +172,22 @@ xos-update-images: clean-images
 
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS     ?=
-COPY_CORD_PREREQS      ?=
-CORD_CONFIG_PREREQS    ?=
-COPY_CONFIG_PREREQS    ?=
-PREP_BUILDNODE_PREREQS ?=
-PREP_HEADNODE_PREREQS  ?=
-DOCKER_IMAGES_PREREQS  ?=
-START_XOS_PREREQS      ?=
-DEPLOY_ONOS_PREREQS    ?=
+VAGRANT_UP_PREREQS       ?=
+CORD_CONFIG_PREREQS      ?=
+COPY_CONFIG_PREREQS      ?=
+PREP_BUILDNODE_PREREQS   ?=
+PREP_HEADNODE_PREREQS    ?=
+DOCKER_IMAGES_PREREQS    ?=
+START_XOS_PREREQS        ?=
+DEPLOY_ONOS_PREREQS      ?=
+DEPLOY_MAVENREPO_PREREQS ?=
 DEPLOY_OPENSTACK_PREREQS ?=
 DEPLOY_MAVENREPO_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
 
+
 # == MILESTONES == #
-# empty target files are touched in the milestones dir to indicate completion
+# target files are touched in the milestones dir to indicate completion
 
 # Prep targets
 $(M)/prereqs-check:
@@ -263,11 +274,11 @@ $(M)/publish-onos-apps: | $(M)/deploy-maas $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
+$(M)/deploy-mavenrepo: | $(M)/build-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
+$(M)/deploy-onos: | $(M)/docker-images $(M)/build-onos-apps $(M)/deploy-mavenrepo $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
 
