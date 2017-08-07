@@ -144,14 +144,15 @@ local-ubuntu-dev-env:
 
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS     ?=
-CORD_CONFIG_PREREQS    ?=
-COPY_CONFIG_PREREQS    ?=
-PREP_BUILDNODE_PREREQS ?=
-PREP_HEADNODE_PREREQS  ?=
-DOCKER_IMAGES_PREREQS  ?=
-START_XOS_PREREQS      ?=
-DEPLOY_ONOS_PREREQS    ?=
+VAGRANT_UP_PREREQS       ?=
+CORD_CONFIG_PREREQS      ?=
+COPY_CONFIG_PREREQS      ?=
+PREP_BUILDNODE_PREREQS   ?=
+PREP_HEADNODE_PREREQS    ?=
+DOCKER_IMAGES_PREREQS    ?=
+START_XOS_PREREQS        ?=
+DEPLOY_ONOS_PREREQS      ?=
+DEPLOY_MAVENREPO_PREREQS ?=
 DEPLOY_OPENSTACK_PREREQS ?=
 DEPLOY_MAVENREPO_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
@@ -237,12 +238,16 @@ $(M)/publish-onos-apps: | $(M)/deploy-maas $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
+$(M)/deploy-mavenrepo: | $(M)/build-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
+$(M)/deploy-onos: | $(M)/docker-images $(M)/build-onos-apps $(M)/deploy-mavenrepo $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/onos-debug: | $(M)/onboard-profile $(M)/deploy-onos
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onos-debug-playbook.yml" $(LOGCMD)
 	touch $@
 
 
@@ -282,10 +287,6 @@ $(M)/deploy-computenode: | $(M)/deploy-openstack
 	$(ANSIBLE_PB) $(PI)/deploy-computenode-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/onos-debug: | $(M)/onboard-profile
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onos-debug-playbook.yml" $(LOGCMD)
-	touch $@
-
 $(M)/onboard-openstack: | $(M)/deploy-computenode $(M)/glance-images $(M)/deploy-onos $(M)/onboard-profile
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-openstack-playbook.yml" $(LOGCMD)
 	touch $@
@@ -318,6 +319,7 @@ pod-test: $(M)/setup-automation collect-diag
 
 fabric-pingtest: $(M)/refresh-fabric
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
+
 
 # Local Targets, bring up XOS containers without a VM
 $(M)/local-cord-config:
