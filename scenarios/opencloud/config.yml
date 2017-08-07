@@ -48,16 +48,20 @@ start_xos_prereqs:
 deploy_onos_prereqs:
   - deploy-elasticstack
 
-# node topology, used to bring up management interfaces
+# node topology
+
+management_net_interfaces:
+  - eth1
+
 physical_node_list:
   - name: head1
     ipv4_last_octet: 1
     aliases:
       - head
   - name: compute1
-    ipv4_last_octet: 250
+    ipv4_last_octet: 17
   - name: compute2
-    ipv4_last_octet: 251
+    ipv4_last_octet: 18
 
 # Vagrant VM configuration
 vagrant_vms:
