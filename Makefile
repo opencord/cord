@@ -272,10 +272,6 @@ $(M)/deploy-computenode: | $(M)/deploy-openstack
 	$(ANSIBLE_PB) $(PI)/deploy-computenode-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/onboard-profile: | $(M)/start-xos $(M)/deploy-onos
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-profile-playbook.yml" $(LOGCMD)
-	touch $@
-
 $(M)/onos-debug: | $(M)/onboard-profile
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onos-debug-playbook.yml" $(LOGCMD)
 	touch $@
