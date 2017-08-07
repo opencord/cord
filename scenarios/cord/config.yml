@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # cord Scenario
 # for both Physical (using a corddev VM) and Virtual (using multiple VMs)
 
@@ -42,7 +40,6 @@ fabric_ip: '10.6.1.1/24'
 management_ip: '10.1.0.1/24'
 external_iface: 'eth0'
 management_network: '10.1.0.0/24'
-#ansible_ssh_user: "vagrant"  # wtf
 
 # Other old config carried over
 skipTags:
@@ -95,9 +92,11 @@ start_xos_prereqs:
 deploy_openstack_prereqs:
   - deploy-maas
 
+deploy-mavenrepo-prereqs:
+  - publish-onos-apps
+
 deploy_onos_prereqs:
   - deploy-maas
-  - deploy-mavenrepo
 
 deploy_mavenrepo_prereqs:
   - deploy-maas
