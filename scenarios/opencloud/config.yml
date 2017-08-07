@@ -20,6 +20,7 @@
 
 # opencloud profile config
 frontend_only: False
+use_vtn_net_management_host: True
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
@@ -64,16 +65,20 @@ start_xos_prereqs:
 deploy_onos_prereqs:
   - deploy-elasticstack
 
-# node topology, used to bring up management interfaces
+# node topology
+
+management_net_interfaces:
+  - eth1
+
 physical_node_list:
   - name: head1
     ipv4_last_octet: 1
     aliases:
       - head
   - name: compute1
-    ipv4_last_octet: 250
+    ipv4_last_octet: 33
   - name: compute2
-    ipv4_last_octet: 251
+    ipv4_last_octet: 34
 
 # Vagrant VM configuration
 vagrant_vms:
