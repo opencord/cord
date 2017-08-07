@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # opencloud Scenario
 # For a virtual install, physical does not use VMs
 
 # opencloud profile config
 frontend_only: False
+use_vtn_net_management_host: True
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
@@ -40,6 +39,7 @@ vagrant_up_prereqs:
 
 # Copy cord and config to physical/virtual nodes
 cord_config_prereqs:
+   - vagrant-ssh-install
   - copy-cord
 
 copy_config_prereqs:
@@ -57,23 +57,27 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
-# Start elasticstack before XOS/ONOS, which log to it
+# Start elasticstack before XOS/ONOS, which send logs to it
 start_xos_prereqs:
   - deploy-elasticstack
 
 deploy_onos_prereqs:
   - deploy-elasticstack
 
-# node topology, used to bring up management interfaces
+# node topology
+
+management_net_interfaces:
+  - eth1
+
 physical_node_list:
   - name: head1
     ipv4_last_octet: 1
     aliases:
       - head
   - name: compute1
-    ipv4_last_octet: 250
+    ipv4_last_octet: 33
   - name: compute2
-    ipv4_last_octet: 251
+    ipv4_last_octet: 34
 
 # Vagrant VM configuration
 vagrant_vms:
