@@ -111,7 +111,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
