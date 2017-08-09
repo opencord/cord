@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -14,7 +15,6 @@
 # limitations under the License.
 
 
-#!/usr/bin/env python
 
 # imagebuilder.py
 # rebuilds/fetches docker container images per their git status in repo
