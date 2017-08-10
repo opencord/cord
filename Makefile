@@ -24,12 +24,12 @@ GENCONFIG_D      ?= $(BUILD)/genconfig
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
-POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/vagrant-up-switches $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
+POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
 ALL_MILESTONES   ?= $(PREP_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS)
 
 LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
@@ -168,6 +168,10 @@ $(M)/build-local-bootstrap:
 	$(ANSIBLE_PB) $(BUILD)/ansible/build-local-bootstrap.yml $(LOGCMD)
 	touch $@
 
+$(M)/ciab-ovs:
+	$(ANSIBLE_PB) $(BUILD)/ansible/ciab-ovs.yml $(LOGCMD)
+	touch $@
+
 $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
 	$(VAGRANT) up $(VAGRANT_VMS) --provider $(VAGRANT_PROVIDER) $(LOGCMD)
 	@echo "Configuring SSH for VM's..."
@@ -294,17 +298,17 @@ $(M)/setup-automation: | $(M)/onboard-profile $(M)/deploy-onos $(SETUP_AUTOMATIO
 
 
 # Additional CiaB targets
-$(M)/vagrant-up-switches: | $(M)/setup-automation
-	$(VAGRANT) up $(VAGRANT_SWITCHES) --provider $(VAGRANT_PROVIDER) $(LOGCMD)
-	touch $@
-
 $(M)/setup-ciab-pcu: | $(M)/setup-automation
 	$(ANSIBLE_PB) $(MAAS)/setup-ciab-pcu.yml
 	touch $@
 
-$(M)/compute%-up: | $(M)/setup-ciab-pcu $(M)/vagrant-up-switches
+$(M)/compute%-up: | $(M)/setup-ciab-pcu
 	$(VAGRANT) up compute$* --provider $(VAGRANT_PROVIDER) $(LOGCMD)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) ansible/maas-provision.yml --extra-vars='maas_user=maas vagrant_name=cord_compute$*'" $(LOGCMD)
+	touch $@
+
+$(M)/refresh-fabric: | $(M)/compute1-up
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-refresh-fabric.yml" $(LOGCMD)
 	touch $@
 
 
@@ -312,6 +316,8 @@ $(M)/compute%-up: | $(M)/setup-ciab-pcu $(M)/vagrant-up-switches
 pod-test: $(M)/setup-automation collect-diag
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/pod-test-playbook.yml" $(LOGCMD)
 
+fabric-pingtest: $(M)/refresh-fabric
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
 
 # Local Targets, bring up XOS containers without a VM
 $(M)/local-cord-config:
