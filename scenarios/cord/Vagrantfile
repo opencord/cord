@@ -47,14 +47,12 @@ Vagrant.configure(2) do |config|
         libvirt__network_name: settings['vm_management_network_name'],
         libvirt__forward_mode: "none",
         libvirt__dhcp_enabled: false
-    d.vm.network "private_network",
-        ip: "0.1.0.0", # not used, ignore
+    d.vm.network "public_network",
         mac: "02420a060101",
         auto_config: false,
-        virtualbox__intnet: "head1-leaf1",
-        libvirt__network_name: "head1-leaf1",
-        libvirt__forward_mode: "none",
-        libvirt__dhcp_enabled: false
+        type: "bridge",
+        dev: "leaf1",
+        ovs: true
     d.vm.provider :virtualbox do |v|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']
@@ -72,218 +70,6 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  config.vm.define "leaf1" do |s|
-    s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "leaf1"
-    s.vm.synced_folder $cordpath, $ciab_dir
-    s.vm.network "private_network",
-      #type: "dhcp",
-      ip: "0.0.0.0",
-      auto_config: false,
-      virtualbox__intnet: settings['vm_management_network_name'],
-      libvirt__network_name: settings['vm_management_network_name'],
-      mac: "cc37ab000011"
-    s.vm.network "private_network",
-      ip: "0.1.0.0",
-      auto_config: false,
-      virtualbox__intnet: "head1-leaf1",
-      libvirt__network_name: "head1-leaf1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.2.0.0",
-      auto_config: false,
-      virtualbox__intnet: "compute1-leaf1",
-      libvirt__network_name: "compute1-leaf1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.5.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf1-spine1",
-      libvirt__network_name: "leaf1-spine1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.6.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf1-spine2",
-      libvirt__network_name: "leaf1-spine2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    if (settings['enable_fabric'])
-      s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-    end
-    s.vm.provision :ansible do |ansible|
-      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
-      ansible.extra_vars = {
-        fabric: settings['enable_fabric'],
-        net_prefix: "10.6.1"
-      }
-    end
-    s.vm.provider :libvirt do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
-    end
-    s.vm.provider :virtualbox do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-    end
-  end
-
-  config.vm.define "leaf2" do |s|
-    s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "leaf2"
-    s.vm.synced_folder $cordpath, $ciab_dir
-    s.vm.network "private_network",
-      #type: "dhcp",
-      ip: "0.0.0.0",
-      auto_config: false,
-      virtualbox__intnet: settings['vm_management_network_name'],
-      libvirt__network_name: settings['vm_management_network_name'],
-      mac: "cc37ab000012"
-    s.vm.network "private_network",
-      ip: "0.3.0.0",
-      auto_config: false,
-      virtualbox__intnet: "compute2-leaf2",
-      libvirt__network_name: "compute2-leaf2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.4.0.0",
-      auto_config: false,
-      virtualbox__intnet: "compute3-leaf2",
-      libvirt__network_name: "compute3-leaf2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.7.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf2-spine1",
-      libvirt__network_name: "leaf2-spine1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.8.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf2-spine2",
-      libvirt__network_name: "leaf2-spine2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    if (settings['enable_fabric'])
-      s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-    end
-    s.vm.provision :ansible do |ansible|
-      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
-      ansible.extra_vars = {
-        fabric: settings['enable_fabric'],
-        net_prefix: "10.6.1"
-      }
-    end
-    s.vm.provider :libvirt do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
-    end
-    s.vm.provider :virtualbox do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-    end
-  end
-
-  config.vm.define "spine1" do |s|
-    s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "spine1"
-    s.vm.synced_folder $cordpath, $ciab_dir
-    s.vm.network "private_network",
-      #type: "dhcp",
-      ip: "0.0.0.0",
-      auto_config: false,
-      virtualbox__intnet: settings['vm_management_network_name'],
-      libvirt__network_name: settings['vm_management_network_name'],
-      mac: "cc37ab000021"
-    s.vm.network "private_network",
-      ip: "0.5.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf1-spine1",
-      libvirt__network_name: "leaf1-spine1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.7.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf2-spine1",
-      libvirt__network_name: "leaf2-spine1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    if (settings['enable_fabric'])
-      s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-    end
-    s.vm.provision :ansible do |ansible|
-      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
-      ansible.extra_vars = {
-        fabric: settings['enable_fabric'],
-        net_prefix: "10.6.1"
-      }
-    end
-    s.vm.provider :libvirt do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
-    end
-    s.vm.provider :virtualbox do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-    end
-  end
-
-  config.vm.define "spine2" do |s|
-    s.vm.box = "ubuntu/trusty64"
-    s.vm.hostname = "spine2"
-    s.vm.synced_folder $cordpath, $ciab_dir
-    s.vm.network "private_network",
-      #type: "dhcp",
-      ip: "0.0.0.0",
-      auto_config: false,
-      virtualbox__intnet: settings['vm_management_network_name'],
-      libvirt__network_name: settings['vm_management_network_name'],
-      mac: "cc37ab000022"
-    s.vm.network "private_network",
-      ip: "0.6.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf1-spine2",
-      libvirt__network_name: "leaf1-spine2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    s.vm.network "private_network",
-      ip: "0.8.0.0",
-      auto_config: false,
-      virtualbox__intnet: "leaf2-spine2",
-      libvirt__network_name: "leaf2-spine2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
-    if (settings['enable_fabric'])
-      s.vm.provision :shell, path: $cordpath + "/build/scripts/install.sh", args: "-3f"
-    end
-    s.vm.provision :ansible do |ansible|
-      ansible.playbook = $cordpath + "/build/ansible/leafswitch.yml"
-      ansible.extra_vars = {
-        fabric: settings['enable_fabric'],
-        net_prefix: "10.6.1"
-      }
-    end
-    s.vm.provider :libvirt do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-        override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
-    end
-    s.vm.provider :virtualbox do |v, override|
-        v.memory = settings['switch_vm_mem']
-        v.cpus = settings['switch_vm_cpu']
-    end
-  end
-
   config.vm.define "compute1" do |c|
     c.vm.communicator = "none"
     c.vm.hostname = "compute1"
@@ -293,14 +79,12 @@ Vagrant.configure(2) do |config|
       auto_config: false,
       virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name']
-    c.vm.network "private_network",
+    c.vm.network "public_network",
       adapter: 2,         # The fabric interface for each node
-      ip: "0.2.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute1-leaf1",
-      libvirt__network_name: "compute1-leaf1",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
+      type: "bridge",
+      dev: "leaf1",
+      ovs: true
     c.vm.provider :libvirt do |v|
       v.memory = settings['compute_vm_mem']
       v.cpus = settings['compute_vm_cpu']
@@ -327,14 +111,12 @@ Vagrant.configure(2) do |config|
       auto_config: false,
       virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name']
-    c.vm.network "private_network",
+    c.vm.network "public_network",
       adapter: 2,         # The fabric interface for each node
-      ip: "0.3.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute2-leaf2",
-      libvirt__network_name: "compute2-leaf2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
+      type: "bridge",
+      dev: "leaf2",
+      ovs: true
     c.vm.provider :libvirt do |v|
       v.memory = settings['compute_vm_mem']
       v.cpus = settings['compute_vm_cpu']
@@ -361,14 +143,12 @@ Vagrant.configure(2) do |config|
       auto_config: false,
       virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name']
-    c.vm.network "private_network",
+    c.vm.network "public_network",
       adapter: 2,         # The fabric interface for each node
-      ip: "0.4.0.0",
       auto_config: false,
-      virtualbox__intnet: "compute3-leaf2",
-      libvirt__network_name: "compute3-leaf2",
-      libvirt__forward_mode: "none",
-      libvirt__dhcp_enabled: false
+      type: "bridge",
+      dev: "leaf2",
+      ovs: true
     c.vm.provider :libvirt do |v|
       v.memory = settings['compute_vm_mem']
       v.cpus = settings['compute_vm_cpu']
