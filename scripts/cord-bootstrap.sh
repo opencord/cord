@@ -1,4 +1,5 @@
-
+#!/usr/bin/env bash
+#
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-#!/usr/bin/env bash
 # cord-bootstrap.sh
 # Bootstraps a dev system for CORD, downloads source
 

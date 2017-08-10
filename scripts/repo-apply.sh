@@ -1,3 +1,4 @@
+#!/bin/sh
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -13,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-#!/bin/sh
 ## Script to patch up diff reated by `repo diff`
 
 # from https://groups.google.com/d/msg/repo-discuss/43juvD1qGIQ/7maptZVcEjsJ
