@@ -1,0 +1,35 @@
+- name: Install prereqs for building OVS
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  become: yes
+  with_items:
+    - build-essential
+    - fakeroot
+    - graphviz
+    - autoconf
+    - automake
+    - bzip2
+    - debhelper
+    - dh-autoreconf
+    - libssl-dev
+    - libtool
+    - openssl
+    - procps
+    - python-all
+    - python-qt4
+    - python-twisted-conch
+    - python-zopeinterface
+
+- name: Download and unarchive OVS tarball
+  unarchive:
+    src: http://openvswitch.org/releases/openvswitch-{{ ovs_version }}.tar.gz
+    dest: /tmp/
+    remote_src: yes
+
+- name: Build OVS .deb packages
+  command: fakeroot debian/rules binary
+  args:
+    chdir: /tmp/openvswitch-{{ ovs_version }}
+    creates: /tmp/openvswitch-switch_{{ ovs_version }}-1_amd64.deb
