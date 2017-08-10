@@ -65,6 +65,7 @@ build_targets:
 
 vagrant_up_prereqs:
   - prereqs-check
+  - ciab-ovs
 
 cord_config_prereqs:
   - copy-cord
