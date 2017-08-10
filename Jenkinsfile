@@ -10,7 +10,7 @@ node ('master') {
         sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
     }
 
-    stage ("Parse deployment configuartion file") {
+    stage ("Parse deployment configuration file") {
         sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
         sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
         config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
