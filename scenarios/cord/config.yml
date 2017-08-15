@@ -27,11 +27,11 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 
 build_cord_dir: "/opt/cord"
 
-buildnode: head1
+buildnode: localhost
 headnode: head1
 
 # docker config
-deploy_docker_registry: "docker-registry:5000"  # IP address of head node giving errors
+deploy_docker_registry: "docker-registry:5000"
 deploy_docker_tag: "candidate"
 pull_docker_registry: "docker-registry:5000/"
 pull_docker_tag: "candidate"
@@ -174,7 +174,8 @@ inventory_groups:
       ansible_connection: local
 
   build:
-    head1:
+    localhost:
+      ansible_connection: local
 
   head:
     head1:
