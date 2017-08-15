@@ -24,7 +24,7 @@ GENCONFIG_D      ?= $(BUILD)/genconfig
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-PREP_MS          ?= $(M)/prereqs-check $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
@@ -153,6 +153,7 @@ DOCKER_IMAGES_PREREQS  ?=
 START_XOS_PREREQS      ?=
 DEPLOY_ONOS_PREREQS    ?=
 DEPLOY_OPENSTACK_PREREQS ?=
+DEPLOY_MAVENREPO_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
 
 # == MILESTONES == #
@@ -161,6 +162,10 @@ SETUP_AUTOMATION_PREREQS ?=
 # Prep targets
 $(M)/prereqs-check:
 	$(ANSIBLE_PB) $(PI)/prereqs-check-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/build-local-bootstrap:
+	$(ANSIBLE_PB) $(BUILD)/ansible/build-local-bootstrap.yml $(LOGCMD)
 	touch $@
 
 $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
@@ -203,7 +208,7 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 
 # MaaS targets
 $(M)/build-maas-images: | $(M)/prep-buildnode $(BUILD_MAAS_IMAGES_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.image; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
 $(M)/maas-prime: | $(M)/deploy-elasticstack
@@ -221,14 +226,14 @@ $(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config
 
 # ONOS targets
 $(M)/build-onos-apps: | $(M)/prep-buildnode $(BUILD_ONOS_APPS_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
 $(M)/publish-onos-apps: | $(M)/maas-prime $(M)/build-onos-apps
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps
+$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
