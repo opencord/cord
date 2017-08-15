@@ -191,14 +191,21 @@ function bootstrap_docker() {
   fi
 }
 
+function bootstrap_local() {
+  echo "Bootstrapping localhost build"
+  cd ${CORDDIR}/build/ansible
+  ansible-playbook build-local-bootstrap.yml
+}
+
 # Parse options
 GERRIT_PATCHES=()
 MAKE_TARGETS=()
 GROUP_LIST=()
 DOCKER=0
 VAGRANT=0
+LOCAL=0
 
-while getopts "dhp:t:v" opt; do
+while getopts "dhlp:t:v" opt; do
   case ${opt} in
     d ) DOCKER=1
         GROUP_LIST+=("docker")
@@ -206,10 +213,13 @@ while getopts "dhp:t:v" opt; do
     h ) echo "Usage for $0:"
       echo "  -d                           Install Docker for local scenario."
       echo "  -h                           Display this help message."
+      echo "  -l                           Bootstrap localhost as POD build node"
       echo "  -p <project:change/revision> Download a patch from gerrit. Can be repeated."
       echo "  -t <target>                  Run '$MAKECMD <target>' in cord/build/. Can be repeated."
       echo "  -v                           Install Vagrant for mock/virtual/physical scenarios."
       exit 0
+      ;;
+    l ) LOCAL=1
       ;;
     p ) GERRIT_PATCHES+=("$OPTARG")
       ;;
@@ -236,6 +246,11 @@ fi
 if [[ $DOCKER -ne 0 ]]
 then
   run_stage bootstrap_docker
+fi
+
+if [[ $LOCAL -ne 0 ]]
+then
+  run_stage bootstrap_local
 fi
 
 # Check for group membership when needed
