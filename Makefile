@@ -213,7 +213,7 @@ $(M)/publish-maas-images: | $(M)/maas-prime $(M)/build-maas-images
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config
+$(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config $(M)/publish-docker-images
 	$(ANSIBLE_PB) $(MAAS)/head-node.yml $(LOGCMD)
 	touch $@
 
