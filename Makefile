@@ -125,6 +125,7 @@ vagrant-destroy:
 clean-images:
 	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps
 
+
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
 
@@ -210,7 +211,7 @@ $(M)/maas-prime: | $(M)/deploy-elasticstack
 	touch $@
 
 $(M)/publish-maas-images: | $(M)/maas-prime $(M)/build-maas-images
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.publish; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
 $(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config

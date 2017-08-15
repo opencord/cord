@@ -1141,6 +1141,7 @@ class DockerBuilder():
             self.pulled.append({
                     "id": pulled_image['Id'],
                     "tags": pulled_image['RepoTags'],
+                    "base": image.name.split(":")[0],
                 })
 
             self.tag_image(image)
@@ -1243,6 +1244,7 @@ class DockerBuilder():
                     "push_name": image.raw_name,
                     "build_log": bl_path,
                     "duration": duration.total_seconds(),
+                    "base": image.name.split(":")[0],
                 })
 
             self.tag_image(image)
