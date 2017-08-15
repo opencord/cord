@@ -828,6 +828,7 @@ class DockerBuilder():
                             self.preexisting.append({
                                     'id': pe_image['Id'],
                                     'tags': raw_tags,
+                                    'base': image.name.split(":")[0],
                                 })
 
                             image.image_id = pe_image['Id']

@@ -31,7 +31,7 @@ buildnode: head1
 headnode: head1
 
 # docker config
-deploy_docker_registry: "docker-registry:5000"  # IP address of head node giving errors
+deploy_docker_registry: "10.100.198.201:5000"  # IP address of head node giving errors
 deploy_docker_tag: "candidate"
 pull_docker_registry: "docker-registry:5000/"
 pull_docker_tag: "candidate"
@@ -97,6 +97,9 @@ deploy_openstack_prereqs:
 deploy_onos_prereqs:
   - deploy-maas
   - deploy-mavenrepo
+
+deploy_mavenrepo_prereqs:
+  - deploy-maas
 
 setup_automation_prereqs:
   - deploy-openstack

@@ -1,0 +1,45 @@
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+
+- name: Ensure /opt/cord and /opt/cord_profile sym links
+  become: yes
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: yes
+  with_items:
+  - { dest: '/opt/cord', src: '{{ config_cord_dir }}' }
+  - { dest: '/opt/cord_profile', src: '{{ config_cord_profile_dir }}' }
+
+- name: Ensure SSH keypair exists for Ansible login user
+  user:
+    name: "{{ ansible_user_id }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_type: rsa
+
+- name: Get public key for Ansible login user
+  slurp:
+    src: "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+  register: pubkey
+
+- name: Ensure public key in authorized_keys
+  authorized_key:
+    user: "{{ ansible_user_id }}"
+    state: present
+    key: "{{ pubkey['content'] | b64decode }}"
+
