@@ -153,6 +153,7 @@ DOCKER_IMAGES_PREREQS  ?=
 START_XOS_PREREQS      ?=
 DEPLOY_ONOS_PREREQS    ?=
 DEPLOY_OPENSTACK_PREREQS ?=
+DEPLOY_MAVENREPO_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
 
 # == MILESTONES == #
@@ -228,7 +229,7 @@ $(M)/publish-onos-apps: | $(M)/maas-prime $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps
+$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 

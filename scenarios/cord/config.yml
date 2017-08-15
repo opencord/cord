@@ -98,6 +98,9 @@ deploy_onos_prereqs:
   - deploy-maas
   - deploy-mavenrepo
 
+deploy_mavenrepo_prereqs:
+  - deploy-maas
+
 setup_automation_prereqs:
   - deploy-openstack
 
