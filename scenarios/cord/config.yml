@@ -27,11 +27,11 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 
 build_cord_dir: "/opt/cord"
 
-buildnode: head1
+buildnode: localhost
 headnode: head1
 
 # docker config
-deploy_docker_registry: "docker-registry:5000"  # IP address of head node giving errors
+deploy_docker_registry: "docker-registry:5000"
 deploy_docker_tag: "candidate"
 pull_docker_registry: "docker-registry:5000/"
 pull_docker_tag: "candidate"
@@ -59,7 +59,6 @@ management_exclude_names: eth0,eth2
 # make build config
 build_targets:
  - prereqs-check
- - prep-headnode
  - setup-automation
  - compute1-up
 
@@ -72,18 +71,9 @@ cord_config_prereqs:
 copy_config_prereqs:
   - cord-config
 
-prep_buildnode_prereqs:
-  - prep-headnode
-  - copy-cord
-  - copy-config
-
 prep_headnode_prereqs:
   - copy-cord
   - copy-config
-
-# Wait until headnode prepped before building containers, for consistent DNS
-docker_images_prereqs:
-  - prep-headnode
 
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
@@ -174,7 +164,8 @@ inventory_groups:
       ansible_connection: local
 
   build:
-    head1:
+    localhost:
+      ansible_connection: local
 
   head:
     head1:
