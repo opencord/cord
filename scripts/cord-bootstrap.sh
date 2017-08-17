@@ -123,6 +123,7 @@ function bootstrap_vagrant() {
       cd ~
     fi
     vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
+    vagrant plugin list | grep vagrant-hosts || vagrant plugin install vagrant-hosts
 
     add_box ubuntu/trusty64
   fi
