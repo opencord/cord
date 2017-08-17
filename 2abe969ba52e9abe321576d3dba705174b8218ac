@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3291f1_cc3dafbd",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-17T23:56:35Z",
+      "side": 1,
+      "message": "Specifying the IP address to deploy_docker_registry also works:\n\nhttps://gerrit.opencord.org/#/c/5110/20/scenarios/cord/config.yml\n\nI think the approach in #5110 is clearer.",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "2abe969ba52e9abe321576d3dba705174b8218ac",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_ac4a6353",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-17T23:56:35Z",
+      "side": 1,
+      "message": "See other comment",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 40
+      },
+      "revId": "2abe969ba52e9abe321576d3dba705174b8218ac",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
