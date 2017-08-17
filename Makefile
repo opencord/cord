@@ -203,7 +203,7 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 
 # MaaS targets
 $(M)/build-maas-images: | $(M)/prep-buildnode $(BUILD_MAAS_IMAGES_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.image; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
 $(M)/maas-prime: | $(M)/deploy-elasticstack
