@@ -26,8 +26,10 @@ config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
 
 build_cord_dir: "/opt/cord"
+build_cord_profile_dir: "/opt/cord_profile"
+host_cord_profile_dir: "~/cord_profile"
 
-buildnode: head1
+buildnode: corddev
 headnode: head1
 
 # docker config
@@ -57,9 +59,12 @@ fabric_exclude_names: eth0,eth1
 management_include_names: eth1
 management_exclude_names: eth0,eth2
 
+docker_opts: "{{ ('--insecure-registry ' ~ deploy_docker_registry) }}"
+
 # make build config
 build_targets:
  - prereqs-check
+ - prep-buildnode
  - prep-headnode
  - setup-automation
  - compute1-up
@@ -74,7 +79,6 @@ copy_config_prereqs:
   - cord-config
 
 prep_buildnode_prereqs:
-  - prep-headnode
   - copy-cord
   - copy-config
 
@@ -107,6 +111,7 @@ setup_automation_prereqs:
 
 # Vagrant VM configuration
 vagrant_vms:
+  - corddev
   - head1
 
 dev_vm_mem: 2048
@@ -178,7 +183,7 @@ inventory_groups:
       ansible_connection: local
 
   build:
-    head1:
+    corddev:
 
   head:
     head1:
