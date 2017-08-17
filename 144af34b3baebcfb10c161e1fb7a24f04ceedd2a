@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2585a7_6187de62",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-17T20:28:20Z",
+      "side": 1,
+      "message": "Probably not needed",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 15
+      },
+      "revId": "144af34b3baebcfb10c161e1fb7a24f04ceedd2a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2585a7_8182ca50",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-17T20:28:20Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 17
+      },
+      "revId": "144af34b3baebcfb10c161e1fb7a24f04ceedd2a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2585a7_417ce272",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-17T20:28:20Z",
+      "side": 1,
+      "message": "Probably not needed",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 17
+      },
+      "revId": "144af34b3baebcfb10c161e1fb7a24f04ceedd2a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
