@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3291f1_2fb425f1",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-18T21:30:26Z",
+      "side": 1,
+      "message": "Can we avoid using \"ensure\" in task names, in exchange for more descriptive wording?\n\nFor example:  \"symlink cord and cord_profile directories to /opt\", \"Create ssh key if one doesn\u0027t exist\", and \"Add created public key authorized keys\"\n\nI\u0027m fine with using \"ensure\" when we make an assertion about the state of the system.",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_cfca416e",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-18T21:30:26Z",
+      "side": 1,
+      "message": "Could this be a makefile target that gets invoked with the `-t` option, instead of a customization of the boostrap script?",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 1
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
