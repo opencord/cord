@@ -45,6 +45,29 @@
       "revId": "2abe969ba52e9abe321576d3dba705174b8218ac",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_4c79bf92",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-18T00:00:10Z",
+      "side": 1,
+      "message": "Can we use the value of {{ deploy_docker_registry }} here rather than hardcoding it?",
+      "range": {
+        "startLine": 60,
+        "startChar": 38,
+        "endLine": 60,
+        "endChar": 58
+      },
+      "revId": "2abe969ba52e9abe321576d3dba705174b8218ac",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
