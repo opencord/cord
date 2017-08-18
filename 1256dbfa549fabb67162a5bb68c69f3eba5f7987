@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a3291f1_cff48189",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2017-08-18T22:44:16Z",
+      "side": 1,
+      "message": "I think \u0027ensure\u0027 is a pretty standard way of describing the desired end-state of a declaratively-specified task. Your examples are more imperative, describing what needs to be done to achieve that end state.",
+      "parentUuid": "3a3291f1_2fb425f1",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a3291f1_cfca416e",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 23
