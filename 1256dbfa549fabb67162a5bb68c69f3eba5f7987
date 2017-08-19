@@ -49,6 +49,76 @@
     },
     {
       "key": {
+        "uuid": "3a3291f1_4fc1b1e3",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-19T12:13:59Z",
+      "side": 1,
+      "message": "Maybe what I really want is to get some idea of what is going to happen from the task name.\n\nIn CORD codebase frequently \"Ensure ...\" tasks names are like mystery meat - without reading the task, you don\u0027t know what might happen.\n\n\"Ensure SSH Keypair\" falls into that category - it could be the current behavior, or a copy of the keys to the remote machine, or just an assertion that the file exists and nothing new might be created.\n\n\"Ensure SSH keypair is created for ansible login user\" would meet this goal but still uses \"Ensure\".",
+      "parentUuid": "3a3291f1_cff48189",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_8f8f99cc",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-19T12:13:59Z",
+      "side": 1,
+      "message": "Should probably use: http://docs.ansible.com/ansible/latest/user_module.html\n\nWith the `generate_ssh_key` and `ssh_*` options as needed.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 81
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_6fbc6d6d",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-19T12:13:59Z",
+      "side": 1,
+      "message": "The `file` lookup runs on the system running ansible-playbook, which is different from the context of the previous step, so if this was run against a remote machine, it might use a different file than was generated.  \n\n`fetch` or `slurp` would probably work better.",
+      "range": {
+        "startLine": 39,
+        "startChar": 3,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a3291f1_cfca416e",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 23
