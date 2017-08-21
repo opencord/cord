@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3a3291f1_327c8872",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-21T17:06:58Z",
+      "side": 1,
+      "message": "I added some text to the error messages",
+      "parentUuid": "3a3291f1_4fc1b1e3",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a3291f1_8f8f99cc",
         "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
         "patchSetId": 23
@@ -84,6 +108,30 @@
       "writtenOn": "2017-08-19T12:13:59Z",
       "side": 1,
       "message": "Should probably use: http://docs.ansible.com/ansible/latest/user_module.html\n\nWith the `generate_ssh_key` and `ssh_*` options as needed.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 81
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_12818c4a",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-21T17:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a3291f1_8f8f99cc",
       "range": {
         "startLine": 29,
         "startChar": 0,
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "3a3291f1_f295e088",
+        "filename": "ansible/roles/build-local-bootstrap/tasks/main.yml",
+        "patchSetId": 23
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-21T17:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a3291f1_6fbc6d6d",
+      "range": {
+        "startLine": 39,
+        "startChar": 3,
+        "endLine": 39,
+        "endChar": 75
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a3291f1_cfca416e",
         "filename": "scripts/cord-bootstrap.sh",
         "patchSetId": 23
@@ -130,6 +202,30 @@
       "writtenOn": "2017-08-18T21:30:26Z",
       "side": 1,
       "message": "Could this be a makefile target that gets invoked with the `-t` option, instead of a customization of the boostrap script?",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 1
+      },
+      "revId": "1256dbfa549fabb67162a5bb68c69f3eba5f7987",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_d292e49e",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-21T17:06:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a3291f1_cfca416e",
       "range": {
         "startLine": 194,
         "startChar": 0,
