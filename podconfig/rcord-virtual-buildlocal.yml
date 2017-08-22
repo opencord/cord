@@ -31,7 +31,7 @@ prep_buildnode_prereqs:
 docker_image_prereqs:
   - prep-buildnode
 
-docker_opts: "--insecure-registry 10.100.198.201:5000"
+deploy_docker_registry: "10.100.198.201:5000"
 
 inventory_groups:
 

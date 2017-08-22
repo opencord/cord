@@ -31,10 +31,11 @@ buildnode: head1
 headnode: head1
 
 # docker config
-deploy_docker_registry: "10.100.198.201:5000"  # IP address of head node giving errors
+deploy_docker_registry: "docker-registry:5000"
 deploy_docker_tag: "candidate"
 pull_docker_registry: "docker-registry:5000/"
 pull_docker_tag: "candidate"
+docker_opts: "--insecure-registry {{ deploy_docker_registry }}"
 
 # Variables required by MAAS
 fabric_ip: '10.6.1.1/24'
