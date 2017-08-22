@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3291f1_b5762205",
+        "filename": "ansible/roles/ciab-ovs/tasks/main.yml",
+        "patchSetId": 22
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-22T21:49:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure if doing it this way (direct download) will result in a redownload of the package every time from the internet on every playbook run.\n\nCould you split the download here into a get_url and supply a sha256sum to guarantee package integrity, like how xos_images is handled in the profile manifests?",
+      "revId": "a9f0ac73083ee45580181b61a79248ea62f48b28",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
