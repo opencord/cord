@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3291f1_9551e6da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-22T19:54:27Z",
+      "side": 1,
+      "message": "Please change:\n\nCORD-1729 Use corddev VM as build machine\n\n... or something similar",
+      "range": {
+        "startLine": 7,
+        "startChar": 21,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "f84d1ccddddb856b289036c1700a774f71f07c25",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_d5476e1c",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-22T19:54:27Z",
+      "side": 1,
+      "message": "Don\u0027t need this as a prereq of itself",
+      "range": {
+        "startLine": 80,
+        "startChar": 9,
+        "endLine": 80,
+        "endChar": 18
+      },
+      "revId": "f84d1ccddddb856b289036c1700a774f71f07c25",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_b554e2ca",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-22T19:54:27Z",
+      "side": 1,
+      "message": "Don\u0027t need this as a prereq of itself",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 17
+      },
+      "revId": "f84d1ccddddb856b289036c1700a774f71f07c25",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
