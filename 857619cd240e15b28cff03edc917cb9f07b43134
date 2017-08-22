@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a3291f1_95d7a6ed",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 16
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-22T21:17:03Z",
+      "side": 1,
+      "message": "Can these be pulled from the `settings[]`, rather than explicitly set here?",
+      "revId": "857619cd240e15b28cff03edc917cb9f07b43134",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a3291f1_1503b674",
+        "filename": "scenarios/cord/Vagrantfile",
+        "patchSetId": 16
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-22T21:17:03Z",
+      "side": 1,
+      "message": "This sets lines in the /etc/hosts file?",
+      "revId": "857619cd240e15b28cff03edc917cb9f07b43134",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
