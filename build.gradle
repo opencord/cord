@@ -153,6 +153,12 @@ ext {
                     'upstream': upstreamReg,
                     'name':     'gliderlabs/registrator',
                     'digest':   'sha256:6e708681dd52e28f4f39d048ac75376c9a762c44b3d75b2824173f8364e52c10'
+            ],
+	    'sebp/elk': [
+		    'type':     'image',
+		    'upstream': upstreamReg,
+		    'name':     'sebp/elk',
+		    'digest':   'sha256:b13b38c53b87be185988b9afe72072b4d7baafda367f3a3e2be91fb9ff852bad'
             ]
     ]
 }

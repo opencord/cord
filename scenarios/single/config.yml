@@ -91,6 +91,7 @@ docker_image_whitelist:
   - "onosproject/onos"
   - "redis"
   - "node"
+  - "sebp/elk"
 
 # Ansible Inventory
 inventory_groups:

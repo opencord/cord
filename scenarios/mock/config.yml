@@ -80,6 +80,7 @@ docker_image_whitelist:
   - "nginx"
   - "redis"
   - "node"
+  - "sebp/elk"
 
 # Ansible Inventory
 inventory_groups:

@@ -29,6 +29,7 @@ docker_build_tag: "candidate"
 # in buildable_images - those are automatically pulled
 
 pull_only_images:
+  - "sebp/elk:551"
   - "gliderlabs/consul-server:0.6"
   - "gliderlabs/registrator:v7"
   - "nginx:1.13"
