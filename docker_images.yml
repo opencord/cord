@@ -34,6 +34,7 @@ pull_only_images:
   - "nginx:1.13"
   - "onosproject/onos:1.10.3"
   - "redis:3.2"
+  - "node:7.9.0" # remove once the issue with node:candidate is resolved
 
 # buildable_images - list of images that we build from Dockerfiles
 #
