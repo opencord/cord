@@ -63,10 +63,6 @@ docker_opts: "{{ ('--insecure-registry ' ~ deploy_docker_registry) }}"
 
 # make build config
 build_targets:
- - prereqs-check
- - prep-buildnode
- - prep-headnode
- - setup-automation
  - compute1-up
 
 vagrant_up_prereqs:
@@ -78,17 +74,9 @@ cord_config_prereqs:
 copy_config_prereqs:
   - cord-config
 
-prep_buildnode_prereqs:
-  - copy-cord
-  - copy-config
-
 prep_headnode_prereqs:
   - copy-cord
   - copy-config
-
-# Wait until headnode prepped before building containers, for consistent DNS
-docker_images_prereqs:
-  - prep-headnode
 
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
@@ -102,6 +90,7 @@ deploy_openstack_prereqs:
 deploy_onos_prereqs:
   - deploy-maas
   - deploy-mavenrepo
+  - publish-docker-images
 
 deploy_mavenrepo_prereqs:
   - deploy-maas
