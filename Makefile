@@ -229,7 +229,7 @@ $(M)/build-onos-apps: | $(M)/prep-buildnode $(BUILD_ONOS_APPS_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
-$(M)/publish-onos-apps: | $(M)/maas-prime $(M)/build-onos-apps
+$(M)/publish-onos-apps: | $(M)/deploy-maas $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
@@ -252,7 +252,7 @@ $(M)/core-image: | $(M)/docker-images
 	touch $@
 
 # Requires ib_actions.yml file which is on the build host
-$(M)/publish-docker-images: | $(M)/maas-prime $(M)/docker-images $(M)/core-image
+$(M)/publish-docker-images: | $(M)/deploy-maas $(M)/docker-images $(M)/core-image
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
