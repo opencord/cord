@@ -65,10 +65,6 @@ docker_opts: "{{ ('--insecure-registry ' ~ deploy_docker_registry) }}"
 build_targets:
  - compute1-up
 
-vagrant_up_prereqs:
-  - prereqs-check
-  - ciab-ovs
-
 cord_config_prereqs:
   - copy-cord
 
