@@ -27,6 +27,10 @@ buildnode: localhost
 prep_buildnode_prereqs:
   - build-local-bootstrap
 
+vagrant_up_prereqs:
+  - prereqs-check
+  - ciab-ovs
+
 # Override setting in scenarios/cord/config.yml with noop
 docker_image_prereqs:
   - prep-buildnode
