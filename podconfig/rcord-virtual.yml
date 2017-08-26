@@ -21,3 +21,6 @@
 cord_scenario: cord
 cord_profile: rcord
 
+vagrant_up_prereqs:
+  - prereqs-check
+  - ciab-ovs
