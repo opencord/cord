@@ -24,7 +24,7 @@ GENCONFIG_D      ?= $(BUILD)/genconfig
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/head-net-physical $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
@@ -170,6 +170,10 @@ $(M)/build-local-bootstrap:
 
 $(M)/ciab-ovs:
 	$(ANSIBLE_PB) $(BUILD)/ansible/ciab-ovs.yml $(LOGCMD)
+	touch $@
+
+$(M)/head-net-physical:
+	$(ANSIBLE_PB) $(BUILD)/ansible/head-net-physical.yml $(LOGCMD)
 	touch $@
 
 $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
