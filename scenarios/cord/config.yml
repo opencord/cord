@@ -59,15 +59,9 @@ fabric_exclude_names: eth0,eth1
 management_include_names: eth1
 management_exclude_names: eth0,eth2
 
-docker_opts: "{{ ('--insecure-registry ' ~ deploy_docker_registry) }}"
-
 # make build config
 build_targets:
  - compute1-up
-
-vagrant_up_prereqs:
-  - prereqs-check
-  - ciab-ovs
 
 cord_config_prereqs:
   - copy-cord
