@@ -32,6 +32,7 @@
         * [GUI Internals](xos-gui/architecture/README.md)
             * [Module Strucure](xos-gui/architecture/gui-modules.md)
             * [Data Sources](xos-gui/architecture/data-sources.md)
+    * [Migrating Services from cord-3.0 to cord-4.0](xos/migrate-4.0.md)
 * [Testing CORD](test/README.md)
     * [Running Tests](test/running.md)
     * [List of Tests](test/testcases-listings.md)
