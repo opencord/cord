@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a2f8d8d_51d5d441",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-29T00:23:25Z",
+      "side": 1,
+      "message": "Remove before final check-in?",
+      "range": {
+        "startLine": 282,
+        "startChar": 15,
+        "endLine": 282,
+        "endChar": 19
+      },
+      "revId": "d95542f57487a0933ca22d52c41ee040634eac8e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_f1c3a088",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-29T00:23:25Z",
+      "side": 1,
+      "message": "Do we need this?",
+      "range": {
+        "startLine": 44,
+        "startChar": 10,
+        "endLine": 44,
+        "endChar": 15
+      },
+      "revId": "d95542f57487a0933ca22d52c41ee040634eac8e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_11cf4cb2",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-29T00:23:25Z",
+      "side": 1,
+      "message": "Will this stay in the config?  I thought that ~/cord_profile is the typical location.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 43
+      },
+      "revId": "d95542f57487a0933ca22d52c41ee040634eac8e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a2f8d8d_31ca48a2",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-29T00:23:25Z",
+      "side": 1,
+      "message": "Though it\u0027s necessary to set up mgmtbr and fabric on the head node, it\u0027s unlikely that running this (producing the same setup as CiaB) will work in general.\n\nWe should check with Luca to see how he typically satisfies the networking dependencies.",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "d95542f57487a0933ca22d52c41ee040634eac8e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
