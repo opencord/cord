@@ -24,7 +24,7 @@ GENCONFIG_D      ?= $(BUILD)/genconfig
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-config $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
@@ -58,7 +58,7 @@ VAGRANT_PROVIDER ?= libvirt
 VAGRANT_VMS      ?= $(HEADNODE)
 VAGRANT_SWITCHES ?= leaf1
 VAGRANT_CWD      ?= $(SCENARIOS_D)/$(SCENARIO)/
-SSH_CONFIG       ?= ~/.ssh/config  # Vagrant modifies this, should it always?
+VAGRANT_SSH_CONF ?= $(GENCONFIG_D)/vagrant_ssh_config
 
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
@@ -136,7 +136,7 @@ local-ubuntu-dev-env:
 
 vagrant-destroy:
 	$(VAGRANT) destroy -f $(LOGCMD)
-	rm -f $(M)/vagrant-up
+	rm -f $(M)/vagrant-up $(VAGRANT_SSH_CONF)
 
 xos-teardown: xos-update-images
 	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
@@ -178,19 +178,23 @@ $(M)/ciab-ovs:
 
 $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
 	$(VAGRANT) up $(VAGRANT_VMS) --provider $(VAGRANT_PROVIDER) $(LOGCMD)
-	@echo "Configuring SSH for VM's..."
-	$(VAGRANT) ssh-config $(VAGRANT_VMS) > $(SSH_CONFIG)
 	touch $@
 
 $(M)/config-ssh-key: | $(M)/vagrant-up
 	$(ANSIBLE_PB) $(BUILD)/ansible/config-ssh-key.yml $(LOGCMD)
 	touch $@
 
-$(M)/copy-cord: | $(M)/vagrant-up $(COPY_CORD_PREREQS)
+$(M)/vagrant-ssh-config: | $(M)/vagrant-up
+	@echo "Creating $(VAGRANT_SSH_CONF)"
+	$(VAGRANT) ssh-config $(VAGRANT_VMS) > $(VAGRANT_SSH_CONF)
+	$(BUILD)/scripts/vagrant-ssh-config.sh $(VAGRANT_SSH_CONF)
+	touch $@
+
+$(M)/copy-cord: | $(M)/vagrant-ssh-config $(COPY_CORD_PREREQS)
 	$(ANSIBLE_PB) $(PI)/copy-cord-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/cord-config: | $(M)/vagrant-up $(CORD_CONFIG_PREREQS)
+$(M)/cord-config: | $(M)/vagrant-ssh-config $(CORD_CONFIG_PREREQS)
 	$(ANSIBLE_PB) $(PI)/cord-config-playbook.yml $(LOGCMD)
 	cp -r $(GENCONFIG_D) $(CONFIG_CORD_PROFILE_DIR)/genconfig
 	touch $@
@@ -199,13 +203,13 @@ $(M)/copy-config: | $(COPY_CONFIG_PREREQS)
 	$(ANSIBLE_PB) $(PI)/copy-profile-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/prep-buildnode: | $(M)/vagrant-up $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
+$(M)/prep-buildnode: | $(M)/vagrant-ssh-config $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-buildnode-playbook.yml $(LOGCMD)
 	@echo Waiting 20 seconds to timeout SSH ControlPersist, and so future ansible commands gain docker group membership
 	sleep 20
 	touch $@
 
-$(M)/prep-headnode: | $(M)/vagrant-up $(M)/cord-config $(PREP_HEADNODE_PREREQS)
+$(M)/prep-headnode: | $(M)/vagrant-ssh-config $(M)/cord-config $(PREP_HEADNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-headnode-playbook.yml $(LOGCMD)
 	touch $@
 

@@ -257,6 +257,7 @@ then
     echo "Running '$MAKECMD $make_target'" | tee -a $makelog
     cd ${CORDDIR}/build/
     $MAKECMD $make_target 2>&1 | tee -a $makelog
+    # should die here if the make target fails
   done
 fi
 
