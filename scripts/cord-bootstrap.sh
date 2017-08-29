@@ -17,7 +17,7 @@
 # cord-bootstrap.sh
 # Bootstraps a dev system for CORD, downloads source
 
-set -e -u
+set -e -u -o pipefail
 
 # start time, used to name logfiles
 START_T=$(date -u "+%Y%m%d%H%M%SZ")
