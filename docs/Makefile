@@ -8,8 +8,8 @@ build:
 	ln -s ../../orchestration/profiles profiles && \
 	gitbook init && gitbook install && gitbook build
 
-book: build
-	gitbook serve &
+book: clean build
+	gitbook serve
 clean:
 	rm -rf _book; \
 	rm -rf node_modules; \
