@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa5d592f_0abb9b73",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-30T18:26:06Z",
+      "side": 1,
+      "message": "Remove end of line whitespace",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 2
+      },
+      "revId": "831f12162fb43ada36379351b34997e799ceba89",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
