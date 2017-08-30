@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa5d592f_4a099394",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-30T15:16:35Z",
+      "side": 1,
+      "message": "I think this is only needed in a CiaB",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 30
+      },
+      "revId": "7fbc8f37aa3100bed54bc09f41d623db391cb2ea",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_eaf7278b",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-30T15:16:35Z",
+      "side": 1,
+      "message": "Maybe a comment on how to set this.  It\u0027s got to point to the same directory as config_cord_profile_dir, except be a real path so that Vagrant can process it?  If so, seems like that\u0027s going to bite people.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 43
+      },
+      "revId": "7fbc8f37aa3100bed54bc09f41d623db391cb2ea",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_caf46389",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-30T15:16:35Z",
+      "side": 1,
+      "message": "We probably don\u0027t  really need any skipTags for the physical install.  But since skipTags is specified in scenarios/cord/config.yml I see why you\u0027re overriding them here. \n I think the right solution is to remove skipTags from that file.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "7fbc8f37aa3100bed54bc09f41d623db391cb2ea",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_aaf12f97",
+        "filename": "podconfig/rcord-physical.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-30T15:16:35Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 22
+      },
+      "revId": "7fbc8f37aa3100bed54bc09f41d623db391cb2ea",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
