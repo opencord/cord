@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa5d592f_ad3389f5",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000297
+      },
+      "writtenOn": "2017-08-30T20:45:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa5d592f_ed12a157",
+      "range": {
+        "startLine": 27,
+        "startChar": 80,
+        "endLine": 27,
+        "endChar": 105
+      },
+      "revId": "449b7c03f4ba4486ec306154103660cef6227834",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa5d592f_0d0e1535",
         "filename": "Makefile",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2017-08-30T20:30:33Z",
       "side": 1,
       "message": "Needs removed as playbook/role was removed",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 9
+      },
+      "revId": "449b7c03f4ba4486ec306154103660cef6227834",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_8d30c5e9",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000297
+      },
+      "writtenOn": "2017-08-30T20:45:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa5d592f_0d0e1535",
       "range": {
         "startLine": 174,
         "startChar": 0,
