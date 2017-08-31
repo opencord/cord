@@ -136,7 +136,7 @@ buildable_images:
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/volt-synchronizer
-    repo: olt
+    repo: olt-service
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
@@ -146,7 +146,7 @@ buildable_images:
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vtn-synchronizer
-    repo: vtn
+    repo: vtn-service
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
