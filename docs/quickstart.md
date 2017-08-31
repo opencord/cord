@@ -2,7 +2,7 @@
 
 This guide walks through the steps to bring up a demonstration CORD
 "POD", running in virtual machines on a single physical server (a.k.a.
-"CORD-in-a-Box"). The purpose of this demonstration POD is to enable those
+"CORD-in-a-Box" or just "CiaB"). The purpose of this demonstration POD is to enable those
 interested in understanding how CORD works to examine and interact with a
 running CORD environment.  It is a good place for novice CORD users to start.
 
@@ -13,10 +13,10 @@ how to install a multi-node POD, you will find them in the
 [Physical POD Guide](./quickstart_physical.md).  For more details about the
 actual build process, look there.*
 
-## What You Need (Prerequisites)
+## What you need (prerequisites)
 
-You will need a *target server*, which will run both a development environment
-in a Vagrant VM (used to deploy CORD) as well as CORD-in-a-Box itself.
+You will need a *target server*, which will run both a build environment
+in a Vagrant VM (used to deploy CORD) as well as CiaB itself.
 
 Target server requirements:
 
@@ -30,7 +30,7 @@ Target server requirements:
 * User account used to install CORD-in-a-Box has password-less *sudo*
   capability (e.g., like the `ubuntu` user)
 
-### Target Server on CloudLab (optional)
+### Target server on CloudLab (optional)
 
 If you do not have a target server available that meets the above requirements,
 you can borrow one on [CloudLab](https://www.cloudlab.us).  Sign up for an
@@ -50,62 +50,80 @@ requirements.
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more
 information.
 
-## Download and Run the Script
+## Building a CiaB
 
-On the target server, download the script that installs CORD-in-a-Box and run
-it.  The script's output is displayed and also saved to `~/cord/install.out`:
+There are three main steps to building CiaB:
+
+* Bootstrap the server by installing software dependencies and checking out the CORD code
+* Customize the source and configuration if desired
+* Running `make` commands to build and deploy the CORD software, and run tests
+
+### Download and run the bootstrap script
+
+On the target server, download the script that bootstraps the build process and run it:
 
 ```
-curl -o ~/cord-in-a-box.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
-bash ~/cord-in-a-box.sh -t
+wget https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
+chmod +x cord-bootstrap.sh
+~/cord-bootstrap.sh -v
 ```
 
-**NOTE:** *If you are connecting to a remote target server, it is highly
-recommended that you run the `cord-in-a-box.sh` script in a `tmux` session, or
-use `mosh` to connect to the target rather than `ssh`.  Without one of these,
-interrupted connectivity between your local machine and the remote server
-may cause the CiaB install to hang.*
+This script installs software dependencies (e.g., Ansible, Vagrant) as well as the CORD source code (in `~/cord`).
 
-The script takes a *long time* (at least two hours) to run.  Be patient!  If it
-hasn't completely failed yet, then assume all is well!
+### Customize the source and configuration
 
-### Complete
-
-The script builds the CORD-in-a-Box and runs a couple of tests to ensure that
-things are working as expected.  Once it has finished running, you'll see a
-**BUILD SUCCESSFUL** message.
-
-The file `~/cord/install.out` contains the output of the build process,
-post-bootstrap phase.
-
-### Using cord-in-a-box.sh to download development code from Gerrit
-
-There is an `-b` option to cord-in-a-box.sh that will checkout a specific
+CiaB can be used as an integration testing platform for patchsets in Gerrit.  There is a `-p` option to `cord-bootstrap.sh` that will checkout a specific
 changeset from a gerrit repo during the run.  The syntax for this is `<project
 path>:<changeset>/<revision>`.  It can be used multiple times - for example:
 
 ```
-bash ~/cord-in-a-box.sh -b build/platform-install:1233/4 -b orchestration/service-profile:1234/2"
+~/cord-bootstrap.sh -v -p build/platform-install:1233/4 -p orchestration/xos:1234/2
 ```
 
 will check out the `platform-install` repo with changeset 1233, revision 4, and
-`service-profile` repo changeset 1234, revision 2.
+`xos` repo changeset 1234, revision 2.  Note that the `-p` option
+will only have an effect the first time the `cord-bootstrap.sh` script is run.
+You can also just run the `repo` command directly to download patch sets.
 
 You can find the project path used by the `repo` tool in the [manifest/default.xml](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml) file.
 
-### Using cord-in-a-box.sh to run the CORD fabric
+### Build and deploy the software
 
-The `-f` option to cord-in-a-box.sh can be used to configure an ONOS
-fabric for CORD-in-a-Box.  The fabric consists of two leaf and two
-spine switches, each running a [CPqD OpenFlow software
-switch](https://github.com/CPqD/ofsoftswitch13) controlled by ONOS.
-The build process automatically generates a configuration file for the
-fabric and pushes it to ONOS.  *THIS FEATURE IS EXPERIMENTAL AND STILL
-UNDER DEVELOPMENT.*
+Once the system has been bootstrapped, run the following `make` commands to launch the build:
 
-## Inspecting CORD-in-a-Box
+```
+cd ~/cord/build
+make PODCONFIG=rcord-virtual.yml config
+make -j4 build |& tee ~/build.out
+```
 
-CORD-in-a-Box creates a virtual CORD POD running inside Vagrant VMs, using
+The output of the build will be displayed, as well as saved in `~/build.out`.
+Also logs for individual steps of the build are stored in `~/cord/build/logs`.
+
+**NOTE:** *If you are connecting to a remote target server, it is highly
+recommended that you run the above commands in a `tmux` session, or
+use `mosh` to connect to the target rather than `ssh`.  Without one of these,
+interrupted connectivity between your local machine and the remote server
+may cause the CiaB install to hang.*
+
+The `make -j4 build` step takes a *long time* (at least 1 hour) to run.  Be patient!  If it
+hasn't completely failed yet, then assume all is well!
+
+### Run basic E2E tests
+
+If the build completed without errors, you can use the following command to run basic end-to-end tests:
+
+```
+cd ~/cord/build
+make pod-tests
+```
+
+The output of the tests will be displayed, as well as stored in `~/cord/build/logs`.
+
+
+## Inspecting CiaB
+
+CiaB creates a virtual CORD POD running inside Vagrant VMs, using
 libvirt as a backend.
 
 As access to the libvirt socket depends on being in the `libvirtd` group, you
@@ -124,25 +142,19 @@ xos-PG0 root libvirtd
 ```
 
 Once you have done this, you can inspect the status of the VM's by setting the
-`VAGRANT_CWD` environmental variable to the path to the cord-in-a-box
-`Vagrantfile`'s parent directory, then run `vagrant status`:
+`VAGRANT_CWD` environmental variable to `~/cord/build/scenarios/cord` and running `vagrant status`:
 
 ```
-~$ export VAGRANT_CWD=~/cord/build
-~$ vagrant status
+~$ cd cord/build
+~/cord/build$ export VAGRANT_CWD=~/cord/build/scenarios/cord
+~/cord/build$ vagrant status
 Current machine states:
 
 corddev                   running (libvirt)
-prod                      running (libvirt)
-switch                    not created (libvirt)
-leaf-1                    running (libvirt)
-leaf-2                    running (libvirt)
-spine-1                   running (libvirt)
-spine-2                   not created (libvirt)
-testbox                   not created (libvirt)
-compute-node-1            running (libvirt)
-compute-node-2            not created (libvirt)
-compute-node-3            not created (libvirt)
+head1                     running (libvirt)
+compute1                  running (libvirt)
+compute2                  not created (libvirt)
+compute3                  not created (libvirt)
 
 This environment represents multiple VMs. The VMs are all listed
 above with their current state. For more information about a specific
@@ -151,7 +163,7 @@ VM, run `vagrant status NAME`.
 
 ### corddev VM
 
-The `corddev` VM is a development machine used by the `cord-in-a-box.sh` script
+The `corddev` VM is a build machine used
 to drive the installation.  It downloads and builds Docker containers and
 publishes them to the virtual head node (see below). It then installs MaaS on
 the virtual head node (for bare-metal provisioning) and the ONOS, XOS, and
@@ -161,59 +173,63 @@ OpenStack services in containers.  This VM can be entered as follows:
 $ ssh corddev
 ```
 
-The CORD build environment is located in `/cord/build` inside this VM.  It is
-possible to manually run individual steps in the build process here if you
-wish; see the [Physical POD Guide](./quickstart_physical.md) for more
-information on how to run build steps.
+The CORD source tree is mounted at `/opt/cord` inside this VM.
 
-### prod VM
+### head1 VM
 
-The `prod` VM is the virtual head node of the POD.  It runs the OpenStack,
+The `head1` VM is the virtual head node of the POD.  It runs the OpenStack,
 ONOS, and XOS services inside containers.  It also simulates a subscriber
 devices using a container.  To enter it, simply type:
 
 ```
-$ ssh prod
+$ ssh head1
 ```
 
 Inside the VM, a number of services run in Docker and LXD containers.
 
 ```
-vagrant@prod:~$ docker ps
-CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                                            NAMES
-043ea433232c        xosproject/xos-ui                                     "python /opt/xos/mana"   About an hour ago   Up About an hour    8000/tcp, 0.0.0.0:8888->8888/tcp                                                                 cordpod_xos_ui_1
-40b6b05be96c        xosproject/xos-synchronizer-exampleservice            "bash -c 'sleep 120; "   About an hour ago   Up About an hour    8000/tcp                                                                                         cordpod_xos_synchronizer_exampleservice_1
-cfd93633bfae        xosproject/xos-synchronizer-vtr                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vtr_1
-d2d2a0799ca0        xosproject/xos-synchronizer-vsg                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vsg_1
-480b5e85e87d        xosproject/xos-synchronizer-onos                      "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_onos_1
-9686909333c3        xosproject/xos-synchronizer-fabric                    "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_fabric_1
-de53b100ce20        xosproject/xos-synchronizer-openstack                 "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_openstack_1
-8a250162424c        xosproject/xos-synchronizer-vtn                       "bash -c 'sleep 120; "   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpod_xos_synchronizer_vtn_1
-f1bd21f98a9f        xosproject/xos                                        "python /opt/xos/mana"   2 hours ago         Up 2 hours          0.0.0.0:81->81/tcp, 8000/tcp                                                                     cordpodbs_xos_bootstrap_ui_1
-e41ccc63e7dd        xosproject/xos                                        "bash -c 'cd /opt/xos"   2 hours ago         Up 2 hours          8000/tcp                                                                                         cordpodbs_xos_synchronizer_onboarding_1
-7fdeb35614e8        redis                                                 "docker-entrypoint.sh"   2 hours ago         Up 2 hours          6379/tcp                                                                                         cordpodbs_xos_redis_1
-84fa440023bf        xosproject/xos-postgres                               "/usr/lib/postgresql/"   2 hours ago         Up 2 hours          5432/tcp                                                                                         cordpodbs_xos_db_1
-ef0dd85badf3        onosproject/onos:latest                               "./bin/onos-service"     2 hours ago         Up 2 hours          0.0.0.0:6653->6653/tcp, 0.0.0.0:8101->8101/tcp, 0.0.0.0:8181->8181/tcp, 0.0.0.0:9876->9876/tcp   onosfabric_xos-onos_1
-e2348ddee189        xos/onos                                              "./bin/onos-service"     2 hours ago         Up 2 hours          0.0.0.0:6654->6653/tcp, 0.0.0.0:8102->8101/tcp, 0.0.0.0:8182->8181/tcp, 0.0.0.0:9877->9876/tcp   onoscord_xos-onos_1
-f487db716d8c        docker-registry:5000/mavenrepo:candidate              "nginx -g 'daemon off"   3 hours ago         Up 3 hours          443/tcp, 0.0.0.0:8080->80/tcp                                                                    mavenrepo
-0a24bcc3640a        docker-registry:5000/cord-maas-automation:candidate   "/go/bin/cord-maas-au"   3 hours ago         Up 3 hours                                                                                                           automation
-c5448fb834ac        docker-registry:5000/cord-maas-switchq:candidate      "/go/bin/switchq"        3 hours ago         Up 3 hours          0.0.0.0:4244->4244/tcp                                                                           switchq
-7690414fec4b        docker-registry:5000/cord-provisioner:candidate       "/go/bin/cord-provisi"   3 hours ago         Up 3 hours          0.0.0.0:4243->4243/tcp                                                                           provisioner
-833752cd8c71        docker-registry:5000/config-generator:candidate       "/go/bin/config-gener"   3 hours ago         Up 3 hours          1337/tcp, 0.0.0.0:4245->4245/tcp                                                                 generator
-300df95eb6bd        docker-registry:5000/consul:candidate                 "docker-entrypoint.sh"   3 hours ago         Up 3 hours                                                                                                           storage
-e0a68af23e9c        docker-registry:5000/cord-ip-allocator:candidate      "/go/bin/cord-ip-allo"   3 hours ago         Up 3 hours          0.0.0.0:4242->4242/tcp                                                                           allocator
-240a8b3e5af5        docker-registry:5000/cord-dhcp-harvester:candidate    "/go/bin/harvester"      3 hours ago         Up 3 hours          0.0.0.0:8954->8954/tcp                                                                           harvester
-9444c39ffe10        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5000->5000/tcp                                                                           registry
-13d2f04e3b9b        registry:2.4.0                                        "/bin/registry serve "   3 hours ago         Up 3 hours          0.0.0.0:5001->5000/tcp                                                                           registry-mirror
+vagrant@head1:~$ docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}"
+CONTAINER ID        NAMES                                 IMAGE
+84c09b156774        rcord_xos_gui_1                       docker-registry:5000/xosproject/xos-gui:candidate
+52e477e9b188        rcord_xos_ws_1                        docker-registry:5000/xosproject/xos-ws:candidate
+10a54a4a4f03        rcord_xos_chameleon_1                 docker-registry:5000/xosproject/chameleon:candidate
+257f4c29967d        rcord_xos_tosca_1                     docker-registry:5000/xosproject/xos-tosca:candidate
+b2c78cf4de7b        rcord_xos_ui_1                        docker-registry:5000/xosproject/xos-ui:candidate
+526a4282610d        rcord_xos_core_1                      docker-registry:5000/xosproject/xos-ui:candidate
+0783438bba1e        rcord_vtr-synchronizer_1              docker-registry:5000/xosproject/vtr-synchronizer:candidate
+e66bd071bdba        rcord_vsg-synchronizer_1              docker-registry:5000/xosproject/vsg-synchronizer:candidate
+961ce2793217        rcord_onos-synchronizer_1             docker-registry:5000/xosproject/onos-synchronizer:candidate
+7d4b66291c37        rcord_exampleservice-synchronizer_1   docker-registry:5000/xosproject/exampleservice-synchronizer:candidate
+a918b5dc6f72        rcord_volt-synchronizer_1             docker-registry:5000/xosproject/volt-synchronizer:candidate
+6bc841f6c888        rcord_vrouter-synchronizer_1          docker-registry:5000/xosproject/vrouter-synchronizer:candidate
+c99b203f5a7e        rcord_vtn-synchronizer_1              docker-registry:5000/xosproject/vtn-synchronizer:candidate
+6fef0cffae83        rcord_openstack-synchronizer_1        docker-registry:5000/xosproject/openstack-synchronizer:candidate
+26f8cd2e32df        rcord_fabric-synchronizer_1           docker-registry:5000/xosproject/fabric-synchronizer:candidate
+d99b09ec8e2c        rcord_xos_db_1                        docker-registry:5000/xosproject/xos-postgres:candidate
+2a22f4836172        rcord_xos_redis_1                     docker-registry:5000/redis:candidate
+392e6e4aa4cf        rcord_registrator_1                   docker-registry:5000/gliderlabs/registrator:candidate
+1899d7d561f9        rcord_consul_1                        docker-registry:5000/gliderlabs/consul-server:candidate
+ba4e6640a4f0        onosfabric_xos-onos_1                 docker-registry:5000/onosproject/onos:candidate
+35517eec96e1        onoscord_xos-onos_1                   xos/onos:candidate
+b591fd1c406f        mavenrepo                             docker-registry:5000/opencord/mavenrepo:candidate
+c4a772babeb6        switchq                               docker-registry:5000/opencord/maas-switchq:candidate
+c79f358d03c9        automation                            docker-registry:5000/opencord/maas-automation:candidate
+c02fd40982f6        provisioner                           docker-registry:5000/opencord/maas-provisioner:candidate
+9b4b481bf2f5        allocator                             docker-registry:5000/opencord/maas-allocator:candidate
+2276a0f258ad        generator                             docker-registry:5000/opencord/maas-generator:candidate
+bec8d53ebe12        storage                               docker-registry:5000/consul:candidate
+4475dddba35a        harvester                             docker-registry:5000/opencord/maas-harvester:candidate
+30d4996337bd        registry                              registry:2.4.0
+21289d8b63ff        registry-mirror                       registry:2.4.0
 ```
 
-The above shows Docker containers launched by XOS (image names starting with
-`xosproject`).  Containers starting with `onos` are running ONOS.  There is
+The above shows Docker containers launched by XOS (container names starting with
+`rcord`).  Containers starting with `onos` are running ONOS.  There is
 also a Docker image registry, a Maven repository containing the CORD ONOS apps,
 and a number of microservices used in bare-metal provisioning.
 
 ```
-vagrant@prod:~$ sudo lxc list
+vagrant@head1:~$ sudo lxc list
 +-------------------------+---------+------------------------------+------+------------+-----------+
 |          NAME           |  STATE  |             IPV4             | IPV6 |    TYPE    | SNAPSHOTS |
 +-------------------------+---------+------------------------------+------+------------+-----------+
@@ -259,15 +275,15 @@ to the vSG, but it can be entered using:
 $ sudo lxc exec testclient bash
 ```
 
-### compute_node-1 VM
+### compute1 VM
 
-The `compute_node-1` VM is the virtual compute node controlled by OpenStack.
-This VM can be entered from the `prod` VM.  Run `cord prov list` to get the
+The `compute1` VM is the virtual compute node controlled by OpenStack.
+This VM can be entered from the `head1` VM.  Run `cord prov list` to get the
 node name (assigned by MaaS).  The node name will be something like
 `bony-alley.cord.lab`; in this case, to login you'd run:
 
 ```
-$ ssh ubuntu@bony-alley
+$ ssh ubuntu@bony-alley.cord.lab
 ```
 
 Virtual machines created via XOS/OpenStack will be instantiated on this
@@ -275,8 +291,8 @@ compute node.  To login to an OpenStack VM, first get the management IP
 address (172.27.0.x):
 
 ```
-vagrant@prod:~$ source /opt/cord_profile/admin-openrc.sh
-vagrant@prod:~$ nova list --all-tenants
+vagrant@head1:~$ source /opt/cord_profile/admin-openrc.sh
+vagrant@head1:~$ nova list --all-tenants
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
 | ID                                   | Name                    | Status | Task State | Power State | Networks                                          |
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
@@ -289,35 +305,29 @@ The VM hosting the vSG is called `mysite_vsg-1` and we see it has a management I
 Then run `ssh-agent` and add the default key (used to access the OpenStack VMs):
 
 ```
-vagrant@prod:~$ ssh-agent bash
-vagrant@prod:~$ ssh-add
+vagrant@head1:~$ ssh-agent bash
+vagrant@head1:~$ ssh-add
 ```
 
 SSH to the compute node with the `-A` option and then to the VM using the
-management IP obtained above.  So if the compute node name is `bony-alley` and
+management IP obtained above.  So if the compute node name is `bony-alley.cord.lab` and
 the management IP is 172.27.0.2:
 
 ```
-vagrant@prod:~$ ssh -A ubuntu@bony-alley
+vagrant@head1:~$ ssh -A ubuntu@bony-alley.cord.lab
 ubuntu@bony-alley:~$ ssh ubuntu@172.27.0.2
 
 # Now you're inside the mysite-vsg-1 VM
 ubuntu@mysite-vsg-1:~$
 ```
 
-### leaf-[12] and spine-[12] VMs
-
-These VMs run software switches for the CORD fabric.  In the default
-configuration they run standard Linux bridges.  If you have chosen to run
-cord-in-a-box.sh with the experimental `-f` option, the VMs run CPqD switches
-controlled by ONOS running in the `onosfabric_xos-onos_1` container.
 
 ### MaaS GUI
 
 You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to
 the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on CloudLab,
 your `<target-server>` is the hostname of your CloudLab node.
-The username is `cord` and the auto-generated password is found in `~/cord/build/maas/passwords/maas_user.txt`.
+The username is `cord` and the auto-generated password is found in `~/cord/build/maas/passwords/maas_user.txt` on the CiaB server.
 For more information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 
 ### XOS GUI
@@ -325,14 +335,14 @@ For more information on MaaS, see [the MaaS documentation](http://maas.io/docs).
 You can access the XOS GUI by pointing your browser to URL
 `http://<target-server>:8080/xos/`.  The username is
 `xosadmin@opencord.org` and the auto-generated password is found in
-`~/cord/build/platform-install/credentials/xosadmin@opencord.org`.
+`/opt/credentials/xosadmin@opencord.org` on the head node.
 
 The state of the system is that all CORD services have been onboarded to XOS.
-You can see them in the `Service Graph` represented in the `Home` page. 
-If you want to see more details about the services you navigate to `Core > Services`, 
+You can see them in the `Service Graph` represented in the `Home` page.
+If you want to see more details about the services you navigate to `Core > Services`,
 or searching for `Service` in the top bar (you start searching just pressing `f`)
 
-A sample CORD subscriber has also been created. You can see the `Service Graph` 
+A sample CORD subscriber has also been created. You can see the `Service Graph`
 for subscribers by selecting the `Service Graph` item in the left navigation.
 
 Here is a sample output:
@@ -353,7 +363,7 @@ documentation](https://www.elastic.co/guide/en/kibana/current/index.html).
 
 After CORD-in-a-Box was set up, a couple of basic health
 tests were executed on the platform.  The results of these tests can be
-found near the end of `~/install.out`.
+found near the end of `~/build.out`.
 
 ### test-vsg
 
@@ -411,6 +421,9 @@ TASK [test-exampleservice : Output from curl test] *****************************
 Thursday 27 October 2016  15:34:40 +0000 (0:00:01.116)       0:24:44.732 ******
 ok: [10.100.198.201] => {
     "curltest.stdout_lines": [
+        "",
+        "",
+        "",
         "ExampleService",
         " Service Message: \"hello\"",
         " Tenant Message: \"world\""
@@ -418,64 +431,22 @@ ok: [10.100.198.201] => {
 }
 ```
 
-## Development Workflow
-
-CORD-in-a-Box is a useful environment for integration testing and
-debugging.  A typical scenario is to find a problem, and then rebuild and redeploy
-some XOS containers (e.g., a service synchronizer) to verify a fix.  A
-workflow for quickly rebuilding and redeploying the XOS containers from source is:
-
- * Make changes in your source tree, under `~/cord/orchestration/xos*`
- * Login to the `corddev` VM and `cd /cord/build`
- * `./gradlew :platform-install:buildImages`
- * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :platform-install:publish`
- * `./gradlew -PdeployConfig=config/cord_in_a_box.yml :orchestration:xos:publish`
-
-Additionally, if you made any changes to a profile (e.g., you added a new service), you'll need to re-sync the configuration from the build node to the head node.  To do this run:
-
- * `./gradlew -PdeployConfig=config/cord_in_a_box.yml PIprepPlatform`
-
-Now the new XOS images should be published to the registry on `prod`.  To bring them up, login to the `prod` VM and define these aliases:
-
-```
-CORD_PROFILE=$( cat /opt/cord_profile/profile_name )
-alias xos-pull="docker-compose -p $CORD_PROFILE -f /opt/cord_profile/docker-compose.yml pull"
-alias xos-up="docker-compose -p $CORD_PROFILE -f /opt/cord_profile/docker-compose.yml up -d"
-alias xos-teardown="pushd /opt/cord/build/platform-install; ansible-playbook -i inventory/head-localhost --extra-vars @/opt/cord/build/genconfig/config.yml teardown-playbook.yml; popd"
-alias compute-node-refresh="pushd /opt/cord/build/platform-install; ansible-playbook -i /etc/maas/ansible/pod-inventory --extra-vars=@/opt/cord/build/genconfig/config.yml compute-node-refresh-playbook.yml; popd"
-```
-
-To pull new images from the database and launch the containers, while retaining the existing XOS database, run:
-
-```
-$ xos-pull; xos-up
-```
-
-Alternatively, to remove the XOS database and reinitialize XOS from scratch, run:
-
-```
-$ xos-teardown; xos-pull; xos-launch; compute-node-refresh
-```
-
 
 ## Troubleshooting
 
-If the CORD-in-a-Box build fails, you may try simply resuming the build at the
+If the CiaB build fails, you may try simply resuming the build at the
 place that failed.  The easiest way is to do is to re-run the
-`cord-in-a-box.sh` script; this will start the build at the beginning and skip
-over the steps that have already been completed.
+`make build` command; it will skip over the steps that have already completed.
 
-If that doesn't work, the next thing to try is running `cord-in-a-box.sh -c` (specify
-the `-c` flag).  This causes the script to clean up the previous installation
-and start from scratch.
+If you need to force `make build` to re-run steps that have already completed,
+remove the appropriate file in the `milestones` directory prior to re-running.
 
-If running `cord-in-a-box.sh -c` repeatedly fails for you, please tell us
-about it on the [CORD Slack channel](https://slackin.opencord.org/)!
+For more information about how the build works, see [the build internals guide](./build_internals.md).
 
 ## Congratulations
 
 If you got this far, you successfully built, deployed, and tested your first
-CORD POD.
+(virtual) CORD POD.
 
 You are now ready to bring up a multi-node POD with a real switching fabric and
 multiple physical compute nodes.  The process for doing so is
