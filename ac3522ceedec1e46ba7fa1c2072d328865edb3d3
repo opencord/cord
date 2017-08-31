@@ -22,6 +22,30 @@
       "revId": "ac3522ceedec1e46ba7fa1c2072d328865edb3d3",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_4d688df5",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T16:40:49Z",
+      "side": 1,
+      "message": "Ah, I see that too.  Updated the doc.",
+      "parentUuid": "fa5d592f_ed8861c8",
+      "range": {
+        "startLine": 426,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 5
+      },
+      "revId": "ac3522ceedec1e46ba7fa1c2072d328865edb3d3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
