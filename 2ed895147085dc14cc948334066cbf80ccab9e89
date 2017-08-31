@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa5d592f_cd6ebd96",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 11
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T16:47:02Z",
+      "side": 0,
+      "message": "Do we not need this any more?  Or did it move somewhere?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 70
+      },
+      "revId": "2ed895147085dc14cc948334066cbf80ccab9e89",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
