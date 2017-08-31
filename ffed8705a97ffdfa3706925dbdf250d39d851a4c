@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa5d592f_b0e64043",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "highlights?",
+      "range": {
+        "startLine": 6,
+        "startChar": 39,
+        "endLine": 6,
+        "endChar": 50
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_70d0c853",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "fields",
+      "range": {
+        "startLine": 26,
+        "startChar": 60,
+        "endLine": 26,
+        "endChar": 65
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_90e33c33",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "can be used",
+      "range": {
+        "startLine": 26,
+        "startChar": 38,
+        "endLine": 26,
+        "endChar": 45
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_50d5c441",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "hiding",
+      "range": {
+        "startLine": 27,
+        "startChar": 41,
+        "endLine": 27,
+        "endChar": 48
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_30ca50a2",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "physical",
+      "range": {
+        "startLine": 69,
+        "startChar": 14,
+        "endLine": 69,
+        "endChar": 22
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_f0c39888",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "I didn\u0027t think that the automated pod deployment was configuring the fabric.",
+      "range": {
+        "startLine": 72,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 40
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_10cf4cb2",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "configuration",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 17
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_d0c0947e",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "Developed",
+      "range": {
+        "startLine": 102,
+        "startChar": 2,
+        "endLine": 102,
+        "endChar": 9
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_7037a8b1",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "We did this but it turned out not to be useful because there is no data plane on the QCT2 pod.",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 65
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_503ca493",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "Bound",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 6
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa5d592f_3041300c",
+        "filename": "docs/release-notes/shared-delusion.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-08-31T21:48:27Z",
+      "side": 1,
+      "message": "Changed",
+      "range": {
+        "startLine": 134,
+        "startChar": 2,
+        "endLine": 134,
+        "endChar": 8
+      },
+      "revId": "ffed8705a97ffdfa3706925dbdf250d39d851a4c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
