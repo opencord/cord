@@ -21,6 +21,7 @@
     * [Writing Synchronizers](xos/dev/synchronizers.md)
         * [Design Guidelines](xos/dev/sync_arch.md)
         * [Implementation Details](xos/dev/sync_impl.md)
+    * [Migrating Models to 4.0](xos/migrate-4.0.md) 
 * [Developing for CORD](develop.md)
     * [Workflow: platform-install](platform-install/README.md)
     * [Workflow: local dev](xos/dev/local_env.md)
@@ -41,4 +42,6 @@
     * [E-CORD](profiles/ecord/README.md)
     * [M-CORD](profiles/mcord/README.md)
     * [OpenCloud](profiles/opencloud/README.md)
+* [Release Notes](release-notes/shared-delusion.md)
+    * [Jira](release-notes/sd-jira.md)
 
