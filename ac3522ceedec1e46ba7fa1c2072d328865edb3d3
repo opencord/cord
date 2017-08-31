@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa5d592f_ed8861c8",
+        "filename": "docs/quickstart.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-08-31T15:59:43Z",
+      "side": 1,
+      "message": "On my more recent builds, there were a few blank lines in the output.  Not sure if this is worth fixing or if we just update the docs here:\n\nTASK [test-exampleservice : Output from curl test] *****************************\nThursday 31 August 2017  08:07:14 +0000 (0:00:00.419)       0:18:06.395 ******* \nok: [localhost] \u003d\u003e {\n    \"curltest.stdout_lines\": [\n        \"\", \n        \"\", \n        \"\", \n        \"ExampleService\", \n        \" Service Message: \\\"hello\\\"\", \n        \" Tenant Message: \\\"world\\\"\"\n    ]\n}",
+      "range": {
+        "startLine": 426,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 5
+      },
+      "revId": "ac3522ceedec1e46ba7fa1c2072d328865edb3d3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
