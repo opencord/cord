@@ -2,7 +2,7 @@
 
 The Shared-Delusion release completes a major refactoring of CORD,
 with the goal of improving the developer experience. A full listing of
-Epics and Stories completed for Shared-Delusion (pulled from Jira) are
+Epics and Stories completed for Shared-Delusion (pulled from Jira) is
 available [here](sd-jira.md), with the highlights summarized below.
 
 #### XOS Modeling Framework
@@ -32,21 +32,19 @@ services. Specific features include:
 * Removed hand-crafted APIs and eliminated the `xos-gui` container.
 
 > Information on migrating services to Shared-Delusion can be found 
-> [here](../xos/dev/xproto.md).
+> [here](../xos/migrate-4.0.md).
 
 #### Build System
 
 Redesigned build system to streamline and unify the developer
 workflow. Specific features include:
 
-* Uses `make` and transitions away from `gradle`, with the goal
-  of providing better support for incremental builds.
+* Uses `make` and transitions away from `gradle`, providing better
+support for incremental builds.
 
 * Implemented an XOS configuration module.
 
-* Support Docker image tagging for deployment.
-
-* Build and push tagged images to Docker Hub.
+* Supports building and pushing tagged images to Docker Hub.
 
 * Added configure targets that generate credentials for each build layer.
 
@@ -69,7 +67,7 @@ workflow. Specific features include:
 Automated the physical POD deployment system. Specific items
 include:
 
-* Support fabric configuration in ONOS and load POD
+* Supports fabric configuration in ONOS and load POD
     configuration files in `pod-configs` repo.
 
 * Automated switch software installation.
@@ -109,13 +107,13 @@ Continued to add features to the fabric, including:
 
 * Updated fabric synchronizer to push routes instead of hosts.
 
-* Support enable/disable ports on STANDBY nodes.
+* Support to enable/disable ports on STANDBY nodes.
 
 * DHCP server HA supported by DHCP relay app.
 
 * Extended network configuration to support multi-homing.
 
-* Support dual-home host failover.
+* Supports dual-home host failover.
 
 * Refactored DHCP relay
 
@@ -131,7 +129,7 @@ Optimized DPDK and OvS performance, including:
 
 * Changed kernel boot options for nodes 
 
-> This is an beta feature, and is not automatically included in a build.
+> This is a beta feature, and is not automatically included in a build.
 
 
 
