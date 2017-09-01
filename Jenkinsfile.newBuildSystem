@@ -76,7 +76,7 @@ node ("${config.dev_node.name}") {
                 }
 
                 stage ("Generate CORD configuration") {
-                    sh "make PODCONFIG=${config.pod_config.file_name} config"
+                    sh "make PODCONFIG=automation/${config.pod_config.file_name} config"
                 }
 
                 stage ("Deploy") {
