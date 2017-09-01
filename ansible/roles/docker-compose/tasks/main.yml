@@ -19,5 +19,5 @@
 - name: docker-compose is present
   become: yes
   pip:
-    name: "docker-compose>=1.14.0"
+    name: "docker-compose==1.15.0"
     state: present
