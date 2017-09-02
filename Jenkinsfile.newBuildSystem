@@ -227,7 +227,7 @@ node ("${config.dev_node.name}") {
                 step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
             } finally {
                 sh 'vagrant destroy -f corddev'
-                sh 'rm -rf podconfigs/automation'
+                sh 'rm -rf podconfig/automation'
             }
             echo "RESULT: ${currentBuild.result}"
        }
