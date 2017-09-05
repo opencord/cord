@@ -30,7 +30,7 @@ VAGRANT_CWD=${CORDDIR}/build/
 VAGRANT_VM_PREFIX=build
 
 # CORD versioning
-REPO_BRANCH="master"
+REPO_BRANCH="cord-4.0"
 VERSION_STRING="CiaB Devel"
 
 function finish {
