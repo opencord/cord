@@ -80,7 +80,7 @@ node ("${config.dev_node.name}") {
                 }
 
                 stage ("Deploy") {
-                    sh "make build"
+                    sh "VAGRANT_PROVIDER=virtualbox make build"
                 }
 
                 stage ("Power cycle compute nodes") {
