@@ -1,3 +1,4 @@
+---
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -14,7 +15,6 @@
 # limitations under the License.
 
 
----
 # rcord-physical-example Pod Config
 # Example configuration for a physical R-CORD pod
 
@@ -56,6 +56,9 @@ skipTags:
 # Wait until headnode prepped before building containers, for consistent DNS
 docker_images_prereqs:
   - prep-headnode
+
+copy_cord_prereqs:
+  - config-ssh-key
 
 # node topology
 physical_node_list:
