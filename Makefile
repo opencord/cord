@@ -135,7 +135,7 @@ local-ubuntu-dev-env:
 	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
 
 vagrant-destroy:
-	$(VAGRANT) -f destroy $(LOGCMD)
+	$(VAGRANT) destroy -f $(LOGCMD)
 	rm -f $(M)/vagrant-up
 
 xos-teardown: xos-update-images
