@@ -7,6 +7,8 @@ build:
 	ln -s ../../orchestration/xos-gui/docs xos-gui && \
 	ln -s ../../orchestration/profiles profiles && \
 	gitbook init && gitbook install && gitbook build
+	# build swagger
+	pushd ../../orchestration/xos/docs/; make swagger_docs; popd;
 
 book: clean build
 	gitbook serve
