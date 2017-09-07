@@ -1,6 +1,8 @@
+SHELL := /bin/bash
+
 default: book
 
-build:
+build: swagger
 	ln -s ../platform-install/docs platform-install && \
 	ln -s ../../test/cord-tester/docs test && \
 	ln -s ../../orchestration/xos/docs xos && \
@@ -23,4 +25,8 @@ clean:
 	rm -f ../../orchestration/xos/docs/docs; \
 	rm -f ../../orchestration/xos-gui/docs/docs; \
 	rm -f ../../orchestration/profiles/profiles
+
+swagger:
+	pushd ../../orchestration/xos/; source scripts/setup_venv.sh; popd;
+	pushd ../../orchestration/xos/docs/; make swagger_docs; popd;
 
