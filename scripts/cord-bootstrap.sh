@@ -106,22 +106,13 @@ function bootstrap_vagrant() {
     curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/1.9.3/vagrant_1.9.3_x86_64.deb
     echo "$VAGRANT_SHA256SUM  /tmp/vagrant.deb" | sha256sum -c -
     sudo dpkg -i /tmp/vagrant.deb
-    sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev nfs-kernel-server ruby2.0
+    sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev nfs-kernel-server
     sudo adduser $USER libvirtd
 
     run_stage cloudlab_setup
 
     echo "Installing vagrant plugins..."
-    # FIXME: fix for vagrant-libvirt dependency issue that arose on 2017-04-28 - zdw
-    # vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
-    if ! vagrant plugin list | grep vagrant-libvirt
-    then
-      git clone -b remove_xmlrpc_dep https://github.com/zdw/vagrant-libvirt.git ${HOME}/vagrant-libvirt
-      cd ~/vagrant-libvirt
-      gem2.0 build vagrant-libvirt.gemspec
-      vagrant plugin install vagrant-libvirt-0.0.35.gem
-      cd ~
-    fi
+    vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
     vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
     vagrant plugin list | grep vagrant-hosts || vagrant plugin install vagrant-hosts
 
