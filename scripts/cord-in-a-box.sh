@@ -96,23 +96,13 @@ function bootstrap() {
     echo "$VAGRANT_SHA256SUM  /tmp/vagrant.deb" | sha256sum -c -
     sudo apt-get update
     sudo dpkg -i /tmp/vagrant.deb
-    sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip ruby2.0
+    sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev curl nfs-kernel-server git build-essential python-pip
     sudo adduser $USER libvirtd
     sudo pip install pyparsing python-logstash mixpanel
   fi
 
   echo "Installing vagrant plugins..."
-  # FIXME: fix for vagrant-libvirt dependency issue that arose on 2017-04-28 - zdw
-  # vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
-  if ! vagrant plugin list | grep vagrant-libvirt
-  then
-    git clone -b remove_xmlrpc_dep https://github.com/zdw/vagrant-libvirt.git ~/vagrant-libvirt
-    cd ~/vagrant-libvirt
-    gem2.0 build vagrant-libvirt.gemspec
-    vagrant plugin install vagrant-libvirt-0.0.35.gem
-    cd ~
-  fi
-
+  vagrant plugin list | grep vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
   vagrant plugin list | grep vagrant-mutate || vagrant plugin install vagrant-mutate
 
   add_box ubuntu/trusty64
