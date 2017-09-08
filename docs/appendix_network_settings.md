@@ -15,29 +15,28 @@ By default, any interface that has a module or kernel driver of tun, bridge, bon
 
 When deciding which interfaces are in this bond, the deployment script selects the list of available interfaces and filters them on the criteria below. The output is the list of interfaces that should be associated with the bond interface. The resultant list is sorted alphabetically. Finally, the interfaces are configured to be in the bond interface with the first interface in the list being the primary. 
 
-The network configuration can be customized before deploying, using a set of variables that can be set in your deployment configuration file, for example `podX.yml`, in the dev VM, under `/cord/build/config`. 
-Below an example of the so called “extraVars” section is reported:
+The network configuration can be customized before deploying, using a set of variables that can be set in your deployment configuration file, for example `podX.yml`, in the dev VM, under `/cord/build/podconfig`. 
+Below, an example of most commonly used network variables is reported:
 
 ```
-extraVars:
-    - 'fabric_include_names=<name1>,<name2>' 
-    - 'fabric_include_module_types=<mod1>,<mod2>' 
-    - 'fabric_include_bus_types=<bus1>,<bus2>' 
-    - 'fabric_exclude_names=<name1>,<name2>' 
-    - 'fabric_exclude_module_types=<mod1>,<mod2>' 
-    - 'fabric_exclude_bus_types=<bus1>,<bus2>' 
-    - 'fabric_ignore_names=<name1>,<name2>' 
-    - 'fabric_ignore_module_types=<mod1>,<mod2>' 
-    - 'fabric_ignore_bus_types=<bus1>,<bus2>' 
-    - 'management_include_names=<name1>,<name2>' 
-    - 'management_include_module_types=<mod1>,<mod2>' 
-    - 'management_include_bus_types=<bus1>,<bus2>' 
-    - 'management_exclude_names=<name1>,<name2>' 
-    - 'management_exclude_module_types=<mod1>,<mod2>' 
-    - 'management_exclude_bus_types=<bus1>,<bus2>' 
-    - 'management_ignore_names=<name1>,<name2>' 
-    - 'management_ignore_module_types=<mod1>,<mod2>' 
-    - 'management_ignore_bus_types=<bus1>,<bus2>' 
+'fabric_include_names'='<name1>,<name2>'
+'fabric_include_module_types'='<mod1>,<mod2>'
+'fabric_include_bus_types'='<bus1>,<bus2>'
+'fabric_exclude_names'='<name1>,<name2>'
+'fabric_exclude_module_types'='<mod1>,<mod2>'
+'fabric_exclude_bus_types'='<bus1>,<bus2>'
+'fabric_ignore_names'='<name1>,<name2>'
+'fabric_ignore_module_types'='<mod1>,<mod2>'
+'fabric_ignore_bus_types'='<bus1>,<bus2>'
+'management_include_names'='<name1>,<name2>'
+'management_include_module_types'='<mod1>,<mod2>'
+'management_include_bus_types'='<bus1>,<bus2>'
+'management_exclude_names'='<name1>,<name2>'
+'management_exclude_module_types'='<mod1>,<mod2>'
+'management_exclude_bus_types'='<bus1>,<bus2>'
+'management_ignore_names'='<name1>,<name2>'
+'management_ignore_module_types'='<mod1>,<mod2>'
+'management_ignore_bus_types'='<bus1>,<bus2>'
 ```
 
 Each of the criteria is specified as a comma separated list of regular expressions. 

@@ -1,19 +1,16 @@
-#Installing a Physical POD
+# Installing a Physical POD
 
 The following is a detailed, step-by-step recipe for installing a physical POD.
 
->NOTE: If you are new to CORD and would like to get familiar with it, you should 
->start by bringing up a development POD on a single physical server, called 
->[CORD-in-a-Box](quickstart.md).
+>NOTE: Looking for a quick list of essential build commands? You can find it [here](quickstarts.md)
 
->NOTE: Also see the [Quick Start: Physical POD](quickstart_physical.md) Guide
->for a streamlined overview of the physical POD install process. 
+>NOTE: If you are new to CORD and would like to get familiar with it, you should start by bringing up a development POD on a single physical server, called [CORD-in-a-Box](install_ciab.md).
 
 ## Overview of a CORD POD
 
 The following is a brief description of a generic full POD.
 
-###Physical Configuration
+### Physical Configuration
 
 A full POD includes a ToR management switch, four fabric switches, and three
 standard x86 servers. The following figure does not show access devices
@@ -22,7 +19,7 @@ later in this section.
 
 <img src="images/physical-overview.png" alt="Drawing" style="width: 400px;"/>
 
-###Logical Configuration: Data Plane Network
+### Logical Configuration: Data Plane Network
 
 The following diagram is a high level logical representation of a typical CORD POD.
 
@@ -35,7 +32,7 @@ depending on the services needed, and where they are located. The
 switches form a leaf and spine fabric. The compute nodes and the head
 node are connected to a port of one of the leaf switches. 
 
-###Logical Configuration: Control Plane / Management Network
+### Logical Configuration: Control Plane / Management Network
 
 The following diagram shows in blue how the components of the system are
 connected through the management network.
@@ -45,7 +42,7 @@ connected through the management network.
 As shown in this figure, the head node is the only server in the POD connected both
 to Internet and to the other components of the system. The compute nodes and the switches are only connected to the head node, which provides them with all the software needed.
 
-##Sample Workflow
+## Sample Workflow
 
 It is important to have a general picture of installation workflow before
 getting into the details. The following is a list of high-level tasks involved
@@ -59,17 +56,17 @@ build procedure automatically installs the OS, other software needed and perform
 the related configurations.
 * The software gets automatically deployed from the head node to the compute nodes. 
 
-##Requirements
+## Requirements
 
 While the CORD project is for openness and does not have any interest in sponsoring specific vendors, it provides a reference implementation for both hardware and software to help users in building their PODs. What is reported below is a list of hardware that, in the community experience, has worked well.
 
 Also note that the CORD community will be better able to help you debugging issues if your hardware and software configuration look as much as possible similar to the ones reported in the reference implementation, below.
 
-##Bill Of Materials (BOM) / Hardware Requirements
+## Bill Of Materials (BOM) / Hardware Requirements
 
 The section provides a list of hardware required to build a full CORD POD.
 
-###BOM Summary
+### BOM Summary
 
 | Quantity | Category | Brand              | Model                            | Part Num          |
 |--------|--------|------------|-------------------|-------------|
@@ -79,7 +76,7 @@ The section provides a list of hardware required to build a full CORD POD.
 | 7             | Cabling (data plane) | Robofiber | QSFP-40G-03C | QSFP-40G-03C |
 | 12           | Cabling (Mgmt) | CAT6 copper cables 3M) | * | * |
 
-###Detailed Requirements
+### Detailed Requirements
 
 * 1x Development Machine. It can be either a physical machine or a virtual machine, as long as the VM supports nested virtualization. It doesn’t have to be necessarily Linux (used in the rest of the guide, below); in principle anything able to satisfy the hardware and the software requirements. Generic hardware requirements are 2 cores, 4G of memory, 60G of hdd.
 
@@ -102,7 +99,7 @@ The section provides a list of hardware required to build a full CORD POD.
 
 * 1x 1G L2 copper management switch supporting VLANs or 2x 1G L2 copper management switches
 
-##Connectivity Requirements
+## Connectivity Requirements
 
 The dev machine and the head node have to download software from
 different Internet sources, so they currently need unfettered Internet access.
@@ -111,7 +108,7 @@ machine, and not the head node, will require Internet connectivity.)
 Sometimes firewalls, proxies, and software that prevents to access
 local DNSs generate issues and should be avoided.
 
-##Cabling a POD
+## Cabling a POD
 
 This section describes how the hardware components should be
 interconnected to form a fully functional CORD POD.
@@ -136,7 +133,7 @@ The external and the management networks can be separated either using two diffe
 
 >NOTE: Vendors often allow a shared management port to provide IPMI functionalities. One of the NICs used for system management (e.g., eth0) can be shared, to be used at the same time also as IPMI port.
 
-####External Network
+#### External Network
 
 The external network allows POD servers to be reached from the
 Internet. This would likely not be supported in a production system,
@@ -155,7 +152,7 @@ usually connected to the external network:
 * Compute node 1 - 1x IPMI/BMC interface (optional, but recommended)
 * Compute node 2 - 1x IPMI/BMC interface (optional, but recommended)
 
-####Internal Network
+#### Internal Network
 
 The internal/management network is separate from the external one. It has the goal to connect the head node to the rest of the system components (compute nodes and fabric switches). For a typical POD, the internal network includes:
 
@@ -167,7 +164,7 @@ The internal/management network is separate from the external one. It has the go
 * Fabric 3 - management interface
 * Fabric 4 - management interface
 
-###User / Data Plane Network
+### User / Data Plane Network
 
 The data plane network (represented in red in the figure) carries user traffic (in green), from the access devices to the point the POD connects to the metro network.
 
@@ -184,7 +181,7 @@ In summary, the following are the devices connecting to the leaf switches:
 * Access devices - 1 or more 40G interfaces
 *Metro devices - 1 or more 40G interfaces
 
-###Best Practices
+### Best Practices
 
 The community follows a set of best practices to better be able to remotely debug issues, for example via mailing-lists. The following is not mandatory, but is strongly suggested:
 
@@ -211,47 +208,27 @@ The community follows a set of best practices to better be able to remotely debu
 Only the dev machine and the head node need to be prepped for installation.
 The other machines will be fully provisioned by CORD itself.
 
-###Development Machine
-
-It should run Ubuntu 14.04 LTS. Then install and configure the following software.
-
-####Install Basic Packages
-
-```
-sudo apt-get -y install git python
-```
-
-####Install repo
-
-```
-curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo && \
-sudo chmod a+x repo && \
-sudo cp repo /usr/bin
-```
-
-####Configure git
-
-Using the email address registered on Gerrit:
-
-```
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-```
-
-####Virtualbox and Vagrant
-
-```
-sudo apt-get install virtualbox vagrant
-```
-
->NOTE: Make sure the version of Vagrant that gets installed is >=1.8 (can be checked using vagrant --version)
-
-###Head Node
+### Development Machine
 
 It should run either Ubuntu 16.04 LTS (recommended) or Ubuntu 14.04 LTS.
-Then, install and configure the following software.
 
-####Create a User with "sudoer" Permissions (no password)
+A script is provided to help you bootstrapping your dev machine and download the CORD repositories.
+
+<pre><code>cd ~ && \
+curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh && \
+chmod +x cord-bootstrap.sh && \
+./cord-bootstrap.sh -v</code></pre>
+
+After the script successfully runs, logout and login again to make the user becomes part of the libvirtd group.
+
+At this stage a cord directory should be in the cord user home directory.
+
+### Head Node
+
+It should run Ubuntu 14.04 LTS.
+Then, configure the following.
+
+#### Create a User with "sudoer" permissions (no password)
 
 ```
 sudo adduser cord && \
@@ -259,19 +236,7 @@ sudo adduser cord sudo && \
 echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
 ```
 
-A script is provided to help you bootstrapping your dev machine and download the CORD repositories.
-
-```
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh && \
-chmod +x cord-bootstrap.sh && \
-./cord-bootstrap.sh -v
-```
-
-After the script successfully runs, logout and login again to make the user becomes part of the libvirtd group.
-
-At this stage a cord directory should be in the cord user home directory.
-
-###Compute Nodes
+### Compute Nodes
 
 The CORD build process installs the compute nodes. The only thing to be
 configured are the BIOS settings, so that they can PXE boot from the head node
@@ -285,7 +250,7 @@ through the internal (management) network. In doing this, make sure that:
 
 >NOTE: Some users prefer to connect as well the IPMI interfaces of the compute nodes to the external network, so they can have control on them also from outside the POD. This way the head node will be able to control them anyway.
 
-###Fabric switches: ONIE
+### Fabric switches: ONIE
 
 The ONIE installer should be already installed on the switch and set to boot in installation mode. This is usually the default for new switches sold without an Operating System. It might not be the case instead if switches have already an Operating System installed. In this case rebooting the switch in ONIE installation mode depends by different factors, such the version of the OS installed and the specific model of the switch.
 
@@ -318,7 +283,7 @@ The process generates a set of files in ~/cord/build/genconfig
 
 >NOTE: Before the configuration process the ~/cord/build/genconfig directory contains a README.md file only.
 
-##Head node deployment
+## Head node deployment
 
 Head node deployment works as follows:
 
@@ -344,7 +309,7 @@ make build
 
 This step is complete when the command successfully runs.
 
-###MaaS
+### MAAS
 
 As previously mentioned, once the deployment is complete the head node becomes a MAAS region and rack controller, basically acting as a PXE server and serving images through the management network to compute nodes and fabric switches connected to it.
 
@@ -364,11 +329,11 @@ If the output of of the above commands is not an empty list ([]) then the images
 
 When the list is empty you can proceed.
 
-###Compute Node and Fabric Switch Deployment
+### Compute Node and Fabric Switch Deployment
 
 The section describes how to provision and configure software on POD compute nodes and fabric switches.
 
-####General Workflow
+#### General Workflow
 
 Once it has been verified that the Ubuntu boot image has been
 downloaded, the compute nodes and the fabric switches may be PXE booted.
@@ -381,7 +346,7 @@ At the end of the process, the compute and switch elemlents should be visible th
 >configured as
 >prescribed in the _Software Environment Requirements_ section.
 
-####Important Commands: cord harvest and cord prov
+#### Important Commands: cord harvest and cord prov
 
 Two important commands are available to debug and check the status of
 the provisioning. They can be used from the head node CLI.
@@ -417,7 +382,7 @@ cord prov delete node_name
 Please refer to [Re-provision Compute Nodes and Switches](quickstart_physical.md)
 for more details.
 
-####Static IP Assignment
+#### Static IP Assignment
 
 If you want to assign a specific IP to either a compute node or a
 fabric switch, it should be done before booting the device. This
@@ -435,7 +400,7 @@ host <name-of-your choice> {
 	}
 ```
 	
-####Compute Nodes
+#### Compute Nodes
 	
 The compute node provisioning process installs the servers as
 OpenStack compute nodes.
@@ -477,7 +442,7 @@ node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4
 
 Once the post deployment provisioning on the compute node is complete, this task is complete.
 
-####Fabric Switches
+#### Fabric Switches
 
 Similar to the compute nodes, the fabric switches will boot, register with MaaS, and then restart (eventually multiple times).
 
@@ -506,7 +471,7 @@ Once the post deployment provisioning on the fabric switches is complete, the ta
 Your POD is now installed. You can now try to access the basic
 services as described below.
 
-###ONOS (Underlay)
+### ONOS (Underlay)
 
 A dedicated ONOS instance is installed on the head node to control the underlay infrastructure (the fabric). You can access it with password “rocks”
 
@@ -514,7 +479,7 @@ A dedicated ONOS instance is installed on the head node to control the underlay 
 
 * Using the ONOS UI, at: `http://<head-node-ip>/fabric`
 
-###ONOS (Overlay)
+### ONOS (Overlay)
 
 A dedicated ONOS instance is installed on the head node to control the overlay infrastructure (tenant networks). You can access it with password “rocks”
 
@@ -522,9 +487,9 @@ A dedicated ONOS instance is installed on the head node to control the overlay i
 
 * Using the ONOS UI, at: `http://<head-node-ip>/vtn`
 
-###OpenStack
+### OpenStack
 
-###XOS UI
+### XOS UI
 
 XOS is the cloud orchestrator that controls the entire POD. It allows
 you to define new service and service dependencies.. You can access XOS:
