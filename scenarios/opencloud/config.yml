@@ -108,6 +108,7 @@ docker_image_whitelist:
   - "xosproject/gui-extension-sample"
   - "xosproject/gui-extension-vtr"
   - "xosproject/xos-synchronizer-base"
+  - "xosproject/addressmanager-synchronizer"
   - "xosproject/exampleservice-synchronizer"
   - "xosproject/onos-synchronizer"
   - "xosproject/openstack-synchronizer"

@@ -125,6 +125,11 @@ buildable_images:
   - name: xosproject/gui-extension-sample
     repo: xos-sample-gui-extension
 
+  - name: xosproject/addressmanager-synchronizer
+    repo: addressmanager
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/openstack-synchronizer
     repo: openstack
     path: "xos/synchronizer"
