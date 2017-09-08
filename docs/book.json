@@ -4,5 +4,30 @@
   "structure": {
     "summary": "SUMMARY.md"
   },
-  "plugins": ["toggle-chapters"]
+  "variables": {
+    "branch": "master"
+  },
+  "plugins": [
+    "toggle-chapters",
+    "versions-select"
+  ],
+  "pluginsConfig": {
+    "versions": {
+      "gitbookConfigURL": "https://raw.githubusercontent.com/opencord/cord/master/docs/book.json",
+      "options": [
+        {
+          "value": "http://guide.opencord.org",
+          "text": "Master"
+        },
+        {
+          "value": "http://guide.opencord.org/400",
+          "text": "4.0"
+        },
+        {
+          "value": "http://wiki.opencord.org",
+          "text": "3.0 and older"
+        }
+      ]
+    }
+  }
 }

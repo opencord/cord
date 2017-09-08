@@ -1,60 +1,16 @@
-#Installing a Physical POD
+# Installing a Physical POD
 
 The following is a detailed, step-by-step recipe for installing a physical POD.
 
->NOTE: If you are new to CORD and would like to get familiar with it, you should 
->start by bringing up a development POD on a single physical server, called 
->[CORD-in-a-Box](quickstart.md).
+>NOTE: Looking for a quick list of essential build commands? You can find it [here](quickstarts.md)
 
->NOTE: Also see the [Quick Start: Physical POD](quickstart_physical.md) Guide
->for a streamlined overview of the physical POD install process.
-
-##Terminology
-
-This guide uses the following terminology.
-
-* **POD**: A single physical deployment of CORD.
-
-* **Full POD**: A typical configuration, and is used as example in this Guide.
-A full CORD POD is composed by three servers, and four fabric switches.
-It makes it possibile to experiment with all the core features of CORD and it
-is what the community uses for tests.
-
-* **Half POD**: A minimum-sized configuration. It is similar to a full POD, but with less hardware. It consists of two servers (one head node and one compute node), and one fabric switch. It does not allow experimentation with all of the core features that
-CORD offers (e.g., a switching fabric), but it is still good for basic experimentation and testing.
-
-* **Development (Dev) / Management Node**: This is the machine used
-to download, build and deploy CORD onto a POD.
-Sometimes it is a dedicated server, and sometime the developer's laptop.
-In principle, it can be any machine that satisfies the hardware and software
-requirements reported below.
-
-* **Development (Dev) VM**: Bootstrapping the CORD installation requires a lot of
-software to be installed and some non-trivial configurations to be applied.
-All this should happens on the dev node.
-To help users with the process, CORD provides an easy way to create a
-VM on the dev node with all the required software and configurations in place.
-
-* **Head Node**: One of the servers in a POD that runs management services
-for the POD. This includes XOS (the orchestrator), two instances of ONOS
-(the SDN controller, one to control the underlay fabric, one to control the overlay),
-MaaS and all the services needed to automatically install and configure the rest of
-the POD devices.
-
-* **Compute Node(s)**: A server in a POD that run VMs or containers associated with
-one or more tenant services. This terminology is borrowed from OpenStack.
-
-* **Fabric Switch**: A switch in a POD that interconnects other switch and server
-elements inside the POD.
-
-* **vSG**: The virtual Subscriber Gateway (vSG) is the CORD counterpart for existing
-CPEs. It implements a bundle of subscriber-selected functions, such as Restricted Access, Parental Control, Bandwidth Metering, Access Diagnostics and Firewall. These functionalities run on commodity hardware located in the Central Office rather than on the customer’s premises. There is still a device in the home (which we still refer to as the CPE), but it has been reduced to a bare-metal switch. 
+>NOTE: If you are new to CORD and would like to get familiar with it, you should start by bringing up a development POD on a single physical server, called [CORD-in-a-Box](install_ciab.md).
 
 ## Overview of a CORD POD
 
 The following is a brief description of a generic full POD.
 
-###Physical Configuration
+### Physical Configuration
 
 A full POD includes a ToR management switch, four fabric switches, and three
 standard x86 servers. The following figure does not show access devices
@@ -63,7 +19,7 @@ later in this section.
 
 <img src="images/physical-overview.png" alt="Drawing" style="width: 400px;"/>
 
-###Logical Configuration: Data Plane Network
+### Logical Configuration: Data Plane Network
 
 The following diagram is a high level logical representation of a typical CORD POD.
 
@@ -76,7 +32,7 @@ depending on the services needed, and where they are located. The
 switches form a leaf and spine fabric. The compute nodes and the head
 node are connected to a port of one of the leaf switches. 
 
-###Logical Configuration: Control Plane / Management Network
+### Logical Configuration: Control Plane / Management Network
 
 The following diagram shows in blue how the components of the system are
 connected through the management network.
@@ -86,7 +42,7 @@ connected through the management network.
 As shown in this figure, the head node is the only server in the POD connected both
 to Internet and to the other components of the system. The compute nodes and the switches are only connected to the head node, which provides them with all the software needed.
 
-##Sample Workflow
+## Sample Workflow
 
 It is important to have a general picture of installation workflow before
 getting into the details. The following is a list of high-level tasks involved
@@ -100,17 +56,17 @@ build procedure automatically installs the OS, other software needed and perform
 the related configurations.
 * The software gets automatically deployed from the head node to the compute nodes. 
 
-##Requirements
+## Requirements
 
 While the CORD project is for openness and does not have any interest in sponsoring specific vendors, it provides a reference implementation for both hardware and software to help users in building their PODs. What is reported below is a list of hardware that, in the community experience, has worked well.
 
 Also note that the CORD community will be better able to help you debugging issues if your hardware and software configuration look as much as possible similar to the ones reported in the reference implementation, below.
 
-##Bill Of Materials (BOM) / Hardware Requirements
+## Bill Of Materials (BOM) / Hardware Requirements
 
 The section provides a list of hardware required to build a full CORD POD.
 
-###BOM Summary
+### BOM Summary
 
 | Quantity | Category | Brand              | Model                            | Part Num          |
 |--------|--------|------------|-------------------|-------------|
@@ -120,7 +76,7 @@ The section provides a list of hardware required to build a full CORD POD.
 | 7             | Cabling (data plane) | Robofiber | QSFP-40G-03C | QSFP-40G-03C |
 | 12           | Cabling (Mgmt) | CAT6 copper cables 3M) | * | * |
 
-###Detailed Requirements
+### Detailed Requirements
 
 * 1x Development Machine. It can be either a physical machine or a virtual machine, as long as the VM supports nested virtualization. It doesn’t have to be necessarily Linux (used in the rest of the guide, below); in principle anything able to satisfy the hardware and the software requirements. Generic hardware requirements are 2 cores, 4G of memory, 60G of hdd.
 
@@ -143,7 +99,7 @@ The section provides a list of hardware required to build a full CORD POD.
 
 * 1x 1G L2 copper management switch supporting VLANs or 2x 1G L2 copper management switches
 
-##Connectivity Requirements
+## Connectivity Requirements
 
 The dev machine and the head node have to download software from
 different Internet sources, so they currently need unfettered Internet access.
@@ -152,7 +108,7 @@ machine, and not the head node, will require Internet connectivity.)
 Sometimes firewalls, proxies, and software that prevents to access
 local DNSs generate issues and should be avoided.
 
-##Cabling a POD
+## Cabling a POD
 
 This section describes how the hardware components should be
 interconnected to form a fully functional CORD POD.
@@ -177,7 +133,7 @@ The external and the management networks can be separated either using two diffe
 
 >NOTE: Vendors often allow a shared management port to provide IPMI functionalities. One of the NICs used for system management (e.g., eth0) can be shared, to be used at the same time also as IPMI port.
 
-####External Network
+#### External Network
 
 The external network allows POD servers to be reached from the
 Internet. This would likely not be supported in a production system,
@@ -196,7 +152,7 @@ usually connected to the external network:
 * Compute node 1 - 1x IPMI/BMC interface (optional, but recommended)
 * Compute node 2 - 1x IPMI/BMC interface (optional, but recommended)
 
-####Internal Network
+#### Internal Network
 
 The internal/management network is separate from the external one. It has the goal to connect the head node to the rest of the system components (compute nodes and fabric switches). For a typical POD, the internal network includes:
 
@@ -208,7 +164,7 @@ The internal/management network is separate from the external one. It has the go
 * Fabric 3 - management interface
 * Fabric 4 - management interface
 
-###User / Data Plane Network
+### User / Data Plane Network
 
 The data plane network (represented in red in the figure) carries user traffic (in green), from the access devices to the point the POD connects to the metro network.
 
@@ -225,7 +181,7 @@ In summary, the following are the devices connecting to the leaf switches:
 * Access devices - 1 or more 40G interfaces
 *Metro devices - 1 or more 40G interfaces
 
-###Best Practices
+### Best Practices
 
 The community follows a set of best practices to better be able to remotely debug issues, for example via mailing-lists. The following is not mandatory, but is strongly suggested:
 
@@ -252,93 +208,39 @@ The community follows a set of best practices to better be able to remotely debu
 Only the dev machine and the head node need to be prepped for installation.
 The other machines will be fully provisioned by CORD itself.
 
-###Development Machine
+### Development Machine
 
-It should run Ubuntu 16.04 LTS (suggested) or Ubuntu 14.04 LTS. Then
-install and configure the following software.
+It should run either Ubuntu 16.04 LTS (recommended) or Ubuntu 14.04 LTS.
 
-####Install Basic Packages
+A script is provided to help you bootstrapping your dev machine and download the CORD repositories.
 
-```
-sudo apt-get -y install git python
-```
+<pre><code>cd ~ && \
+curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh && \
+chmod +x cord-bootstrap.sh && \
+./cord-bootstrap.sh -v</code></pre>
 
-####Install repo
+After the script successfully runs, logout and login again to make the user becomes part of the libvirtd group.
 
-```
-curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo &&
-sudo chmod a+x repo &&
-sudo cp repo /usr/bin
-```
+At this stage a cord directory should be in the cord user home directory.
 
-####Configure git
+### Head Node
 
-Using the email address registered on Gerrit:
+It should run Ubuntu 14.04 LTS.
+Then, configure the following.
 
-```
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-```
-
-####Virtualbox and Vagrant
+#### Create a User with "sudoer" permissions (no password)
 
 ```
-sudo apt-get install virtualbox vagrant
+sudo adduser cord && \
+sudo adduser cord sudo && \
+echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
 ```
 
->NOTE: Make sure the version of Vagrant that gets installed is >=1.8 (can be checked using vagrant --version)
+### Compute Nodes
 
-###Head Node
-
-It should run Ubuntu 14.04 LTS. Then install and configure the
-following software.
-
-####Install Basic Packages
-
-```
-sudo apt-get -y install curl jq
-```
-
-####Install Oracle Java8
-
-```
-sudo apt-get install software-properties-common -y &&
-sudo add-apt-repository ppa:webupd8team/java -y &&
-sudo apt-get update &&
-echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections &&
-sudo apt-get install oracle-java8-installer oracle-java8-set-default -y
-```
-
-####Create a User with "sudoer" Permissions (no password)
-
-```
-sudo adduser cord &&
-sudo adduser cord sudo &&
-sudo echo 'cord ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/90-cloud-init-users
-```
-
-####Copy Your Dev Node ssh Public-Key
-
-On the head node:
-
-```
-ssh-keygen -t rsa &&
-mkdir /home/cord/.ssh/authorized_keys &&
-chmod 700 /home/cord/.ssh &&
-chmod 600 /home/cord/.ssh/authorized_keys
-```
-
-From the dev node:
-
-```
-cat ~/.ssh/id_rsa.pub | ssh cord@{head_node_ip} 'cat >> ~/.ssh/authorized_keys'
-```
-
-###Compute Nodes
-
-The CORD build process installs the compute nodes. You only need to
-configure their BIOS settings so they can PXE boot from the head node
-through the internal ( management) network. In doing this, make sure:
+The CORD build process installs the compute nodes. The only thing to be
+configured are the BIOS settings, so that they can PXE boot from the head node
+through the internal (management) network. In doing this, make sure that:
 
 * The network card connected to the internal / management network is configured with DHCP (no static IPs).
 
@@ -348,138 +250,11 @@ through the internal ( management) network. In doing this, make sure:
 
 >NOTE: Some users prefer to connect as well the IPMI interfaces of the compute nodes to the external network, so they can have control on them also from outside the POD. This way the head node will be able to control them anyway.
 
-###Fabric Switches: ONIE
+### Fabric switches: ONIE
 
 The ONIE installer should be already installed on the switch and set to boot in installation mode. This is usually the default for new switches sold without an Operating System. It might not be the case instead if switches have already an Operating System installed. In this case rebooting the switch in ONIE installation mode depends by different factors, such the version of the OS installed and the specific model of the switch.
 
-###Download Software onto the Dev Machine
-
-From the home directory, use `repo` to clone the CORD repository:
-
-```
-mkdir cord && cd cord &&
-repo init -u https://gerrit.opencord.org/manifest -b master &&
-repo sync
-```
-
->NOTE: master is used as example. You can substitute it with your favorite branch, for example cord-2.0 or cord-3.0. You can also use a "flavor" specific manifests such as “mcord” or “ecord”. The flavor you use here is not correlated to the profile you will choose to run later but it is suggested that you use the corresponding manifest for the deployment you want. AN example is to use the “ecord” profile and then deploy the ecord.yml service\_profile. 
-
-When this is complete, a listing (`ls`) inside this directory should yield output similar to:
-
-```
-ls -F
-build/         incubator/     onos-apps/     orchestration/ test/
-```
-
-###Build the Dev VM
-
-Instead of installing the prerequisiste software by hand on the dev machine,
-the build environment leverages Vagrant to spawn a VM with the tools required to build and deploy CORD.
-To create the development machine the following Vagrant command can be used:
-
-```
-cd ~/cord/build
-vagrant up corddev
-```
-
-This will create an Ubuntu 14.04 LTS virtual machine and will install some required packages, such as Docker, Docker Compose, and Oracle Java 8.
-
->WARNING: Make sure the VM can obtain sufficient resources. It may takes several minutes for the first command vagrant up corddev to complete, as it will include creating the VM, as well as downloading and installing various software packages. Once the Vagrant VM is created and provisioned, you will see output ending with:
-
-```
-==> corddev: PLAY RECAP *********************************************************************
-==> corddev: localhost                  : ok=29   changed=25   unreachable=0    failed=0
-```
-
-The important thing is that the unreachable and failed counts are both zero.
-
->NOTE: From the moment the VM gets created, it shares a folder with the OS below (the one of the server or of your personal computer). This means that what was the installation root directory (~/cord), will be also available in the VM under /cord.
-
-###Log into the Dev VM
-
-From the build directory, run the following command to connect to the development VM created
-
-```
-vagrant ssh corddev
-```
-
-Once inside the VM, you can find the deployment artifacts in the `/cord` directory.
-
-In the VM, change to the `/cord/build` directory before continuing.
-
-```
-cd /cord/build
-```
-
-###Fetch Docker Images
-
-The fetching phase of the build process pulls Docker images from the public repository down to the VM, and clones the git submodules that are part of the project. This phase can be initiated with the following command:
-
-```
-./gradlew fetch
-```
-
->NOTE: The first time you run ./gradlew it will download the gradle binary from the Internet and installs it locally. This is a one time operation, but may be time consuming, depending on the speed of your Internet connection.
-
->WARNING: It is unfortunately fairly common to see this command fail due to network timeouts. If theis happens, be patient and run again the command.
-
-Once the fetch command has successfully run, the step is complete. After the command completes you should be able to see the Docker images that were downloaded using the docker images command on the development machine:
-
-```
-docker images
-REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-opencord/onos               <none>              e1ade494f06e        3 days ago          936.5 MB
-python                      2.7-alpine          c80455665c57        2 weeks ago         71.46 MB
-xosproject/xos-base         <none>              2b791db4def0        4 weeks ago         756.4 MB
-redis                       <none>              74b99a81add5        11 weeks ago        182.8 MB
-xosproject/xos-postgres     <none>              95312a611414        11 weeks ago        393.8 MB
-xosproject/cord-app-build   <none>              003a1c20e34a        5 months ago        1.108 GB
-consul                      <none>              62f109a3299c        6 months ago        41.05 MB
-swarm                       <none>              47dc182ea74b        8 months ago        19.32 MB
-nginx                       <none>              3c69047c6034        8 months ago        182.7 MB
-xosproject/vsg              <none>              dd026689aff3        9 months ago        336 MB
-```
-
-###Build Docker Images
-
-Bare metal provisioning leverages utilities built and packaged as Docker container images. The images can be built by using the following command.
-
-```
-./gradlew buildImages
-```
-
-Once the `buildImages` command successfully runs the task is complete. The CORD artifacts have been built and the Docker images can be viewed by using the docker images command on the dev VM:
-
-```
-docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.ID}}'
-REPOSITORY                  TAG                 SIZE                IMAGE ID
-opencord/mavenrepo          latest              338.2 MB            2e29009df740
-cord-maas-switchq           latest              337.7 MB            73b084b48796
-cord-provisioner            latest              822.4 MB            bd26a7001dd8
-cord-dhcp-harvester         latest              346.8 MB            d3cfa30cf38c
-config-generator            latest              278.4 MB            e58059b1afb2
-cord-maas-bootstrap         latest              359.4 MB            c70c437c6039
-cord-maas-automation        latest              371.8 MB            9757ac34e7f6
-cord-ip-allocator           latest              276.5 MB            0f399f8389aa
-opencord/onos               <none>              936.5 MB            e1ade494f06e
-python                      2.7-alpine          71.46 MB            c80455665c57
-golang                      alpine              240.5 MB            00371bbb49d5
-golang                      1.6-alpine          283 MB              1ea38172de32
-nginx                       latest              181.6 MB            01f818af747d
-xosproject/xos-base         <none>              756.4 MB            2b791db4def0
-ubuntu                      14.04               187.9 MB            3f755ca42730
-redis                       <none>              182.8 MB            74b99a81add5
-xosproject/xos-postgres     <none>              393.8 MB            95312a611414
-xosproject/cord-app-build   <none>              1.108 GB            003a1c20e34a
-consul                      <none>              41.05 MB            62f109a3299c
-swarm                       <none>              19.32 MB            47dc182ea74b
-nginx                       <none>              182.7 MB            3c69047c6034
-xosproject/vsg              <none>              336 MB              dd026689aff3
-```
-
->NOTE: not all the docker machines listed are created by the CORD project but are instead used as a base to create other images.
-
-## Prepare POD Configuration File
+## Prepare POD configuration file and generate the composite configuration
 
 Each CORD POD deployment requires a POD configuration file that
 describes how the system should be configured, including what IP
@@ -488,91 +263,31 @@ what users the system should run during the automated installation,
 and much more.
 
 POD configuration files are YAML files with extension .yml, contained
-in the `/cord/build/config` directory in the dev VM. You can either
+in the `/cord/build/podconfig` directory in the dev VM. You can either
 create a new file with your favorite editor or copy-and-edit an
 existing file. The `sample.yml` configuration file is there for this
-purpose. All parameters have a descriptions. Optional lines have been
-commented out, but can be used in case as needed.
+purpose. All parameters have a description. Optional lines have been
+commented out, but can be used as needed.
 
 More information about how the network configuration for the POD can
 be customized can be found in an Appendix: POD Network Settings.
 
-##Publish Docker Images to the Head Node
-
-Publishing consists of pushing the build docker images to the Docker repository on the target head node. This step can take a while as it has to transfer all the image from the development machine to the target head node. This step is started with the following command:
+Once the POD config yaml file has been created, the composite configuration file should be generated with the following command.
 
 ```
-./gradlew -PdeployConfig=config/podX.yml publish
+cd ~/cord/build && \
+make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config
 ```
 
-Once the publish command successfully runs this task is complete. When this step is complete, a Docker registry has been created on the head node and the images built on the dev node have been published to the head node registry.
+The process generates a set of files in ~/cord/build/genconfig
 
->WARNING: This command sometimes fails for various reasons. Simply
->rerunning the command often solves the problem.
+>NOTE: Before the configuration process the ~/cord/build/genconfig directory contains a README.md file only.
 
-Verify that the containers are running, using the `docker ps` command on the head node.
-
-```
-docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}'
-CONTAINER ID        IMAGE               COMMAND                  CREATED AT
-c8dd48fc9d18        registry:2.4.0      "/bin/registry serve "   2016-12-02 11:49:12 -0800 PST
-e983d2e43760        registry:2.4.0      "/bin/registry serve "   2016-12-02 11:49:12 -0800 PST
-```
-
-Alternatively, the docker registry can be queried from any node that has access to the head node. You should be able to observe a list of docker images. Output may vary from deployment to deployment. The following is an example from an R-CORD deployment:
-
-```
-curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
-{
-  "repositories": [
-    "config-generator",
-    "consul",
-    "cord-dhcp-harvester",
-    "cord-ip-allocator",
-    "cord-maas-automation",
-    "cord-maas-switchq",
-    "cord-provisioner",
-    "gliderlabs/consul-server",
-    "gliderlabs/registrator",
-    "mavenrepo",
-    "nginx",
-    "node",
-    "onosproject/onos",
-    "redis",
-    "swarm",
-    "xosproject/chameleon",
-    "xosproject/exampleservice-synchronizer",
-    "xosproject/fabric-synchronizer",
-    "xosproject/gui-extension-rcord",
-    "xosproject/gui-extension-vtr",
-    "xosproject/onos-synchronizer",
-    "xosproject/openstack-synchronizer",
-    "xosproject/vrouter-synchronizer",
-    "xosproject/vsg",
-    "xosproject/vsg-synchronizer",
-    "xosproject/vtn-synchronizer",
-    "xosproject/vtr-synchronizer",
-    "xosproject/xos",
-    "xosproject/xos-client",
-    "xosproject/xos-corebuilder",
-    "xosproject/xos-gui",
-    "xosproject/xos-postgres",
-    "xosproject/xos-synchronizer-base",
-    "xosproject/xos-ui",
-    "xosproject/xos-ws"
-  ]
-}
-```
-
->NOTE: This example uses the `curl` and `jq` to retrieve data
->and pretty print JSON. If your system doesn't have these commands
->installed, they can be installed using `sudo apt-get install -y curl jq`.
-
-##Head Node Deployment
+## Head node deployment
 
 Head node deployment works as follows:
 
-* Makes the head node a MaaS server from which the other POD elements
+* Makes the head node a MAAS server from which the other POD elements
   (fabric switches and compute nodes) can PXE boot (both to load their OS
   and to be configured).
 * Installs and configures the containers needed to configure other nodes of the network.
@@ -582,49 +297,27 @@ Head node deployment works as follows:
 This step is started with the following command:
 
 ```
-./gradlew -PdeployConfig=config/podX.yml deploy
+cd ~/cord/build && \
+make build
 ```
 
->NOTE: Be patient: this step can take a couple hours to complete.
+>NOTE: Be patient: this step can take an hour to complete.
 
 >WARNING: This command sometimes fails for various reasons.
 >Simply re-running the command often solves the problem. If the command
->fails it’s better to start from a clean head node. Most of the time, 
->re-starting from the publish step (which creates new containers on
->the head node) helps.
-
-If the process runs smoothly, the output should be similar to:
-
-```
-PLAY RECAP *********************************************************************
-localhost                  : ok=5    changed=2    unreachable=0    failed=0   
-
-Monday 19 June 2017  22:59:22 +0000 (0:00:00.233)       0:00:03.370 *********** 
-=============================================================================== 
-setup ------------------------------------------------------------------- 
-1.35s
-setup ------------------------------------------------------------------- 1.18s
-automation-integration : Template do-enlist-compute-node script to /etc/maas/ansible/do-enlist-compute-node --- 0.46s
-automation-integration : Have MAAS do-ansible script run do-enlist-compute-node script --- 0.23s
-Include variables ------------------------------------------------------- 0.12s
-:PIdeployPlatform
-:deploy
-
-BUILD SUCCESSFUL
-
-Total time: 57 mins 25.458 secs
-```
+>fails it’s better to start from a clean head node.
 
 This step is complete when the command successfully runs.
 
-###MaaS
+### MAAS
 
-As previously mentioned, once the deployment is complete the head node becomes a MaaS region and rack controller, basically acting as a PXE server and serving images through the management network to compute nodes and fabric switches connected to it.
+As previously mentioned, once the deployment is complete the head node becomes a MAAS region and rack controller, basically acting as a PXE server and serving images through the management network to compute nodes and fabric switches connected to it.
 
 The Web UI for MaaS can be viewed by browsing to the head node, using a URL of the from `http://head-node-ip-address/MAAS`.
 
 To login to the web page, use `cord` as the username. If you have set a password in the deployment configuration password use that, otherwise the password used can be found in your build directory under `<base>/build/maas/passwords/maas_user.txt`.
-After the deploy command installs MAAS, MAAS itself initiates the download of an Ubuntu 14.04 boot image that will be used to boot the other POD devices. This download can take some time and the process cannot continue until the download is complete. The status of the download can be verified through the UI by visiting the URL `http://head-node-ip-address/MAAS/images/`, or via the command line from head node via the following command:
+
+After the deployment process finishes, MAAS initiates the download of an Ubuntu 14.04 boot image that will be used to boot the other POD devices. This download can take some time and the process cannot continue until the download is complete. The status of the download can be verified through the UI by visiting the URL `http://head-node-ip-address/MAAS/images/`, or via the command line from head node via the following command:
 
 ```
 APIKEY=$(sudo maas-region-admin apikey --user=cord) && \
@@ -636,11 +329,11 @@ If the output of of the above commands is not an empty list ([]) then the images
 
 When the list is empty you can proceed.
 
-###Compute Node and Fabric Switch Deployment
+### Compute Node and Fabric Switch Deployment
 
 The section describes how to provision and configure software on POD compute nodes and fabric switches.
 
-####General Workflow
+#### General Workflow
 
 Once it has been verified that the Ubuntu boot image has been
 downloaded, the compute nodes and the fabric switches may be PXE booted.
@@ -653,7 +346,7 @@ At the end of the process, the compute and switch elemlents should be visible th
 >configured as
 >prescribed in the _Software Environment Requirements_ section.
 
-####Important Commands: cord harvest and cord prov
+#### Important Commands: cord harvest and cord prov
 
 Two important commands are available to debug and check the status of
 the provisioning. They can be used from the head node CLI.
@@ -689,7 +382,7 @@ cord prov delete node_name
 Please refer to [Re-provision Compute Nodes and Switches](quickstart_physical.md)
 for more details.
 
-####Static IP Assignment
+#### Static IP Assignment
 
 If you want to assign a specific IP to either a compute node or a
 fabric switch, it should be done before booting the device. This
@@ -707,7 +400,7 @@ host <name-of-your choice> {
 	}
 ```
 	
-####Compute Nodes
+#### Compute Nodes
 	
 The compute node provisioning process installs the servers as
 OpenStack compute nodes.
@@ -749,7 +442,7 @@ node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4
 
 Once the post deployment provisioning on the compute node is complete, this task is complete.
 
-####Fabric Switches
+#### Fabric Switches
 
 Similar to the compute nodes, the fabric switches will boot, register with MaaS, and then restart (eventually multiple times).
 
@@ -778,7 +471,7 @@ Once the post deployment provisioning on the fabric switches is complete, the ta
 Your POD is now installed. You can now try to access the basic
 services as described below.
 
-###ONOS (Underlay)
+### ONOS (Underlay)
 
 A dedicated ONOS instance is installed on the head node to control the underlay infrastructure (the fabric). You can access it with password “rocks”
 
@@ -786,7 +479,7 @@ A dedicated ONOS instance is installed on the head node to control the underlay 
 
 * Using the ONOS UI, at: `http://<head-node-ip>/fabric`
 
-###ONOS (Overlay)
+### ONOS (Overlay)
 
 A dedicated ONOS instance is installed on the head node to control the overlay infrastructure (tenant networks). You can access it with password “rocks”
 
@@ -794,16 +487,14 @@ A dedicated ONOS instance is installed on the head node to control the overlay i
 
 * Using the ONOS UI, at: `http://<head-node-ip>/vtn`
 
-###OpenStack
+### OpenStack
 
-###XOS UI
+### XOS UI
 
 XOS is the cloud orchestrator that controls the entire POD. It allows
 you to define new service and service dependencies.. You can access XOS:
 
 * Using the XOS GUI at `http://<head-node-ip>/xos`
-
-* Using the XOS admin UI at `http://<head-node-ip>/admin/`
 
 ## Getting Help
 

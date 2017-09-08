@@ -56,12 +56,13 @@ onos> cordvtn-nodes
 * Run the netcfg command. Verify that the updated gateway information is present under publicGateways:
 
 ```
-"publicGateways" : [ {
-               "gatewayIp" : "10.6.1.193",
-               "gatewayMac" : "02:42:0a:06:01:01"
-             }, {
-               "gatewayIp" : "10.6.1.129",
-               "gatewayMac" : "02:42:0a:06:01:01"
-             } ],
-			 ```
-			 
+"publicGateways" : [
+  {
+    "gatewayIp" : "10.6.1.193",
+    "gatewayMac" : "02:42:0a:06:01:01"
+  }, {
+    "gatewayIp" : "10.6.1.129",
+    "gatewayMac" : "02:42:0a:06:01:01"
+  }
+],
+```
