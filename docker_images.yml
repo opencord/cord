@@ -170,3 +170,8 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/addressmanager-synchronizer
+    repo: addressmanager
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
