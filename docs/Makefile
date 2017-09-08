@@ -27,6 +27,6 @@ clean:
 	rm -f ../../orchestration/profiles/profiles
 
 swagger:
-	pushd ../../orchestration/xos/; source scripts/setup_venv.sh; popd;
+	# pushd ../../orchestration/xos/; source scripts/setup_venv.sh; popd;
 	pushd ../../orchestration/xos/docs/; make swagger_docs; popd;
 
