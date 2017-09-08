@@ -1,6 +1,7 @@
 # Summary
 
 * [Guide Overview](overview.md)
+* [Terminology](terminology.md)
 * [Building and Installing CORD](README.md)
     * [CORD-in-a-Box (Quick Start)](quickstart.md)
     * [Physical POD (Quick Start)](quickstart_physical.md)
@@ -23,6 +24,7 @@
         * [Implementation Details](xos/dev/sync_impl.md)
     * [Migrating Models to 4.0](xos/migrate-4.0.md)
 * [Developing for CORD](develop.md)
+    * [Getting the CORD source code](cord_repo.md)
     * [Workflow: platform-install](platform-install/README.md)
     * [Workflow: local dev](xos/dev/local_env.md)
     * [Example Service](xos/example_service.md)
