@@ -23,10 +23,8 @@ checkout the codebase with repo.
 
 It can be downloaded via:
 
-```
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
-chmod +x cord-bootstrap.sh
-```
+<pre><code>curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
+chmod +x cord-bootstrap.sh</code></pre>
 
 The bootstrap script has the following useful options:
 
@@ -66,14 +64,13 @@ targets will be run if you're not in the right groups.
 
 #### Examples: cord-boostrap.sh
 
-Download source code and prep for a local build by installing docker
+Download source code and prep for a local build by installing Docker
 
 ```
 ./cord-bootstrap.sh -d
 ```
 
-A `rcord-local` build from master. Note that the make targets may not run if
-you aren't already in the `docker` group, so you'd need to logout/login and
+An `rcord-local` config is built from the {{ book.branch }} branch. Note that the make targets may not run if you aren't already in the `docker` group, so you'd need to logout/login and
 rerun them.
 
 ```
@@ -86,7 +83,7 @@ A prep for a mock/virtual/physical build, with a gerrit patchset applied:
 ./cord-bootstrap.sh -v -p orchestration/xos:1000/1
 ```
 
-A virtual rcord pod, with tests run afterward. Assumes that you're already in
+A virtual rcord pod, with tests runs afterward. Assumes that you're already in
 the `libvirtd` group:
 
 ```
@@ -104,11 +101,10 @@ The following tools are required to get started up CORD:
 
 Downloading the source tree can be done by running:
 
-```
-mkdir cord && cd cord
-repo init -u https://gerrit.opencord.org/manifest -b master
-repo sync
-```
+<pre><code>mkdir cord && \
+cd cord && \
+repo init -u https://gerrit.opencord.org/manifest -b {{ book.branch }} && \
+repo sync</code></pre>
 
 The build system can be found in the `cord/build/` directory.
 

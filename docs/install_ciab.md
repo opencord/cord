@@ -1,32 +1,27 @@
-# CORD-in-a-Box: Quick Start Guide
+# Installing CORD-in-a-Box (CiaB)
 
 This guide walks through the steps to bring up a demonstration CORD
 "POD", running in virtual machines on a single physical server (a.k.a.
-"CORD-in-a-Box" or just "CiaB"). The purpose of this demonstration POD is to enable those
-interested in understanding how CORD works to examine and interact with a
-running CORD environment.  It is a good place for novice CORD users to start.
+"CORD-in-a-Box" or just "CiaB"). The purpose of this demonstration POD is to enable those interested in understanding how CORD works to examine and interact with a running CORD environment. It is a good place for novice CORD users to start.
 
-**NOTE:** *This guide describes how to install
-a simplified version of a CORD POD on a
-single server using virtual machines.  If you are looking for instructions on
-how to install a multi-node POD, you will find them in the
-[Physical POD Guide](./quickstart_physical.md).  For more details about the
-actual build process, look there.*
+>NOTE: Looking for a quick list of essential build commands? You can find it [here](quickstarts.md)
+
+>NOTE: This guide describes how to install a simplified version of a CORD POD on a single server using virtual machines.  If you are looking for instructions on how to install a multi-node POD, you will find them in the
+[Physical POD installtion guide](install_pod.md).
 
 ## What you need (prerequisites)
 
 You will need a *target server*, which will run both a build environment
 in a Vagrant VM (used to deploy CORD) as well as CiaB itself.
 
-Target server requirements:
+### Target server requirements:
 
 * 64-bit server, with
-  * 32GB+ RAM
-  * 8+ CPU cores
+  * 48GB+ RAM
+  * 12+ CPU cores
   * 200GB+ disk
-* Access to the Internet
-* Ubuntu 14.04 LTS freshly installed (see [TBF]() for instruction on how to
-  install Ubuntu 14.04).
+* Access to the Internet (no enterprise proxies)
+* Ubuntu 14.04 LTS freshly installed
 * User account used to install CORD-in-a-Box has password-less *sudo*
   capability (e.g., like the `ubuntu` user)
 
@@ -37,10 +32,8 @@ you can borrow one on [CloudLab](https://www.cloudlab.us).  Sign up for an
 account using your organization's email address and choose "Join Existing
 Project"; for "Project Name" enter `cord-testdrive`.
 
-**NOTE:** *CloudLab is supporting CORD as a courtesy.  It is expected that you
-will not use CloudLab resources for purposes other than evaluating CORD.  If,
-after a week or two, you wish to continue using CloudLab to experiment with or
-develop CORD, then you must apply for your own separate CloudLab project.*
+>NOTE: CloudLab is supporting CORD as a courtesy.  It is expected that you will not use CloudLab resources for purposes other than evaluating CORD.  If, after a week or two, you wish to continue using CloudLab to experiment with or
+develop CORD, then you must apply for your own separate CloudLab project.
 
 Once your account is approved, start an experiment using the
 `OnePC-Ubuntu14.04.5` profile on the Wisconsin, Clemson, or Utah clusters.
@@ -62,11 +55,10 @@ There are three main steps to building CiaB:
 
 On the target server, download the script that bootstraps the build process and run it:
 
-```
-wget https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
-chmod +x cord-bootstrap.sh
-~/cord-bootstrap.sh -v
-```
+<pre><code>cd ~ && \
+wget https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh && \
+chmod +x cord-bootstrap.sh && \
+~/cord-bootstrap.sh -v</code></pre>
 
 This script installs software dependencies (e.g., Ansible, Vagrant) as well as the CORD source code (in `~/cord`).
 
@@ -81,7 +73,7 @@ path>:<changeset>/<revision>`.  It can be used multiple times - for example:
 ```
 
 will check out the `platform-install` repo with changeset 1233, revision 4, and
-`xos` repo changeset 1234, revision 2.  Note that the `-p` option
+`xos` repo changeset 1234, revision 2. Note that the `-p` option
 will only have an effect the first time the `cord-bootstrap.sh` script is run.
 You can also just run the `repo` command directly to download patch sets.
 
@@ -100,7 +92,7 @@ make -j4 build |& tee ~/build.out
 The output of the build will be displayed, as well as saved in `~/build.out`.
 Also logs for individual steps of the build are stored in `~/cord/build/logs`.
 
-**NOTE:** *If you are connecting to a remote target server, it is highly
+>NOTE: If you are connecting to a remote target server, it is highly
 recommended that you run the above commands in a `tmux` session, or
 use `mosh` to connect to the target rather than `ssh`.  Without one of these,
 interrupted connectivity between your local machine and the remote server
@@ -119,7 +111,6 @@ make pod-tests
 ```
 
 The output of the tests will be displayed, as well as stored in `~/cord/build/logs`.
-
 
 ## Inspecting CiaB
 
@@ -165,7 +156,7 @@ VM, run `vagrant status NAME`.
 
 The `corddev` VM is a build machine used
 to drive the installation.  It downloads and builds Docker containers and
-publishes them to the virtual head node (see below). It then installs MaaS on
+publishes them to the virtual head node (see below). It then installs MAAS on
 the virtual head node (for bare-metal provisioning) and the ONOS, XOS, and
 OpenStack services in containers.  This VM can be entered as follows:
 
@@ -279,7 +270,7 @@ $ sudo lxc exec testclient bash
 
 The `compute1` VM is the virtual compute node controlled by OpenStack.
 This VM can be entered from the `head1` VM.  Run `cord prov list` to get the
-node name (assigned by MaaS).  The node name will be something like
+node name (assigned by MAAS).  The node name will be something like
 `bony-alley.cord.lab`; in this case, to login you'd run:
 
 ```
@@ -322,13 +313,13 @@ ubuntu@mysite-vsg-1:~$
 ```
 
 
-### MaaS GUI
+### MAAS GUI
 
-You can access the MaaS (Metal-as-a-Service) GUI by pointing your browser to
+You can access the MAAS (Metal-as-a-Service) GUI by pointing your browser to
 the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on CloudLab,
 your `<target-server>` is the hostname of your CloudLab node.
 The username is `cord` and the auto-generated password is found in `~/cord/build/maas/passwords/maas_user.txt` on the CiaB server.
-For more information on MaaS, see [the MaaS documentation](http://maas.io/docs).
+For more information on MAAS, see [the MAAS documentation](http://maas.io/docs).
 
 ### XOS GUI
 
@@ -347,7 +338,8 @@ for subscribers by selecting the `Service Graph` item in the left navigation.
 
 Here is a sample output:
 ![subscriber-service-graph.png](subscriber-service-graph.png)
-_NOTE that the `Service Graph` will need to be detangled. You can organize the nodes by dragging them around._
+
+>NOTE: the `Service Graph` will need to be detangled. You can organize the nodes by dragging them around.
 
 ### Kibana log viewing GUI
 
