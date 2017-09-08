@@ -46,6 +46,10 @@ genconfig/*
 
 # GitBook
 _book
+docs/xos
+docs/profiles
+docs/test
+docs/xos-gui
 
 # imagebuilder generated files
 ib_actions.yml
