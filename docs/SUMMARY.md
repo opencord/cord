@@ -10,6 +10,7 @@
         * [Appendix: Basic Configuration](appendix_basic_config.md)
         * [Appendix: Container Images](appendix_images.md)
         * [Appendix: vSG Configuration](appendix_vsg.md)
+    * [Connecting to Upstream Networks](vrouter.md)
     * [Build System Internals](build_internals.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Configuring XOS: xosconfig](xos/modules/xosconfig.md)
