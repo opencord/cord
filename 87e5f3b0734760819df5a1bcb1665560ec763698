@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_8cc0c72b",
+        "filename": "docs/build_internals.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-09T00:19:16Z",
+      "side": 1,
+      "message": "Could be changed to the 4-space intent rather than embedded html - it does the same thing: https://daringfireball.net/projects/markdown/syntax#precode",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 11
+      },
+      "revId": "87e5f3b0734760819df5a1bcb1665560ec763698",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
