@@ -157,6 +157,7 @@ docker_image_whitelist:
   - "onosproject/onos"
   - "redis"
   - "node"
+  - "varunbelur/elk"
 
 # node topology
 physical_node_list:

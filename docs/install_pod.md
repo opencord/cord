@@ -540,6 +540,7 @@ curl -sS http://head-node-ip-address:5000/v2/_catalog | jq .
     "onosproject/onos",
     "redis",
     "swarm",
+    "varunbelur/elk",
     "xosproject/chameleon",
     "xosproject/exampleservice-synchronizer",
     "xosproject/fabric-synchronizer",

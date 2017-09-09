@@ -153,6 +153,12 @@ ext {
                     'upstream': upstreamReg,
                     'name':     'gliderlabs/registrator',
                     'digest':   'sha256:6e708681dd52e28f4f39d048ac75376c9a762c44b3d75b2824173f8364e52c10'
+            ],
+	    'varunbelur/elk': [
+		    'type':     'image',
+		    'upstream': upstreamReg,
+		    'name':     'varunbelur/elk',
+		    'digest':   'sha256:965620fcfceffe784abbe3a2ddc537fa0c5ffe5c139b584467b527ee82cfb97e'
             ]
     ]
 }
