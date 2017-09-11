@@ -13,7 +13,6 @@
   ],
   "pluginsConfig": {
     "versions": {
-      "gitbookConfigURL": "https://raw.githubusercontent.com/opencord/cord/master/docs/book.json",
       "options": [
         {
           "value": "http://guide.opencord.org/cord-4.0",
