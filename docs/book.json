@@ -5,7 +5,7 @@
     "summary": "SUMMARY.md"
   },
   "variables": {
-    "branch": "master"
+    "branch": "cord-4.0"
   },
   "plugins": [
     "toggle-chapters",
@@ -16,12 +16,12 @@
       "gitbookConfigURL": "https://raw.githubusercontent.com/opencord/cord/master/docs/book.json",
       "options": [
         {
-          "value": "http://guide.opencord.org",
-          "text": "Master"
+          "value": "http://guide.opencord.org/cord-4.0",
+          "text": "4.0"
         },
         {
-          "value": "http://guide.opencord.org/400",
-          "text": "4.0"
+          "value": "http://guide.opencord.org",
+          "text": "Master"
         },
         {
           "value": "http://wiki.opencord.org",
