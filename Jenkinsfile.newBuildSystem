@@ -33,6 +33,11 @@ node ('master') {
 
 node ("${config.dev_node.name}") {
     timeout (time: 240) {
+        stage ('Clean up old build') {
+            sh "make -C build clean-all || true"
+            sh "rm -rf *"
+            sh "ssh-keygen -R ${config.head.ip}"
+        }
         stage ('Checkout cord repo') {
             checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
         }
@@ -114,19 +119,15 @@ node ("${config.dev_node.name}") {
                     }
                 }
 
-                stage ("Wait for computes nodes to be provisioned") {
-                    ip = runCmd("${config.head.ip}",
-                                "${config.head.user}",
-                                "${config.head.pass}",
-                                "docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner").trim()
+                stage ("Wait for compute nodes to be provisioned") {
                     timeout(time:45) {
                         waitUntil {
                             try {
-                                out = runCmd("${config.head.ip}",
+                                num = runCmd("${config.head.ip}",
                                              "${config.head.user}",
                                              "${config.head.pass}",
-                                             "curl -sS http://$ip:4243/provision/ | jq -c \".[] | select(.status | contains(${config.compute_nodes.size()}))\"".trim())
-                                return out != ""
+                                             "cord prov list '|' grep -i node '|' grep -i complete '|' wc -l").trim()
+                                return num.toInteger() == config.compute_nodes.size()
                             } catch (exception) {
                                 return false
                             }
@@ -226,8 +227,6 @@ node ("${config.dev_node.name}") {
                 currentBuild.result = 'FAILURE'
                 step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
             } finally {
-                sh 'vagrant destroy -f corddev'
-                sh 'rm -rf podconfig/automation'
             }
             echo "RESULT: ${currentBuild.result}"
        }
