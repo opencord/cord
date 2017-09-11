@@ -113,19 +113,15 @@ node ("${config.dev_node.name}") {
                     }
                 }
 
-                stage ("Wait for computes nodes to be provisioned") {
-                    ip = runCmd("${config.head.ip}",
-                                "${config.head.user}",
-                                "${config.head.pass}",
-                                "docker inspect --format '{{.NetworkSettings.Networks.maas_default.IPAddress}}' provisioner").trim()
+                stage ("Wait for compute nodes to be provisioned") {
                     timeout(time:45) {
                         waitUntil {
                             try {
-                                out = runCmd("${config.head.ip}",
+                                num = runCmd("${config.head.ip}",
                                              "${config.head.user}",
                                              "${config.head.pass}",
-                                             "curl -sS http://$ip:4243/provision/ | jq -c \".[] | select(.status | contains(${config.compute_nodes.size()}))\"".trim())
-                                return out != ""
+                                             "cord prov list '|' grep -i node '|' grep -i complete '|' wc -l").trim()
+                                return num.toInteger() == config.compute_nodes.size()
                             } catch (exception) {
                                 return false
                             }
