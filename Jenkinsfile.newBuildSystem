@@ -33,9 +33,7 @@ node ('master') {
 
 node ("${config.dev_node.name}") {
     timeout (time: 240) {
-        stage ('Clean up old build') {
-            sh "make -C build clean-all || true"
-            sh "rm -rf *"
+        stage ('Remove old head node from known hosts') {
             sh "ssh-keygen -R ${config.head.ip}"
         }
         stage ('Checkout cord repo') {
@@ -227,6 +225,8 @@ node ("${config.dev_node.name}") {
                 currentBuild.result = 'FAILURE'
                 step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
             } finally {
+                sh "make -C build clean-all || true"
+                sh "rm -rf *"
             }
             echo "RESULT: ${currentBuild.result}"
        }
