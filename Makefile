@@ -29,7 +29,7 @@ MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-ima
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
-POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
+POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up $(M)/compute-node-check
 ALL_MILESTONES   ?= $(PREP_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS)
 
 LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
@@ -321,7 +321,11 @@ $(M)/refresh-fabric: | $(M)/compute1-up
 
 
 # Testing targets
-pod-test: $(M)/setup-automation collect-diag
+$(M)/compute-node-check: $(M)/setup-automation
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-check.yml" $(LOGCMD)
+	touch $@
+
+pod-test: $(M)/setup-automation collect-diag $(M)/compute-node-check
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/pod-test-playbook.yml" $(LOGCMD)
 
 fabric-pingtest: $(M)/refresh-fabric
