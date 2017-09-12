@@ -104,12 +104,12 @@ ext {
 
     // Component table
     comps = [
-            // ONOS 1.10.4
+            // ONOS 1.10.6
             'onosproject/onos': [
                     'type':     'image',
                     'upstream': upstreamReg,
                     'name':     'onosproject/onos',
-                    'digest':   'sha256:4b6d27f99fe3f20fb9e38f4d91cb3309f698b8673d542feb4da991b52c267b07'
+                    'digest':   'sha256:b239993ad921f41ca9ab5dce21d7f6f0f8a74fdb888fe14c0da337202f9dced7'
             ],
             'nginx': [
                     'type':     'image',
