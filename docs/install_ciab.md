@@ -61,6 +61,20 @@ chmod +x cord-bootstrap.sh && \
 ~/cord-bootstrap.sh -v</code></pre>
 
 This script installs software dependencies (e.g., Ansible, Vagrant) as well as the CORD source code (in `~/cord`).
+One of the dependencies installed is `libvirt`.  As access to the libvirt socket depends on being in the `libvirtd` group, you
+may need to to logout and back in to have your shell session gain this group
+membership:
+
+```
+~$ groups
+xos-PG0 root
+~$ vagrant status
+Call to virConnectOpen failed: Failed to connect socket to '/var/run/libvirt/libvirt-sock': Permission denied
+~$ logout
+~$ ssh node_name.cloudlab.us
+~$ groups
+xos-PG0 root libvirtd
+```
 
 ### Customize the source and configuration
 
@@ -96,7 +110,7 @@ Also logs for individual steps of the build are stored in `~/cord/build/logs`.
 recommended that you run the above commands in a `tmux` session, or
 use `mosh` to connect to the target rather than `ssh`.  Without one of these,
 interrupted connectivity between your local machine and the remote server
-may cause the CiaB install to hang.*
+may cause the CiaB install to hang.
 
 The `make -j4 build` step takes a *long time* (at least 1 hour) to run.  Be patient!  If it
 hasn't completely failed yet, then assume all is well!
@@ -107,7 +121,7 @@ If the build completed without errors, you can use the following command to run 
 
 ```
 cd ~/cord/build
-make pod-tests
+make pod-test
 ```
 
 The output of the tests will be displayed, as well as stored in `~/cord/build/logs`.
@@ -115,24 +129,7 @@ The output of the tests will be displayed, as well as stored in `~/cord/build/lo
 ## Inspecting CiaB
 
 CiaB creates a virtual CORD POD running inside Vagrant VMs, using
-libvirt as a backend.
-
-As access to the libvirt socket depends on being in the `libvirtd` group, you
-may need to to logout and back in to have your shell session gain this group
-membership:
-
-```
-~$ groups
-xos-PG0 root
-~$ vagrant status
-Call to virConnectOpen failed: Failed to connect socket to '/var/run/libvirt/libvirt-sock': Permission denied
-~$ logout
-~$ ssh node_name.cloudlab.us
-~$ groups
-xos-PG0 root libvirtd
-```
-
-Once you have done this, you can inspect the status of the VM's by setting the
+libvirt as a backend.  You can inspect the status of the VM's by setting the
 `VAGRANT_CWD` environmental variable to `~/cord/build/scenarios/cord` and running `vagrant status`:
 
 ```
