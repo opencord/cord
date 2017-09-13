@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_6a8fb724",
+        "filename": "docs/SUMMARY.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-13T20:29:03Z",
+      "side": 1,
+      "message": "I know it\u0027s just cosmetic, but to make it consistent can you please put the underscore instead?",
+      "range": {
+        "startLine": 19,
+        "startChar": 17,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "f32571e6c105fa8e0d90d083481995654fdb141f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_4a94f336",
+        "filename": "docs/SUMMARY.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-13T20:29:03Z",
+      "side": 1,
+      "message": "This is not our change, but it would be great if you do it also here",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 51
+      },
+      "revId": "f32571e6c105fa8e0d90d083481995654fdb141f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
