@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a5c5d37_6ac7b713",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "I think this should be moved to CiaB config.  The other settings in this section seem like reasonable defaults.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_4accf335",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "Can be deleted",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_0a5f1b74",
         "filename": "scenarios/cord/config.yml",
         "patchSetId": 1
@@ -18,6 +64,98 @@
         "startChar": 0,
         "endLine": 55,
         "endChar": 35
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_2ad1bfcd",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "Could change to be \"setup-automation\", and the CiaB configs can override as it appears here.",
+      "range": {
+        "startLine": 59,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 14
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_0ad6fbc5",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "Could change to be just \"- corddev\", and CiaB configs can override as it appears here.",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 9
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_eada87e8",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "I think these need to stay here (even though they are just used by CiaB) because they appear in the common Vagrantfile.  But I\u0027m not sure.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 16
+      },
+      "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cad7c3be",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-13T23:58:16Z",
+      "side": 1,
+      "message": "See comment above.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 36
       },
       "revId": "d029c251f3f281059f53c74095c8702f3cba569c",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
