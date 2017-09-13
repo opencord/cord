@@ -47,11 +47,6 @@ management_network: '10.1.0.0/24'
 #ansible_ssh_user: "vagrant"  # wtf
 
 # Other old config carried over
-skipTags:
-  - 'set_compute_node_password'
-  - 'switch_support'
-  - 'reboot'
-  - 'interface_config'
 cord_in_a_box: True # what is this for?
 fabric_include_names: eth2
 fabric_include_module_types: omit

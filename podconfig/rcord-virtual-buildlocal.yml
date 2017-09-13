@@ -37,6 +37,12 @@ docker_image_prereqs:
 
 deploy_docker_registry: "10.100.198.201:5000"
 
+skipTags:
+  - 'set_compute_node_password'
+  - 'switch_support'
+  - 'reboot'
+  - 'interface_config'
+
 inventory_groups:
 
   config:

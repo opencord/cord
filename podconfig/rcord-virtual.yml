@@ -24,3 +24,9 @@ cord_profile: rcord
 vagrant_up_prereqs:
   - prereqs-check
   - ciab-ovs
+
+skipTags:
+  - 'set_compute_node_password'
+  - 'switch_support'
+  - 'reboot'
+  - 'interface_config'
