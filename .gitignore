@@ -50,6 +50,7 @@ docs/xos
 docs/profiles
 docs/test
 docs/xos-gui
+docs/xos-tosca
 
 # imagebuilder generated files
 ib_actions.yml
