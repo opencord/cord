@@ -7,6 +7,7 @@ build: swagger
 	ln -s ../../test/cord-tester/docs test && \
 	ln -s ../../orchestration/xos/docs xos && \
 	ln -s ../../orchestration/xos-gui/docs xos-gui && \
+	ln -s ../../orchestration/xos-tosca/docs xos-tosca && \
 	ln -s ../../orchestration/profiles profiles && \
 	gitbook init && gitbook install && gitbook build
 
@@ -24,6 +25,7 @@ clean:
 	rm -f ../../test/cord-tester/docs/docs; \
 	rm -f ../../orchestration/xos/docs/docs; \
 	rm -f ../../orchestration/xos-gui/docs/docs; \
+	rm -f ../../orchestration/xos-tosca; \
 	rm -f ../../orchestration/profiles/profiles
 
 swagger:
