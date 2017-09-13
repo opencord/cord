@@ -42,26 +42,11 @@ docker_opts: "--insecure-registry {{ deploy_docker_registry }}"
 # Variables required by MAAS
 fabric_ip: '10.6.1.1/24'
 management_ip: '10.1.0.1/24'
-external_iface: 'eth0'
 management_network: '10.1.0.0/24'
-#ansible_ssh_user: "vagrant"  # wtf
-
-# Other old config carried over
-skipTags:
-  - 'set_compute_node_password'
-  - 'switch_support'
-  - 'reboot'
-  - 'interface_config'
-cord_in_a_box: True # what is this for?
-fabric_include_names: eth2
-fabric_include_module_types: omit
-fabric_exclude_names: eth0,eth1
-management_include_names: eth1
-management_exclude_names: eth0,eth2
 
 # make build config
 build_targets:
- - compute1-up
+ - setup-automation
 
 cord_config_prereqs:
   - copy-cord
