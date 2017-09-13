@@ -16,7 +16,7 @@
     * [Configuring XOS](xos/modules/xosconfig.md)
     * [Powering Up a POD](operate/power_up.md)
     * [ELK Stack Logs](operate/elk_stack.md)
-    * [REST API](https://guide.opencord.org/{{ book.branch }}/api/xos/)
+    * [REST API](rest-apis.md)
 * [Defining Models in CORD](xos/README.md)
     * [XOS Support for Models](xos/dev/xproto.md)
     * [Core Models](xos/core_models.md)
