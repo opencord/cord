@@ -46,9 +46,6 @@ headnode: cord@10.90.0.252
 # one level up from the `cord` directory
 host_cord_profile_dir: "~/dev/cord_profile"
 
-build_targets:
- - setup-automation
-
 skipTags:
   - 'set_compute_node_password'
   - 'switch_support'
