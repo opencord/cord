@@ -82,12 +82,13 @@ help:
 	@echo "Please specify a target (config, build, teardown, ...)"
 
 # Config file generation
-config: $(CONFIG_FILES) $(PODCONFIG_PATH)
+config: $(CONFIG_FILES)
 
 $(CONFIG_FILES):
+	test -e "$(PODCONFIG_PATH)" || { echo "PODCONFIG file $(PODCONFIG_PATH) doesn't exist!" ; exit 1; }
 	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)'" $(BUILD)/ansible/genconfig.yml $(LOGCMD)
 
-printconfig: config
+printconfig:
 	@echo "Scenario: $(SCENARIO)"
 	@echo "Profile: $(PROFILE)"
 
@@ -119,7 +120,7 @@ clean-genconfig:
 
 clean-profile:
 	rm -rf $(CONFIG_CORD_PROFILE_DIR)
-	rm -f $(M)/cord-config $(M)/copy-config
+	rm -f $(M)/cord-config $(M)/copy-config $(M)/onboard-profile $(M)/local-onboard-profile $(M)/onboard-openstack $(M)/refresh-fabric
 
 clean-all: vagrant-destroy clean-profile clean-genconfig
 	rm -f $(ALL_MILESTONES)
