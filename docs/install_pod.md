@@ -323,7 +323,7 @@ After the deployment process finishes, MAAS initiates the download of an Ubuntu 
 
 ```
 APIKEY=$(sudo maas-region-admin apikey --user=cord) && \
-maas login cord http://localhost/MAAS/api/1.0 "$APIKEY” && \
+maas login cord http://localhost/MAAS/api/1.0 "$APIKEY" && \
 maas cord boot-resources read | jq 'map(select(.type != "Synced"))'
 ```
 
