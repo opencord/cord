@@ -1,4 +1,4 @@
-#Appendix:   Container Images 
+#  Container Images 
 
 In the installation process CORD fetches, builds, and deploys a set of container images. 
 These include:

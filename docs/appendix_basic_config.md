@@ -1,6 +1,6 @@
-#Appendix:  Basic Configuration 
+#  Basic Configuration 
 
-This appendix provides instructions on how to configure an installed POD.
+The following provides instructions on how to configure an installed POD.
 
 ##Fabric 
 

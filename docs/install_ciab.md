@@ -1,13 +1,20 @@
-# Installing CORD-in-a-Box (CiaB)
+# Installing CORD-in-a-Box
 
-This guide walks through the steps to bring up a demonstration CORD
-"POD", running in virtual machines on a single physical server (a.k.a.
-"CORD-in-a-Box" or just "CiaB"). The purpose of this demonstration POD is to enable those interested in understanding how CORD works to examine and interact with a running CORD environment. It is a good place for novice CORD users to start.
+This guide walks through the steps to bring up a virtual CORD
+POD, running in virtual machines on a single physical server. This
+version is also known as *CORD-in-a-Box* (or just *CiaB*).
+The purpose of this virtual POD is to enable those interested in
+understanding how CORD works to examine and interact with
+a running CORD environment. It also serves as a common
+[development environment](develop.md).
 
->NOTE: Looking for a quick list of essential build commands? You can find it [here](quickstarts.md)
+>NOTE: Looking for a quick list of essential build commands?
+>You can find it [here](quickstarts.md)
 
->NOTE: This guide describes how to install a simplified version of a CORD POD on a single server using virtual machines.  If you are looking for instructions on how to install a multi-node POD, you will find them in the
-[Physical POD installtion guide](install_pod.md).
+>NOTE: This guide describes how to install a simplified version
+>of a CORD POD on a single server using virtual machines.
+>If you are looking for instructions on how to install a physical
+>POD, you can find it [here](install_pod.md).
 
 ## What you need (prerequisites)
 
@@ -32,8 +39,11 @@ you can borrow one on [CloudLab](https://www.cloudlab.us).  Sign up for an
 account using your organization's email address and choose "Join Existing
 Project"; for "Project Name" enter `cord-testdrive`.
 
->NOTE: CloudLab is supporting CORD as a courtesy.  It is expected that you will not use CloudLab resources for purposes other than evaluating CORD.  If, after a week or two, you wish to continue using CloudLab to experiment with or
-develop CORD, then you must apply for your own separate CloudLab project.
+>NOTE: CloudLab is supporting CORD as a courtesy.  It is expected that
+>you will not use CloudLab resources for purposes other than
+>evaluating CORD.  If, after a week or two, you wish to continue using
+>CloudLab to experiment with or develop CORD, then you must apply for
+>your own separate CloudLab project.
 
 Once your account is approved, start an experiment using the
 `OnePC-Ubuntu14.04.5` profile on the Wisconsin, Clemson, or Utah clusters.
@@ -43,13 +53,13 @@ requirements.
 Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more
 information.
 
-## Building a CiaB
+## Building CiaB
 
 There are three main steps to building CiaB:
 
 * Bootstrap the server by installing software dependencies and checking out the CORD code
 * Customize the source and configuration if desired
-* Running `make` commands to build and deploy the CORD software, and run tests
+* Run `make` commands to build and deploy the CORD software, and run tests
 
 ### Download and run the bootstrap script
 
@@ -338,7 +348,7 @@ Here is a sample output:
 
 >NOTE: the `Service Graph` will need to be detangled. You can organize the nodes by dragging them around.
 
-### Kibana log viewing GUI
+### Kibana Logging GUI
 
 The Kibana web interface to the ElasticStack log aggregation system can be
 found at: `http://<target-server>:8080/kibana/`.
@@ -425,7 +435,7 @@ ok: [10.100.198.201] => {
 
 If the CiaB build fails, you may try simply resuming the build at the
 place that failed.  The easiest way is to do is to re-run the
-`make build` command; it will skip over the steps that have already completed.
+`make build` command. It will skip over the steps that have already completed.
 
 If you need to force `make build` to re-run steps that have already completed,
 remove the appropriate file in the `milestones` directory prior to re-running.

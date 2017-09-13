@@ -1,4 +1,4 @@
-# Appendix:  Network Settings 
+# Network Settings 
 
 The CORD POD uses two core network interfaces: fabric and mgmtbr. 
 The fabric interface is used to bond all interfaces meant to be used for CORD data traffic and the mgmtbr will be used to bridge all interfaces used for POD management (signaling) traffic. An additional interface of import on the head node is the external interface, or the interface through which the management network accesses upstream servers, such as the Internet. 

@@ -11,6 +11,8 @@ supported in the future.
 
 It is also the case that CORD's operations and management interface
 is primarily defined by its Northbound API. The RESTful version of
-this API is documented at `<head-node>/apidocs/` on a running POD.
+this API is documented at `<head-node>/apidocs/` on a running
+POD (a composite API spec is also included in this
+[guide](https://guide.opencord.org/{{ book.branch }}/api/xos/)).
 This API is auto-generated from a set of models, where CORD's
 model-based design is describe [elsewhere](../xos/README.md).

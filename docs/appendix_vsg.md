@@ -1,4 +1,4 @@
-#Appendix:  vSG Configuration
+# vSG Configuration
 
 First, login to the CORD head node CLI and go to the `/opt/cord_profile` directory. To configure the fabric gateway, you will need to edit the file `cord-services.yaml`. You will see a section that looks like this:
 

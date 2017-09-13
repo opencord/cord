@@ -12,8 +12,9 @@ The following is a brief description of a generic full POD.
 
 ### Physical Configuration
 
-A full POD includes a ToR management switch, four fabric switches, and three
-standard x86 servers. The following figure does not show access devices
+A full POD includes a Top-of-Rack (ToR) management switch,
+four fabric switches, and three standard x86 servers.
+The following figure does not show access devices
 or any upstream connectivity to the metro network; those details are included
 later in this section.
 
@@ -87,7 +88,7 @@ The section provides a list of hardware required to build a full CORD POD.
    * Strongly Suggested NIC:
        * Intel Ethernet Converged Network Adapters XL710 10/40 GbE PCIe 3.0, x8 Dual port.
        * ConnectX®-3 EN Single/Dual-Port 10/40/56GbE Adapters w/ PCI Express 3.0.
-	   >NOTE: while the machines mentioned above are generic standard x86 servers, and can be potentially substituted with any other machine, it’s quite important to stick with either one of the network card suggested. CORD scripts will look for either an i40e or a mlx4_en driver, used by the two cards cards. To use other cards additional operations will need to be done. Please, see the [Network Settings](appendix_network_settings.md) appendix for more information.
+	   >NOTE: while the machines mentioned above are generic standard x86 servers, and can be potentially substituted with any other machine, it’s quite important to stick with either one of the network card suggested. CORD scripts will look for either an i40e or a mlx4_en driver, used by the two cards cards. To use other cards additional operations will need to be done. Please, see [Network Settings](appendix_network_settings.md) for more information.
 	   
 * 4x Fabric Switches
      * Suggested Model: OCP-qualified Accton 6712 switch. Each switch
@@ -250,11 +251,11 @@ through the internal (management) network. In doing this, make sure that:
 
 >NOTE: Some users prefer to connect as well the IPMI interfaces of the compute nodes to the external network, so they can have control on them also from outside the POD. This way the head node will be able to control them anyway.
 
-### Fabric switches: ONIE
+### Fabric Switches: ONIE
 
 The ONIE installer should be already installed on the switch and set to boot in installation mode. This is usually the default for new switches sold without an Operating System. It might not be the case instead if switches have already an Operating System installed. In this case rebooting the switch in ONIE installation mode depends by different factors, such the version of the OS installed and the specific model of the switch.
 
-## Prepare POD configuration file and generate the composite configuration
+## Prepare POD Configuration
 
 Each CORD POD deployment requires a POD configuration file that
 describes how the system should be configured, including what IP
@@ -270,7 +271,8 @@ purpose. All parameters have a description. Optional lines have been
 commented out, but can be used as needed.
 
 More information about how the network configuration for the POD can
-be customized can be found in an Appendix: POD Network Settings.
+be customized can be found
+in [Network Settings](appendix_network_settings.md).
 
 Once the POD config yaml file has been created, the composite configuration file should be generated with the following command.
 
@@ -279,11 +281,11 @@ cd ~/cord/build && \
 make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config
 ```
 
-The process generates a set of files in ~/cord/build/genconfig
+The process generates a set of files in `~/cord/build/genconfig`
 
->NOTE: Before the configuration process the ~/cord/build/genconfig directory contains a README.md file only.
+>NOTE: Before the configuration process the `~/cord/build/genconfig` directory contains a README.md file only.
 
-## Head node deployment
+## Head Node Deployment
 
 Head node deployment works as follows:
 
@@ -489,6 +491,19 @@ A dedicated ONOS instance is installed on the head node to control the overlay i
 
 ### OpenStack
 
+From the head node CLI
+
+```
+$ sudo lxc list
+```
+
+lists the set of LXC containers running the various OpenStack-related services.
+These containers can be entered as follows:
+
+```
+$ ssh ubuntu@<container-name>
+```
+
 ### XOS UI
 
 XOS is the cloud orchestrator that controls the entire POD. It allows
@@ -498,5 +513,8 @@ you to define new service and service dependencies.. You can access XOS:
 
 ## Getting Help
 
-If it seems that something has gone wrong with your setup, there are a number of ways that you can get help --	in the documentation on the OpenCORD wiki, on the OpenCORDSlack channel (get an invitation here), or on the CORD-discuss mailing list.
-See the How to Contribute to CORD wiki page for more information.
+If it seems that something has gone wrong with your setup,
+the best way to ask for help is to join the CORD Slack channel
+or mailing lists. Information about both can be found at the
+[CORD wiki](https://wiki.opencord.org/display/CORD).
+
