@@ -29,6 +29,7 @@
     * [Getting the Source Code](cord_repo.md)
     * [Workflow: platform-install](platform-install/README.md)
     * [Workflow: local dev](xos/dev/local_env.md)
+    * [Workflow: Cord-in-a-Box](xos/dev/workflow_ciab.md)
     * [Example Service](xos/example_service.md)
     * [GUI Development](xos-gui/developer/README.md)
         * [Quickstart](xos-gui/developer/quickstart.md)
