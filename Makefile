@@ -60,6 +60,9 @@ VAGRANT_SWITCHES ?= leaf1
 VAGRANT_CWD      ?= $(SCENARIOS_D)/$(SCENARIO)/
 SSH_CONFIG       ?= ~/.ssh/config  # Vagrant modifies this, should it always?
 
+# Virsh config
+VIRSH_CORDDEV_DOMAIN ?= cord_corddev
+
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
 
@@ -121,7 +124,7 @@ clean-profile:
 	rm -rf $(CONFIG_CORD_PROFILE_DIR)
 	rm -f $(M)/cord-config $(M)/copy-config
 
-clean-all: vagrant-destroy clean-profile clean-genconfig
+clean-all: virsh-domain-destroy vagrant-destroy clean-profile clean-genconfig
 	rm -f $(ALL_MILESTONES)
 
 clean-local: clean-profile clean-genconfig
@@ -137,6 +140,10 @@ local-ubuntu-dev-env:
 vagrant-destroy:
 	$(VAGRANT) destroy -f $(LOGCMD)
 	rm -f $(M)/vagrant-up
+
+virsh-domain-destroy:
+	virsh destroy ${VIRSH_CORDDEV_DOMAIN} || true
+	virsh undefine ${VIRSH_CORDDEV_DOMAIN} || true
 
 xos-teardown: xos-update-images
 	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
