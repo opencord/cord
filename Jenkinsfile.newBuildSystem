@@ -108,7 +108,7 @@ node ("${config.dev_node.name}") {
                                 num = runCmd("${config.head.ip}",
                                              "${config.head.user}",
                                              "${config.head.pass}",
-                                             "maas pod-maas nodes list | grep -i deployed | wc -l").trim()
+                                             "maas pod-maas nodes list | grep substatus_name | grep -i deployed | wc -l").trim()
                                 return num.toInteger() == config.compute_nodes.size()
                             } catch (exception) {
                                 return false
