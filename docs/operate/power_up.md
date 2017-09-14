@@ -7,9 +7,9 @@ procedure is a fully functioning CORD POD.
 ## Boot the Head Node
 
 * **Physical  POD:** Power on the head node
-* **CiaB:** Bring up the prod VM:
+* **CiaB:** Bring up the head1 VM:
 ```
-$ cd ~/cord/build; vagrant up prod
+$ cd ~/cord/build; VAGRANT_CWD=~/cord/build/scenarios/cord vagrant up head1 --provider libvirt
 ```
 
 ## Check the Head Node Services
@@ -24,7 +24,7 @@ $ cd ~/cord/build; vagrant up prod
 > Run `ps ax|grep 8080`
 > and look for an SSH command (will look something like this):
 ```
-31353 pts/5    S      0:00 ssh -o User=vagrant -o Port=22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PasswordAuthentication=no -o ForwardX11=no -o IdentityFile="/users/acb/cord/build/targets/cord-in-a-box/.vagrant/machines/prod/libvirt/private_key" -L *:8080:192.168.121.14:80 -N 192.168.121.14
+31353 pts/5    S      0:00 ssh -o User=vagrant -o Port=22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PasswordAuthentication=no -o ForwardX11=no -o IdentityFile="/users/acb/cord/build/scenarios/cord/.vagrant/machines/head1/libvirt/private_key" -L *:8080:192.168.121.14:80 -N 192.168.121.14
 ```
 > A workaround is to kill this process, and then copy and paste the command
 > above into another window on the CiaB server to set up a new SSH port forwarding connection.
@@ -49,17 +49,15 @@ $ cd ~/cord/build; vagrant up prod
 ## Power on Leaf and Spine Switches
 
 * **Physical POD:** power on the switches.  
-* **CiaB:** bring up the switch VMs:
-```
-$ cd ~/cord/build; vagrant up leaf-1 leaf-2 spine-1
-```
+* **CiaB:** nothing to do; CiaB using OvS switches that come up when the CiaB server is booted.
 
 ## Check the Switches
 
-On the head node (i.e., prod VM for CiaB):
-
+* **Physical POD:** On the head node:
 1. Get switch IPs by running: cord prov list
 2. Verify that ping works for all switch IPs 
+
+* **CiaB:** run `sudo ovs-vsctl show` on the CiaB server; you should see `leaf1` and `spine1`.
 
 ## Boot the Compute Nodes
 
