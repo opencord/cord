@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_cde35d04",
+        "filename": "Makefile",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-14T15:13:06Z",
+      "side": 1,
+      "message": "This undoes my fix yesterday: https://gerrit.opencord.org/#/c/5811/",
+      "range": {
+        "startLine": 131,
+        "startChar": 34,
+        "endLine": 131,
+        "endChar": 58
+      },
+      "revId": "ee00d0101ba80f54825a98fc8f00c4c2ed63e0d2",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
