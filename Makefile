@@ -109,7 +109,7 @@ collect-diag:
 	$(ANSIBLE_PB) $(PI)/collect-diag-playbook.yml $(LOGCMD)
 
 compute-node-refresh:
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 
 clean-images:
 	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
