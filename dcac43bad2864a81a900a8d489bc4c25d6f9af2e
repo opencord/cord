@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_50794292",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-14T21:56:56Z",
+      "side": 1,
+      "message": "How is this name determined, and what steps bring it up?",
+      "range": {
+        "startLine": 64,
+        "startChar": 24,
+        "endLine": 64,
+        "endChar": 36
+      },
+      "revId": "dcac43bad2864a81a900a8d489bc4c25d6f9af2e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
