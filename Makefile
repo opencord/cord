@@ -61,6 +61,9 @@ VAGRANT_CWD      ?= $(SCENARIOS_D)/$(SCENARIO)/
 
 # Virsh config
 VIRSH_CORDDEV_DOMAIN ?= cord_corddev
+VIRSH_BUILD_DOMAIN ?= build_corddev
+VIRSH_MOCK_DOMAIN ?= mock_headnode
+VIRSH_SINGLE_DOMAIN ?= single_headnode
 
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
@@ -152,6 +155,12 @@ vagrant-destroy:
 virsh-domain-destroy:
 	virsh destroy ${VIRSH_CORDDEV_DOMAIN} || true
 	virsh undefine ${VIRSH_CORDDEV_DOMAIN} || true
+	virsh destroy ${VIRSH_BUILD_DOMAIN} || true
+	virsh undefine ${VIRSH_BUILD_DOMAIN} || true
+	virsh destroy ${VIRSH_MOCK_DOMAIN} || true
+	virsh undefine ${VIRSH_MOCK_DOMAIN} || true
+	virsh destroy ${VIRSH_SINGLE_DOMAIN} || true
+	virsh undefine ${VIRSH_SINGLE_DOMAIN} || true
 
 xos-teardown: xos-update-images
 	$(ANSIBLE_PB) $(PI)/teardown-xos-playbook.yml $(LOGCMD)
