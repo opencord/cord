@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_303b6eed",
+        "filename": "docs/operate/power_up.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T17:04:01Z",
+      "side": 1,
+      "message": "Which provider (libvirt, virtualbox) will Vagrant use in this case?\n\nShould we document the `--provider` option here?",
+      "range": {
+        "startLine": 12,
+        "startChar": 19,
+        "endLine": 12,
+        "endChar": 75
+      },
+      "revId": "55102b8aadc03c4b2d0e4ca48195425ebe41b74f",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
