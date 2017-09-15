@@ -35,6 +35,12 @@
       register: config_pubkey
 
 - hosts: head
+  gather_facts: false
+  tasks:
+    - name: Wait for head node to be available
+      wait_for_connection:
+
+- hosts: head
   tasks:
     - name: Add config ssh key to head node
       authorized_key:
