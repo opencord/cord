@@ -43,7 +43,7 @@
             * [Data Sources](xos-gui/architecture/data-sources.md)
 * [Testing CORD](test/README.md)
     * [Running Tests](test/running.md)
-    * [List of Tests](test/testcases-listings.md)
+    * [Test Environment](test/qa_testsetup.md)
 * [Service Profiles](service-profiles.md)
     * [R-CORD](profiles/rcord/README.md)
     * [E-CORD](profiles/ecord/README.md)
