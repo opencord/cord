@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_dbd793be",
+        "filename": "ansible/roles/vagrant-ssh-install/tasks/main.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:46:27Z",
+      "side": 1,
+      "message": "Could ~/.ssh directory also not exist?",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 37
+      },
+      "revId": "f2be98e49df9463e13ecaf70d08ed7b45e110971",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
