@@ -30,7 +30,7 @@
 * [Developing for CORD](develop.md)
     * [Getting the Source Code](cord_repo.md)
     * [Workflow: platform-install](platform-install/README.md)
-    * [Workflow: local dev](xos/dev/local_env.md)
+    * [Workflow: Mock Config](xos/dev/workflow_mock.md)
     * [Workflow: Cord-in-a-Box](xos/dev/workflow_ciab.md)
     * [Example Service](xos/example_service.md)
     * [Configuring XOS](xos/modules/xosconfig.md)
