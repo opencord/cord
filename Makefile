@@ -58,7 +58,6 @@ VAGRANT_PROVIDER ?= libvirt
 VAGRANT_VMS      ?= $(HEADNODE)
 VAGRANT_SWITCHES ?= leaf1
 VAGRANT_CWD      ?= $(SCENARIOS_D)/$(SCENARIO)/
-VAGRANT_SSH_CONF ?= $(GENCONFIG_D)/vagrant.ssh_config
 
 # Virsh config
 VIRSH_CORDDEV_DOMAIN ?= cord_corddev
@@ -197,8 +196,8 @@ $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
 	touch $@
 
 $(M)/vagrant-ssh-install: | $(M)/vagrant-up
-	$(VAGRANT) ssh-config $(VAGRANT_VMS) > $(VAGRANT_SSH_CONF) $(LOGCMD)
-	$(BUILD)/scripts/vagrant-ssh-install.sh "$(VAGRANT_SSH_CONF)" "Include $(abspath $(GENCONFIG_D))/*.ssh_config" $(LOGCMD)
+	$(VAGRANT) ssh-config $(VAGRANT_VMS) > /tmp/vagrant_ssh_config
+	$(ANSIBLE_PB) $(BUILD)/ansible/vagrant-ssh-install.yml $(LOGCMD)
 	touch $@
 
 $(M)/config-ssh-key: | $(M)/vagrant-up
