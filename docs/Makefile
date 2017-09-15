@@ -9,7 +9,7 @@ build: swagger
 	ln -s ../../orchestration/xos-gui/docs xos-gui && \
 	ln -s ../../orchestration/xos-tosca/docs xos-tosca && \
 	ln -s ../../orchestration/profiles profiles && \
-	gitbook init && gitbook install && gitbook build
+	gitbook install && gitbook build
 
 book: clean build
 	gitbook serve
@@ -21,14 +21,14 @@ clean:
 	rm profiles; \
 	rm xos; \
 	rm xos-gui; \
+	rm xos-tosca; \
 	rm -f ../platform-install/docs/docs; \
 	rm -f ../../test/cord-tester/docs/docs; \
 	rm -f ../../orchestration/xos/docs/docs; \
 	rm -f ../../orchestration/xos-gui/docs/docs; \
-	rm -f ../../orchestration/xos-tosca; \
+	rm -f ../../orchestration/xos-tosca/docs/docs; \
 	rm -f ../../orchestration/profiles/profiles
 
 swagger:
-	# pushd ../../orchestration/xos/; source scripts/setup_venv.sh; popd;
 	pushd ../../orchestration/xos/docs/; make swagger_docs; popd;
 
