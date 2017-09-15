@@ -1,0 +1,12 @@
+---
+- name: Get SSH config block
+  make:
+    chdir: "{{ ( playbook_dir ~ '/..' ) | realpath }}"
+    target: vagrant-ssh-config
+  register: vagrant_ssh_config
+
+- name: Add SSH config block to config file
+  blockinfile:
+    path: "{{ ssh_config }}"
+    state: present
+    block: "{{ vagrant_ssh_config.stdout }}"

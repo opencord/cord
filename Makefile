@@ -150,6 +150,9 @@ vagrant-destroy:
 	$(VAGRANT) destroy -f $(LOGCMD)
 	rm -f $(M)/vagrant-up $(M)/vagrant-ssh-install $(VAGRANT_SSH_CONF)
 
+vagrant-ssh-config:
+	@$(VAGRANT) ssh-config $(VAGRANT_VMS)
+
 virsh-domain-destroy:
 	virsh destroy ${VIRSH_CORDDEV_DOMAIN} || true
 	virsh undefine ${VIRSH_CORDDEV_DOMAIN} || true
@@ -197,8 +200,7 @@ $(M)/vagrant-up: | $(VAGRANT_UP_PREREQS)
 	touch $@
 
 $(M)/vagrant-ssh-install: | $(M)/vagrant-up
-	$(VAGRANT) ssh-config $(VAGRANT_VMS) > $(VAGRANT_SSH_CONF) $(LOGCMD)
-	$(BUILD)/scripts/vagrant-ssh-install.sh "$(VAGRANT_SSH_CONF)" "Include $(abspath $(GENCONFIG_D))/*.ssh_config" $(LOGCMD)
+	$(ANSIBLE_PB) $(BUILD)/ansible/vagrant-ssh-install.yml $(LOGCMD)
 	touch $@
 
 $(M)/config-ssh-key: | $(M)/vagrant-up

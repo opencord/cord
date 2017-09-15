@@ -1,0 +1,2 @@
+---
+ssh_config: "{{ ansible_env.HOME }}/.ssh/config"
