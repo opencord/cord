@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_3b834fce",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "Dep on `$(M)/vagrant-up` ?",
+      "range": {
+        "startLine": 153,
+        "startChar": 16,
+        "endLine": 153,
+        "endChar": 19
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_1b888be6",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "Does this need to be redirected into a file?",
+      "range": {
+        "startLine": 154,
+        "startChar": 33,
+        "endLine": 154,
+        "endChar": 38
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_fb6c9738",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "Dep on `vagrant-ssh-config`?  Or should that be a milestone?",
+      "range": {
+        "startLine": 202,
+        "startChar": 27,
+        "endLine": 202,
+        "endChar": 43
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_1b5f6b74",
+        "filename": "ansible/roles/vagrant-ssh-install/defaults/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "YAML start of document should be at the top of the file",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_bb761f05",
+        "filename": "ansible/roles/vagrant-ssh-install/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "Ah... I finally see what was going on earlier in the Makefile.\n\nHaving ansible call make again seems complex, when the result of `vagrant-config-ssh` could be redirected into a file then:\n\n  `lookup(\u0027file\u0027,\u0027/path/to/vagrant_ssh_config\u0027)` \n\nin the task below.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 30
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3b5a2f84",
+        "filename": "ansible/vagrant-ssh-install.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-15T23:36:03Z",
+      "side": 1,
+      "message": "Add these to make it run faster: \n\n connection: local\n gather_facts: False",
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
