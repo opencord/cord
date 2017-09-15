@@ -1,2 +1,4 @@
 node_modules/
-venv-xos/
+venv-xosdocs/
+xos/_book/
+xos/swagger/
