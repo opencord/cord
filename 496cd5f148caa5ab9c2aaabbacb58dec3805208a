@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_7b9547e3",
+        "filename": "ansible/roles/vagrant-ssh-install/defaults/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-16T00:09:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_1b5f6b74",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_bb761f05",
         "filename": "ansible/roles/vagrant-ssh-install/tasks/main.yml",
         "patchSetId": 2
@@ -117,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_5b9a8315",
+        "filename": "ansible/roles/vagrant-ssh-install/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-16T00:09:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_bb761f05",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 30
+      },
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_3b5a2f84",
         "filename": "ansible/vagrant-ssh-install.yml",
         "patchSetId": 2
@@ -128,6 +176,24 @@
       "writtenOn": "2017-09-15T23:36:03Z",
       "side": 1,
       "message": "Add these to make it run faster: \n\n connection: local\n gather_facts: False",
+      "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3bb6af8b",
+        "filename": "ansible/vagrant-ssh-install.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-16T00:09:13Z",
+      "side": 1,
+      "message": "Can\u0027t ditch gather_facts because I use a fact.  Otherwise, done.",
+      "parentUuid": "9a5c5d37_3b5a2f84",
       "revId": "496cd5f148caa5ab9c2aaabbacb58dec3805208a",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
