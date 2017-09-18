@@ -22,6 +22,30 @@
       "revId": "0fe74b88ec673caf270196d7c0db00f67db46349",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_16b502cd",
+        "filename": "docs/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-09-18T23:47:10Z",
+      "side": 1,
+      "message": "No init is required only if you want to generate the basic files, (SUMMARY, README) if they\u0027re already there it actually does nothing",
+      "parentUuid": "9a5c5d37_7b04277e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "0fe74b88ec673caf270196d7c0db00f67db46349",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
