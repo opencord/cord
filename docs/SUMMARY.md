@@ -18,7 +18,8 @@
 #    * [ELK Stack Logs](operate/elk_stack.md)
     * [REST API](rest_apis.md)
     * [TOSCA](xos-tosca/README.md)
-        * [Development Environment](xos-tosca/devel.md)
+# Not targeted at operators; about internal development
+#        * [Development Environment](xos-tosca/devel.md)
 * [Defining Models in CORD](xos/README.md)
     * [XOS Support for Models](xos/dev/xproto.md)
     * [Core Models](xos/core_models.md)
