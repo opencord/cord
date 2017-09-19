@@ -1,0 +1,170 @@
+
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+---
+# ecord Scenario
+# for both Physical (using a corddev VM) and Virtual (using multiple VMs)
+
+# cord profile config
+frontend_only: False
+use_maas: True
+needs_pki_install: True
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+build_cord_dir: "/opt/cord"
+build_cord_profile_dir: "/opt/cord_profile"
+host_cord_profile_dir: "~/cord_profile"
+
+buildnode: corddev
+headnode: head1
+
+# docker config
+deploy_docker_registry: "docker-registry:5000"
+deploy_docker_tag: "candidate"
+pull_docker_registry: "docker-registry:5000/"
+pull_docker_tag: "candidate"
+docker_opts: "--insecure-registry {{ deploy_docker_registry }}"
+
+# Variables required by MAAS
+fabric_ip: '10.6.1.1/24'
+management_ip: '10.1.0.1/24'
+management_network: '10.1.0.0/24'
+
+# make build config
+build_targets:
+ - setup-automation
+
+cord_config_prereqs:
+  - copy-cord
+
+copy_config_prereqs:
+  - cord-config
+
+prep_buildnode_prereqs:
+  - copy-config
+
+prep_headnode_prereqs:
+  - copy-cord
+  - copy-config
+
+# Start elasticstack before XOS/ONOS, which log to it
+start_xos_prereqs:
+  - deploy-elasticstack
+  - deploy-maas
+  - publish-docker-images
+
+deploy_openstack_prereqs:
+  - deploy-maas
+
+deploy_onos_prereqs:
+  - deploy-maas
+  - deploy-mavenrepo
+  - publish-docker-images
+
+deploy_mavenrepo_prereqs:
+  - deploy-maas
+
+setup_automation_prereqs:
+  - deploy-openstack
+
+# Vagrant VM configuration
+vagrant_vms:
+  - corddev
+  - head1
+
+dev_vm_mem: 2048
+dev_vm_cpu: 1
+
+head_vm_mem: 16384
+head_vm_cpu: 8
+
+compute_vm_mem: 16384
+compute_vm_cpu: 8
+
+switch_vm_mem: 512
+switch_vm_cpu: 1
+
+vm_management_network_name: cordmgmt
+
+# Enable experimental fabric
+enable_fabric: False
+
+# Apt cache depends on DNS provided by MAAS
+# MAAS isn't installed when prep-headnode runs
+use_apt_cache: True
+
+# Always pull XOS images if start-xos target is re-run
+always_pull_xos_images: True
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-extension-builder"
+  - "xosproject/xos-libraries"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/gui-extension-vtr"
+  - "xosproject/xos-synchronizer-base"
+  - "xosproject/addressmanager-synchronizer"
+  - "xosproject/fabric-synchronizer"
+  - "xosproject/onos-synchronizer"
+  - "xosproject/openstack-synchronizer"
+  - "xosproject/vrouter-synchronizer"
+  - "xosproject/vtn-synchronizer"
+  - "xosproject/vee-synchronizer"
+  - "xosproject/veg-synchronizer"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "redis"
+  - "node"
+
+# node topology
+physical_node_list:
+  - name: head1
+    ipv4_last_octet: 1
+    aliases:
+      - head
+
+# Inventory for ansible, used to generate inventory.ini
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    corddev:
+
+  head:
+    head1:
+      ansible_host: 10.90.0.252
+      ansible_port: 22
+      ansible_user: cord
+      ansible_ssh_pass: cord
+
+  compute:
+
