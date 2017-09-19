@@ -125,6 +125,10 @@ buildable_images:
   - name: xosproject/gui-extension-sample
     repo: xos-sample-gui-extension
 
+  - name: xosproject/gui-extension-vnaas
+    repo: vnaas
+    path: "xos/gui"
+
   - name: xosproject/addressmanager-synchronizer
     repo: addressmanager
     path: "xos/synchronizer"
@@ -174,4 +178,21 @@ buildable_images:
     repo: exampleservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vee-synchronizer
+    repo: vEE
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/veg-synchronizer
+    repo: vEG
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vnaas-synchronizer
+    repo: vnaas
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+
 
