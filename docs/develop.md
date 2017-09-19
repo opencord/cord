@@ -1,5 +1,8 @@
 # Developing for CORD
 
-This guide describes how to develop for CORD. It includes example workflows and detailed information for writing service models and extending the GUI. It also
-documents platform internals for developers that want to modify or extend the
-CORD platform.
+This guide describes how to develop for CORD. It includes two
+example workflows, one based on a lightweight development
+environment that runs on a laptop and a more realistic environment
+that runs an emulated version of a CORD POD. It also documents
+the key elements involved in developing services that can be on-boarded
+into CORD.

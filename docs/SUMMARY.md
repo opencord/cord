@@ -16,7 +16,7 @@
     * [Powering Up a POD](operate/power_up.md)
 # My understanding is that ELK Stack is not working right now
 #    * [ELK Stack Logs](operate/elk_stack.md)
-    * [REST API](rest_apis.md)
+    * [REST API](operate/rest_apis.md)
     * [TOSCA](xos-tosca/README.md)
 # Not targeted at operators; about internal development
 #        * [Development Environment](xos-tosca/devel.md)
@@ -30,8 +30,7 @@
     * [Migrating Models to 4.0](xos/migrate_4.0.md)
 * [Developing for CORD](develop.md)
     * [Getting the Source Code](cord_repo.md)
-    * [Workflow: platform-install](platform-install/README.md)
-    * [Workflow: Mock Config](xos/dev/workflow_mock.md)
+    * [Workflow: Mock Configuration](xos/dev/workflow_mock.md)
     * [Workflow: Cord-in-a-Box](xos/dev/workflow_ciab.md)
     * [Example Service](xos/example_service.md)
     * [Configuring XOS](xos/modules/xosconfig.md)
