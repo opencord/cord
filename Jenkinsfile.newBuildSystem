@@ -82,6 +82,17 @@ node ("${config.dev_node.name}") {
                     sh "make PODCONFIG=automation/${config.pod_config.file_name} config"
                 }
 
+                if (config.fabric_switches != null) {
+                    stage("Reserve IPs for fabric switches") {
+                        for(int i=0; i < config.fabric_switches.size(); i++) {
+                            def str = createMACIPbindingStr(i+1,
+                                                           "${config.fabric_switches[i].mac}",
+                                                           "${config.fabric_switches[i].ip}")
+                            sh "echo $str >> maas/roles/maas/files/dhcpd.reservations"
+                        }
+                    }
+                }
+
                 stage ("Deploy") {
                     sh "make build"
                 }
@@ -134,30 +145,6 @@ node ("${config.dev_node.name}") {
                 }
 
                 if (config.fabric_switches != null) {
-                    stage("Reserve IPs for fabric switches and restart maas-dhcp service") {
-                        for(int i=0; i < config.fabric_switches.size(); i++) {
-                            def append = "";
-                            if (i!=0) {
-                                append = "-a";
-                            }
-                            def str = createMACIPbindingStr(i+1,
-                                                           "${config.fabric_switches[i].mac}",
-                                                           "${config.fabric_switches[i].ip}")
-                            runCmd("${config.head.ip}",
-                                    "${config.head.user}",
-                                    "${config.head.pass}",
-                                    "echo -e $str '|' sudo tee $append /etc/dhcp/dhcpd.reservations > /dev/null")
-                        }
-                        runCmd("${config.head.ip}",
-                               "${config.head.user}",
-                               "${config.head.pass}",
-                               "sudo restart maas-dhcpd")
-
-                        runCmd("${config.head.ip}",
-                               "${config.head.user}",
-                               "${config.head.pass}",
-                               "cord harvest go")
-                    }
 
                     stage ("Wait for fabric switches to get deployed") {
                         for(int i=0; i < config.fabric_switches.size(); i++) {
@@ -176,6 +163,14 @@ node ("${config.dev_node.name}") {
                                          "${config.fabric_switches[i].user}",
                                          "${config.fabric_switches[i].pass}",
                                          "sudo reboot")
+
+                            // Ensure that switches get provisioned after ONIE reinstall.
+                            // Delete them if they were provisioned earlier.  If the switches are not
+                            // present in 'cord prov list', this command has no effect.
+                            runCmd("${config.head.ip}",
+                                   "${config.head.user}",
+                                   "${config.head.pass}",
+                                   "cord prov delete ${config.fabric_switches[i].mac}")
                         }
                         timeout(time: 45) {
                             waitUntil {
@@ -242,7 +237,7 @@ node ("${config.dev_node.name}") {
  * @param ip      the IP address to substitute
  */
 def createMACIPbindingStr(counter, mac, ip) {
-    return """\\'host fabric${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}\\'"""
+    return """host fabric${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}"""
 }
 
 /**
