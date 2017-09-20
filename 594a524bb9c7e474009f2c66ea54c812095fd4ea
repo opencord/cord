@@ -22,6 +22,30 @@
       "revId": "594a524bb9c7e474009f2c66ea54c812095fd4ea",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a18cb280",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-20T00:31:09Z",
+      "side": 1,
+      "message": "More details in CORD-1911.  The operator would need to do this if the switches are up and get provisioned during the head node install, and then they are ONIE installed afterwards (like our Jenkins job does).",
+      "parentUuid": "9a5c5d37_0196de94",
+      "range": {
+        "startLine": 167,
+        "startChar": 28,
+        "endLine": 170,
+        "endChar": 87
+      },
+      "revId": "594a524bb9c7e474009f2c66ea54c812095fd4ea",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
