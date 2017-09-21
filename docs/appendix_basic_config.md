@@ -8,12 +8,25 @@ This section describes how to apply a basic configuration to a freshly installed
 
 ##Configure Routes on the Compute Nodes 
 
-Before starting to configure the fabric we need to make sure the traffic going out of the compute nodes can go out through the correct interface, towards the fabric. To do this, the routes on the compute node br-int interface need to be manually configured. 
+Each leaf switch on the fabric corresponds to a separate IP subnet.
+Routes must be manually configured on the compute nodes so that traffic between nodes on different leaves will be forwarded via the local spine switch.
 
-Run the following command on the compute nodes:
+Run commands of this form on each compute node:
 
 ```
-sudo ip route add 10.6.2.0/24 via 10.6.1.254 
+sudo ip route add <remote-leaf-subnet> via <local-spine-ip>
+```
+
+The recommended configuration is a POD with two leaves; the leaf1 subnet is `10.6.1.0/24` and the leaf2 subnet is `10.6.2.0/24`.  In this configuration, on the compute nodes attached to leaf1, run:
+
+```
+sudo ip route add 10.6.2.0/24 via 10.6.1.254
+```
+
+Likewise, on the compute nodes attached to leaf2, run:
+
+```
+sudo ip route add 10.6.1.0/24 via 10.6.2.254
 ```
 
 >NOTE: it’s strongly suggested to add it as a permanent route to the compute node, so the route will still be there after a reboot 
@@ -57,7 +70,7 @@ If the switches are not already connected, the following command on the head nod
 
 ```
 for s in $(cord switch list | grep -v IP | awk '{print $3}'); do 
-ssh -qftn root@$s ./connect -bg 2>&1  > $s.log 
+ssh -i ~/.ssh/cord_rsa -qftn root@$s ./connect -bg 2>&1  > $s.log 
 done 
 ```
 
@@ -81,15 +94,15 @@ id=of:0000cc37ab7cbf6c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom C
 
 ##Connect Compute Nodes to ONOS 
 
-To make sure that ONOS is aware of the compute nodes the follow command will a ping over the fabric interface on each compute node. 
+To make sure that ONOS is aware of the compute nodes, the following command will send a ping over the fabric interface on each compute node. 
 
 ```
 for h in localhost $(cord prov list | grep "^node" | awk '{print $4}'); do 
-ssh -qftn $h ping -c 1 -I fabric 8.8.8.8;
+ssh -i ~/.ssh/cord_rsa -qftn $h ping -c 1 -I fabric 8.8.8.8;
 done 
 ```
 
-You can verify ONOS has recognized the devices using the following command:
+It is fine if the `ping` command fails, it's just used to register the node with ONOS.  You can verify ONOS has recognized the nodes using the following command:
 
 ```
 ssh -p 8101 onos@onos-fabric hosts 
