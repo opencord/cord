@@ -109,7 +109,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -125,7 +125,7 @@ clean-local: clean-profile clean-genconfig
 	rm -f $(LOCAL_MILESTONES)
 
 clean-onos:
-	$(ANSIBLE_PB) $(PI)/teardown-onos.yml $(LOGCMD)
+	$(ANSIBLE_PB) $(PI)/teardown-onos-playbook.yml $(LOGCMD)
 	rm -f $(M)/deploy-onos $(M)/onos-debug
 
 clean-openstack:
@@ -154,7 +154,7 @@ virsh-domain-destroy:
 	virsh undefine ${VIRSH_CORDDEV_DOMAIN} || true
 
 xos-teardown: xos-update-images
-	$(ANSIBLE_PB) $(PI)/teardown-playbook.yml $(LOGCMD)
+	$(ANSIBLE_PB) $(PI)/teardown-xos-playbook.yml $(LOGCMD)
 	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
 
 xos-update-images: clean-images
