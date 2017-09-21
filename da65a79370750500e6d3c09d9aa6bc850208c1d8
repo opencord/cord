@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_dc78a92d",
+        "filename": "docs/book.json",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000009
+      },
+      "writtenOn": "2017-09-21T17:25:06Z",
+      "side": 1,
+      "message": "I prefer without the navigator plugin, which mostly draws attention to the unevenness of the current organization. (Not now, but maybe we can play with header size/color instead.)",
+      "revId": "da65a79370750500e6d3c09d9aa6bc850208c1d8",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
