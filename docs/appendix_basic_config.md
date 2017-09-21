@@ -94,15 +94,16 @@ id=of:0000cc37ab7cbf6c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom C
 
 ##Connect Compute Nodes to ONOS 
 
-To make sure that ONOS is aware of the compute nodes, the following command will send a ping over the fabric interface on each compute node. 
+To make sure that ONOS is aware of the compute nodes, the following commands will send a ping over the fabric interface on the head node and each compute node. 
 
 ```
-for h in localhost $(cord prov list | grep "^node" | awk '{print $4}'); do 
-ssh -i ~/.ssh/cord_rsa -qftn $h ping -c 1 -I fabric 8.8.8.8;
+ping -c 1 -I fabric 8.8.8.8
+for h in $(cord prov list | grep "^node" | awk '{print $4}'); do 
+ssh -i ~/.ssh/cord_rsa -qftn ubuntu@$h ping -c 1 -I fabric 8.8.8.8;
 done 
 ```
 
-It is fine if the `ping` command fails, it's just used to register the node with ONOS.  You can verify ONOS has recognized the nodes using the following command:
+It is fine if the `ping` command fails; the purpose is to register the node with ONOS.  You can verify ONOS has recognized the nodes using the following command:
 
 ```
 ssh -p 8101 onos@onos-fabric hosts 
