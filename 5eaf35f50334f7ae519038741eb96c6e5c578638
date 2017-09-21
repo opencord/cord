@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_bce4d5ac",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2017-09-21T23:14:49Z",
+      "side": 1,
+      "message": "I guess we need the user name here? ubuntu@$h",
+      "range": {
+        "startLine": 101,
+        "startChar": 29,
+        "endLine": 101,
+        "endChar": 31
+      },
+      "revId": "5eaf35f50334f7ae519038741eb96c6e5c578638",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
