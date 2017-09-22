@@ -139,18 +139,20 @@ sudo pip install httpie
 ###Delete Old Configuration
 
 ```
-http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/
 ```
 
 ###Load New Configuration
 
 ```
-http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
+cd /opt/cord_profile && \
+docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
 ```
 
 ###Restart ONOS Apps
 
 ```
+http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
 http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 ```
 
@@ -161,21 +163,32 @@ $ ssh -p 8101 onos@onos-fabric netcfg
 Password authentication
 Password:
 {
-  "hosts" : {
-    "00:00:00:00:00:04/None" : {
-      "basic" : {
-        "ips" : [ "10.6.2.2" ],
-        "location" : "of:0000000000000002/4"
-      }
-    },
-    "00:00:00:00:00:03/None" : {
-      "basic" : {
-        "ips" : [ "10.6.2.1" ],
-        "location" : "of:0000000000000002/3"
-      }
-    },
+    "devices": {
+        "of:0000480fcfaeee2a": {
+            "segmentrouting": {
+                "name": "device-480fcfaeee2a",
+                "ipv4NodeSid": 100,
+                "ipv4Loopback": "10.6.0.103",
+                "routerMac": "48:0f:cf:ae:ee:2a",
+                "isEdgeRouter": true,
+                "adjacencySids": []
+            }
+        },
+        "of:0000480fcfaede26": {
+            "segmentrouting": {
+                "name": "device-480fcfaede26",
+                "ipv4NodeSid": 101,
+                "ipv4Loopback": "10.6.0.101",
+                "routerMac": "48:0f:cf:ae:de:26",
+                "isEdgeRouter": true,
+                "adjacencySids": []
+            }
+        },
 	...
 ```
 
 >NOTE: When prompt, use password "rocks"
 
+## Verify Connectivity over the Fabric
+
+Once the new ONOS configuration is active, the fabric interface on each node should be reachable from the other nodes.  From each compute node, ping the IP address of head node's fabric interface (e.g., `10.6.1.1`).
