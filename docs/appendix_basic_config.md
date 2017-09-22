@@ -139,18 +139,20 @@ sudo pip install httpie
 ###Delete Old Configuration
 
 ```
-http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/
 ```
 
 ###Load New Configuration
 
 ```
-http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
+cd /opt/cord_profile && \
+docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
 ```
 
 ###Restart ONOS Apps
 
 ```
+http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
 http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 ```
 
