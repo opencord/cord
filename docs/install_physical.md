@@ -518,7 +518,7 @@ After this is complete, an entry for each node will be visible:
 * From the OpenStack CLI on the head node, using the command
 
 ```
-source ~/admin-openrc.sh &&
+source /opt/cord_profile/admin-openrc.sh && \
 nova hypervisor-list
 ```
 
@@ -620,4 +620,5 @@ XOS is the cloud orchestrator that controls the entire POD. It allows you to
 define new service and service dependencies. You can access XOS at:
 
 * Using the XOS GUI at `http://<head-node-ip>/xos`
+* The username is `xosadmin@opencord.org` and the auto-generated password can be found in `/opt/credentials/xosadmin@opencord.org` on the head node
 
