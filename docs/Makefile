@@ -1,5 +1,8 @@
 default: serve
 
+# use bash for pushd/popd, and to fail if commands within  a pipe fail
+SHELL = bash -o pipefail
+
 GENERATED_DOCS = build_glossary.md
 
 serve: setup
