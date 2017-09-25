@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_33ec93c7",
+        "filename": "docs/cord_repo.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 0,
+      "message": "zdw this is how you should include variables in code blocks. Annoying, but the only way apparently to make it work",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "bff566717a787922b2baf95a7fbc3523e8d6bbfe",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_93045f7f",
+        "filename": "docs/quickstarts.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 0,
+      "message": "I\u0027d like to keep this page as it is if possible.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "bff566717a787922b2baf95a7fbc3523e8d6bbfe",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}

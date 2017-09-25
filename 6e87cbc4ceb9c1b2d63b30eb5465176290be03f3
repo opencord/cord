@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_535a6784",
+        "filename": "docs/SUMMARY.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "I\u0027d say CiaB to don\u0027t let it go out of the margins",
+      "range": {
+        "startLine": 6,
+        "startChar": 33,
+        "endLine": 6,
+        "endChar": 46
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_53d147cc",
+        "filename": "docs/SUMMARY.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "I can\u0027t find in this patch the build_glossary file. It must have gone in earlier. To me is not clear what this refers to (of course the pod configuration). This is clear instead from the installation guide, but I\u0027d change the title (POD configuration settings?) and put a clear description at the top of the page.\nAlso, should there be a cross-reference with the network settings page, anyway part of this config?",
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_53e707e5",
+        "filename": "docs/book.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "I wouldn\u0027t put this",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 46
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f3cddb5e",
+        "filename": "docs/getting_the_code.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "This won\u0027t work. Please use \u003cpre\u003e and \u003ccode\u003e tags instead. You can find an example in the old file",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 3
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f3227b00",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "Few things:\n* I would create a generic physical file example and a virtual file example\n* For profile I would list the profiles\n* I\u0027d suggest to take a look at the old samle.yml file in the old config directory. It\u0027s all commented. It could be a good start\n* I would delete possibly any other file in the pod config directory. There\u0027s really no reason why those files, with those IPs are there",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 32
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_133f4f27",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "isn\u0027t always called like this? Maybe there\u0027s something different between the physical and the virtual versions?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 12
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_d34897ce",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "Mandatory? Aren\u0027t there deafults for these?",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 33
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7309eb94",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "This has been swapped with external_gw",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_13f86f7b",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "Mandatory?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 42
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_53fee76c",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "don\u0027t see why all this should be mandatory",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 31
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_33037375",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 84,
+        "startChar": 2,
+        "endLine": 85,
+        "endChar": 12
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_b3ee43b3",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "what is this?",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 32
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_d3f1b796",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "can we get this from the variables above? Why the two should ever be different?",
+      "range": {
+        "startLine": 89,
+        "startChar": 6,
+        "endLine": 89,
+        "endChar": 31
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f3f4bb88",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "mandatory?",
+      "range": {
+        "startLine": 90,
+        "startChar": 6,
+        "endLine": 90,
+        "endChar": 22
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_932b3feb",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-25T23:03:41Z",
+      "side": 1,
+      "message": "mandatory and empty?",
+      "range": {
+        "startLine": 94,
+        "startChar": 2,
+        "endLine": 94,
+        "endChar": 10
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
