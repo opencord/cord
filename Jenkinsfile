@@ -62,6 +62,17 @@ node ("${config.dev_node.name}") {
                     )
                 }
 
+                if (config.fabric_switches != null) {
+                    stage("Reserve IPs for fabric switches") {
+                        for(int i=0; i < config.fabric_switches.size(); i++) {
+                            def str = createMACIPbindingStr(i+1,
+                                                           "${config.fabric_switches[i].mac}",
+                                                           "${config.fabric_switches[i].ip}")
+                            sh "echo $str >> maas/roles/maas/files/dhcpd.reservations"
+                        }
+                    }
+                }
+
                 stage ("Fetch CORD packages") {
                     sh "vagrant ssh -c \"cd /cord/build; ./gradlew fetch\" corddev"
                 }
@@ -130,31 +141,6 @@ node ("${config.dev_node.name}") {
                 }
 
                 if (config.fabric_switches != null) {
-                    stage("Reserve IPs for fabric switches and restart maas-dhcp service") {
-                        for(int i=0; i < config.fabric_switches.size(); i++) {
-                            def append = "";
-                            if (i!=0) {
-                                append = "-a";
-                            }
-                            def str = createMACIPbindingStr(i+1,
-                                                           "${config.fabric_switches[i].mac}",
-                                                           "${config.fabric_switches[i].ip}")
-                            runCmd("${config.head.ip}",
-                                    "${config.head.user}",
-                                    "${config.head.pass}",
-                                    "echo -e $str '|' sudo tee $append /etc/dhcp/dhcpd.reservations > /dev/null")
-                        }
-                        runCmd("${config.head.ip}",
-                               "${config.head.user}",
-                               "${config.head.pass}",
-                               "sudo restart maas-dhcpd")
-
-                        runCmd("${config.head.ip}",
-                               "${config.head.user}",
-                               "${config.head.pass}",
-                               "cord harvest go")
-                    }
-
                     stage ("Wait for fabric switches to get deployed") {
                         for(int i=0; i < config.fabric_switches.size(); i++) {
                             runFabricCmd("${config.head.ip}",
