@@ -97,9 +97,9 @@ id=of:0000cc37ab7cbf6c, available=true, role=MASTER, type=SWITCH, mfr=Broadcom C
 To make sure that ONOS is aware of the compute nodes, the following commands will send a ping over the fabric interface on the head node and each compute node.
 
 ```
-ping -c 1 -I fabric 8.8.8.8
+ping -c 1 10.6.1.254
 for h in $(cord prov list | grep "^node" | awk '{print $2}'); do
-ssh -i ~/.ssh/cord_rsa -qftn ubuntu@$h ping -c 1 -I fabric 8.8.8.8;
+ssh -i ~/.ssh/cord_rsa -qftn ubuntu@$h ping -c 1 10.6.1.254;
 done
 ```
 
@@ -110,8 +110,8 @@ ssh -p 8101 onos@onos-fabric hosts
 Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
 Password authentication
 Password:
-id=00:16:3E:DF:89:0E/None, mac=00:16:3E:DF:89:0E, location=of:0000cc37ab7cba58/3, vlan=None, ip(s)=[10.6.0.54], configured=false
-id=3C:FD:FE:9E:94:28/None, mac=3C:FD:FE:9E:94:28, location=of:0000cc37ab7cba58/4, vlan=None, ip(s)=[10.6.0.53], configured=false
+id=00:16:3E:DF:89:0E/None, mac=00:16:3E:DF:89:0E, location=of:0000cc37ab7cba58/3, vlan=None, ip(s)=[10.6.1.1], configured=false
+id=3C:FD:FE:9E:94:28/None, mac=3C:FD:FE:9E:94:28, location=of:0000cc37ab7cba58/4, vlan=None, ip(s)=[10.6.1.2], configured=false
 ```
 
 >NOTE: When prompt, use password rocks
