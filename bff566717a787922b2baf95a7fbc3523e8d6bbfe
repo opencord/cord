@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_26aa13d5",
+        "filename": "docs/cord_repo.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-26T06:04:40Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_b3e1a39c",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 22
+      },
+      "revId": "bff566717a787922b2baf95a7fbc3523e8d6bbfe",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_93045f7f",
         "filename": "docs/quickstarts.md",
         "patchSetId": 1
@@ -84,6 +108,30 @@
       "side": 0,
       "message": "Done",
       "parentUuid": "9a5c5d37_93045f7f",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 23
+      },
+      "revId": "bff566717a787922b2baf95a7fbc3523e8d6bbfe",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e6abdbd4",
+        "filename": "docs/quickstarts.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-26T06:04:40Z",
+      "side": 0,
+      "message": "Thanks a lot. We can always come back here if we want to rethink to this again",
+      "parentUuid": "9a5c5d37_73f32b74",
       "range": {
         "startLine": 1,
         "startChar": 0,
