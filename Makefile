@@ -121,7 +121,7 @@ clean-profile:
 clean-all: virsh-domain-destroy vagrant-destroy clean-profile clean-genconfig
 	rm -f $(ALL_MILESTONES)
 
-clean-local: clean-profile clean-genconfig
+clean-local: clean-profile clean-genconfig clean-images
 	rm -f $(LOCAL_MILESTONES)
 
 clean-onos:

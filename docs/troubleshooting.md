@@ -21,7 +21,7 @@ the make target(s) that failed.
 All configuration in CORD is driven off of YAML files which contain variables
 used by Ansible, make, and Vagrant to build development and production
 environments. A [glossary of build system variables](build_glossary.md) is
-available which describes these variables and where they are used. 
+available which describes these variables and where they are used.
 
 When a command to generate config such as `make PODCONFIG=rcord-mock.yml
 config` is run, the following steps happen:
@@ -80,7 +80,11 @@ There are various utility targets:
 
  - `printconfig`: Prints the configured scenario and profile.
 
- - `xos-teardown`: Stop and remove a running set of XOS docker containers
+ - `xos-teardown`: Stop and remove a running set of XOS docker containers,
+   removing the database.
+
+ - `xos-update-images`: Rebuild the images used by XOS, without tearing down
+   running XOS containers.
 
  - `collect-diag`: Collect detailed diagnostic information on a deployed head
    and compute nodes, into `diag-<datestamp>` directory on the head node.
@@ -142,29 +146,4 @@ make -j4 build
 
 This will teardown the XOS container set, tell the build system to rebuild
 images, then perform a build and reload the profile.
-
-#### Use ElasticStack or ONOS with the `single` scenario
-
-The single scenario is a medium-weight scenario for synchronizer development,
-and has optional ElasticStack or ONOS functionality.
-
-To use these, you would invoke the ONOS or ElasticStack milestone target before
-the `build` target:
-
-```
-make PODCONFIG=rcord-single.yml config
-make -j4 milestones/deploy-elasticstack
-make -j4 build
-```
-
-or
-
-```
-make PODCONFIG=opencloud-single.yml config
-make -j4 milestones/deploy-onos
-make -j4 build
-```
-
-If you want to use both in combination, make sure to run the ElasticStack
-target first, so ONOS can send logs to ElasticStack.
 
