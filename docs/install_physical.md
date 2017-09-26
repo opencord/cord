@@ -6,30 +6,6 @@ with multiple physical servers and switches.
 If you are new to CORD and would like to get familiar with it, you should start
 by [bringing up a virtual POD on a single physical server](install_virtual.md).
 
-## Quickstart
-
-After performing the [physical configuration](#physical-configuration), install
-Ubuntu 14.04 on a [suitable head node](#detailed-requirements). On the target
-head node, add a `cord` user with `sudo` rights:
-
-```
-sudo adduser cord && \
-sudo usermod -a -G sudo cord && \
-echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
-```
-
-[Create a POD configuration](install.md#pod-config) file in the
-`~/cord/build/podconfig` directory, then run:
-
-```
-cd ~/cord/build && \
-make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config && \
-make -j4 build |& tee ~/build.out
-```
-
-After a successful build, set the compute nodes and the switches to boot from
-PXE and manually reboot them. They will be automatically deployed.
-
 ## Overview of a CORD POD
 
 The following is a brief description of a full physical POD.

@@ -50,7 +50,7 @@ docs/api
 docs/build_glossary.md
 docs/platform-install
 docs/profiles
-docs/test
+docs/cord-tester
 docs/xos
 docs/xos-gui
 docs/xos-tosca
