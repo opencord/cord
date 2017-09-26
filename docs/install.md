@@ -30,7 +30,7 @@ And either:
 
  - [Docker](https://www.docker.com/community-edition), for *local* build
    scenarios
- - [Vagrant](https://www.vagrantup.com/downloads.html), for for all other
+ - [Vagrant](https://www.vagrantup.com/downloads.html), for all other
    scenarios
 
 You can manually install these on your development system - see [Getting the
@@ -41,7 +41,7 @@ out the CORD source tree.
 
 If you're working on an Ubuntu 14.04 system (CloudLab or another test
 environment), you can use the `cord-bootstrap.sh` script to install these tools
-and check out the CORD repo tree to `~/cord`. This hasn't been tested on
+and check out the CORD source tree to `~/cord`. This hasn't been tested on
 other versions or distributions.
 
 <pre><code>
@@ -131,6 +131,9 @@ directory under [build/scenarios](https://github.com/opencord/cord/tree/master/s
 
 The included POD configs are generally named `<profile>-<scenario>.yml`. 
 
+POD configs are used during a build by passing them with the `PODCONFIG`
+variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
+
 ### Profiles
 
 The set of services that XOS on-boards into CORD -- the  _Service Graph_, and
@@ -157,3 +160,4 @@ The current set of scenarios:
 - `cord`: Physical or virtual multi-node CORD pod, with MaaS and OpenStack
 - `opencloud`: Physical or virtual multi-node OpenCloud pod, with OpenStack
 
+The scenario is specified in the POD config.

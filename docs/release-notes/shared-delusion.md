@@ -32,7 +32,7 @@ services. Specific features include:
 * Removed hand-crafted APIs and eliminated the `xos-gui` container.
 
 > Information on migrating services to Shared-Delusion can be found in the
-> [CORD-4.0 Service Migration Guide](../xos/migrate-4.0.md).
+> [CORD-4.0 Service Migration Guide](/xos/migrate_4.0.md).
 
 ## Build System
 

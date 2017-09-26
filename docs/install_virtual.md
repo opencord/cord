@@ -7,37 +7,9 @@ see [Install a Physical Pod](install_physical.md).
 
 The virtual pod is also known as *CORD-in-a-Box* (or just *CiaB*).  The purpose
 of this virtual POD is to enable those interested in understanding how CORD
-works to examine and interact with a running CORD environment. It also serves
-as a common [development environment](develop.md).
-
-## Quickstart
-
-To install a CiaB, on a [suitable](#target-server-requirements) Ubuntu 14.04
-system, run the following commands:
-
-```bash
-cd ~ && \
-wget https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh && \
-chmod +x cord-bootstrap.sh && \
-~/cord-bootstrap.sh -v |& tee ~/setup.out
-
-cd ~/cord/build && \
-make PODCONFIG=rcord-virtual.yml config && \
-make -j4 build |& tee ~/build.out && \
-make pod-test |& tee ~/test.out
-```
-
-This will create a virtual R-CORD pod (as specified in the `PODCONFIG`), and go
-through the build and end-to-end test procedure, bringing up vSG and
-ExampleService instances.
-
-If you'll be running these commands frequently, a shortcut is to use the `-t`
-option on the `cord-bootstrap.sh` script to run all the make targets, for a
-more unattended build process, which can be handy when testing:
-
-```
-./cord-bootstrap.sh -v -t "PODCONFIG=rcord-virtual.yml config" -t "build" -t "pod-test"
-```
+works to examine and interact with a running CORD environment. There is also a
+[Development Workflow: Virtual Pod](xos/dev/workflow_pod.md) that allows for a
+tighter loop when developing the XOS core or services.
 
 ## What you need (prerequisites)
 
@@ -94,7 +66,7 @@ There are a few steps to building CiaB:
 ### Bootstrap the server
 
 See [Configuring your Development Environment:cord-bootstrap.sh script
-](install.md#cord-bootstrap.sh-script) for instructions for running the
+](install.md#cord-bootstrapsh-script) for instructions for running the
 bootstrap script to download the CORD source tree and optionally downloading
 patches from Gerrit. You must specify the `-v` option to this script in order
 to install Vagrant, which is required to build a CiaB.
@@ -347,7 +319,7 @@ A sample CORD subscriber has also been created. You can see the `Service Graph`
 for subscribers by selecting the `Service Graph` item in the left navigation.
 
 Here is a sample output:
-![subscriber-service-graph.png](subscriber-service-graph.png)
+![Subscriber Service Graph](images/subscriber-service-graph.png)
 
 > NOTE: the `Service Graph` will need to be detangled and can be organized by
 > dragging the nodes.
@@ -433,52 +405,6 @@ ok: [10.100.198.201] => {
 }
 ```
 
-## Development Loop using CiaB
-
-For service or core development using CiaB, we have a tighter development
-workflow loop which involves tearing down XOS as well as any active OpenStack
-objects (Instances, Networks, etc), rebuilding XOS container images, and then
-redeploying XOS.
-
-We sometimes refer to this as a "mini-End2End" as it does result in a new XOS
-deployment with an E2E test, but does not require a full reinstall.
-
-1. Make changes to your service code and propagate them to your CiaB host.
-   There are a number of ways to propagate changes to the host depending on
-   developer preference, including using [gerrit
-   patchsets](getting_the_code.md#download-patchsets), rsync, scp, etc. 
-
-2. Teardown the existing XOS installation and clean up OpenStack to
-   remove any leftover instances or networks:
-
-```
-cd ~/cord/build
-make xos-teardown
-make clean-openstack
-```
-
-3. Optional: Teardown ONOS. Sometimes we find it helpful to reinstall the
-   onos-cord and onos-fabric containers, to ensure that all state is wiped
-   clean from ONOS.
-
-```
-cd ~/cord/build
-make clean-onos
-```
-
-4. Build the new XOS container images and deploy to the pod.
-
-```
-cd ~/cord/build
-make -j4 build
-make compute-node-refresh
-make pod-test
-```
-
-5. Test and verify your changes.
-
-6. Go back to step #1
-
 ## Troubleshooting
 
 If the CiaB build fails, you may try simply resuming the build at the place
@@ -500,6 +426,4 @@ If you got this far, you successfully built, deployed, and tested your first
 You are now ready to bring up a multi-node POD with a real switching fabric and
 multiple physical compute nodes.  The process for doing so is described in
 [Installing a Physical POD](install_physical.md).
-
-
 

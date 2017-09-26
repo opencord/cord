@@ -15,7 +15,7 @@ If you are new to CORD and would like to get familiar with it, you should start
 by [bringing up a virtual POD on a single physical server](install_virtual.md).
 
 If you want to work on the CORD core or develop a service, please see [Getting
-the Source Code](cord_repo.md) and [Developing for CORD](develop.md).
+the Source Code](getting_the_code.md) and [Developing for CORD](develop.md).
 
 ## Getting Help
 
@@ -28,7 +28,7 @@ wiki](https://wiki.opencord.org/display/CORD).
 
 ## Making Changes to Documentation
 
-The [http://guide.opencord.org](guide.opencord.org) website is built using the
+The [http://guide.opencord.org](http://guide.opencord.org) website is built using the
 [GitBook Toolchain](https://toolchain.gitbook.com/), with the documentation
 root in [build/docs](https://github.com/opencord/cord/blob/{{ book.branch
 }}/docs) in a checked out source tree.  It is build with `make`, and requires
