@@ -23,12 +23,12 @@ sudo chmod a+x /usr/local/bin/repo
 The `cord` repositories are usually checked out to `~/cord` in most of our
 examples and deployments:
 
-```sh
+<pre><code>
 mkdir ~/cord && \
 cd ~/cord && \
 repo init -u https://gerrit.opencord.org/manifest -b {{ book.branch }} && \
 repo sync
-```
+</code></pre>
 
 > NOTE: `-b` specifies the branch name. Development work goes on in `master,
 > and there are also specific stable branches such as `cord-4.0` that can be
@@ -42,7 +42,7 @@ $ ls
 build		component	incubator	onos-apps	orchestration	test
 ```
 
-## Downloading patchsets
+## Download patchsets
 
 Once you've downloaded a CORD source tree, you can download patchsets from
 Gerrit with the following command:
@@ -56,7 +56,7 @@ version `3`.
 
 Also see [Configuring your Development Environment:cord-bootstrap.sh script
 ](install.md#cord-bootstrap.sh-script) for instructions on downloading
-patchsets during a build that uses the `cord-bootstrap.sh` script.
+patchsets during a build using the `cord-bootstrap.sh` script.
 
 ## Contributing code to CORD
 

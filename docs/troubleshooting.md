@@ -143,28 +143,3 @@ make -j4 build
 This will teardown the XOS container set, tell the build system to rebuild
 images, then perform a build and reload the profile.
 
-#### Use ElasticStack or ONOS with the `single` scenario
-
-The single scenario is a medium-weight scenario for synchronizer development,
-and has optional ElasticStack or ONOS functionality.
-
-To use these, you would invoke the ONOS or ElasticStack milestone target before
-the `build` target:
-
-```
-make PODCONFIG=rcord-single.yml config
-make -j4 milestones/deploy-elasticstack
-make -j4 build
-```
-
-or
-
-```
-make PODCONFIG=opencloud-single.yml config
-make -j4 milestones/deploy-onos
-make -j4 build
-```
-
-If you want to use both in combination, make sure to run the ElasticStack
-target first, so ONOS can send logs to ElasticStack.
-
