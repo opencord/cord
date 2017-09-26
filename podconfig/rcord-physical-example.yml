@@ -58,20 +58,13 @@ headnode: 'cord@10.80.1.200'
 external_gw: '10.80.1.200'
 deploy_docker_registry: "10.80.1.200:5000"
 
-# Makefile targets
-# primary build target (the final MaaS build step in this case)
-build_targets:
-  - 'setup-automation'
-
+# Additional makefile targets
+# copy SSH key to handle auth using a password
 copy_cord_prereqs:
   - 'config-ssh-key'
 
 skipTags:
   - 'set_compute_node_password'
-
-# Wait until headnode prepped before building containers, for consistent DNS
-docker_images_prereqs:
-  - 'prep-headnode'
 
 # Inventory for ansible, used to generate inventory.ini
 # There must be a config, build, head, and compute sections
@@ -85,9 +78,8 @@ inventory_groups:
     corddev:
 
   head:
-    headnode.site1.opencord.org:
+    head1:
       ansible_host: 10.80.1.200
-      ansible_port: 22
       ansible_user: cord
       ansible_ssh_pass: cordpass
 

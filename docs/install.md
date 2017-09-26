@@ -41,7 +41,7 @@ out the CORD source tree.
 
 If you're working on an Ubuntu 14.04 system (CloudLab or another test
 environment), you can use the `cord-bootstrap.sh` script to install these tools
-and check out the CORD repo tree to `~/cord`. This hasn't been tested on
+and check out the CORD source tree to `~/cord`. This hasn't been tested on
 other versions or distributions.
 
 <pre><code>
