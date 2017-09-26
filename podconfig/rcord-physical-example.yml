@@ -24,6 +24,9 @@ cord_profile: rcord
 vagrant_vms:
  - 'corddev'
 
+# NOTE: Many of these items are described in more detail in the Build System
+# Variable Glossary: https://guide.opencord.org/build_glossary.html
+
 # Location of the cord_profile directory to be mounted in the `corddev` VM by
 # Vagrant.
 #
@@ -31,22 +34,32 @@ vagrant_vms:
 
 # Set these directory paths if the defaults aren't suitable, or if deploying
 # multiple pods from the same source tree where the credentials, keys, and
-# profile should differ.
+# profile should differ. These are paths on the config node.
 #
 # credentials_dir: '/path_to/credentials'
 # pki_dir: '/path_to/pki'
 # ssh_pki_dir: '/path_to/ssh_pki'
 
-# Variables
-# IP address used for the ONOS Fabric
-fabric_ip: '10.6.1.1/24'
+# Variables. Default values are specified here
 
-# IP and range of the management network, which MaaS serves DHCP
-management_ip: '10.6.0.1/24'
-management_network: '10.6.0.0/24'
+# IP address used for the ONOS fabric interface on the head node
+#
+# fabric_ip: '10.6.1.0/24'
 
-# External gateway IP address and range that the head node is on
-external_ip: '10.80.1.1/24'
+# Low and high addresses to assign to on the fabric
+#
+# fabric_range_low: '10.6.1.2'
+# fabric_range_high: '10.6.1.100'
+
+# IP and range of the management network, which MaaS serves DHCP.
+#
+# management_ip: '10.6.0.0/24'
+# management_network: '10.6.0.0/24'
+
+# Low and high addresses to assign to on the management network
+#
+# management_range_low: '10.6.0.2'
+# management_range_high: '10.6.0.127'
 
 # name or IP of the POD head node, used to SSH to the head node. You can also
 # specify the head node user here in user@hostname format.  This could also be
@@ -54,27 +67,47 @@ external_ip: '10.80.1.1/24'
 # external DNS is set up.
 headnode: 'cord@10.80.1.200'
 
-# the external IP on the head node and docker registry (on the head node)
-external_gw: '10.80.1.200'
+# External interface device name on head node
+external_iface: 'eth2'
+
+# External interface ip/range on head node
+external_ip: '10.80.1.200/24'
+
+# Gateway IP address
+external_gw: '10.80.1.1'
+
+# address and port of docker registry (on the head node)
 deploy_docker_registry: "10.80.1.200:5000"
 
-# Makefile targets
-# primary build target (the final MaaS build step in this case)
-build_targets:
-  - 'setup-automation'
+# Additional network config documentation can be found here:
+# https://guide.opencord.org/appendix_network_settings.html
 
-copy_cord_prereqs:
-  - 'config-ssh-key'
+# Additional makefile targets
 
+# key-based SSH auth is required for some portions of the build, specifically
+# the 'synchronize' task. Enable this to generate a SSH key on the config node
+# and have the head node trust it.
+# copy_cord_prereqs:
+#   - 'config-ssh-key'
+
+# skipTags is used in MaaS options allow various part of the deployment to be skipped
+#
+# switch_support - does not deploy switch boot images to the PXE server
+#
+# reboot - will not reboot the head node after updating its network configuration
+#          this may mean the network configuration will not take effect, but will
+#          also prevent you from being locked out of the server if there is a
+#          network configuration error.
+#
+# interface_config - will not modify the network configuration of the head node,
+#                    including the consistent naming of the network interfaces
 skipTags:
-  - 'set_compute_node_password'
-
-# Wait until headnode prepped before building containers, for consistent DNS
-docker_images_prereqs:
-  - 'prep-headnode'
+#  - 'switch_support'
+#  - 'reboot'
+#  - 'interface_config'
 
 # Inventory for ansible, used to generate inventory.ini
-# There must be a config, build, head, and compute sections
+# There must be config, build, head, and compute sections
 inventory_groups:
 
   config:
@@ -86,10 +119,17 @@ inventory_groups:
 
   head:
     headnode.site1.opencord.org:
-      ansible_host: 10.80.1.200
-      ansible_port: 22
-      ansible_user: cord
-      ansible_ssh_pass: cordpass
+# If you do not have DNS set up that will resolve the headnode address, you can
+# specify the IP address here.
+#
+#      ansible_host: 10.80.1.200
+#
+# Set these if you don't have SSH keys set up between the config node (where
+# make runs) and the head node. Also, make sure to enable the 'config-ssh-key'
+# further up in the file to create these.
+#
+#      ansible_user: cord
+#      ansible_ssh_pass: cordpass
 
   compute:
 
