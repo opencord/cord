@@ -1,5 +1,9 @@
-This documents every variable available in the build system.  The repos these
-variables are used in are:
+
+This page documents all the configuration variables that can be set in a [POD
+config](install.md#pod-config), [scenario](install.md#scenarios), or
+[profile_manifests](https://github.com/opencord/platform-install/tree/master/profile_manifests).
+
+These variables are used in and apply to the following repositories:
 
  - [cord](https://github.com/opencord/cord) (aka "build" when checked out)
  - [maas](https://github.com/opencord/maas)

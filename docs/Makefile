@@ -1,3 +1,10 @@
+# Makefile for building CORD docs site, guide.opencord.org
+# Building docs requires the following tools:
+#  - Gitbook toolchain: https://toolchain.gitbook.com/setup.html
+#  - NPM (for Gitbook and Swagger)
+#  - Python (for build glossary script)
+#  - linkchecker (for test target) http://wummel.github.io/linkchecker/
+
 default: serve
 
 # use bash for pushd/popd, and to fail if commands within  a pipe fail
@@ -11,15 +18,20 @@ serve: setup
 build: setup
 	gitbook build
 
-setup: clean platform-install test profiles xos xos-gui xos-tosca swagger $(GENERATED_DOCS)
+setup: clean platform-install cord-tester profiles xos xos-gui xos-tosca swagger $(GENERATED_DOCS)
 	gitbook init
 	gitbook install
+
+test: linkcheck
+
+linkcheck: build
+	linkchecker -a _book/
 
 platform-install:
 	ln -s ../platform-install/docs platform-install
 
-test:
-	ln -s ../../test/cord-tester/docs test
+cord-tester:
+	ln -s ../../test/cord-tester/docs cord-tester
 
 profiles:
 	ln -s ../../orchestration/profiles profiles
