@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_a61cc3c2",
+        "filename": "docs/scripts/descriptions.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-26T23:59:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_26e21304",
+      "range": {
+        "startLine": 2,
+        "startChar": 49,
+        "endLine": 2,
+        "endChar": 50
+      },
+      "revId": "50db13dec977f63742ec5a82f4c86f9713281f39",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_e6e3db03",
         "filename": "podconfig/rcord-physical-example.yml",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_e6699b26",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-26T23:59:24Z",
+      "side": 1,
+      "message": "External ip/gw seem to have default set in MaaS.  external_iface seems to as well, but set incorrectly, so I\u0027ll include that.\n\nI\u0027m thinking a lot of the other ones should be a link to here:\n\nhttps://guide.opencord.org/appendix_network_settings.html\n\nWhich seems more complete than was was in the previous sample.yml file.  I did this.\n\nI added to the descriptions as well, and nearly everything from the sample.yml file is now included.",
+      "parentUuid": "9a5c5d37_e6e3db03",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 26
+      },
+      "revId": "50db13dec977f63742ec5a82f4c86f9713281f39",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_06e70f14",
         "filename": "podconfig/rcord-physical-example.yml",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2017-09-26T17:20:11Z",
       "side": 1,
       "message": "Isn\u0027t the opposite? Isn\u0027t for not handling auth using a password?",
+      "range": {
+        "startLine": 62,
+        "startChar": 2,
+        "endLine": 62,
+        "endChar": 46
+      },
+      "revId": "50db13dec977f63742ec5a82f4c86f9713281f39",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8679bffe",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-26T23:59:24Z",
+      "side": 1,
+      "message": "This was badly worded, so I made it more clear, and it\u0027s not needed in all cases so I commented it out.",
+      "parentUuid": "9a5c5d37_06e70f14",
       "range": {
         "startLine": 62,
         "startChar": 2,
