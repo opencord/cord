@@ -54,8 +54,8 @@ repo download orchestration/xos 1234/3
 Which downloads a patch for the `xos` git repo, patchset number `1234` and
 version `3`.
 
-Also see [Configuring your Development Environment:cord-bootstrap.sh script
-](install.md#cord-bootstrap.sh-script) for instructions on downloading
+Also see [Required Tools:cord-bootstrap.sh script
+](install.html#cord-bootstrapsh-script) for instructions on downloading
 patchsets during a build using the `cord-bootstrap.sh` script.
 
 ## Contributing code to CORD
