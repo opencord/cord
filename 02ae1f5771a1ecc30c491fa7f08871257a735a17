@@ -46,6 +46,30 @@
       "revId": "02ae1f5771a1ecc30c491fa7f08871257a735a17",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6987bc62",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-27T05:06:15Z",
+      "side": 1,
+      "message": "Actually, I was thinking (and hoping) that we could get rid of all of them.\n\nIn my mind we should have\n* physical-example.yml (can\u0027t remember if I\u0027ve already talk to you about unifying -for now the use cases)\n* virtual-ciab-example.yml\n* opencloud-example.yml\n\nEverything else generates IMHO confusion and should disappear. It makes reference to personal -even if private- IPs. There\u0027s no reason why we should keep those files there.\n\nFor the other example files I\u0027m ready to make the change happen on them.\n\nIt\u0027s not a big deal if we don\u0027t put the mandatory stuff at the top, but I really think we should get rid of the majority of the files mentioned above. Then, if accidentally we can make also this order thing happen, even better! :)",
+      "parentUuid": "9a5c5d37_09af20e5",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "02ae1f5771a1ecc30c491fa7f08871257a735a17",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
