@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_49a51803",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-27T04:29:05Z",
+      "side": 1,
+      "message": "zack, very cool. Thanks. I think we\u0027re really there this time. I\u0027m just thinking, should we put mandatory things at the top?",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "02ae1f5771a1ecc30c491fa7f08871257a735a17",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
