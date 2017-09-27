@@ -8,6 +8,7 @@
     "branch": "master"
   },
   "plugins": [
+    "anchorjs",
     "toggle-chapters",
     "versions-select"
   ],

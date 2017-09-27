@@ -53,9 +53,9 @@ There are a few steps to building CiaB:
 
 * Bootstrap the server by installing software dependencies and checking out the
   CORD code
-* (Optional) Customize the source and configuration if desired
-* Run `make` targets to build and deploy the CORD software
-* (Optional) Run end-to-end tests to verify CiaB functionality
+* (Optional) Customize the build (change source and configuration)
+* Build and deploy the CORD software using `make`
+* (Optional) Run End-to-End tests
 
 > NOTE: If you are connecting to a remote target server, it is highly
 > recommended that you run the commands in a `tmux` session on the target
@@ -65,13 +65,13 @@ There are a few steps to building CiaB:
 
 ### Bootstrap the server
 
-See [Configuring your Development Environment:cord-bootstrap.sh script
-](install.md#cord-bootstrapsh-script) for instructions for running the
+See [Required Tools:cord-bootstrap.sh script
+](install.html#cord-bootstrapsh-script) for instructions for running the
 bootstrap script to download the CORD source tree and optionally downloading
 patches from Gerrit. You must specify the `-v` option to this script in order
 to install Vagrant, which is required to build a CiaB.
 
-### (Optional) Customize your build
+### (Optional) Customize the build
 
 You can now modify your CORD source tree that has been checked out in `~/cord`,
 if required, or [download patches manually from gerrit using
