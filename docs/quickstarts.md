@@ -3,11 +3,19 @@
 This section provides a short list of essential commands that can be used to
 deploy virtual or physical PODs.
 
-Before you start, you must obtain the CORD source tree and install Vagrat.
-Instructions for doing this can be found at [Configuring your Development
-Environment](install.md#configuring-your-development-environment) - if you're
-on CloudLab, most likely you will want to use the `cord-bootstrap.sh` script
-with the `-v` option.
+Before you start, you must obtain the CORD source tree and install Vagrant.
+Instructions for doing this can be found at [Required
+Tools](install.md#required-tools).
+
+To prepare a newly installed Ubuntu 14.04 system for either a Physical or
+Virtual pod, you can use the
+[cord-bootstrap.sh](install.html#cord-bootstrapsh-script) script:
+
+<pre><code>
+curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
+chmod +x cord-bootstrap.sh
+./cord-bootstrap.sh -v
+</code></pre>
 
 ## Virtual POD (CORD-in-a-Box)
 
@@ -28,8 +36,8 @@ through the build and end-to-end test procedure, bringing up vSG and
 ExampleService instances.
 
 If you'll be running these commands frequently, a shortcut is to use the `-t`
-option on the `cord-bootstrap.sh` script to run all the make targets, for a
-more unattended build process, which can be handy when testing:
+option on the `cord-bootstrap.sh` script to download source, then run all the
+make targets involved in doing a build and test cycle:
 
 ```
 ./cord-bootstrap.sh -v -t "PODCONFIG=rcord-virtual.yml config" -t "build" -t "pod-test"

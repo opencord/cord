@@ -579,9 +579,15 @@ Use the ONOS VTN app to manage networks for virtual instances.
 
 DPDK setting to specify CPU pinning.
 
+## vsg_test_ping_target
+
+DNS name of the server to ping when running the vSG portion of the
+[pod-test](install_virtual.html#test-vsg)
+
 ## vtn_management_host_net_interface
 
-Network interface to use on the head/compute nodes for the management_host network.
+Network interface to use on the head/compute nodes for the management_host
+network.
 
 ## xos_admin_first
 
@@ -660,5 +666,5 @@ XOS Web UI port to use for API access.
 ## xos_users
 
 List of additional users to create in XOS, in addition to
-[xos_admin_user](#xos_admin_user).
+[xos_admin_user](#xosadminuser).
 

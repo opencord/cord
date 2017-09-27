@@ -18,20 +18,23 @@ or performing other development tasks, see [Developing for CORD](develop.md).
 If you've run into trouble or want to know more about the CORD build process,
 please see [Troubleshooting and Build Internals](troubleshooting.md).
 
-## Configuring your Development Environment
+## Required Tools
 
-CORD has a unified development and deployment environment which uses the
+CORD has a unified build system for development and deployment which uses the
 following tools:
 
- - [Ansible](https://docs.ansible.com/ansible/intro_installation.html)
- - [Repo](https://source.android.com/source/downloading#installing-repo)
+ - [Ansible](https://docs.ansible.com/ansible/intro_installation.html), *tested
+   with v2.4*
+ - [Repo](https://source.android.com/source/downloading#installing-repo),
+   *tested with v1.23 of repo (launcher)*
 
 And either:
 
  - [Docker](https://www.docker.com/community-edition), for *local* build
-   scenarios
- - [Vagrant](https://www.vagrantup.com/downloads.html), for all other
-   scenarios
+   scenarios, *tested with Community Edition version 17.06*
+ - [Vagrant](https://www.vagrantup.com/downloads.html), for all other scenarios
+   *tested with version 1.9.3, requires specific plugins and modules if using
+   with libvirt, see `cord-bootstrap.sh` for more details *
 
 You can manually install these on your development system - see [Getting the
 Source Code](getting_the_code.md) for a more detailed instructions for checking
@@ -39,10 +42,9 @@ out the CORD source tree.
 
 ### cord-bootstrap.sh script
 
-If you're working on an Ubuntu 14.04 system (CloudLab or another test
-environment), you can use the `cord-bootstrap.sh` script to install these tools
-and check out the CORD source tree to `~/cord`. This hasn't been tested on
-other versions or distributions.
+If you're working on an cleanly installed Ubuntu 14.04 system, you can use the
+`cord-bootstrap.sh` script to install these tools and check out the CORD source
+tree to `~/cord`.
 
 <pre><code>
 curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
@@ -62,7 +64,7 @@ Usage for ./cord-bootstrap.sh:
 
 Using the `-v` option is required to install Vagrant for running a [Virtual Pod
 (CiaB)](install_virtual.md), whereas `-d` is required to install Docker for a
-[Local Workflow](xos/dev/workflow_local.md).
+[Local Workflow](/xos/dev/workflow_local.md).
 
 The `-p` option downloads a patch from gerrit, and the syntax for this is
 `<project path>:<changeset>/<revision>`.  It can be used multiple
@@ -80,7 +82,7 @@ You can find the project path in the `repo` manifest file:
 
 You can also run make targets with the `-t` option; `-t build` is the same as
 running `cd ~/cord/build ; make -j4 build` after the rest of the installations
-and downloads have completed.  
+and downloads have completed.
 
 In some cases, you may see a message like this if you install software that
 adds you to a group and you aren't already a member:
@@ -117,19 +119,23 @@ handful of YAML files.
 
 The top level configuration for a build is the *POD config* file, which is a
 YAML file stored in
-[build/podconfig](https://github.com/opencord/cord/tree/master/podconfig) that
+[build/podconfig](https://github.com/opencord/cord/tree/{{ book.branch }}/podconfig) that
 contains a list of variables that control how the build proceeds, and can
-override the configuration of the rest of the build. 
+override the configuration of the rest of the build.
 
 A minimal POD Config file must define two variables:
 
 `cord_scenario` - the name of the *scenario* to use, which is defined in a
-directory under [build/scenarios](https://github.com/opencord/cord/tree/master/scenarios).
+directory under [build/scenarios](https://github.com/opencord/cord/tree/{{
+  book.branch }}/scenarios).
 
 `cord_profile` - the name of a *profile* to use, defined as a YAML file in
-[build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/master/profile_manifests).
+[build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/{{
+  book.branch }}/profile_manifests).
 
-The included POD configs are generally named `<profile>-<scenario>.yml`. 
+The included POD configs are generally named `<profile>-<scenario>.yml`, except
+for the `physical-example.yml` file which is used for a [Physical
+  POD](install_physical.md) and requires a bit more work to configured.
 
 POD configs are used during a build by passing them with the `PODCONFIG`
 variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
@@ -138,7 +144,8 @@ variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
 
 The set of services that XOS on-boards into CORD -- the  _Service Graph_, and
 other per-profile configuration for a CORD deployment.  These are located in
-[build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/master/profile_manifests).
+[build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/{{
+  book.branch }}/profile_manifests).
 
 ### Scenarios
 
@@ -146,11 +153,11 @@ Scenarios define the physical or virtual environment that CORD will be
 installed into, a default mapping of ansible groups to nodes, the set of Docker
 images that can be built, and software and platform features are installed onto
 those nodes. Scenarios are subdirectories of the
-[build/scenarios](https://github.com/opencord/cord/tree/master/scenarios)
-directory, and consist of a `config.yaml` file and possibly VM's specified in a
-`Vagrantfile`.
+[build/scenarios](https://github.com/opencord/cord/tree/{{ book.branch
+}}/scenarios) directory, and consist of a `config.yaml` file and possibly VM's
+specified in a `Vagrantfile`.
 
-The current set of scenarios: 
+The current set of scenarios:
 
 - `local`: Minimal set of containers running locally on the development host
 - `mock`: Creates a single Vagrant VM with containers and DNS set up, without
@@ -160,4 +167,5 @@ The current set of scenarios:
 - `cord`: Physical or virtual multi-node CORD pod, with MaaS and OpenStack
 - `opencloud`: Physical or virtual multi-node OpenCloud pod, with OpenStack
 
-The scenario is specified in the POD config.
+The scenario is specified in the POD config's `cord_scenario` line.
+

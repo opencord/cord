@@ -30,6 +30,7 @@
 * [Developing for CORD](develop.md)
     * [Getting the Source Code](getting_the_code.md)
     * [Workflow: Mock Configuration](xos/dev/workflow_mock_single.md)
+    * [Workflow: Local](xos/dev/workflow_local.md)
     * [Workflow: Virtual POD](xos/dev/workflow_pod.md)
     * [Example Service](xos/example_service.md)
     * [Configuring XOS](xos/modules/xosconfig.md)
