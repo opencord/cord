@@ -65,8 +65,8 @@ There are a few steps to building CiaB:
 
 ### Bootstrap the server
 
-See [Configuring your Development Environment:cord-bootstrap.sh script
-](install.md#cord-bootstrapsh-script) for instructions for running the
+See [Required Tools:cord-bootstrap.sh script
+](install.html#cord-bootstrapsh-script) for instructions for running the
 bootstrap script to download the CORD source tree and optionally downloading
 patches from Gerrit. You must specify the `-v` option to this script in order
 to install Vagrant, which is required to build a CiaB.
