@@ -252,9 +252,7 @@ The other machines will be fully provisioned by CORD itself.
 ### Development Machine
 
 It should run either Ubuntu 16.04 LTS (recommended) or Ubuntu 14.04 LTS.  See
-[Configuring your Development
-Environment](install.md#configuring-your-development-environment) for more
-details.
+[Required Tools](install.md#required-tools) for more details.
 
 This documentation assumes that you checked out the CORD source tree into
 `~/cord`.
@@ -312,9 +310,10 @@ the automated installation, and much more.
 POD configuration files are YAML files with extension .yml, contained in the
 `/cord/build/podconfig` directory in the dev VM. You can either create a new
 file with your favorite editor or copy-and-edit an existing file. The
-[rcord-physical-example.yml](https://github.com/opencord/cord/blob/master/podconfig/rcord-physical-example.yml)
-configuration file is there for this purpose. All parameters have a
-description. Optional lines have been commented out, but can be used as needed.
+[physical-example.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/podconfig/physical-example.yml)
+configuration file is there for this purpose, and the most commonly set
+parameters are described. Optional lines have been commented out, but can be
+used as needed.
 
 More information about how the network configuration for the POD can be
 customized can be found in [Network Settings](appendix_network_settings.md).

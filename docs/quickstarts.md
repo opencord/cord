@@ -4,10 +4,9 @@ This section provides a short list of essential commands that can be used to
 deploy virtual or physical PODs.
 
 Before you start, you must obtain the CORD source tree and install Vagrat.
-Instructions for doing this can be found at [Configuring your Development
-Environment](install.md#configuring-your-development-environment) - if you're
-on CloudLab, most likely you will want to use the `cord-bootstrap.sh` script
-with the `-v` option.
+Instructions for doing this can be found at [Required
+Tools](install.md#required-tools) - if you're on CloudLab, most likely you will
+want to use the `cord-bootstrap.sh` script with the `-v` option.
 
 ## Virtual POD (CORD-in-a-Box)
 

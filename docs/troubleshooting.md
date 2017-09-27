@@ -16,6 +16,25 @@ ls -ltr milestones ; ls -ltr logs
 And looking for logfiles without a corresponding milestone will point you to
 the make target(s) that failed.
 
+## Collecting POD diagnostics
+
+There is a `collect-diag` makefile target that can be run on virtual and
+physical pods, and generates a `~/diag-<timestamp>` directory on the head node.
+
+This will contain docker logs and the output of many network and system
+diagnostic commands which can be helpful in debugging problems.
+
+## Raising ONOS log levels
+
+If you need to raise the logging level of a specific ONOS app when debugging,
+there is an `onos-debug` target which will set the level of the any services in
+the [onos_debug_appnames](build_glossary.html#onosdebugappnames) list to
+[onos_debug_level](build_glossary.html#onosdebuglevel). 
+
+Add the names of the ONOS apps to `onos_debug_appnames` and add `onos-debug`
+to the `build_targets` list in your POD config before running a build to use
+this functionality.
+
 ## Config Generation Overview
 
 All configuration in CORD is driven off of YAML files which contain variables

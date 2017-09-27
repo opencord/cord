@@ -18,9 +18,9 @@ or performing other development tasks, see [Developing for CORD](develop.md).
 If you've run into trouble or want to know more about the CORD build process,
 please see [Troubleshooting and Build Internals](troubleshooting.md).
 
-## Configuring your Development Environment
+## Required Tools
 
-CORD has a unified development and deployment environment which uses the
+CORD has a unified build system for development and deployment which uses the
 following tools:
 
  - [Ansible](https://docs.ansible.com/ansible/intro_installation.html)
@@ -62,7 +62,7 @@ Usage for ./cord-bootstrap.sh:
 
 Using the `-v` option is required to install Vagrant for running a [Virtual Pod
 (CiaB)](install_virtual.md), whereas `-d` is required to install Docker for a
-[Local Workflow](xos/dev/workflow_local.md).
+[Local Workflow](/xos/dev/workflow_local.md).
 
 The `-p` option downloads a patch from gerrit, and the syntax for this is
 `<project path>:<changeset>/<revision>`.  It can be used multiple
@@ -80,7 +80,7 @@ You can find the project path in the `repo` manifest file:
 
 You can also run make targets with the `-t` option; `-t build` is the same as
 running `cd ~/cord/build ; make -j4 build` after the rest of the installations
-and downloads have completed.  
+and downloads have completed.
 
 In some cases, you may see a message like this if you install software that
 adds you to a group and you aren't already a member:
@@ -119,7 +119,7 @@ The top level configuration for a build is the *POD config* file, which is a
 YAML file stored in
 [build/podconfig](https://github.com/opencord/cord/tree/master/podconfig) that
 contains a list of variables that control how the build proceeds, and can
-override the configuration of the rest of the build. 
+override the configuration of the rest of the build.
 
 A minimal POD Config file must define two variables:
 
@@ -129,7 +129,9 @@ directory under [build/scenarios](https://github.com/opencord/cord/tree/master/s
 `cord_profile` - the name of a *profile* to use, defined as a YAML file in
 [build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/master/profile_manifests).
 
-The included POD configs are generally named `<profile>-<scenario>.yml`. 
+The included POD configs are generally named `<profile>-<scenario>.yml`, except
+for the `physical-example.yml` file which is used for a [Physical
+  POD](install_physical.md) and requires a bit more work to configured.
 
 POD configs are used during a build by passing them with the `PODCONFIG`
 variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
@@ -150,7 +152,7 @@ those nodes. Scenarios are subdirectories of the
 directory, and consist of a `config.yaml` file and possibly VM's specified in a
 `Vagrantfile`.
 
-The current set of scenarios: 
+The current set of scenarios:
 
 - `local`: Minimal set of containers running locally on the development host
 - `mock`: Creates a single Vagrant VM with containers and DNS set up, without
@@ -160,4 +162,5 @@ The current set of scenarios:
 - `cord`: Physical or virtual multi-node CORD pod, with MaaS and OpenStack
 - `opencloud`: Physical or virtual multi-node OpenCloud pod, with OpenStack
 
-The scenario is specified in the POD config.
+The scenario is specified in the POD config's `cord_scenario` line.
+

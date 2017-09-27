@@ -181,7 +181,7 @@ that are already containerized, and we deploy as-is (or with minor
 modifications).
 
 To do this, add the full name of the image, including a version tag, to the
-`https://github.com/opencord/cord/blob/{{ book.branch }}/docker_images.yml`
+`https://github.com/opencord/cord/blob/master/docker_images.yml`
 file, and to `docker_image_whitelist` list in the
 `scenarios/<scenario name>/config.yml` file.
 
