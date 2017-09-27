@@ -410,6 +410,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_46e8677c",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "I agree  - the entire idea of the build node has decreasing value, especially as we do fewer and fewer builds there, and it\u0027s basically just an unnecessary place where docker images are copied to, then immediately copied to the head node. \n\nSo I guess the answer is \"eventually we\u0027ll get there\"",
+      "parentUuid": "9a5c5d37_a6b5e332",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 12
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_d34897ce",
         "filename": "podconfig/rcord-physical-example.yml",
         "patchSetId": 1
@@ -469,6 +493,30 @@
       "side": 1,
       "message": "If there\u0027s a default it would be great to put it as optional (commented)",
       "parentUuid": "9a5c5d37_33bb7374",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 33
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_66f36b74",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "These appear to have default, so commented out.",
+      "parentUuid": "9a5c5d37_8682df50",
       "range": {
         "startLine": 42,
         "startChar": 0,
@@ -623,6 +671,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_86ee5f8a",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "It\u0027s hard to say whether the `headnode` (which can be user@host format) or `external_gw` address is always the right address to use for the docker registry.  It might not be (if doing config from a separate mgmt network, for example), so I\u0027d rather have this be a separate value.",
+      "parentUuid": "9a5c5d37_467ce772",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 42
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_53fee76c",
         "filename": "podconfig/rcord-physical-example.yml",
         "patchSetId": 1
@@ -682,6 +754,30 @@
       "side": 1,
       "message": "For \"copy_cord_prereqs is needed to create/copy an ssh key from the config to head node to work around password-auth SSH\" do we have a Jira ticket, so we know that we still have a problem to fix? If not, shouldn\u0027t this just be the default behavior?\n\nFor \"skipTags is MaaS... something?  I\u0027m not up on what they\u0027re all for, and it\u0027s not best practice.\" this shouldn\u0027t be mandatory. As long as we clearly say to users where the generated passwords are, it should be fine not having it. I would in that case like to put it as one of the optional (commented) params\n\nI understand it\u0027s needed, but why the user should bother to see a default param, if we can possibly just copying it using the address of the head node - already inserted?",
       "parentUuid": "9a5c5d37_7368cbf5",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 31
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a6e1639c",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "I simplified the language on `config_ssh_key` in the followup patch.\n\nThe notes on skipTags I copied from the sample.yml in the old build system, so that should be taken care of.",
+      "parentUuid": "9a5c5d37_2681f34a",
       "range": {
         "startLine": 61,
         "startChar": 0,
@@ -836,6 +932,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_e6d75bbe",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "The host has to have an inventory name.  I\u0027d rather show the ideal situation (that DNS is working and hosts have names) and remove/comment out the `ansible_host` variable next, but that seems to not match how our systems are set up.",
+      "parentUuid": "9a5c5d37_e692bb9e",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 32
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_d3f1b796",
         "filename": "podconfig/rcord-physical-example.yml",
         "patchSetId": 1
@@ -895,6 +1015,30 @@
       "side": 1,
       "message": "Zack, here I\u0027m just making assumptions on variables. Would be that hard to copy the variable value from the one inserted by the user as head node IP at the beginning of the file?",
       "parentUuid": "9a5c5d37_b37d23b4",
+      "range": {
+        "startLine": 89,
+        "startChar": 6,
+        "endLine": 89,
+        "endChar": 31
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_06db8fee",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "It\u0027s not going through the jinja2 pipeline, so it would be harder to do - the headnode variable might also be in user@host format.",
+      "parentUuid": "9a5c5d37_c68fb774",
       "range": {
         "startLine": 89,
         "startChar": 6,
@@ -1037,6 +1181,30 @@
       "side": 1,
       "message": "It\u0027s fine. I\u0027m just proposing to leave majority of this commented, if not mandatory",
       "parentUuid": "9a5c5d37_3349338c",
+      "range": {
+        "startLine": 94,
+        "startChar": 2,
+        "endLine": 94,
+        "endChar": 10
+      },
+      "revId": "6e87cbc4ceb9c1b2d63b30eb5465176290be03f3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c6e457ae",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T00:08:35Z",
+      "side": 1,
+      "message": "I think it\u0027ll break if it\u0027s missing/commented out.",
+      "parentUuid": "9a5c5d37_86e9bf1c",
       "range": {
         "startLine": 94,
         "startChar": 2,
