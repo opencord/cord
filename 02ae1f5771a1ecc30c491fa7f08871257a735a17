@@ -22,6 +22,30 @@
       "revId": "02ae1f5771a1ecc30c491fa7f08871257a735a17",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_09af20e5",
+        "filename": "podconfig/rcord-physical-example.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-27T04:48:58Z",
+      "side": 1,
+      "message": "That makes sense, but the podconfigs and scenarios currently all to have a similar order: the scenario/profile, variables, make targets, inventory.\n\nIf we moved the optional items to the bottom, we\u0027d lose some of that order. There\u0027s no specific reason for the order, it\u0027s just what came about when it was being developed.\n\nI think I\u0027d prefer not to, unless we decide to go over all the podconfig and scenario files and make them match, or make the sections more obvious (put in comments as section headings, etc.)",
+      "parentUuid": "9a5c5d37_49a51803",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 18
+      },
+      "revId": "02ae1f5771a1ecc30c491fa7f08871257a735a17",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
