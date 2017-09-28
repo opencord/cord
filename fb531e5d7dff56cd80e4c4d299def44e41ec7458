@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_645a4385",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2017-09-28T23:41:52Z",
+      "side": 1,
+      "message": "Is saving the task enough to get VTN resynced? I have a feeling I\u0027ve had to save the VTN app in the past (but maybe I just wasn\u0027t patient enough).",
+      "range": {
+        "startLine": 14,
+        "startChar": 237,
+        "endLine": 14,
+        "endChar": 241
+      },
+      "revId": "fb531e5d7dff56cd80e4c4d299def44e41ec7458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_445f3f73",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2017-09-28T23:41:52Z",
+      "side": 1,
+      "message": "How can the user know which node(s) are connected to other leafs? Is there an easy way to find this out?",
+      "range": {
+        "startLine": 14,
+        "startChar": 120,
+        "endLine": 14,
+        "endChar": 144
+      },
+      "revId": "fb531e5d7dff56cd80e4c4d299def44e41ec7458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
