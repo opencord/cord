@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_a4d39b37",
+        "filename": "docs/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-09-28T21:50:51Z",
+      "side": 1,
+      "message": "shouldn\u0027t we create (example for one profile):\n- profiles/rcord/docs (in the rcord repository)\n- ln -s ../../../../orchestration/profiles/rcord/docs profiles/rcord",
+      "range": {
+        "startLine": 37,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 81
+      },
+      "revId": "eda8e876c13933119060ce3f6b98d75185a75d8b",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
