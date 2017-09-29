@@ -13,9 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# rcord-single Pod Config
-# Creates a single-node mock R-CORD pod w/synchronizers
+# ecord-global-single Pod Config
+# Creates a single-node Global E-CORD pod w/synchronizers and ONOS
+# This is the production config for Global E-CORD development
 
 cord_scenario: single
-cord_profile: rcord
+cord_profile: ecord-global
+
+start_xos_prereqs:
+  - deploy-onos
 

@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
-# single head-node scenario
+# single node scenario (head-node only)
 # Brings up a VM with synchronizers, for more complicated testing without OpenStack
+# Can be used with ONOS and ElasticStack, see:
+# https://guide.opencord.org/xos/dev/workflow_mock_single.html
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..') | realpath }}"
@@ -74,6 +74,7 @@ docker_image_whitelist:
   - "xosproject/chameleon"
   - "xosproject/gui-extension-rcord"
   - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-vnaas"
   - "xosproject/gui-extension-vtr"
   - "xosproject/xos-synchronizer-base"
   - "xosproject/addressmanager-synchronizer"
@@ -81,6 +82,9 @@ docker_image_whitelist:
   - "xosproject/fabric-synchronizer"
   - "xosproject/onos-synchronizer"
   - "xosproject/openstack-synchronizer"
+  - "xosproject/vee-synchronizer"
+  - "xosproject/veg-synchronizer"
+  - "xosproject/vnaas-synchronizer"
   - "xosproject/volt-synchronizer"
   - "xosproject/vrouter-synchronizer"
   - "xosproject/vsg-synchronizer"

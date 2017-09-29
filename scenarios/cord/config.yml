@@ -1,3 +1,4 @@
+---
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -13,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # cord Scenario
 # for both Physical (using a corddev VM) and Virtual (using multiple VMs)
 
@@ -130,6 +129,8 @@ docker_image_whitelist:
   - "xosproject/openstack-synchronizer"
   - "xosproject/volt-synchronizer"
   - "xosproject/vrouter-synchronizer"
+  - "xosproject/vee-synchronizer"
+  - "xosproject/veg-synchronizer"
   - "xosproject/vsg-synchronizer"
   - "xosproject/vtn-synchronizer"
   - "xosproject/vtr-synchronizer"
