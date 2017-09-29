@@ -228,7 +228,8 @@ $(M)/prep-headnode: | $(M)/vagrant-ssh-install $(M)/cord-config $(PREP_HEADNODE_
 	touch $@
 
 $(M)/deploy-elasticstack: | $(M)/prep-headnode
-	$(ANSIBLE_PB) $(PI)/deploy-elasticstack-playbook.yml $(LOGCMD)
+	# Remove Elastic Stack, as it is currently unused and consumes much memory
+	# $(ANSIBLE_PB) $(PI)/deploy-elasticstack-playbook.yml $(LOGCMD)
 	touch $@
 
 $(M)/prep-computenode: | $(M)/prep-headnode
