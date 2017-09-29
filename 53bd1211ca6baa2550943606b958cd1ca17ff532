@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_3fcfb2b2",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-29T14:40:23Z",
+      "side": 1,
+      "message": "Minor style nit - can we wrap lines at 80 characters?  \n\nIt helps both when reading on the console, and makes it easier to tell what changed when using diff.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 226
+      },
+      "revId": "53bd1211ca6baa2550943606b958cd1ca17ff532",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
