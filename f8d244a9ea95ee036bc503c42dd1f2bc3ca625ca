@@ -22,6 +22,30 @@
       "revId": "f8d244a9ea95ee036bc503c42dd1f2bc3ca625ca",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3f88d2e6",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-29T17:40:49Z",
+      "side": 1,
+      "message": "Do you favor removing the dependencies instead?",
+      "parentUuid": "9a5c5d37_5f0ca694",
+      "range": {
+        "startLine": 231,
+        "startChar": 1,
+        "endLine": 231,
+        "endChar": 75
+      },
+      "revId": "f8d244a9ea95ee036bc503c42dd1f2bc3ca625ca",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
