@@ -45,6 +45,54 @@
       "revId": "fb531e5d7dff56cd80e4c4d299def44e41ec7458",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_64e8037d",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-29T00:12:27Z",
+      "side": 1,
+      "message": "It used to be necessary to save more things, but I think this bug was fixed.  At least it seems to be working for me now.",
+      "parentUuid": "9a5c5d37_645a4385",
+      "range": {
+        "startLine": 14,
+        "startChar": 237,
+        "endLine": 14,
+        "endChar": 241
+      },
+      "revId": "fb531e5d7dff56cd80e4c4d299def44e41ec7458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_24020b3f",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-09-29T00:12:27Z",
+      "side": 1,
+      "message": "Yeah, the only way I can think of is to connect the switches, get ONOS to discover the hosts, figure out what switch each is on, and then tear down the fabric.\n\nHopefully this configuration bug will be fixed in the next release.",
+      "parentUuid": "9a5c5d37_445f3f73",
+      "range": {
+        "startLine": 14,
+        "startChar": 120,
+        "endLine": 14,
+        "endChar": 144
+      },
+      "revId": "fb531e5d7dff56cd80e4c4d299def44e41ec7458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
