@@ -16,6 +16,7 @@
     * [Build System Config Glossary](build_glossary.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Powering Up a POD](operate/power_up.md)
+    * [XOS Internals](xos/xos_internals.md)
     * [REST API](operate/rest_apis.md)
     * [TOSCA](xos-tosca/README.md)
 * [Defining Models in CORD](xos/README.md)
