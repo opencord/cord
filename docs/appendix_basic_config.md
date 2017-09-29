@@ -19,6 +19,8 @@ XOS will communicate the new IP address to the ONOS VTN app, which will change i
 ip addr list br-int
 ```
 
+>NOTE: It can take several minutes to complete the IP address change
+
 ###Add Routes to Fabric Subnets
 
 Routes must be manually configured on the compute nodes so that traffic between nodes on different leaves will be forwarded via the local spine switch.
@@ -191,7 +193,9 @@ docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@openco
 ###Restart ONOS Apps
 
 ```
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
 http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 ```
 
@@ -231,3 +235,27 @@ Password:
 ## Verify Connectivity over the Fabric
 
 Once the new ONOS configuration is active, the fabric interface on each node should be reachable from the other nodes.  From each compute node, ping the IP address of head node's fabric interface (e.g., `10.6.1.1`).
+
+Sometimes ping fails for various reasons. Reconnecting switches to ONOS often solves the problem:
+
+Log into the switch from the head node:
+
+```
+ssh root@SWITCH_IP
+```
+
+>NOTE: Switch IPs can be found by running "cord switch list" on the head node
+
+Kill the current connection and restart a new one:
+
+```
+./killit
+./connect -bg
+```
+
+Sometimes restarting ONOS segmentrouting app also helps:
+
+```
+http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
+http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
+```
