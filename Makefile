@@ -241,7 +241,7 @@ $(M)/build-maas-images: | $(M)/prep-buildnode $(BUILD_MAAS_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.image; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
-$(M)/maas-prime: | $(M)/deploy-elasticstack
+$(M)/maas-prime: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(MAAS)/prime-node.yml $(LOGCMD)
 	touch $@
 
@@ -304,7 +304,7 @@ $(M)/glance-images: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/glance-images-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-openstack: | $(M)/deploy-elasticstack $(M)/prep-headnode $(M)/prep-computenode $(DEPLOY_OPENSTACK_PREREQS)
+$(M)/deploy-openstack: | $(M)/prep-headnode $(M)/prep-computenode $(DEPLOY_OPENSTACK_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-openstack-playbook.yml $(LOGCMD)
 	touch $@
 
