@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_ff50fa5f",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-29T17:55:41Z",
+      "side": 1,
+      "message": "Should this have a prereq of `build-maas-images` ?  It needs some prereq or it\u0027ll run very early in the build process.",
+      "revId": "c83236ccdcdf8afa9351b8175a2e3172b4e6de94",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
