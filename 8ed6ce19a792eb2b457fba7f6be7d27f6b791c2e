@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_ff08fa2e",
+        "filename": "docs/build_images.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2017-09-29T20:21:08Z",
+      "side": 1,
+      "message": "this should really be {{ book.branch }} but it won\u0027t be rendered if inside a code block, you can workaround this using:\n\u003ccode\u003ehttps://github.com/opencord/cord/blob/{{ book.branch }}/docker_images.yml\u003c/code\u003e",
+      "range": {
+        "startLine": 184,
+        "startChar": 39,
+        "endLine": 184,
+        "endChar": 45
+      },
+      "revId": "8ed6ce19a792eb2b457fba7f6be7d27f6b791c2e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
