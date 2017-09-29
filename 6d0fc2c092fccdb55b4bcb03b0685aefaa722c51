@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_3a2580ab",
+        "filename": "podconfig/ecord-single.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-29T20:57:51Z",
+      "side": 1,
+      "message": "Is this for the global physical node?\n\nSo it doesn\u0027t need anything else? What about the address where to deploy? users? passwords? nothing?",
+      "range": {
+        "startLine": 19,
+        "startChar": 15,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5a20349b",
+        "filename": "podconfig/physical-example.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-29T20:57:51Z",
+      "side": 1,
+      "message": "should we add \"single\" for the ecord-global?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7a2bf882",
+        "filename": "podconfig/physical-example.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-29T20:57:51Z",
+      "side": 1,
+      "message": "at this point to be fair I\u0027d add mcord and ecord-global",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 53
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
