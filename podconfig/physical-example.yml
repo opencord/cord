@@ -16,8 +16,13 @@
 # rcord-physical-example Pod Config
 # Example configuration for a physical R-CORD pod
 
+# The scenario in `scenarios` to use:
 cord_scenario: cord
-cord_profile: rcord
+
+# The cord_profile variable must be set to a valid profile name
+# profiles can be found in platform-install/profile_manifests.
+# Example values: `rcord`, `ecord`, `opencloud`, etc.
+cord_profile: <must_be_set>
 
 # Bring up the corddev VM. This is the `build` node as specified in ansible
 # inventory below.
@@ -107,6 +112,10 @@ skipTags:
 #  - 'interface_config'
 
 # Inventory for ansible, used to generate inventory.ini
+#
+# A physical podconfig must contain this, and will minimally set the head node
+# address in the `head` section..
+#
 # There must be config, build, head, and compute sections
 inventory_groups:
 
