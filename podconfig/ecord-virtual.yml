@@ -13,9 +13,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# rcord-single Pod Config
-# Creates a single-node mock R-CORD pod w/synchronizers
+# ecord-virtual Pod Config
+# Creates a virtual multi-node E-CORD pod
 
-cord_scenario: single
-cord_profile: rcord
+cord_scenario: cord
+cord_profile: ecord
+
+vagrant_up_prereqs:
+  - prereqs-check
+  - ciab-ovs
+
+build_targets:
+ - compute1-up
+
+external_iface: 'eth0'
+fabric_include_names: eth2
+fabric_include_module_types: omit
+fabric_exclude_names: eth0,eth1
+management_include_names: eth1
+management_exclude_names: eth0,eth2
+
+skipTags:
+  - 'set_compute_node_password'
+  - 'switch_support'
+  - 'reboot'
+  - 'interface_config'
 

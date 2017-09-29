@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # docker_images.yml
 # master list of docker images used by imagebuilder.py
 
@@ -122,6 +120,10 @@ buildable_images:
     repo: vtr
     path: "xos/gui"
 
+  - name: xosproject/gui-extension-vnaas
+    repo: vnaas
+    path: "xos/gui"
+
   - name: xosproject/gui-extension-sample
     repo: xos-sample-gui-extension
 
@@ -137,6 +139,21 @@ buildable_images:
 
   - name: xosproject/onos-synchronizer
     repo: onos-service
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vee-synchronizer
+    repo: vEE
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/veg-synchronizer
+    repo: vEG
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vnaas-synchronizer
+    repo: vnaas
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 

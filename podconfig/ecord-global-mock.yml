@@ -13,9 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# rcord-single Pod Config
-# Creates a single-node mock R-CORD pod w/synchronizers
+# ecord-global-mock Pod Config
+# Creates a single-node mock Global E-CORD pod
 
-cord_scenario: single
-cord_profile: rcord
-
+cord_scenario: mock
+cord_profile: ecord-global
