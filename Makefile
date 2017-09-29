@@ -271,7 +271,7 @@ $(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/onos-debug: | $(M)/onboard-profile
+$(M)/onos-debug: | $(M)/onboard-profile $(M)/deploy-onos
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onos-debug-playbook.yml" $(LOGCMD)
 	touch $@
 
