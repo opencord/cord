@@ -15,12 +15,9 @@
     * [Build System Variable Glossary](build_glossary.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Powering Up a POD](operate/power_up.md)
-# My understanding is that ELK Stack is not working right now
-#    * [ELK Stack Logs](operate/elk_stack.md)
+    * [XOS Internals](xos/xos_internals.md)
     * [REST API](operate/rest_apis.md)
     * [TOSCA](xos-tosca/README.md)
-# Not targeted at operators; about internal development
-#    * [Development Environment](xos-tosca/devel.md)
 * [Defining Models in CORD](xos/README.md)
     * [XOS Support for Models](xos/dev/xproto.md)
     * [Core Models](xos/core_models.md)
@@ -32,8 +29,6 @@
 * [Developing for CORD](develop.md)
     * [Getting the Source Code](getting_the_code.md)
     * [Workflow: Mock Configuration](xos/dev/workflow_mock.md)
-# this workflow has been added to install_virtual.md
-#    * [Workflow: Cord-in-a-Box](xos/dev/workflow_ciab.md)
     * [Example Service](xos/example_service.md)
     * [Configuring XOS](xos/modules/xosconfig.md)
     * [GUI Development](xos-gui/developer/README.md)
