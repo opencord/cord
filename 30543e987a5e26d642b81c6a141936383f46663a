@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_9a2b4ceb",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "If at the moment specific versions of the software are not installed, nothing works (i.e. Ansible 2.3). Should we make it clear?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_baee10b3",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "This has been already adapted by Andy to work also on 16.04. Gopi and I already tested it and worked. The important thing to say is that to have guarantees that the script works, people should have a cleanly installed OS",
+      "range": {
+        "startLine": 42,
+        "startChar": 22,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7a309856",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "Just curious. Can I put multiple targets here? For example, can I install required software (bootstrap -v), make config and make deploy?\nWhat\u0027s the typical use case for this otherwise?",
+      "range": {
+        "startLine": 59,
+        "startChar": 2,
+        "endLine": 59,
+        "endChar": 87
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5a35d444",
+        "filename": "docs/quickstarts.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "Can we put back a code section (```) with cord-bootstrap.sh -v. I think it would be great if we keep the quickstart a very lean section where people can come and simply do a copy and paste. I understand we can\u0027t cover all the use cases, but remember we\u0027re in the administration guide. This is not designed for developers.\n\nPlus, I don\u0027t believe we should mention for any reason either in the CORD guide or in the code base Cloudlab, which is a specific CORD deployment. If we want to create a specific section for it might be still fine, but put it in generic pages, assuming that everyone knows what it is (again IMHO) no",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3a3a2037",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "I assume we\u0027re on the dev node? Should we make it more clear?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 10
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_1a3f5c27",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "Should we put a cd command before to clarify what\u0027s the directory?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 3
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_da48a4ce",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "what node?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 52
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_fa3b6836",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:59:04Z",
+      "side": 1,
+      "message": "Is this something that can be done at runtime, while the system has been installed? I\u0027m not confused...on what node are we now? :P",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 19
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
