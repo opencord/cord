@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_5afef46c",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-09-30T18:34:06Z",
+      "side": 1,
+      "message": "Not really a problem at all...but why --- completely disappeared?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "46cf2f1d09655d4bc725e374211a0df3580fd31d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
