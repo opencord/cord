@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_ba1610f0",
+        "filename": "podconfig/ecord-single.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-30T00:48:42Z",
+      "side": 1,
+      "message": "ecord-global just needs XOS + ONOS, no OpenStack/MaaS, so not a traditional POD.\n\nIf you wanted to put this on a physical node, you\u0027d override the `head` section in inventory and possibly split build from head (use `corddev`).\n\nFor the time being and for testing, this is probably sufficient.  We may need to make a separate scenario in the future that will integrate with multiple non-global PODs.",
+      "parentUuid": "9a5c5d37_3a2580ab",
+      "range": {
+        "startLine": 19,
+        "startChar": 15,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_5a20349b",
         "filename": "podconfig/physical-example.yml",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_9ad34c38",
+        "filename": "podconfig/physical-example.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-30T00:48:42Z",
+      "side": 1,
+      "message": "See the comment on ecord-global-single.yml .  Don\u0027t think it\u0027s needed yet.",
+      "parentUuid": "9a5c5d37_5a20349b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_7a2bf882",
         "filename": "podconfig/physical-example.yml",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2017-09-29T20:57:51Z",
       "side": 1,
       "message": "at this point to be fair I\u0027d add mcord and ecord-global",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 53
+      },
+      "revId": "6d0fc2c092fccdb55b4bcb03b0685aefaa722c51",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7ad89853",
+        "filename": "podconfig/physical-example.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-09-30T00:48:42Z",
+      "side": 1,
+      "message": "Maybe it\u0027s better to point at the guide than to try to maintain a list here?",
+      "parentUuid": "9a5c5d37_7a2bf882",
       "range": {
         "startLine": 24,
         "startChar": 18,
