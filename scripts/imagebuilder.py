@@ -666,6 +666,13 @@ class DockerImage():
             # exclude files in this list
             exclusion_list = ['.git']
 
+            docker_ignore = os.path.join(context_path, '.dockerignore')
+            if os.path.exists(docker_ignore):
+                for line in open(docker_ignore).readlines():
+                    if line.strip()[0] is not '#':
+                        exclusion_list.append(line.strip().rstrip('\/'))
+            LOG.info("Exclusion list: %s" % exclusion_list)
+
             # see docker-py source for context
             for path in sorted(
                     DockerUtils.exclude_paths(context_path, exclusion_list)):
