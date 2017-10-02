@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_3aa46056",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-02T17:25:26Z",
+      "side": 1,
+      "message": "Comments are only if  # \u003d first character in line, not anywhere in line, so this would be the more correct check:\n\n  if line[0] is not \u0027#\u0027: \n\nper: https://docs.docker.com/engine/reference/builder/#dockerignore-file",
+      "range": {
+        "startLine": 672,
+        "startChar": 20,
+        "endLine": 672,
+        "endChar": 39
+      },
+      "revId": "8ab497cd9d7eb9754469f66b5ceb2186b26d3d41",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
