@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_ba8f30cc",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-02T17:31:26Z",
+      "side": 1,
+      "message": "It moved to the top - it\u0027s the YAML start of document separator.",
+      "parentUuid": "9a5c5d37_5afef46c",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "46cf2f1d09655d4bc725e374211a0df3580fd31d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_1a54fc52",
         "filename": "scenarios/cord/config.yml",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-02T16:37:50Z",
       "side": 1,
       "message": "Why are vnaas and its extension not included?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 23
+      },
+      "revId": "46cf2f1d09655d4bc725e374211a0df3580fd31d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_da92e4f5",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-02T17:31:26Z",
+      "side": 1,
+      "message": "the `cord` scenario is not used for ecord-global as it doesn\u0027t need OpenStack/MaaS, so vnaas doesn\u0027t need to be added here. \n\nEventually we\u0027ll dynamically generate this list and include the service synchronizer and gui extension images automatically.",
+      "parentUuid": "9a5c5d37_1a54fc52",
       "range": {
         "startLine": 110,
         "startChar": 0,
