@@ -35,6 +35,7 @@ pull_only_images:
   - "onosproject/onos:1.10.6"
   - "redis:3.2"
   - "node:7.9.0" # remove once the issue with node:candidate is resolved
+  - "varunbelur/elk:1"
 
 # buildable_images - list of images that we build from Dockerfiles
 #
