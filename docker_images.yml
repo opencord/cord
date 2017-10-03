@@ -175,3 +175,8 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/vmme-synchronizer
+    repo: vmme
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
