@@ -224,7 +224,7 @@ node ("${config.dev_node.name}") {
  * @param ip      the IP address to substitute
  */
 def createMACIPbindingStr(counter, mac, ip) {
-    return """\\'host fabric${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}\\'"""
+    return """host fabric${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}"""
 }
 
 /**
