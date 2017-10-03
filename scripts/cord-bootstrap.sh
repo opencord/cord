@@ -29,7 +29,7 @@ CORDDIR="${CORDDIR:-${HOME}/cord}"
 MAKECMD="${MAKECMD:-make -j4}"
 
 # CORD versioning
-REPO_BRANCH="${REPO_BRANCH:-cord-4.0}"
+REPO_BRANCH="${REPO_BRANCH:-cord-4.1}"
 
 # Functions
 function run_stage {
