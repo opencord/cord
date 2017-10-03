@@ -135,6 +135,7 @@ docker_image_whitelist:
   - "xosproject/vsg-synchronizer"
   - "xosproject/vtn-synchronizer"
   - "xosproject/vtr-synchronizer"
+  - "xosproject/vmme-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
