@@ -651,6 +651,10 @@ should be included for the services.
 ## xos_tosca_config_templates
 
 List of XOS tosca templates to load that make up the service graph of a
+profile. Deprecated, see: [xos_new_tosca_config_templates](xosnewtoscaconfigtemplates)
+
+## xos_new_tosca_config_templates
+List of XOS tosca templates to load that make up the service graph of a
 profile.
 
 ## xos_ui_port
