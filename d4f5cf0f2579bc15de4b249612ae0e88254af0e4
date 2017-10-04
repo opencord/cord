@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_9ca0e7f5",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-10-04T16:04:29Z",
+      "side": 1,
+      "message": "this can be also 16.04. we say it also in the software requirements requirements section for the physical pod",
+      "range": {
+        "startLine": 45,
+        "startChar": 41,
+        "endLine": 45,
+        "endChar": 61
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7ca53303",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-10-04T16:04:29Z",
+      "side": 1,
+      "message": "Can we delete references to Cloudlab here?",
+      "range": {
+        "startLine": 45,
+        "startChar": 63,
+        "endLine": 45,
+        "endChar": 71
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5caa6fd5",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-10-04T16:04:29Z",
+      "side": 1,
+      "message": "do we want to say it directly together with the first sentence above?",
+      "range": {
+        "startLine": 47,
+        "startChar": 68,
+        "endLine": 48,
+        "endChar": 65
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
