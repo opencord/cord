@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_9ceea721",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T17:15:05Z",
+      "side": 1,
+      "message": "I tested the build on 16.04 yesterday and it didn\u0027t complete a build.  Do we still want to claim this?",
+      "parentUuid": "9a5c5d37_9ca0e7f5",
+      "range": {
+        "startLine": 45,
+        "startChar": 41,
+        "endLine": 45,
+        "endChar": 61
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7cf3f30a",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T17:15:05Z",
+      "side": 1,
+      "message": "Yes, can do.",
+      "parentUuid": "9a5c5d37_7ca53303",
+      "range": {
+        "startLine": 45,
+        "startChar": 63,
+        "endLine": 45,
+        "endChar": 71
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_5caa6fd5",
         "filename": "docs/install.md",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2017-10-04T16:04:29Z",
       "side": 1,
       "message": "do we want to say it directly together with the first sentence above?",
+      "range": {
+        "startLine": 47,
+        "startChar": 68,
+        "endLine": 48,
+        "endChar": 65
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5cf82fe5",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T17:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_5caa6fd5",
       "range": {
         "startLine": 47,
         "startChar": 68,
