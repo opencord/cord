@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_95ff9f01",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "I\u0027ll add \"tested with...\" and the version numbers here to provide guidance.",
+      "parentUuid": "9a5c5d37_9a2b4ceb",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_baee10b3",
         "filename": "docs/install.md",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-30T18:59:04Z",
       "side": 1,
       "message": "This has been already adapted by Andy to work also on 16.04. Gopi and I already tested it and worked. The important thing to say is that to have guarantees that the script works, people should have a cleanly installed OS",
+      "range": {
+        "startLine": 42,
+        "startChar": 22,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f536dbe6",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "I\u0027ll mention this may work on 16.04 in the last line of this paragraph.",
+      "parentUuid": "9a5c5d37_baee10b3",
       "range": {
         "startLine": 42,
         "startChar": 22,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_1513af5d",
+        "filename": "docs/install.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "Yes, there\u0027s a \"fire and forget\"  that I frequently use that does the whole build and test: \n\n  cord-bootstrap.sh -v -t \"PODCONFIG\u003drcord-virtual.yml config\" -t \"build\" -t \"pod-test\"\n\nI\u0027ll add this somewhere...",
+      "parentUuid": "9a5c5d37_7a309856",
+      "range": {
+        "startLine": 59,
+        "startChar": 2,
+        "endLine": 59,
+        "endChar": 87
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_5a35d444",
         "filename": "docs/quickstarts.md",
         "patchSetId": 5
@@ -94,6 +166,53 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_19c76947",
+        "filename": "docs/quickstarts.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_5a35d444",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_59b5e1cb",
+        "filename": "docs/quickstarts.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "ah, here\u0027s where I put that sequential use of `-t` example.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 3
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_3a3a2037",
         "filename": "docs/troubleshooting.md",
         "patchSetId": 5
@@ -105,6 +224,30 @@
       "writtenOn": "2017-09-30T18:59:04Z",
       "side": 1,
       "message": "I assume we\u0027re on the dev node? Should we make it more clear?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 10
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f9c37536",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "I\u0027ll add a section at the top that explains where to go to start debugging.",
+      "parentUuid": "9a5c5d37_3a3a2037",
       "range": {
         "startLine": 1,
         "startChar": 0,
@@ -140,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_d9c0b12c",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_1a3f5c27",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 3
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_da48a4ce",
         "filename": "docs/troubleshooting.md",
         "patchSetId": 5
@@ -163,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_d91c31c4",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_da48a4ce",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 52
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_fa3b6836",
         "filename": "docs/troubleshooting.md",
         "patchSetId": 5
@@ -174,6 +365,30 @@
       "writtenOn": "2017-09-30T18:59:04Z",
       "side": 1,
       "message": "Is this something that can be done at runtime, while the system has been installed? I\u0027m not confused...on what node are we now? :P",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 19
+      },
+      "revId": "30543e987a5e26d642b81c6a141936383f46663a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_f91ff5b5",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-10-04T00:47:46Z",
+      "side": 1,
+      "message": "It can be done at runtime via the ONOS CLI - this just automates the process.",
+      "parentUuid": "9a5c5d37_fa3b6836",
       "range": {
         "startLine": 27,
         "startChar": 0,
