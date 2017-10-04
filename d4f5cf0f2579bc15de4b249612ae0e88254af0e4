@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_1cdab778",
+        "filename": "docs/install.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-10-04T17:17:26Z",
+      "side": 1,
+      "message": "If this is the case, something changed....as far as we knew the installation was just fine. Any insight? We can go back on this..this should be considered a bug then..Rather than changing the guide, I\u0027d try to understand what the issue is.",
+      "parentUuid": "9a5c5d37_9ceea721",
+      "range": {
+        "startLine": 45,
+        "startChar": 41,
+        "endLine": 45,
+        "endChar": 61
+      },
+      "revId": "d4f5cf0f2579bc15de4b249612ae0e88254af0e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_5caa6fd5",
         "filename": "docs/install.md",
         "patchSetId": 7
