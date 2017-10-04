@@ -115,7 +115,7 @@ clean-genconfig:
 	rm -f $(CONFIG_FILES)
 
 clean-profile:
-	rm -rf $(CONFIG_CORD_PROFILE_DIR)
+	rm -rf $(CONFIG_CORD_PROFILE_DIR)/*
 	rm -f $(M)/cord-config $(M)/copy-config $(M)/onboard-profile $(M)/local-onboard-profile $(M)/onboard-openstack $(M)/refresh-fabric
 
 clean-all: virsh-domain-destroy vagrant-destroy clean-profile clean-genconfig
