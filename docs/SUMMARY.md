@@ -32,6 +32,7 @@
     * [Workflow: Mock Configuration](xos/dev/workflow_mock_single.md)
     * [Workflow: Virtual POD](xos/dev/workflow_pod.md)
     * [Example Service](xos/example_service.md)
+    * [Bootstrapping data in XOS](platform-install/bootstrap_models_in_xos.md)
     * [Configuring XOS](xos/modules/xosconfig.md)
     * [GUI Development](xos-gui/developer/README.md)
         * [Quickstart](xos-gui/developer/quickstart.md)
