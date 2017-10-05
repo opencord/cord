@@ -162,15 +162,16 @@ xos-update-images: clean-images
 
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS     ?=
-COPY_CORD_PREREQS      ?=
-CORD_CONFIG_PREREQS    ?=
-COPY_CONFIG_PREREQS    ?=
-PREP_BUILDNODE_PREREQS ?=
-PREP_HEADNODE_PREREQS  ?=
-DOCKER_IMAGES_PREREQS  ?=
-START_XOS_PREREQS      ?=
-DEPLOY_ONOS_PREREQS    ?=
+VAGRANT_UP_PREREQS       ?=
+COPY_CORD_PREREQS        ?=
+CORD_CONFIG_PREREQS      ?=
+COPY_CONFIG_PREREQS      ?=
+PREP_BUILDNODE_PREREQS   ?=
+PREP_HEADNODE_PREREQS    ?=
+DOCKER_IMAGES_PREREQS    ?=
+START_XOS_PREREQS        ?=
+BUILD_ONOS_APPS_PREREQS  ?=
+DEPLOY_ONOS_PREREQS      ?=
 DEPLOY_OPENSTACK_PREREQS ?=
 DEPLOY_MAVENREPO_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
@@ -259,15 +260,15 @@ $(M)/build-onos-apps: | $(M)/prep-buildnode $(BUILD_ONOS_APPS_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
-$(M)/publish-onos-apps: | $(M)/deploy-maas $(M)/build-onos-apps
+$(M)/publish-onos-apps: | $(M)/build-onos-apps
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
+$(M)/deploy-mavenrepo: | $(M)/build-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
+$(M)/deploy-onos: | $(M)/docker-images $(M)/deploy-mavenrepo $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
 
