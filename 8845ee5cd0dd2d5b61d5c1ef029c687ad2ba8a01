@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_c2b67adc",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-10-05T20:55:21Z",
+      "side": 1,
+      "message": "This is fine, but seems like it could be relaxed to publish_onos_apps_prereqs",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "8845ee5cd0dd2d5b61d5c1ef029c687ad2ba8a01",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
