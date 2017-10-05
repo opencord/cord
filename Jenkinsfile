@@ -23,8 +23,8 @@ node ("${config.dev_node.name}") {
             checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
         }
 
-        dir('build') {
-            try {
+        try {
+            dir('build') {
                 stage ("Re-deploy head node and Build Vagrant box") {
                     parallel(
                         maasOps: {
@@ -194,24 +194,24 @@ node ("${config.dev_node.name}") {
                         }
                     }
                 }
-
-                if (config.make_release == true) {
-                    stage ("Trigger Build") {
-                        url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
-                        httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
-                    }
-                }
-
-                currentBuild.result = 'SUCCESS'
-            } catch (err) {
-                currentBuild.result = 'FAILURE'
-                step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
-            } finally {
-                sh 'vagrant destroy -f corddev'
-                sh 'rm -rf config/pod-configs'
             }
-            echo "RESULT: ${currentBuild.result}"
-       }
+            if (config.make_release == true) {
+                stage ("Trigger Build") {
+                    url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
+                    httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
+                }
+            }
+
+            currentBuild.result = 'SUCCESS'
+        } catch (err) {
+            currentBuild.result = 'FAILURE'
+            step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
+        } finally {
+            sh 'cd build && vagrant destroy -f corddev'
+            sh 'rm -rf *'
+        }
+
+        echo "RESULT: ${currentBuild.result}"
     }
 }
 
