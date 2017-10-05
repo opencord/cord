@@ -267,7 +267,7 @@ $(M)/deploy-mavenrepo: | $(M)/publish-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-onos: | $(M)/docker-images $(DEPLOY_ONOS_PREREQS)
+$(M)/deploy-onos: | $(M)/docker-images $(M)/deploy-mavenrepo $(DEPLOY_ONOS_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-onos-playbook.yml $(LOGCMD)
 	touch $@
 

@@ -67,7 +67,6 @@ deploy_openstack_prereqs:
 
 deploy_onos_prereqs:
   - deploy-maas
-  - deploy-mavenrepo
   - publish-docker-images
 
 deploy_mavenrepo_prereqs:
