@@ -65,9 +65,11 @@ start_xos_prereqs:
 deploy_openstack_prereqs:
   - deploy-maas
 
+build_onos_apps_prereqs:
+  - deploy-maas
+
 deploy_onos_prereqs:
   - deploy-maas
-  - deploy-mavenrepo
   - publish-docker-images
 
 deploy_mavenrepo_prereqs:
