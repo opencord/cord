@@ -291,7 +291,7 @@ $(M)/publish-docker-images: | $(M)/deploy-maas $(M)/docker-images $(M)/core-imag
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
-$(M)/start-xos: | $(M)/prep-headnode $(M)/core-image $(START_XOS_PREREQS)
+$(M)/start-xos: | $(M)/prep-headnode $(M)/cord-config $(M)/core-image $(START_XOS_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/start-xos-playbook.yml" $(LOGCMD)
 	touch $@
 
