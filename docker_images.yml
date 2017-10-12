@@ -197,3 +197,8 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/internetemulator-synchronizer
+    repo: internetemulator
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
