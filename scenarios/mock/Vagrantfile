@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
   # sync these folders with VM
   config.vm.synced_folder "../../../", "/opt/cord/", create: true
   config.vm.synced_folder "../../../../cord_profile/", "/opt/cord_profile/", create: true
+  config.vm.synced_folder "../../platform-install/credentials/", "/opt/credentials/", create: true
 
   # set the headnode VM
   config.vm.define "headnode" do |d|
