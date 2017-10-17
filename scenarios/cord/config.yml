@@ -1,5 +1,4 @@
 ---
-
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +46,11 @@ management_network: '10.1.0.0/24'
 build_targets:
  - setup-automation
 
+copy_cord_prereqs:
+  - vagrant-ssh-install
+
 cord_config_prereqs:
+  - vagrant-ssh-install
   - copy-cord
 
 copy_config_prereqs:
