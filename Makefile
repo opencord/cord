@@ -346,6 +346,9 @@ $(M)/refresh-fabric: | $(M)/compute1-up
 pod-test: $(M)/setup-automation collect-diag
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/pod-test-playbook.yml" $(LOGCMD)
 
+mcord-test: $(M)/setup-automation
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-test-playbook.yml" $(LOGCMD)
+
 fabric-pingtest: $(M)/refresh-fabric
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
 
