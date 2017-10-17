@@ -93,51 +93,55 @@ node ("${config.dev_node.name}") {
                     sh "vagrant ssh -c \"cd /cord/build; ./gradlew -PtargetReg=${config.head.ip}:5000 -PdeployConfig=config/pod-configs/${config.pod_config.file_name} deploy\" corddev"
                 }
 
-                stage ("Power cycle compute nodes") {
-                    for(int i=0; i < config.compute_nodes.size(); i++) {
-                        sh "ipmitool -U ${config.compute_nodes[i].ipmi.user} -P ${config.compute_nodes[i].ipmi.pass} -H ${config.compute_nodes[i].ipmi.ip} power cycle"
-                    }
-                }
+                if (config.compute_nodes != null) {
 
-                stage ("Wait for compute nodes to get deployed") {
-                    sh "ssh-keygen -f /home/${config.dev_node.user}/.ssh/known_hosts -R ${config.head.ip}"
-                    def cordApiKey = runCmd("${config.head.ip}",
-                                            "${config.head.user}",
-                                            "${config.head.pass}",
-                                            "sudo maas-region-admin apikey --username ${config.head.user}")
-                    runCmd("${config.head.ip}",
-                           "${config.head.user}",
-                           "${config.head.pass}",
-                           "maas login pod-maas http://${config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
-                    timeout(time: 45) {
-                        waitUntil {
-                            try {
-                                num = runCmd("${config.head.ip}",
-                                             "${config.head.user}",
-                                             "${config.head.pass}",
-                                             "maas pod-maas nodes list | grep -i deployed | wc -l").trim()
-                                return num.toInteger() == config.compute_nodes.size()
-                            } catch (exception) {
-                                return false
+                    stage ("Power cycle compute nodes") {
+                        for(int i=0; i < config.compute_nodes.size(); i++) {
+                            sh "ipmitool -U ${config.compute_nodes[i].ipmi.user} -P ${config.compute_nodes[i].ipmi.pass} -H ${config.compute_nodes[i].ipmi.ip} power cycle"
+                        }
+                    }
+
+                    stage ("Wait for compute nodes to get deployed") {
+                        sh "ssh-keygen -f /home/${config.dev_node.user}/.ssh/known_hosts -R ${config.head.ip}"
+                        def cordApiKey = runCmd("${config.head.ip}",
+                                                "${config.head.user}",
+                                                "${config.head.pass}",
+                                                "sudo maas-region-admin apikey --username ${config.head.user}")
+                        runCmd("${config.head.ip}",
+                               "${config.head.user}",
+                               "${config.head.pass}",
+                               "maas login pod-maas http://${config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
+                        timeout(time: 45) {
+                            waitUntil {
+                                try {
+                                    num = runCmd("${config.head.ip}",
+                                                 "${config.head.user}",
+                                                 "${config.head.pass}",
+                                                 "maas pod-maas nodes list | grep -i deployed | wc -l").trim()
+                                    return num.toInteger() == config.compute_nodes.size()
+                                } catch (exception) {
+                                    return false
+                                }
                             }
                         }
                     }
-                }
 
-                stage ("Wait for compute nodes to be provisioned") {
-                    timeout(time:45) {
-                        waitUntil {
-                            try {
-                                num = runCmd("${config.head.ip}",
-                                             "${config.head.user}",
-                                             "${config.head.pass}",
-                                             "cord prov list '|' grep -i node '|' grep -i complete '|' wc -l").trim()
-                                return num.toInteger() == config.compute_nodes.size()
-                            } catch (exception) {
-                                return false
+                    stage ("Wait for compute nodes to be provisioned") {
+                        timeout(time:45) {
+                            waitUntil {
+                                try {
+                                    num = runCmd("${config.head.ip}",
+                                                 "${config.head.user}",
+                                                 "${config.head.pass}",
+                                                 "cord prov list '|' grep -i node '|' grep -i complete '|' wc -l").trim()
+                                    return num.toInteger() == config.compute_nodes.size()
+                                } catch (exception) {
+                                    return false
+                                }
                             }
                         }
                     }
+
                 }
 
                 if (config.fabric_switches != null) {
