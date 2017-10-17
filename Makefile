@@ -167,7 +167,7 @@ xos-update-images: clean-images
 VAGRANT_UP_PREREQS       ?=
 COPY_CORD_PREREQS        ?=
 CORD_CONFIG_PREREQS      ?=
-COPY_CONFIG_PREREQS      ?=
+CONFIG_SSH_KEY_PREREQS   ?=
 PREP_BUILDNODE_PREREQS   ?=
 PREP_HEADNODE_PREREQS    ?=
 DOCKER_IMAGES_PREREQS    ?=
@@ -204,7 +204,7 @@ $(M)/vagrant-ssh-install: | $(M)/vagrant-up
 	$(ANSIBLE_PB) $(BUILD)/ansible/vagrant-ssh-install.yml $(LOGCMD)
 	touch $@
 
-$(M)/config-ssh-key: | $(M)/vagrant-up
+$(M)/config-ssh-key: | $(CONFIG_SSH_KEY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/config-ssh-key.yml $(LOGCMD)
 	touch $@
 
