@@ -52,14 +52,14 @@ BUILD_TARGETS           = $(M)/{{ build_targets | join(" $(M)/") }}
 {% if vagrant_up_prereqs is defined %}
 VAGRANT_UP_PREREQS      = $(M)/{{ vagrant_up_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if config_ssh_key_prereqs is defined %}
+CONFIG_SSH_KEY_PREREQS      = $(M)/{{ config_ssh_key_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if copy_cord_prereqs is defined %}
 COPY_CORD_PREREQS       = $(M)/{{ copy_cord_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if cord_config_prereqs is defined %}
 CORD_CONFIG_PREREQS     = $(M)/{{ cord_config_prereqs | join(" $(M)/") }}
-{% endif %}
-{% if copy_config_prereqs is defined %}
-COPY_CONFIG_PREREQS     = $(M)/{{ copy_config_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if prep_buildnode_prereqs is defined %}
 PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}

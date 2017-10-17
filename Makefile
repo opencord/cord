@@ -204,7 +204,7 @@ $(M)/vagrant-ssh-install: | $(M)/vagrant-up
 	$(ANSIBLE_PB) $(BUILD)/ansible/vagrant-ssh-install.yml $(LOGCMD)
 	touch $@
 
-$(M)/config-ssh-key: | $(M)/vagrant-up
+$(M)/config-ssh-key: | $(CONFIG_SSH_KEY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/config-ssh-key.yml $(LOGCMD)
 	touch $@
 
