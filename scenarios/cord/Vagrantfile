@@ -16,13 +16,13 @@ Vagrant.configure(2) do |config|
     d.vm.box = "ubuntu/trusty64"
     d.vm.hostname = "corddev"
     d.vm.network "private_network", ip: "10.100.198.200"
+    d.vm.synced_folder $cordpath, settings['build_cord_dir']
     d.vm.synced_folder settings['host_cord_profile_dir'], settings['build_cord_profile_dir'], create: true
     d.vm.provision :hosts do |provisioner|
       provisioner.autoconfigure = true
       provisioner.sync_hosts = true
       provisioner.add_host '10.100.198.201', ['docker-registry']
     end
-    d.vm.synced_folder $cordpath, settings['build_cord_dir']
     d.vm.provider :virtualbox do |v|
       v.memory = settings['dev_vm_mem']
       v.cpus = settings['dev_vm_cpu']
@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
       v.memory = settings['dev_vm_mem']
       v.cpus = settings['dev_vm_cpu']
       override.vm.synced_folder $cordpath, settings['build_cord_dir'], type: "nfs"
+      override.vm.synced_folder settings['host_cord_profile_dir'], settings['build_cord_profile_dir'], type: "nfs"
     end
   end
 
