@@ -46,6 +46,9 @@ management_network: '10.1.0.0/24'
 build_targets:
  - setup-automation
 
+config_ssh_key_prereqs:
+  - vagrant-ssh-install
+
 copy_cord_prereqs:
   - vagrant-ssh-install
 
