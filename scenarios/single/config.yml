@@ -45,6 +45,9 @@ physical_node_list:
 build_targets:
   - onboard-profile
 
+cord_config_prereqs:
+  - vagrant-ssh-install
+
 prep_headnode_prereqs:
   - prep-buildnode
 
