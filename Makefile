@@ -64,14 +64,15 @@ VIRSH_CORDDEV_DOMAIN ?= cord_corddev
 
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
+EXTRA_VARS       ?= --extra-vars "@/opt/cord_profile/genconfig/config.yml"
 
 # Commands
 SHELL            = bash -o pipefail
 VAGRANT          ?= VAGRANT_CWD=$(VAGRANT_CWD) vagrant
 ANSIBLE          ?= ansible -i $(INVENTORY)
 ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG)
-ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost --extra-vars "@/opt/cord_profile/genconfig/config.yml"
-ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory --extra-vars "@/opt/cord_profile/genconfig/config.yml"
+ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
+ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py
 LOGCMD           ?= 2>&1 | tee -a $(LOGS)/$(TS)_$(@F)
 SSH_HEAD         ?= ssh $(HEADNODE)
@@ -97,9 +98,10 @@ printconfig:
 	@echo "Scenario: '$(SCENARIO)'"
 	@echo "Profile: '$(PROFILE)'"
 
-# Primary Targets
+# == BUILD TARGET == #
+# This is entirely determined by the podconfig/scenario, and should generally
+# be set to only one value - everything else should be a dependency
 build: $(BUILD_TARGETS)
-
 
 # Utility targets
 ansible-ping:
@@ -172,9 +174,10 @@ DOCKER_IMAGES_PREREQS    ?=
 START_XOS_PREREQS        ?=
 BUILD_ONOS_APPS_PREREQS  ?=
 DEPLOY_ONOS_PREREQS      ?=
-DEPLOY_OPENSTACK_PREREQS ?=
 DEPLOY_MAVENREPO_PREREQS ?=
+DEPLOY_OPENSTACK_PREREQS ?=
 SETUP_AUTOMATION_PREREQS ?=
+
 
 # == MILESTONES == #
 # empty target files are touched in the milestones dir to indicate completion
@@ -205,26 +208,26 @@ $(M)/config-ssh-key: | $(M)/vagrant-up
 	$(ANSIBLE_PB) $(BUILD)/ansible/config-ssh-key.yml $(LOGCMD)
 	touch $@
 
-$(M)/copy-cord: | $(M)/vagrant-ssh-install $(COPY_CORD_PREREQS)
+$(M)/copy-cord: | $(COPY_CORD_PREREQS)
 	$(ANSIBLE_PB) $(PI)/copy-cord-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/cord-config: | $(M)/vagrant-ssh-install $(CORD_CONFIG_PREREQS)
+$(M)/cord-config: | $(CORD_CONFIG_PREREQS)
 	$(ANSIBLE_PB) $(PI)/cord-config-playbook.yml $(LOGCMD)
 	cp -r $(GENCONFIG_D) $(CONFIG_CORD_PROFILE_DIR)/genconfig
 	touch $@
 
-$(M)/copy-config: | $(COPY_CONFIG_PREREQS)
+$(M)/copy-config: | $(M)/cord-config
 	$(ANSIBLE_PB) $(PI)/copy-profile-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/prep-buildnode: | $(M)/vagrant-ssh-install $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
+$(M)/prep-buildnode: | $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-buildnode-playbook.yml $(LOGCMD)
 	@echo Waiting 20 seconds to timeout SSH ControlPersist, and so future ansible commands gain docker group membership
 	sleep 20
 	touch $@
 
-$(M)/prep-headnode: | $(M)/vagrant-ssh-install $(M)/cord-config $(PREP_HEADNODE_PREREQS)
+$(M)/prep-headnode: | $(M)/cord-config $(PREP_HEADNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-headnode-playbook.yml $(LOGCMD)
 	touch $@
 

@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # mock ("mockup") scenario
 # Brings up just core containers without synchronizers, for API tests and GUI dev
 
@@ -44,6 +42,9 @@ physical_node_list:
 # make targets
 build_targets:
   - onboard-profile
+
+cord_config_prereqs:
+  - vagrant-ssh-install
 
 prep_headnode_prereqs:
   - prep-buildnode
