@@ -94,7 +94,7 @@ node ("${config.dev_node.name}") {
                 }
 
                 stage ("Deploy") {
-                    sh "make -j4 build"
+                    sh "make build"
                 }
 
                 if (config.compute_nodes != null) {
