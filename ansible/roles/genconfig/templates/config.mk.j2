@@ -41,7 +41,7 @@ CONFIG_CORD_PROFILE_DIR = {{ config_cord_profile_dir }}
 {% if build_cord_dir is defined %}
 BUILD_CORD_DIR = {{ build_cord_dir }}
 {% endif %}
-{% if skipTags is defined %}
+{% if skipTags is defined and skipTags %}
 ANSIBLE_ARGS += --skip-tags "{{ skipTags | join(",") }}"
 {% endif %}
 
