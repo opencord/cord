@@ -22,9 +22,12 @@
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
 
+headnode: localhost
+
 # head = config in local scenario
 head_cord_dir: "{{ config_cord_dir }}"
 head_cord_profile_dir: "{{ config_cord_profile_dir }}"
+head_credentials_dir: "~/cord/build/platform-install/credentials"
 
 # make targets
 build_targets:
