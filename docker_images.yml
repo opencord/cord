@@ -202,8 +202,3 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/sdncontroller-synchronizer
-    repo: sdn-controller
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
