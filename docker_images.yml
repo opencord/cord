@@ -207,3 +207,7 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/vspgwc-synchronizer
+    repo: vspgwc
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
