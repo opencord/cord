@@ -197,3 +197,17 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/internetemulator-synchronizer
+    repo: internetemulator
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/sdncontroller-synchronizer
+    repo: sdn-controller
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vspgwc-synchronizer
+    repo: vspgwc
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
