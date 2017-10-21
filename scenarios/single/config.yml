@@ -97,6 +97,7 @@ docker_image_whitelist:
   - "xosproject/internetemulator-synchronizer"
   - "xosproject/sdncontroller-synchronizer"
   - "xosproject/vspgwc-synchronizer"
+  - "xosproject/vspgwu-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
