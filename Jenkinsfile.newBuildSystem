@@ -97,6 +97,10 @@ node ("${config.dev_node.name}") {
                     sh "make build"
                 }
 
+                stage ("Collect Diagnostics 1") {
+                    sh "make collect-diag"
+                }
+
                 if (config.compute_nodes != null) {
 
                     stage ("Power cycle compute nodes") {
