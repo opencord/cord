@@ -224,3 +224,8 @@ buildable_images:
     repo: venb
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/templateservice-synchronizer
+    repo: templateservice
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"

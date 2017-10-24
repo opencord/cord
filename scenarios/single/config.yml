@@ -93,6 +93,7 @@ docker_image_whitelist:
   - "xosproject/vspgwc-synchronizer"
   - "xosproject/vspgwu-synchronizer"
   - "xosproject/venb-synchronizer"
+  - "xosproject/templateservice-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
