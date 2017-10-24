@@ -219,3 +219,8 @@ buildable_images:
     repo: vspgwu
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/venb-synchronizer
+    repo: venb
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
