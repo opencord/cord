@@ -29,14 +29,8 @@ head_vm_mem: 4096
 head_vm_cpu: 8
 head_vm_ip: "192.168.46.100"
 
-vagrant_vms:
-  - headnode
-
-buildnode: headnode
-headnode: headnode
-
 physical_node_list:
-  - name: headnode
+  - name: head1
     ipv4_last_octet: 1
     aliases:
       - head
@@ -113,10 +107,10 @@ inventory_groups:
       ansible_connection: local
 
   build:
-    headnode:
+    head1:
 
   head:
-    headnode:
+    head1:
 
   compute:
 
