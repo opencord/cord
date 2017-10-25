@@ -134,6 +134,14 @@ The included POD configs are generally named `<profile>-<scenario>.yml`.
 POD configs are used during a build by passing them with the `PODCONFIG`
 variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
 
+### Password
+
+If you use an included pod config you can modify the password of your
+deployment after having run the `make PODCONFIG`.
+TO do so please issue the command:
+`echo "xos_admin_pass: <your_password_here>" >> genconfig/config.yml`
+Substituting to <your_password_here> the set of characters you want.
+
 ### Profiles
 
 The set of services that XOS on-boards into CORD -- the  _Service Graph_, and
