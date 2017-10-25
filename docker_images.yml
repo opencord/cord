@@ -116,6 +116,10 @@ buildable_images:
     repo: rcord
     path: "xos/gui"
 
+  - name: xosproject/gui-extension-veestat
+    repo: vEE
+    path: "xos/veestat"
+
   - name: xosproject/gui-extension-vtr
     repo: vtr
     path: "xos/gui"
