@@ -115,7 +115,7 @@ node ("${config.dev_node.name}") {
                                "${config.head.user}",
                                "${config.head.pass}",
                                "maas login pod-maas http://${config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
-                        timeout(time: 45) {
+                        timeout(time: 90) {
                             waitUntil {
                                 try {
                                     num = runCmd("${config.head.ip}",
