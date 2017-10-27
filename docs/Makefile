@@ -34,11 +34,11 @@ cord-tester:
 	ln -s ../../test/cord-tester/docs cord-tester
 
 profiles:
-	mkdir -p profiles/rcord profiles/ecord profiles/mcord profiles/opencloud
-	ln -s ../../../../orchestration/profiles/rcord/docs/README.md profiles/rcord/
-	ln -s ../../../../orchestration/profiles/ecord/docs/README.md profiles/ecord/
-	ln -s ../../../../orchestration/profiles/mcord/docs/README.md profiles/mcord/
-	ln -s ../../../../orchestration/profiles/opencloud/docs/README.md profiles/opencloud/
+	mkdir profiles
+	ln -s ../../../orchestration/profiles/rcord/docs profiles/rcord
+	ln -s ../../../orchestration/profiles/ecord/docs profiles/ecord
+	ln -s ../../../orchestration/profiles/mcord/docs profiles/mcord
+	ln -s ../../../orchestration/profiles/opencloud/docs profiles/opencloud
 
 xos:
 	ln -s ../../orchestration/xos/docs xos
