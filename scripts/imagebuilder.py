@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 # imagebuilder.py
 # rebuilds/fetches docker container images per their git status in repo
 # in addition to docker, needs `sudo apt-get install python-git`
@@ -65,6 +63,7 @@ def setup_logging(name=None, logfile=False):
         log.addHandler(flh)
 
     return log
+
 
 LOG = setup_logging()
 
@@ -324,6 +323,7 @@ class RepoManifest():
     def get_repo(self, repo_name):
         return self.repos[repo_name]
 
+
 # DockerImage Status Constants
 
 DI_UNKNOWN = 'unknown'  # unknown status
@@ -362,8 +362,8 @@ class DockerImage():
         self.components = components
         self.status = status
 
-        self.parent_name = None  # set by _find_parent_name()
-        self.parent = None  # pointer to parent DockerImage object
+        self.parent_names = []  # names of parents from _find_parent_names()
+        self.parents = []  # list of parent DockerImage object
         self.children = []   # list of child DockerImage objects
 
         # split name:tag if given in combined format
@@ -393,7 +393,7 @@ class DockerImage():
 
         # self.clean only applies to this container
         self.clean = self._context_clean()
-        self._find_parent_name()
+        self._find_parent_names()
 
     def __str__(self):
         return self.name
@@ -420,8 +420,8 @@ class DockerImage():
             # check of subcomponents are clean
             components_clean = self.components_clean()
 
-            LOG.debug(" Build Context Cleanliness -")
-            LOG.debug("  repo: %s, context: %s, components: %s" %
+            LOG.debug(" Build Context Cleanliness - "
+                      "repo: %s, context: %s, components: %s" %
                       (repo_clean, context_clean, components_clean))
 
             if context_clean and repo_clean and components_clean:
@@ -431,14 +431,18 @@ class DockerImage():
 
         return True  # unbuildable images are clean
 
-    def parent_clean(self):
+    def parents_clean(self):
         """ if all parents are clean """
 
         if self.buildable():
-            if self.clean and self.parent.parent_clean():
-                return True
-            else:
+            if not self.clean:
                 return False
+            else:
+                for parent in self.parents:
+                    if not parent.parents_clean():
+                        return False
+                else:
+                    return True
 
         return True  # unbuildable images are clean
 
@@ -523,13 +527,13 @@ class DockerImage():
     def child_labels(self, repo_list=None):
         """ return a dict of labels to apply to child images """
 
-        LOG.debug(" Parent image %s generating child labels" % self.name)
+        LOG.debug(" Generating child labels from parent: %s" % self.name)
 
         # only create labels when they haven't already been created
         if repo_list is None:
             repo_list = []
 
-        LOG.debug(" Parents already labeled with: %s" % ", ".join(repo_list))
+        LOG.debug(" Already labeled with: %s" % ", ".join(repo_list))
 
         cl = {}
 
@@ -555,8 +559,9 @@ class DockerImage():
             cl.update(self.component_labels())
 
         # recursively find labels up the parent chain
-        if self.parent is not None:
-            cl.update(self.parent.child_labels(repo_list))
+        if self.parents is not None:
+            for parent in self.parents:
+                cl.update(parent.child_labels(repo_list))
 
         return cl
 
@@ -600,7 +605,7 @@ class DockerImage():
             LOG.debug("Creating tags for image: %s" % self.name)
 
             # if clean and parents clean, add tags for branch/commit
-            if self.parent_clean():
+            if self.parents_clean():
                 if build_tag not in self.tags:
                     self.tags.append(build_tag)
 
@@ -611,22 +616,27 @@ class DockerImage():
                     # pulling is done via raw_name, set tag to commit
                     self.raw_name = "%s:%s" % (self.name, commit_tag)
 
-            LOG.debug("All tags: %s" %
-                      ", ".join(self.tags))
+            LOG.debug("All tags: %s" % ", ".join(self.tags))
 
-    def _find_parent_name(self):
-        """ set self.parent_name using Dockerfile FROM line """
+    def _find_parent_names(self):
+        """ set self.parent_names using Dockerfile FROM lines """
 
         if self.buildable():
             # read contents of Dockerfile into df
             with open(self.dockerfile_abspath()) as dfh:
-                df = dfh.read()
+                dfl = dfh.readlines()
 
-            # find FROM line to determine image parent
-            frompatt = re.compile(r'^FROM\s+(.*)$', re.MULTILINE)
-            fromline = re.search(frompatt, df)
+            parent_names = []
+            frompatt = re.compile(r'^FROM\s+([\w/_:.-]+)', re.MULTILINE)
 
-            self.parent_name = fromline.group(1)  # may have tag
+            for line in dfl:
+                fromline = re.search(frompatt, line)
+                if fromline:
+                    parent_names.append(fromline.group(1))
+
+            self.parent_names = parent_names  # may have tag
+
+            LOG.debug(" Parents: %s" % ", ".join(self.parent_names))
 
     def dockerfile_abspath(self):
         """ returns absolute path to Dockerfile for this image """
@@ -669,9 +679,12 @@ class DockerImage():
             docker_ignore = os.path.join(context_path, '.dockerignore')
             if os.path.exists(docker_ignore):
                 for line in open(docker_ignore).readlines():
+                    # slightly out of spec, we allow whitespace before comments
+                    # https://docs.docker.com/engine/reference/builder/#dockerignore-file
                     if line.strip()[0] is not '#':
                         exclusion_list.append(line.strip().rstrip('\/'))
-            LOG.info("Exclusion list: %s" % exclusion_list)
+
+            LOG.debug("Exclusion list: %s" % exclusion_list)
 
             # see docker-py source for context
             for path in sorted(
@@ -795,7 +808,11 @@ class DockerBuilder():
     def _docker_connect(self):
         """ Connect to docker daemon """
 
-        self.dc = DockerClient()
+        try:
+            self.dc = DockerClient()
+        except requests.ConnectionError:
+            LOG.debug("Docker connection not available")
+            sys.exit(1)
 
         if self.dc.ping():
             LOG.debug("Docker server is responding")
@@ -862,9 +879,13 @@ class DockerBuilder():
     def create_dependency(self):
         """ set parent/child links for images """
 
-        # list of all parent image names, with dupes
-        parents_with_dupes = [img.parent_name for img in self.images
-                              if img.parent_name is not None]
+        # List of lists of parents images. Done in two steps for clarity
+        lol_of_parents = [img.parent_names for img in self.images
+                          if img.parent_names is not []]
+
+        # flat list of all parent image names, with dupes
+        parents_with_dupes = [parent for parent_sublist in lol_of_parents
+                              for parent in parent_sublist]
 
         # remove duplicates
         parents = list(set(parents_with_dupes))
@@ -898,22 +919,24 @@ class DockerBuilder():
             self.images.append(img_o)
 
         # now that all images (including parents) are in list, associate them
-        for image in filter(lambda img: img.parent_name is not None,
+        for image in filter(lambda img: img.parent_names is not [],
                             self.images):
 
             LOG.debug("Associating image: %s" % image.name)
 
-            parent = self.find_image(image.parent_name)
-            image.parent = parent
+            for parent_name in image.parent_names:
 
-            if parent is not None:
-                LOG.debug(" internal image '%s' is parent of '%s'" %
-                          (parent.name, image.name))
-                parent.children.append(image)
+                parent = self.find_image(parent_name)
+                image.parents.append(parent)
 
-            else:
-                LOG.debug(" external image '%s' is parent of '%s'" %
-                          (image.parent_name, image.name))
+                if parent is not None:
+                    LOG.debug(" internal image '%s' is parent of '%s'" %
+                              (parent.name, image.name))
+                    parent.children.append(image)
+
+                else:
+                    LOG.debug(" external image '%s' is parent of '%s'" %
+                              (image.parent_name, image.name))
 
         # loop again now that parents are linked to create labels
         for image in self.images:
@@ -921,13 +944,14 @@ class DockerBuilder():
             image.create_tags()
 
             # if image has parent, get labels from parent(s)
-            if image.parent is not None:
-                LOG.debug("Adding parent labels from %s to child %s" %
-                          (image.parent.name, image.name))
+            if image.parents is not None:
+                for parent in image.parents:
+                    LOG.debug("Adding parent labels from %s to child %s" %
+                              (parent.name, image.name))
 
-                # don't create component labels for same repo as image
-                repo_list = [image.repo_name]
-                image.labels.update(image.parent.child_labels(repo_list))
+                    # don't create component labels for same repo as image
+                    repo_list = [image.repo_name]
+                    image.labels.update(parent.child_labels(repo_list))
 
     def dependency_graph(self, graph_fn):
         """ save a DOT dependency graph to a file """
@@ -953,9 +977,10 @@ class DockerBuilder():
             name_g = image.raw_name.replace(':', '\n')
             dg.node(name_g)
 
-            if image.parent is not None:
-                name_p = image.parent.raw_name.replace(':', '\n')
-                dg.edge(name_p, name_g)
+            if image.parents is not None:
+                for parent in image.parents:
+                    name_p = parent.raw_name.replace(':', '\n')
+                    dg.edge(name_p, name_g)
 
             if image.components is not None:
                 for component in image.components:
@@ -992,17 +1017,17 @@ class DockerBuilder():
         """ determine whether to build/fetch images """
 
         # upstream images (have no parents), must be fetched
-        must_fetch_a = filter(lambda img: img.parent is None, self.images)
+        must_fetch_a = filter(lambda img: img.parents is [], self.images)
 
         for image in must_fetch_a:
             if image.status is not DI_EXISTS:
                 image.status = DI_FETCH
 
         # images that can be built or fetched (have parents)
-        b_or_f_a = filter(lambda img: img.parent is not None, self.images)
+        b_or_f_a = filter(lambda img: img.parents is not [], self.images)
 
         for image in b_or_f_a:
-            if not image.parent_clean():
+            if not image.parents_clean():
                 # must be built if not clean
                 image.status = DI_BUILD
             elif image.status is not DI_EXISTS:
@@ -1015,12 +1040,12 @@ class DockerBuilder():
                  ", ".join(c.name for c in c_and_e_a))
 
         upstream_a = filter(lambda img: (img.status is DI_FETCH and
-                                         img.parent is None), self.images)
+                                         img.parents is []), self.images)
         LOG.info("Upstream images that must be fetched: %s" %
                  ", ".join(u.raw_name for u in upstream_a))
 
         fetch_a = filter(lambda img: (img.status is DI_FETCH and
-                                      img.parent is not None), self.images)
+                                      img.parents is not []), self.images)
         LOG.info("Clean, buildable images to attempt to fetch: %s" %
                  ", ".join(f.raw_name for f in fetch_a))
 
@@ -1059,8 +1084,10 @@ class DockerBuilder():
         buildable = []
 
         for image in filter(lambda img: img.status is DI_BUILD, self.images):
-            if image.parent.status is DI_EXISTS:
-                buildable.append(image)
+            for parent in image.parents:
+                if parent.status is DI_EXISTS:
+                    if image not in buildable:  # build once if two parents
+                        buildable.append(image)
 
         LOG.debug("Buildable images: %s" %
                   ', '.join(image.name for image in buildable))
@@ -1114,6 +1141,20 @@ class DockerBuilder():
                         if 'error' in stat_d:
                             LOG.error(stat_d['error'])
                             sys.exit(1)
+
+            except (DockerErrors.NotFound, DockerErrors.ImageNotFound) as e:
+                LOG.warning("Image could not be pulled: %s , %s" %
+                            (e.errno, e.strerror))
+
+                self.failed_pull.append({
+                        "tags": [image.raw_name, ],
+                    })
+
+                if not image.parents:
+                    LOG.error("Pulled image required to build, not available!")
+                    sys.exit(1)
+
+                return False
 
             except:
                 LOG.exception("Error pulling docker image")
@@ -1266,14 +1307,19 @@ if __name__ == "__main__":
     # only include docker module if not a dry run
     if not args.dry_run:
         try:
+            import requests
             from distutils.version import LooseVersion
             from docker import __version__ as docker_version
+
+            # handle the docker-py v1 to v2 API differences
             if LooseVersion(docker_version) >= LooseVersion('2.0.0'):
                 from docker import APIClient as DockerClient
-                from docker import utils as DockerUtils
             else:
                 from docker import Client as DockerClient
-                from docker import utils as DockerUtils
+
+            from docker import utils as DockerUtils
+            from docker import errors as DockerErrors
+
         except ImportError:
             LOG.error("Unable to load python docker module (dry run?)")
             sys.exit(1)
