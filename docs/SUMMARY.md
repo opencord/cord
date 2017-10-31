@@ -42,6 +42,7 @@
         * [GUI Internals](xos-gui/architecture/README.md)
             * [Module Strucure](xos-gui/architecture/gui-modules.md)
             * [Data Sources](xos-gui/architecture/data-sources.md)
+    * [Unit Tests](xos/dev/unittest.md)
 * [Testing CORD](cord-tester/README.md)
     * [Running Tests](cord-tester/running.md)
     * [Test Environment](cord-tester/qa_testsetup.md)
