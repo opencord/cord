@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # base-virtual Pod Config
 # Creates a virtual multi-node CORD pod
 
@@ -22,7 +20,6 @@ cord_scenario: cord
 cord_profile: base-cord
 
 vagrant_up_prereqs:
-  - prereqs-check
   - ciab-ovs
 
 build_targets:
@@ -43,3 +40,4 @@ fabric_include_module_types: omit
 fabric_exclude_names: eth0,eth1
 management_include_names: eth1
 management_exclude_names: eth0,eth2
+
