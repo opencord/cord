@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_a049278d",
+        "filename": "docker_images.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-11-05T05:42:06Z",
+      "side": 1,
+      "message": "Jenkins build failed because of this trailing whitespace.\n\nLooks +2 worthy otherwise.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 2
+      },
+      "revId": "2c382ab71844995e13cb1d66b9f765ca19795eca",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
