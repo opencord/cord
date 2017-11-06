@@ -71,6 +71,7 @@ docker_image_whitelist:
   - "xosproject/chameleon"
   - "xosproject/gui-extension-rcord"
   - "xosproject/gui-extension-sample"
+  - "xosproject/gui-extension-veestat"
   - "xosproject/gui-extension-vnaas"
   - "xosproject/gui-extension-vtr"
   - "xosproject/xos-synchronizer-base"
