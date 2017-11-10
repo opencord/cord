@@ -65,6 +65,7 @@ Vagrant.configure(2) do |config|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']
       v.storage :file, :size => '100G', :type => 'qcow2'
+      override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
       override.vm.provision :ansible do |ansible|
         ansible.playbook = $cordpath + "/build/ansible/add-extra-drive.yml" # Needs testing
       end
