@@ -31,6 +31,17 @@ MAKECMD="${MAKECMD:-make -j4}"
 # CORD versioning
 REPO_BRANCH="${REPO_BRANCH:-master}"
 
+# Tool/OS versioning
+UBUNTU_VERSION="ubuntu/trusty64"
+
+HOST_RELEASE=`lsb_release -c -s`
+
+if [ ${HOST_RELEASE} = "trusty" ]; then
+  VAGRANT_LIBVIRT_VERSION="0.0.35"
+else
+  VAGRANT_LIBVIRT_VERSION="0.0.40"
+fi
+
 # Functions
 function run_stage {
     echo "==> "$1": Starting"
@@ -105,8 +116,8 @@ function bootstrap_vagrant() {
     sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev nfs-kernel-server
     sudo adduser $USER libvirtd
 
-    VAGRANT_SHA256SUM="faff6befacc7eed3978b4b71f0dbb9c135c01d8a4d13236bda2f9ed53482d2c4"  # version 1.9.3
-    curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/1.9.3/vagrant_1.9.3_x86_64.deb
+    VAGRANT_SHA256SUM="2f9498a83b3d650fcfcfe0ec7971070fcd3803fad6470cf7da871caf2564d84f"  # version 2.0.1
+    curl -o /tmp/vagrant.deb https://releases.hashicorp.com/vagrant/2.0.1/vagrant_2.0.1_x86_64.deb
     echo "$VAGRANT_SHA256SUM  /tmp/vagrant.deb" | sha256sum -c -
     sudo dpkg -i /tmp/vagrant.deb
   fi
@@ -114,13 +125,13 @@ function bootstrap_vagrant() {
   run_stage cloudlab_setup
 
   echo "Installing vagrant plugins if needed..."
-  vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
+  vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version ${VAGRANT_LIBVIRT_VERSION}
   vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
   vagrant plugin list | grep -q vagrant-hosts || vagrant plugin install vagrant-hosts
 
-  if ! vagrant box list | grep -q ubuntu/trusty64.*libvirt
+  if ! vagrant box list | grep -q ${UBUNTU_VERSION}.*libvirt
   then
-    add_box ubuntu/trusty64
+    add_box ${UBUNTU_VERSION}
   fi
 }
 

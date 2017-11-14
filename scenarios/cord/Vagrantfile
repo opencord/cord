@@ -30,8 +30,8 @@ Vagrant.configure(2) do |config|
     d.vm.provider :libvirt do |v, override|
       v.memory = settings['dev_vm_mem']
       v.cpus = settings['dev_vm_cpu']
-      override.vm.synced_folder $cordpath, settings['build_cord_dir'], type: "nfs"
-      override.vm.synced_folder settings['host_cord_profile_dir'], settings['build_cord_profile_dir'], type: "nfs"
+      override.vm.synced_folder $cordpath, settings['build_cord_dir'], type: "nfs", nfs_udp: false, nfs_version: 4
+      override.vm.synced_folder settings['host_cord_profile_dir'], settings['build_cord_profile_dir'], type: "nfs", nfs_udp: false, nfs_version: 4
     end
   end
 
@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']
       v.storage :file, :size => '100G', :type => 'qcow2'
-      override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
+      override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs", nfs_udp: false, nfs_version: 4
       override.vm.provision :ansible do |ansible|
         ansible.playbook = $cordpath + "/build/ansible/add-extra-drive.yml" # Needs testing
       end

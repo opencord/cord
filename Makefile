@@ -148,7 +148,7 @@ local-ubuntu-dev-env:
 	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
 
 vagrant-destroy:
-	$(VAGRANT) destroy -f $(LOGCMD)
+	$(VAGRANT) destroy -f $(LOGCMD) || true
 	rm -f $(M)/vagrant-up $(M)/vagrant-ssh-install $(VAGRANT_SSH_CONF)
 
 virsh-domain-destroy:
