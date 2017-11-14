@@ -139,7 +139,7 @@ compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 
 vagrant-destroy:
-	$(VAGRANT) destroy -f $(LOGCMD)
+	$(VAGRANT) destroy -f $(LOGCMD) || true
 	rm -f $(M)/vagrant-up $(M)/vagrant-ssh-install $(VAGRANT_SSH_CONF)
 
 virsh-domain-destroy:
