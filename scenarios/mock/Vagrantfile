@@ -28,6 +28,9 @@ Vagrant.configure("2") do |config|
     d.vm.provider :libvirt do |v|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']
+      override.vm.synced_folder "../../../", "/opt/cord/", type: "nfs", create: true
+      override.vm.synced_folder "../../../../cord_profile/", "/opt/cord_profile/", type: "nfs", create: true
+      override.vm.synced_folder "../../platform-install/credentials/", "/opt/credentials/", type: "nfs", create: true
     end
   end
 

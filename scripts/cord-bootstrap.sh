@@ -31,6 +31,10 @@ MAKECMD="${MAKECMD:-make -j4}"
 # CORD versioning
 REPO_BRANCH="${REPO_BRANCH:-master}"
 
+# Tool/OS versioning
+VAGRANT_LIBVIRT_VERSION="0.0.35"
+UBUNTU_VERSION="ubuntu/trusty"
+
 # Functions
 function run_stage {
     echo "==> "$1": Starting"
@@ -114,13 +118,13 @@ function bootstrap_vagrant() {
   run_stage cloudlab_setup
 
   echo "Installing vagrant plugins if needed..."
-  vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version 0.0.35
+  vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version ${VAGRANT_LIBVIRT_VERSION}
   vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
   vagrant plugin list | grep -q vagrant-hosts || vagrant plugin install vagrant-hosts
 
-  if ! vagrant box list | grep -q ubuntu/trusty64.*libvirt
+  if ! vagrant box list | grep -q ${UBUNTU_VERSION}.*libvirt
   then
-    add_box ubuntu/trusty64
+    add_box ${UBUNTU_VERSION}
   fi
 }
 
