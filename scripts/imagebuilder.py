@@ -674,7 +674,7 @@ class DockerImage():
             t = tarfile.open(mode='w', fileobj=t_fh, dereference=True)
 
             # exclude files in this list
-            exclusion_list = ['.git']
+            exclusion_list = ['**/.git']
 
             docker_ignore = os.path.join(context_path, '.dockerignore')
             if os.path.exists(docker_ignore):
