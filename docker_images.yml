@@ -49,6 +49,11 @@ pull_only_images:
 #    dest: destination path to copy components to, relative to context
 
 buildable_images:
+
+  - name: opencord/mavenrepo
+    repo: cord-onos-publisher
+    dockerfile: "Dockerfile.make"
+
   - name: xosproject/xos-base
     repo: xos
     path: "containers/xos"
@@ -233,3 +238,4 @@ buildable_images:
     repo: templateservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
