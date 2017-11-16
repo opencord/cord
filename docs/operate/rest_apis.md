@@ -17,3 +17,4 @@ manifest, and includes both core and service-specific models.
 * [Example Service](https://guide.opencord.org/{{ book.branch }}/api/xos/#/exampleservice)
 * [vEE](https://guide.opencord.org/{{ book.branch }}/api/xos/#/vee)
 * [vEG](https://guide.opencord.org/{{ book.branch }}/api/xos/#/veg)
+* [vnaas](https://guide.opencord.org/{{ book.branch }}/api/xos/#/vnaas)
