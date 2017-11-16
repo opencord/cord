@@ -110,12 +110,12 @@ buildable_images:
   - name: xosproject/xos-ws
     repo: xos-rest-gw
 
+  - name: xosproject/xos-gui-builder
+    repo: xos-gui
+    dockerfile: "Dockerfile.xos-gui-builder"
+
   - name: xosproject/xos-gui
     repo: xos-gui
-
-  - name: xosproject/xos-gui-extension-builder
-    repo: xos-gui
-    dockerfile: "Dockerfile.xos-gui-extension-builder"
 
   - name: xosproject/gui-extension-rcord
     repo: rcord
