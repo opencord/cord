@@ -259,15 +259,7 @@ $(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config
 
 
 # ONOS targets
-$(M)/build-onos-apps: | $(M)/prep-buildnode $(BUILD_ONOS_APPS_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) build" $(LOGCMD)
-	touch $@
-
-$(M)/publish-onos-apps: | $(M)/build-onos-apps
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/onos-apps; make MAKE_CONFIG=../build/$(MAKEFILE_CONFIG) publish" $(LOGCMD)
-	touch $@
-
-$(M)/deploy-mavenrepo: | $(M)/build-onos-apps $(DEPLOY_MAVENREPO_PREREQS)
+$(M)/deploy-mavenrepo: | $(M)/docker-images $(DEPLOY_MAVENREPO_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-mavenrepo-playbook.yml $(LOGCMD)
 	touch $@
 
