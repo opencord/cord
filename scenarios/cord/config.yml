@@ -68,13 +68,7 @@ start_xos_prereqs:
 deploy_openstack_prereqs:
   - deploy-maas
 
-build_onos_apps_prereqs:
-  - deploy-maas
-
 deploy_mavenrepo_prereqs:
-  - publish-onos-apps
-
-deploy_onos_prereqs:
   - publish-docker-images
 
 setup_automation_prereqs:
@@ -152,6 +146,7 @@ docker_image_whitelist:
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
+  - "opencord/mavenrepo"
   - "redis"
   - "node"
 

@@ -100,6 +100,7 @@ docker_image_whitelist:
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
+  - "opencord/mavenrepo"
   - "redis"
   - "node"
 
