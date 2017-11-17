@@ -344,6 +344,9 @@ mcord-test: $(M)/setup-automation
 mcord-spirent-test: $(M)/setup-automation
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-spirent-test-playbook.yml" $(LOGCMD)
 
+mcord-ng4t-test: $(M)/setup-automation
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-ng4t-test-playbook.yml" $(LOGCMD)
+
 fabric-pingtest: $(M)/refresh-fabric
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
 
