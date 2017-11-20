@@ -20,6 +20,8 @@ PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
 
+NG40_LICENSE_FILE ?= ~/ng40-license
+
 # Milestones/logs paths
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
@@ -162,6 +164,10 @@ xos-teardown: xos-update-images
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
 
+add-ng40-license:
+	@read -p "Enter license file name [$(NG40_LICENSE_FILE)]: " license; \
+	license=$${license:-$(NG40_LICENSE_FILE)}; \
+	cp $$license ../orchestration/xos_services/venb/xos/synchronizer/files/ng40-license
 
 # == PREREQS == #
 VAGRANT_UP_PREREQS       ?=
