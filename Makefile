@@ -20,6 +20,8 @@ PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
 
+NG4T_LICENSE_FILE ?= $(BUILD)/ng4t-license.txt
+
 # Milestones/logs paths
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
@@ -162,6 +164,10 @@ xos-teardown: xos-update-images
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
 
+add-ng4t-license:
+	@read -p "Enter license file name [$(NG4T_LICENSE_FILE)]: " license; \
+	license=$${license:-$(NG4T_LICENSE_FILE)}; \
+	cp $$license ../orchestration/xos_services/venb/xos/synchronizer/files/ng4t-license.txt
 
 # == PREREQS == #
 VAGRANT_UP_PREREQS       ?=
