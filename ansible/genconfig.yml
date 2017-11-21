@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,27 +13,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
----
 # ansible/genconfig.yml
-# Generate configuration files
+# Generate CORD configuration files
 
 - name: Load pod and scenario config files
   hosts: localhost
   connection: local
   gather_facts: False
+
   tasks:
 
     - name: Set pod_config_path fact
       set_fact:
         pod_config_path:  "{{ cord_podconfig | realpath }}"
 
+    - name: Check for PODCONFIG file
+      stat:
+        path: "{{ pod_config_path }}"
+      register: pod_config_stat
+
+    - name: POD config file specified by 'PODCONFIG' must exist
+      assert:
+        that: pod_config_stat.stat.isreg
+
     - name: Load pod config
       include_vars: "{{ pod_config_path }}"
+
+    - name: Set profile_manifest_path fact
+      set_fact:
+        profile_manifest_path:  "{{ (platform_install_dir ~ '/profile_manifests/' ~ cord_profile ~ '.yml') | realpath }}"
+
+    - name: Check for profile manifest
+      stat:
+        path: "{{ profile_manifest_path }}"
+      register: profile_manifest_stat
+
+    - name: Profile manifest file specified by 'cord_profile' must exist
+      assert:
+        that: profile_manifest_stat.stat.isreg
 
     - name: Set scenario_config_path fact
       set_fact:
         scenario_config_path:  "{{ (scenarios_dir ~ '/' ~ cord_scenario ~ '/config.yml') | realpath }}"
+
+    - name: Check for scenario config file manifest
+      stat:
+        path: "{{ scenario_config_path }}"
+      register: scenario_config_stat
+
+    - name: Scenario config.yml file specified by 'cord_scenario' must exist
+      assert:
+        that: scenario_config_stat.stat.isreg
 
     - name: Load scenario config
       include_vars: "{{ scenario_config_path }}"
@@ -41,14 +71,34 @@
     - name: Reload pod config to take precedence
       include_vars: "{{ pod_config_path }}"
 
-    - name: Load pod and scenario configs into facts
+    - name: Load pod, scenario, profile_manifest into facts
       set_fact:
         pod_config: "{{ lookup('file', pod_config_path) | from_yaml }}"
         scenario_config: "{{ lookup('file', scenario_config_path) | from_yaml }}"
+        profile_manifest: "{{ lookup('file', profile_manifest_path) | from_yaml }}"
 
     - name: Combine pod and scenario config into master config
       set_fact:
         master_config: "{{ scenario_config | combine(pod_config) }}"
+
+    - name: Prime profile_container_list from with master_config.docker_image_whitelist
+      set_fact:
+        profile_container_list: "{{ master_config.docker_image_whitelist }}"
+
+    - name: Add items to profile_container_list from profile_manifest.xos_services
+      set_fact:
+        profile_container_list: "{{ profile_container_list }} + [ 'xosproject/{{ item.name }}-synchronizer' ]"
+      with_items: "{{ profile_manifest.xos_services }}"
+      when: (not master_config.frontend_only) and (item.synchronizer is not defined or item.synchronizer)
+
+    - name: Add items to profile_container_list from profile_manifest.enabled_gui_extensions
+      set_fact:
+        profile_container_list: "{{ profile_container_list }} + [ 'xosproject/gui-extension-{{ item.name }}' ]"
+      with_items: "{{ profile_manifest.enabled_gui_extensions }}"
+
+    - name: Update docker_image_whitelist to include containers specified by profile
+      set_fact:
+        master_config: "{{ master_config | combine({'docker_image_whitelist': profile_container_list}, recursive=True) }}"
 
     - name: Print vars
       debug:
