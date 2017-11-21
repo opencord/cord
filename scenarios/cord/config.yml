@@ -1,8 +1,7 @@
 ---
 # Copyright 2017-present Open Networking Foundation
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
@@ -114,26 +113,19 @@ use_elasticstack: True
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
-  - "xosproject/xos-base"
-  - "xosproject/xos"
-  - "xosproject/xos-client"
-  - "xosproject/xos-corebuilder"
-  - "xosproject/xos-gui"
-  - "xosproject/xos-gui-builder"
-  - "xosproject/xos-libraries"
-  - "xosproject/xos-postgres"
-  - "xosproject/xos-tosca"
-  - "xosproject/xos-ws"
-  - "xosproject/chameleon"
-  - "xosproject/xos-synchronizer-base"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
-  - "nginx"
   - "onosproject/onos"
   - "opencord/mavenrepo"
   - "redis"
-  - "node"
   - "sebp/elk"
+  - "xosproject/chameleon"
+  - "xosproject/xos"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
 
 # node topology
 physical_node_list:

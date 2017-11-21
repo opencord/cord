@@ -137,30 +137,33 @@ def load_config():
     else:
         build_tag = conf['docker_build_tag']
 
-    if args.filter_images is None:
-        buildable_images = conf['buildable_images']
-        pull_only_images = conf['pull_only_images']
-    else:
+    buildable_images = conf.get('buildable_images', [])
+    pull_only_images = conf.get('pull_only_images', [])
+    directory_named_images = conf.get('pull_only_images', [])
+
+    if args.filter_images is not None:
         fi_abs = os.path.abspath(args.filter_images)
 
-        LOG.info("Filtering image list per 'docker_image_whitelist' in: %s" %
-                 fi_abs)
         try:
             fi_fh = open(fi_abs, 'r')
             filter_list = yaml.safe_load(fi_fh)
             fi_fh.close()
 
-            if 'docker_image_whitelist' not in filter_list:
-                LOG.error("No 'docker_image_whitelist' defined in: %s" %
-                          fi_abs)
+            LOG.info("Marking items in 'docker_images' as requested: %s" %
+                     fi_abs)
+
+            if 'docker_images' not in filter_list:
+                LOG.error("No 'docker_images' defined in: %s" % fi_abs)
                 sys.exit(1)
 
             # fail if filter list specifies tags
-            for f_i in filter_list['docker_image_whitelist']:
+            for f_i in filter_list['docker_images']:
                 (name, tag) = split_name(f_i)
                 if tag:
-                    LOG.error("filter list may not be tagged")
+                    LOG.error("filter whitelist may not be tagged")
                     sys.exit(1)
+
+            for item in
 
             buildable_images = [img for img in conf['buildable_images']
                                 if split_name(img['name'])[0]
@@ -907,7 +910,7 @@ class DockerBuilder():
 
         # List of lists of parents images. Done in two steps for clarity
         lol_of_parents = [img.parent_names for img in self.images
-                          if img.parent_names is not []]
+                          if img.parent_names != []]
 
         # flat list of all parent image names, with dupes
         parents_with_dupes = [parent for parent_sublist in lol_of_parents
@@ -945,7 +948,7 @@ class DockerBuilder():
             self.images.append(img_o)
 
         # now that all images (including parents) are in list, associate them
-        for image in filter(lambda img: img.parent_names is not [],
+        for image in filter(lambda img: img.parent_names != [],
                             self.images):
 
             LOG.debug("Associating image: %s" % image.name)
@@ -955,14 +958,9 @@ class DockerBuilder():
                 parent = self.find_image(parent_name)
                 image.parents.append(parent)
 
-                if parent is not None:
-                    LOG.debug(" internal image '%s' is parent of '%s'" %
-                              (parent.name, image.name))
-                    parent.children.append(image)
-
-                else:
-                    LOG.debug(" external image '%s' is parent of '%s'" %
-                              (image.parent_name, image.name))
+                LOG.debug(" internal image '%s' is parent of '%s'" %
+                          (parent.name, image.name))
+                parent.children.append(image)
 
         # loop again now that parents are linked to create labels
         for image in self.images:
@@ -1177,8 +1175,7 @@ class DockerBuilder():
                             sys.exit(1)
 
             except (DockerErrors.NotFound, DockerErrors.ImageNotFound) as e:
-                LOG.warning("Image could not be pulled: %s , %s" %
-                            (e.errno, e.strerror))
+                LOG.warning("Image could not be pulled: %s" % e)
 
                 self.failed_pull.append({
                         "tags": [image.raw_name, ],
