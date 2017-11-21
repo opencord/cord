@@ -100,24 +100,13 @@ docker_image_whitelist:
   - "xosproject/xos-tosca"
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
-  - "xosproject/gui-extension-rcord"
-  - "xosproject/gui-extension-sample"
-  - "xosproject/gui-extension-vtr"
   - "xosproject/xos-synchronizer-base"
-  - "xosproject/addressmanager-synchronizer"
-  - "xosproject/exampleservice-synchronizer"
-  - "xosproject/onos-synchronizer"
-  - "xosproject/openstack-synchronizer"
-  - "xosproject/vrouter-synchronizer"
-  - "xosproject/vtn-synchronizer"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
   - "redis"
   - "node"
-
-
 
 # Ansible Inventory
 inventory_groups:
