@@ -14,19 +14,22 @@
 # limitations under the License.
 
 # docker_images.yml
-# master list of docker images used by imagebuilder.py
+# master list of docker images used by scripts/imagebuilder.py
 
-# tag to set on every container built/downloaded
+# Tag to set on every container that is built/downloaded
 
 docker_build_tag: "candidate"
 
-# pull_only_images: images pulled and used directly without changes
+
+# pull_only_images - images pulled and used directly without changes
+#
 # you must include a tag (':1.0') on these images to pull the correct version
 #
-# do not include images in this list that are parents of images
-# in buildable_images - those are automatically pulled
+# do not include images in this list that are parents of images in
+# `buildable_images` - those are automatically pulled
 
 pull_only_images:
+
   - "gliderlabs/consul-server:0.6"
   - "gliderlabs/registrator:v7"
   - "nginx:1.13"
@@ -35,19 +38,21 @@ pull_only_images:
   - "node:7.9.0" # remove once the issue with node:candidate is resolved
   - "sebp/elk:564"
 
+
 # buildable_images - list of images that we build from Dockerfiles
 #
 # required:
-#  name: Name of docker image
-#  repo: git repo name (not the path! not what it's renamed to be in the repo manifest!)
+#   name: Name of docker image
+#   repo: git repo name (not the path! not what it's renamed to be in the repo manifest!)
+#
 # optional:
-#  dockerfile: Name of Dockerfile. Default: "Dockerfile"
-#  path: Path to parent directory of containing dockerfile, relative to. Default: "."
-#  context: Path to docker build context, relative to path item. Default: "."
-#  component: dict of sub-component paths to copy into build context.
-#    repo: Name of component repo to copy from (required)
-#    path: path in to copy from. Relative to component repo. Default "."
-#    dest: destination path to copy components to, relative to context
+#   dockerfile: Name of Dockerfile. Default: "Dockerfile"
+#   path: Path to parent directory of containing dockerfile, relative to. Default: "."
+#   context: Path to docker build context, relative to path item. Default: "."
+#   component: dict of sub-component paths to copy into build context.
+#     repo: Name of component repo to copy from (required)
+#     path: path in to copy from. Relative to component repo. Default "."
+#     dest: destination path to copy components to, relative to context
 
 buildable_images:
 
@@ -118,32 +123,18 @@ buildable_images:
   - name: xosproject/xos-gui
     repo: xos-gui
 
-  - name: xosproject/gui-extension-rcord
-    repo: rcord
-    path: "xos/gui"
+  - name: xosproject/gui-extension-sample
+    repo: xos-sample-gui-extension
+
+# synchronizer/gui-extension containers that don't match the
+# `directory_named_images` pattern
 
   - name: xosproject/gui-extension-veestat
     repo: vEE
     path: "xos/veestat"
 
-  - name: xosproject/gui-extension-vtr
-    repo: vtr
-    path: "xos/gui"
-
-  - name: xosproject/gui-extension-vnaas
-    repo: vnaas
-    path: "xos/gui"
-
-  - name: xosproject/gui-extension-sample
-    repo: xos-sample-gui-extension
-
-  - name: xosproject/addressmanager-synchronizer
-    repo: addressmanager
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/openstack-synchronizer
-    repo: openstack
+  - name: xosproject/vee-synchronizer
+    repo: vEE
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
@@ -152,18 +143,8 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/vee-synchronizer
-    repo: vEE
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
   - name: xosproject/veg-synchronizer
     repo: vEG
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/vnaas-synchronizer
-    repo: vnaas
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
@@ -172,33 +153,8 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/vrouter-synchronizer
-    repo: vrouter
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
   - name: xosproject/vtn-synchronizer
     repo: vtn-service
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/vtr-synchronizer
-    repo: vtr
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/vsg-synchronizer
-    repo: vsg
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/fabric-synchronizer
-    repo: fabric
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/exampleservice-synchronizer
-    repo: exampleservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
@@ -212,43 +168,39 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/venb-synchronizer
-    repo: venb
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/internetemulator-synchronizer
-    repo: internetemulator
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/sdncontroller-synchronizer
-    repo: sdn-controller
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/vspgwc-synchronizer
-    repo: vspgwc
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
-  - name: xosproject/vspgwu-synchronizer
-    repo: vspgwu
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
   - name: xosproject/vepc-synchronizer
     repo: epc-service
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/venb-synchronizer
-    repo: venb
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
+# directory_named_images - images named with using a pattern that includes the
+# name of the directory they are contained in.
+#
+# This allows users to drop a directory containing a Dockerfile in the location
+# specified, and imagebuilder will be able to build it. If the directory is
+# listed in the repo it will be handled as if listed in `buildable_images`, but
+# if not, it will be re-built every time.
+#
+# Most fields are identical to those seen on `buildable_images` with these
+# additions:
+#
+# required:
+#   base_path: Path relative to repo_root directory containing directories
+#              whose names are used as a part of the container name. Only
+#              directories that where the value of `dockerfile` is at `path`
+#              are included.
+# optional:
+#   name_template: This is a string containing `#dirname#`, which is replaced
+#                  with the directory name. Default is `#dirname#`
 
-  - name: xosproject/templateservice-synchronizer
-    repo: templateservice
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
+directory_named_images:
+
+  - name_template: "xosproject/#dirname#-synchronizer"
+    base_path: orchestration/xos_services
+    path: xos/synchronizer
+    dockerfile: Dockerfile.synchronizer
+
+  - name_template: "xosproject/gui-extension-#dirname#"
+    base_path: orchestration/xos_services
+    path: xos/gui
 
