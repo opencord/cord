@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2448e419_ef188c03",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "why do you do this? And why it\u0027s after the reboot? Can we do it before the reboot of the switches if really needed?\nAlso, comments should be backed of one tab",
+      "range": {
+        "startLine": 143,
+        "startChar": 28,
+        "endLine": 147,
+        "endChar": 95
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52d2e51c_ae93df1e",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "This should all be parametrized. How do you assume that there\u0027s necessarily a second leaf in all deployments?\nYou can try to do something with the construct you use also below (where you get compute nodes connected to leaf X)",
+      "range": {
+        "startLine": 187,
+        "startChar": 24,
+        "endLine": 187,
+        "endChar": 84
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40853670_6817fc5a",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "What is this?",
+      "range": {
+        "startLine": 189,
+        "startChar": 24,
+        "endLine": 190,
+        "endChar": 86
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21c53e41_51d430bd",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "Is this debug? Should it be always active?",
+      "range": {
+        "startLine": 191,
+        "startChar": 24,
+        "endLine": 198,
+        "endChar": 74
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "38b9907f_799c3ff0",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "Also these things should be put in variables and parametrized",
+      "range": {
+        "startLine": 202,
+        "startChar": 76,
+        "endLine": 202,
+        "endChar": 102
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2869d41_0b32e0db",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "don\u0027t assume that every pod uses the network 10.6.X",
+      "range": {
+        "startLine": 204,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 109
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe650125_0bfe481a",
+        "filename": "Jenkinsfile.newBuildSystem",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-11-22T18:25:40Z",
+      "side": 1,
+      "message": "should this be a separate stage?",
+      "range": {
+        "startLine": 237,
+        "startChar": 24,
+        "endLine": 237,
+        "endChar": 55
+      },
+      "revId": "5c05f743d7aa0a44277feb5cab10360ab16c1cbc",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
