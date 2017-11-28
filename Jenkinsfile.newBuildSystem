@@ -209,6 +209,29 @@ node ("${config.dev_node.name}") {
                             }
                         }
                     }
+
+                    stage ("Configure fabric switches") {
+                          for(int i=0; i < config.fabric_switches.size(); i++) {
+                                  if (config.fabric_switches[i].breakout_ports != null) {
+                                     for(int j=0; j < config.fabric_switches[i].breakout_ports.size(); j++) {
+                                             runFabricCmd("${config.head.ip}",
+                                                "${config.head.user}",
+                                                "${config.head.pass}",
+                                                "${config.fabric_switches[i].ip}",
+                                                "${config.fabric_switches[i].user}",
+                                                "${config.fabric_switches[i].pass}",
+                                                "sed -i -e 's/#port_mode_${config.fabric_switches[i].breakout_ports[j]}=/port_mode_${config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
+                                     }
+                                     runFabricCmd("${config.head.ip}",
+                                        "${config.head.user}",
+                                        "${config.head.pass}",
+                                        "${config.fabric_switches[i].ip}",
+                                        "${config.fabric_switches[i].user}",
+                                        "${config.fabric_switches[i].pass}",
+                                        "/root/killit; /root/connect -bg")
+                                }
+                          }
+                    }
                 }
             }
 
