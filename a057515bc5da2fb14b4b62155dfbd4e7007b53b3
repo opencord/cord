@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4b0f6e6_173556f5",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-11-29T02:13:29Z",
+      "side": 1,
+      "message": "Would the home directory (~) be a better place to look for this?",
+      "revId": "a057515bc5da2fb14b4b62155dfbd4e7007b53b3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
