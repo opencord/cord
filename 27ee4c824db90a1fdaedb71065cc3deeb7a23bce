@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6462dfa1_6e08f33f",
+        "filename": "podconfig/mcord-ng40-virtual.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2017-11-29T23:05:57Z",
+      "side": 1,
+      "message": "how will we use it?",
+      "range": {
+        "startLine": 23,
+        "startChar": 16,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "27ee4c824db90a1fdaedb71065cc3deeb7a23bce",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
