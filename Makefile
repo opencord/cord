@@ -20,6 +20,8 @@ PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
 
+CONFIG_CORD_PROFILE_DIR ?= $(CORD)/../cord_profile
+
 # Milestones/logs paths
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
@@ -30,9 +32,8 @@ OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-comput
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
 POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
-ALL_MILESTONES   ?= $(PREP_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS)
-
 LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
+ALL_MILESTONES   ?= $(PREP_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS) $(LOCAL_MILESTONES)
 
 # Configuration files
 MASTER_CONFIG    ?= $(GENCONFIG_D)/config.yml
@@ -123,9 +124,6 @@ clean-profile:
 clean-all: virsh-domain-destroy vagrant-destroy clean-profile clean-genconfig
 	rm -f $(ALL_MILESTONES)
 
-clean-local: clean-profile clean-genconfig clean-images
-	rm -f $(LOCAL_MILESTONES)
-
 clean-onos:
 	$(ANSIBLE_PB) $(PI)/teardown-onos-playbook.yml $(LOGCMD)
 	rm -f $(M)/deploy-onos $(M)/onos-debug
@@ -140,13 +138,6 @@ collect-diag:
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 
-.PHONY: docs
-docs:
-	cd docs; make
-
-local-ubuntu-dev-env:
-	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
-
 vagrant-destroy:
 	$(VAGRANT) destroy -f $(LOGCMD) || true
 	rm -f $(M)/vagrant-up $(M)/vagrant-ssh-install $(VAGRANT_SSH_CONF)
@@ -157,11 +148,26 @@ virsh-domain-destroy:
 
 xos-teardown: xos-update-images
 	$(ANSIBLE_PB) $(PI)/teardown-xos-playbook.yml $(LOGCMD)
-	rm -f $(M)/onboard-profile $(M)/local-onboard-profile
+	rm -f $(M)/onboard-profile
 
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
 
+# local scenario helpers
+clean-local: local-xos-teardown clean-profile clean-genconfig clean-images
+	rm -f $(LOCAL_MILESTONES)
+
+local-ubuntu-dev-env:
+	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
+
+local-xos-teardown:
+	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
+	rm -f $(M)/local-onboard-profile
+
+# docs
+.PHONY: docs
+docs:
+	cd docs; make
 
 # == PREREQS == #
 VAGRANT_UP_PREREQS       ?=
