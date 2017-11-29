@@ -24,6 +24,8 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 head_cord_dir: "{{ config_cord_dir }}"
 head_cord_profile_dir: "{{ config_cord_profile_dir }}"
 
+xos_tosca_url: "http://127.0.0.1:9102"
+
 # make targets
 build_targets:
   - local-onboard-profile
