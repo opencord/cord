@@ -1,4 +1,3 @@
-
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,33 @@
 
 
 ---
-# mock-mcord Pod Config
-# Creates a single-node mock M-CORD pod
+# mcord-virtual Pod Config
+# Creates a virtual multi-node M-CORD pod, aka "mcord-in-a-box"
 
-cord_scenario: mock
-cord_profile: mcord-ng4t
+cord_scenario: cord
+cord_profile: mcord-ng40
 
+compute_vm_mem: 32768
+
+vagrant_up_prereqs:
+  - prereqs-check
+  - ciab-ovs
+
+build_targets:
+ - compute1-up
+
+external_iface: 'eth0'
+
+skipTags:
+  - 'set_compute_node_password'
+  - 'switch_support'
+  - 'reboot'
+  - 'interface_config'
+
+# Other old config carried over
+cord_in_a_box: True # what is this for?
+fabric_include_names: eth2
+fabric_include_module_types: omit
+fabric_exclude_names: eth0,eth1
+management_include_names: eth1
+management_exclude_names: eth0,eth2
