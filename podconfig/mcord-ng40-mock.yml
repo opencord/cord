@@ -15,9 +15,9 @@
 
 
 ---
-# mcord-single Pod Config
-# Creates a single-node mock M-CORD pod w/synchronizers
+# mock-mcord Pod Config
+# Creates a single-node mock M-CORD pod
 
-cord_scenario: single
-cord_profile: mcord-ng4t
+cord_scenario: mock
+cord_profile: mcord-ng40
 
