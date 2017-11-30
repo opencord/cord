@@ -23,6 +23,7 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 # head = config in local scenario
 head_cord_dir: "{{ config_cord_dir }}"
 head_cord_profile_dir: "{{ config_cord_profile_dir }}"
+head_credentials_dir: "{{ credentials_dir }}"
 
 xos_tosca_url: "http://127.0.0.1:9102"
 
