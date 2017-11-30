@@ -30,7 +30,7 @@ pull_only_images:
   - "gliderlabs/consul-server:0.6"
   - "gliderlabs/registrator:v7"
   - "nginx:1.13"
-  - "onosproject/onos:1.10.8"
+  - "onosproject/onos:1.10.10"
   - "redis:3.2"
   - "node:7.9.0" # remove once the issue with node:candidate is resolved
 
