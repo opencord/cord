@@ -12,11 +12,13 @@ site](https://source.android.com/source/downloading#installing-repo), or by
 using the following commands which download/verify/install it:
 
 ```sh
-curl -o /tmp/repo https://storage.googleapis.com/git-repo-downloads/repo
-echo 'e147f0392686c40cfd7d5e6f332c6ee74c4eab4d24e2694b3b0a0c037bf51dc5  /tmp/repo' | sha256sum -c -
+curl -o /tmp/repo 'https://gerrit.opencord.org/gitweb?p=repo.git;a=blob_plain;f=repo;hb=refs/heads/stable'
+echo '394d93ac7261d59db58afa49bb5f88386fea8518792491ee3db8baab49c3ecda  /tmp/repo' | sha256sum -c -
 sudo mv /tmp/repo /usr/local/bin/repo
 sudo chmod a+x /usr/local/bin/repo
 ```
+
+**NOTE**: As mentioned above, you may want to install *repo* using the official repository instead. We forked the original repository and host a copy of the file to make repo downloadable also by organizations that don't have access to Google servers.
 
 ## Download CORD repositories
 

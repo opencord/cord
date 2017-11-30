@@ -81,8 +81,8 @@ function bootstrap() {
   if [ ! -x "/usr/local/bin/repo" ]
   then
     echo "Installing repo..."
-    REPO_SHA256SUM="e147f0392686c40cfd7d5e6f332c6ee74c4eab4d24e2694b3b0a0c037bf51dc5" # not versioned...
-    curl -o /tmp/repo https://storage.googleapis.com/git-repo-downloads/repo
+    REPO_SHA256SUM="394d93ac7261d59db58afa49bb5f88386fea8518792491ee3db8baab49c3ecda"
+    curl -o /tmp/repo 'https://gerrit.opencord.org/gitweb?p=repo.git;a=blob_plain;f=repo;hb=refs/heads/stable'
     echo "$REPO_SHA256SUM  /tmp/repo" | sha256sum -c -
     sudo mv /tmp/repo /usr/local/bin/repo
     sudo chmod a+x /usr/local/bin/repo
