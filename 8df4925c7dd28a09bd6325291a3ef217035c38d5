@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bb29b25_2a63a53b",
+        "filename": "scripts/cord-bootstrap.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-01T03:08:17Z",
+      "side": 1,
+      "message": "This should probably say that we\u0027re mirroring the upstream repo version, as it\u0027s intended to document the REPO_SHA256SUM line.",
+      "range": {
+        "startLine": 72,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 62
+      },
+      "revId": "8df4925c7dd28a09bd6325291a3ef217035c38d5",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
