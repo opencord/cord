@@ -19,6 +19,7 @@
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+credentials_dir: "{{ ( playbook_dir ~ '/credentials' ) | realpath }}"
 
 # head = config in local scenario
 head_cord_dir: "{{ config_cord_dir }}"
