@@ -228,7 +228,14 @@ node ("${config.dev_node.name}") {
                                         "${config.fabric_switches[i].ip}",
                                         "${config.fabric_switches[i].user}",
                                         "${config.fabric_switches[i].pass}",
-                                        "/root/killit; /root/connect -bg")
+                                        "/root/killit")
+                                     runFabricCmd("${config.head.ip}",
+                                        "${config.head.user}",
+                                        "${config.head.pass}",
+                                        "${config.fabric_switches[i].ip}",
+                                        "${config.fabric_switches[i].user}",
+                                        "${config.fabric_switches[i].pass}",
+                                        "/root/connect -bg")
                                 }
                           }
                     }
