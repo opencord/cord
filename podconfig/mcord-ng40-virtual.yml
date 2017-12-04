@@ -21,6 +21,7 @@ cord_scenario: cord
 cord_profile: mcord-ng40
 
 compute_vm_mem: 32768
+compute_vm_cpu: 16
 
 vagrant_up_prereqs:
   - prereqs-check
