@@ -34,7 +34,7 @@ cord-tester:
 	ln -s ../../test/cord-tester/docs cord-tester
 
 profiles:
-	mkdir profiles
+	mkdir -p profiles
 	ln -s ../../../orchestration/profiles/rcord/docs profiles/rcord
 	ln -s ../../../orchestration/profiles/ecord/docs profiles/ecord
 	ln -s ../../../orchestration/profiles/mcord/docs profiles/mcord
@@ -59,5 +59,5 @@ clean:
 	rm -rf $(GENERATED_DOCS)
 	rm -rf _book
 	rm -rf node_modules
-	rm -rf platform-install test profiles xos xos-gui xos-tosca
+	rm -f platform-install test profiles/* xos xos-gui xos-tosca
 
