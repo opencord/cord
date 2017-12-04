@@ -32,6 +32,11 @@ out by `repo`) is copied to.
 
 Tag applied to all built (and downloaded standalone) Docker images.
 
+## carrierethernet_domainid_prefix
+
+Domain ID prefix added to TOSCA that is used to configure the E-CORD
+CarrierEthernet app.
+
 ## ca_digest
 
 Name of the digest (aka "hash") algorithm used when creating CA SSL
@@ -160,10 +165,10 @@ deployments.
 
 Domaing to check when performing the prerequisite check.
 
-## dns_check_ipv4
+## dns_check_record
 
-IP address of [dns_check_domain](#dns_check_domain) for DNS resolution
-prerequisite check.
+DNS record returned when [dns_check_domain](#dns_check_domain) is looked up for
+DNS resolution prerequisite check.
 
 ## dns_search
 
@@ -287,9 +292,9 @@ Location on the headnode to create the `onos_fabric` directory, which contains
 configuration and the docker-compose.yml file for starting the ONOS instance
 that runs the Fabric app.
 
-## headnode
+## headnode_dns
 
-Name of the headnode on the system, used to configure NSD DNS aliases.
+DNS Name of the headnode on the system, used to configure NSD DNS aliases.
 
 ## hugepages
 
@@ -419,6 +424,11 @@ Name of the docker image used to bring up ONOS containers.
 
 Default logging level ONOS should log at.
 
+## onos_mavenrepo_url
+
+URL for the mavenrepo deployed as a part of the POD, where ONOS instances will
+download apps from.
+
 ## physical_node_list
 
 List of physical nodes to set up in DNS.
@@ -517,6 +527,21 @@ Directory where SSH keys are generated.
 
 SSL certificate prefix substring to use when generating certificates.
 
+## test_networks
+
+List of OpenStack Neutron networks to check for.  Currently only used in the
+`test-mcord-base` role.
+
+## test_ports
+
+List of OpenStack Neutron network ports on VM's to check for.  Currently only
+used in the `test-mcord-base` role.
+
+## test_services
+
+List of active OpenStack Nova VM instances to check for.  Currently only used
+in the `test-mcord-base` role.
+
 ## trust_store_pw
 
 Java KeyStore password used for encrypting SSL certificates.  This currently
@@ -579,6 +604,10 @@ Use the ONOS VTN app to manage networks for virtual instances.
 
 DPDK setting to specify CPU pinning.
 
+## vsg_test_ping_target
+
+System to try to ping during the VSG test.
+
 ## vtn_management_host_net_interface
 
 Network interface to use on the head/compute nodes for the management_host network.
@@ -635,6 +664,12 @@ Insecure (non-SSL) port used for GRPC connections to the XOS API.
 
 Secure (SSL) port used for GRPC connections to the XOS API.
 
+## xos_gui_service_graph_constraints
+
+Textual set of constraints that controls how the service graph is displayed in
+the GUI. [Guide for writing
+constraints](xos-gui/developer/service_graph.md#define-the-position-of-the-services-in-the-graph).
+
 ## xos_images
 
 List of OpenStack Glance images in QCOW2 format that are downloaded.
@@ -656,6 +691,10 @@ profile. Deprecated, see: [xos_new_tosca_config_templates](xosnewtoscaconfigtemp
 ## xos_new_tosca_config_templates
 List of XOS tosca templates to load that make up the service graph of a
 profile.
+
+## xos_tosca_url
+
+URL for the XOS TOSCA API endpoint
 
 ## xos_ui_port
 
