@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8abfba86_a7d0069d",
+        "filename": "docs/release-notes/sd-dot-one.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-05T21:28:22Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 9
+      },
+      "revId": "4cd0a065f2cce070b07bcc1759cd77ad4548f2e7",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caec7a3a_0e238362",
+        "filename": "docs/release-notes/sd-dot-one.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-05T21:28:22Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 49,
+        "startChar": 281,
+        "endLine": 49,
+        "endChar": 292
+      },
+      "revId": "4cd0a065f2cce070b07bcc1759cd77ad4548f2e7",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
