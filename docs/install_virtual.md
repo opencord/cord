@@ -103,6 +103,7 @@ basic end-to-end tests:
 cd ~/cord/build
 make pod-test
 ```
+> NOTE: This test can only be conducted on the `rcord-virtual` profile. Other profile tests are still WIP. 
 
 The output of the tests will be displayed, as well as stored in
 `~/cord/build/logs/<iso8601_datetime>_pod-test`.
