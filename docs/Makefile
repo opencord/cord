@@ -59,5 +59,5 @@ clean:
 	rm -rf $(GENERATED_DOCS)
 	rm -rf _book
 	rm -rf node_modules
-	rm -f platform-install test profiles/* xos xos-gui xos-tosca
+	rm -rf platform-install test profiles xos xos-gui xos-tosca
 
