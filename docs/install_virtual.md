@@ -44,7 +44,7 @@ Once your account is approved, start an experiment using the
 This will provide you with a temporary target server meeting the above
 requirements.
 
-Refer to the [CloudLab documentation](https://docs.cloudlab.us) for more
+Refer to the [CloudLab documentation](http://docs.cloudlab.us) for more
 information.
 
 ## Building CiaB
