@@ -56,5 +56,9 @@
         * [Troubleshooting](profiles/ecord/troubleshooting.md)
         * [CFM Configuration](profiles/ecord/cfm.md)
     * [M-CORD](profiles/mcord/README.md)
+        * [Overview](profiles/mcord/overview.md)
+        * [Installation](profiles/mcord/installation_guide.md)
+        * [Developers](profiles/mcord/dev_guide.md)
+        * [Troubleshooting](profiles/mcord/troubleshooting.md)
 * [Release Notes](release-notes/sd-dot-one.md)
 
