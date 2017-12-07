@@ -78,7 +78,7 @@ checks out the `platform-install` repo with changeset 1233, patchset 4, and
 `xos` repo changeset 1234, revision 2.
 
 You can find the project path in the `repo` manifest file:
-[manifest/default.xml](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml).
+[manifest/default.xml](https://github.com/opencord/manifest/blob/master/default.xml).
 
 You can also run make targets with the `-t` option; `-t build` is the same as
 running `cd ~/cord/build ; make -j4 build` after the rest of the installations
