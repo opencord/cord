@@ -44,7 +44,7 @@ Run `imagebuilder.py -h` for a list of other supported arguments.
 
 The imagebuilder program performs the following steps when run:
 
- 1. Reads the [repo manifest file](https://gerrit.opencord.org/gitweb?p=manifest.git;a=blob;f=default.xml)
+ 1. Reads the [repo manifest file](https://github.com/opencord/manifest/blob/master/default.xml)
     (checked out as `.repo/manifest`) to get a list of the CORD git repositories.
 
  2. Reads the [build/docker_images.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/docker_images.yml)
