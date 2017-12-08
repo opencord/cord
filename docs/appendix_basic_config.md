@@ -191,8 +191,6 @@ docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@openco
 ###Restart ONOS Apps
 
 ```
-http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
-http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active
 http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
 ```
