@@ -43,3 +43,8 @@ fabric_include_module_types: omit
 fabric_exclude_names: eth0,eth1
 management_include_names: eth1
 management_exclude_names: eth0,eth2
+
+# Routing for address pools
+use_addresspool_vsg: True
+use_addresspool_public: True
+
