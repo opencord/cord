@@ -122,10 +122,10 @@ Filesystem device to use for extra space when on CloudLab
 Symbolic links to create to use the extra space that is mounted when using
 CloudLab
 
-## compute_external_interfaces
+## computenode_fabric_interfaces
 
-List of possible VTN external interfaces on the compute node, for setting up
-OpenStack with the VTN ML2 plugin.
+List of possible VTN external interfaces on the compute node that connect to
+the fabric, for setting up OpenStack with the VTN ML2 plugin.
 
 ## config_cord_dir
 
@@ -240,12 +240,6 @@ Physical interfaces connected to the VTN fabric network switches.
 
 Filename of the JSON file  used to configure the Fabric ONOS.
 
-## frontend_only
-
-`frontend_only` suppresses starting synchronzier containers as a part of the
-XOS container set. It is used in testing scenarios where synchronizers aren't
-needed.
-
 ## gerrit_changesets
 
 List of gerrit
@@ -332,6 +326,10 @@ to the same file with the password.
 
 DNS Name of the headnode on the system, used to configure NSD DNS aliases.
 
+## headnode_fabric_bridge
+
+Name of the fabric bridge interface on the head node.
+
 ## headnode_nat_interface
 
 Network interface on the head node that is connected to the internet.  NAT is
@@ -341,10 +339,6 @@ performed on this interface giving the other nodes on the network access
 ## hugepages
 
 DPDK setting to control memory allocation.
-
-## hwaddr_prefix
-
-MAC address prefix used when creating LXD containers, to assign them DHCP addresses.
 
 ## image_dir
 
@@ -371,26 +365,14 @@ Port used by ONOS containers for sending log4j logging messages to ElasticStack.
 
 Hostname (or IP) for the ElasticStack logging host machine.
 
-## management_hosts_net_cidr
+## management_net_bridge
 
-CIDR for the management_hosts VTN network.
-
-## management_hosts_net_range_xos_high
-
-Last IP address to assign as a part of the management_hosts VTN network.
-
-## management_hosts_net_range_xos_low
-
-First IP address to assign as a part of the management_hosts VTN network.
+Name of the management bridge interface on head and compute nodes.
 
 ## management_net_cidr
 
 CIDR of the head node management network that connects between the OpenStack
 LXC containers and compute nodes.
-
-## management_network_cidr
-
-CIDR for VTN MANAGEMENT_LOCAL network
 
 ## management_net_interfaces
 
@@ -408,10 +390,6 @@ Login used with the [NG40 tester software](profiles/mcord/installation_guide.md#
 ## mcord_ng40_password
 
 Password used with the [NG40 tester software](profiles/mcord/installation_guide.md#ng40-vtester-m-cord-license).
-
-## mgmt_ipv4_first_octets
-
-First 3 octets of the IP address of the management network.
 
 ## min_memtotal_mb
 
@@ -625,6 +603,10 @@ Toggle whether to create the VSG AddressPool NAT interface
 
 Enables the use of `apt-cacher-ng` to cache APT packages on Head/LXC/Compute nodes.
 
+## use_elasticstack
+
+Enables elasticstack (aka `ELK`) for log aggregation
+
 ## use_dpdk
 
 Enable DPDK in OpenStack Nova and Neutron
@@ -636,10 +618,6 @@ Start and use ONOS in a container to manage fabric switches
 ## use_maas
 
 Use MaaS to manage compute nodes and switches.
-
-## use_management_hosts
-
-Whether the management_hosts network type in VTN should be enabled.
 
 ## use_openstack
 
@@ -670,22 +648,33 @@ DPDK setting to specify CPU pinning.
 DNS name of the server to ping when running the vSG portion of the
 [pod-test](install_virtual.md#test-vsg).
 
-## vtn_data_plane_interface
+## vtn_integration_bridge_interface
 
-Physical interface network used for the VTN data plane.
+Which network interface is added to the `br-int` integration bridge by VTN when
+setting up OpenVSwitch on compute nodes.
 
 ## vtn_net_management_host_hwaddr_prefix
 
 MAC address prefix for interfaces on the VTN MANAGEMENT_HOST network.
 
-## vtn_management_host_net_interface
-
-Network interface to use on the head/compute nodes for the management_host
-network.
-
 ## vtn_net_management_host_cidr
 
 CIDR for the MANAGEMENT_HOST VTN network.
+
+## vtn_net_management_host_interface
+
+
+## vtn_net_management_host_range_xos_high
+
+Last IP address to assign as a part of the management_hosts VTN network.
+
+## vtn_net_management_host_range_xos_low
+
+First IP address to assign as a part of the management_hosts VTN network.
+
+## vtn_net_management_local_cidr
+
+CIDR for the management_local VTN network. Used for local networking on compute nodes.
 
 ## vtn_net_public_cidr
 
