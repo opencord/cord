@@ -99,6 +99,9 @@ switch_vm_cpu: 1
 
 vm_management_network_name: cordmgmt
 
+# Configure the headnode network interfaces
+config_head_interfaces: True
+
 # Enable experimental fabric
 enable_fabric: False
 
