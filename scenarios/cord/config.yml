@@ -102,6 +102,13 @@ switch_vm_cpu: 1
 
 vm_management_network_name: cordmgmt
 
+# name of the fabric bridge interface used by VTN (to match maas-configured
+# compute node interfaces)
+vtn_integration_bridge_interface: fabric
+
+# name of the management network bridge (to match maas-configured interface)
+management_net_bridge: mgmtbr
+
 # Enable experimental fabric
 enable_fabric: False
 
