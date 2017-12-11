@@ -85,7 +85,13 @@ DEPLOY_MAVENREPO_PREREQS     = $(M)/{{ deploy_mavenrepo_prereqs | join(" $(M)/")
 {% if deploy_openstack_prereqs is defined %}
 DEPLOY_OPENSTACK_PREREQS = $(M)/{{ deploy_openstack_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if onboard_openstack_prereqs is defined %}
+ONBOARD_OPENSTACK_PREREQS = $(M)/{{ onboard_openstack_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if setup_automation_prereqs is defined %}
 SETUP_AUTOMATION_PREREQS = $(M)/{{ setup_automation_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if testing_prereqs is defined %}
+TESTING_PREREQS = $(M)/{{ testing_prereqs | join(" $(M)/") }}
 {% endif %}
 
