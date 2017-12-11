@@ -102,6 +102,25 @@ switch_vm_cpu: 1
 
 vm_management_network_name: cordmgmt
 
+# which network interfaces belong to which bond on head node
+management_net_interfaces:
+  - eth2
+
+fabric_net_interfaces:
+  - eth3
+
+# name of the fabric bridge interface used by VTN (to match maas-configured
+# compute node interfaces)
+vtn_integration_bridge_interface: fabric
+
+# name of the management network bridge (to match maas-configured interface)
+management_net_bridge: mgmtbr
+
+# Bring up alias interfaces for the vsg and public networks, for forwarding
+# traffic in virtual pod
+use_addresspool_vsg: True
+use_addresspool_public: True
+
 # Enable experimental fabric
 enable_fabric: False
 
