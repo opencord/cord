@@ -205,7 +205,7 @@ GROUP_LIST=()
 DOCKER=0
 VAGRANT=0
 
-while getopts "dhp:t:v" opt; do
+while getopts "dhp:t:vx" opt; do
   case ${opt} in
     d ) DOCKER=1
         GROUP_LIST+=("docker")
