@@ -89,34 +89,9 @@ physical_node_list:
   - name: compute2
     ipv4_last_octet: 18
 
-management_net_bridge: "mgmtbridge"
-
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
 vm_public_network_cidr: "10.230.100.0/24"
-
-# which network interfaces belong to which bond on nodes
-management_net_interfaces:
-  - eth1
-
-fabric_net_interfaces:
-  - eth2
-
-# veth pair connected between a linux and integration bridge are described here
-# https://wiki.opencord.org/display/CORD/VTN+Manual+Tests#VTNManualTests-Testenvironmentsetup
-# but may not work?
-# vtn_integration_bridge_interface: vethfabric1
-
-vtn_integration_bridge_interface: fabricbond
-
-headnode_fabric_bridge: fabricbridge
-
-use_vtn_net_management_host: False
-
-vtn_net_management_host_interface: vethmgmt1
-
-use_addresspool_vsg: True
-use_addresspool_public: True
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:

@@ -92,13 +92,6 @@ vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
 vm_public_network_cidr: "10.230.100.0/24"
 
-# which network interfaces belong to which bond on nodes
-management_net_interfaces:
-  - eth1
-
-fabric_net_interfaces:
-  - eth2
-
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
   - "xosproject/xos-base"
