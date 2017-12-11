@@ -37,6 +37,9 @@ pull_docker_registry: "docker-registry:5000/"
 pull_docker_tag: "candidate"
 docker_opts: "--insecure-registry {{ deploy_docker_registry }}"
 
+# fabric net interfaces
+fabric_net_interfaces: eth3
+
 # Variables required by MAAS
 fabric_ip: '10.6.1.1/24'
 management_ip: '10.1.0.1/24'
@@ -124,13 +127,6 @@ docker_image_whitelist:
   - "opencord/mavenrepo"
   - "redis"
   - "node"
-
-# node topology
-physical_node_list:
-  - name: head1
-    ipv4_last_octet: 1
-    aliases:
-      - head
 
 # Inventory for ansible, used to generate inventory.ini
 inventory_groups:
