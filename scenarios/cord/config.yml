@@ -102,6 +102,11 @@ switch_vm_cpu: 1
 
 vm_management_network_name: cordmgmt
 
+# Bring up alias interfaces for the vsg and public networks, for forwarding
+# traffic in virtual pod
+use_addresspool_vsg: True
+use_addresspool_public: True
+
 # Enable experimental fabric
 enable_fabric: False
 
