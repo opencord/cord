@@ -22,14 +22,14 @@
 
 - name: Ensure Management Bridge
   copy:
-    src: mgmtbr.cfg
-    dest: /etc/network/interfaces.d/mgmtbr.cfg
+    src: mgmtbridge.cfg
+    dest: /etc/network/interfaces.d/mgmtbridge.cfg
     owner: root
     group: root
     mode: 0644
 
 - name: Ensure Management Bridge Up
-  command: ifup mgmtbr
+  command: ifup mgmtbridge
   changed_when: true
 
 - name: Ensure fabric bridge
