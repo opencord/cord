@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import groovy.json.JsonSlurperClassic
+
 def filename = 'manifest-${branch}.xml'
 def manifestUrl = 'https://gerrit.opencord.org/manifest'
-def config = null;
+deployment_config = null;
+pod_config = null;
 
 node ('master') {
     checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
@@ -27,14 +30,15 @@ node ('master') {
     stage ("Parse deployment configuration file") {
         sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
         sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
-        config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
+        deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
+        pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
     }
 }
 
-node ("${config.dev_node.name}") {
+node ("${deployment_config.dev_node.name}") {
     timeout (time: 240) {
         stage ('Remove old head node from known hosts') {
-            sh "ssh-keygen -R ${config.head.ip}"
+            sh "ssh-keygen -R ${deployment_config.head.ip}"
         }
         stage ('Checkout cord repo') {
             checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
@@ -44,13 +48,13 @@ node ("${config.dev_node.name}") {
             dir('build') {
                 stage ("Re-deploy head node") {
                     maasOps: {
-                        sh "maas login maas http://${config.maas.ip}/MAAS/api/2.0 ${config.maas.api_key}"
-                        sh "maas maas machine release ${config.maas.head_system_id}"
+                        sh "maas login maas http://${deployment_config.maas.ip}/MAAS/api/2.0 ${deployment_config.maas.api_key}"
+                        sh "maas maas machine release ${deployment_config.maas.head_system_id}"
 
                         timeout(time: 15) {
                             waitUntil {
                                try {
-                                    sh "maas maas machine read ${config.maas.head_system_id} | grep Ready"
+                                    sh "maas maas machine read ${deployment_config.maas.head_system_id} | grep Ready"
                                     return true
                                 } catch (exception) {
                                     return false
@@ -59,12 +63,12 @@ node ("${config.dev_node.name}") {
                         }
 
                         sh 'maas maas machines allocate'
-                        sh "maas maas machine deploy ${config.maas.head_system_id}"
+                        sh "maas maas machine deploy ${deployment_config.maas.head_system_id}"
 
                         timeout(time: 30) {
                             waitUntil {
                                try {
-                                    sh "maas maas machine read ${config.maas.head_system_id} | grep Deployed"
+                                    sh "maas maas machine read ${deployment_config.maas.head_system_id} | grep Deployed"
                                     return true
                                 } catch (exception) {
                                     return false
@@ -75,19 +79,19 @@ node ("${config.dev_node.name}") {
                 }
 
                 stage ("Download CORD POD configuration") {
-                    sh "cd podconfig; git clone -b ${branch} ${config.pod_config.repo_url} automation"
+                    sh "cd podconfig; git clone -b ${branch} ${deployment_config.pod_config.repo_url} automation"
                 }
 
                 stage ("Generate CORD configuration") {
-                    sh "make PODCONFIG=automation/${config.pod_config.file_name} config"
+                    sh "make PODCONFIG=automation/${deployment_config.pod_config.file_name} config"
                 }
 
-                if (config.fabric_switches != null) {
+                if (deployment_config.fabric_switches != null) {
                     stage("Reserve IPs for fabric switches") {
-                        for(int i=0; i < config.fabric_switches.size(); i++) {
-                            def str = createMACIPbindingStr(i+1,
-                                                           "${config.fabric_switches[i].mac}",
-                                                           "${config.fabric_switches[i].ip}")
+                        for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+                            def str = createMACIPbindingStr("fabric", i+1,
+                                                           "${deployment_config.fabric_switches[i].mac}",
+                                                           "${deployment_config.fabric_switches[i].ip}")
                             sh "echo $str >> maas/roles/maas/files/dhcpd.reservations"
                         }
                     }
@@ -97,32 +101,22 @@ node ("${config.dev_node.name}") {
                     sh "make build"
                 }
 
-                if (config.compute_nodes != null) {
-
+                if (deployment_config.compute_nodes != null) {
                     stage ("Power cycle compute nodes") {
-                        for(int i=0; i < config.compute_nodes.size(); i++) {
-                            sh "ipmitool -U ${config.compute_nodes[i].ipmi.user} -P ${config.compute_nodes[i].ipmi.pass} -H ${config.compute_nodes[i].ipmi.ip} power cycle"
+                        for(int i=0; i < deployment_config.compute_nodes.size(); i++) {
+                            sh "ipmitool -U ${deployment_config.compute_nodes[i].ipmi.user} -P ${deployment_config.compute_nodes[i].ipmi.pass} -H ${deployment_config.compute_nodes[i].ipmi.ip} power cycle"
                         }
                     }
 
                     stage ("Wait for compute nodes to get deployed") {
-                        sh "ssh-keygen -f /home/${config.dev_node.user}/.ssh/known_hosts -R ${config.head.ip}"
-                        def cordApiKey = runCmd("${config.head.ip}",
-                                                "${config.head.user}",
-                                                "${config.head.pass}",
-                                                "sudo maas-region-admin apikey --username ${config.head.user}")
-                        runCmd("${config.head.ip}",
-                               "${config.head.user}",
-                               "${config.head.pass}",
-                               "maas login pod-maas http://${config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
+                        sh "ssh-keygen -f /home/${deployment_config.dev_node.user}/.ssh/known_hosts -R ${deployment_config.head.ip}"
+                        def cordApiKey = runHeadNodeCmd("sudo maas-region-admin apikey --username ${deployment_config.head.user}")
+                        runHeadNodeCmd("maas login pod-maas http://${deployment_config.head.ip}/MAAS/api/1.0 ${cordApiKey}")
                         timeout(time: 90) {
                             waitUntil {
                                 try {
-                                    num = runCmd("${config.head.ip}",
-                                                 "${config.head.user}",
-                                                 "${config.head.pass}",
-                                                 "maas pod-maas nodes list | grep substatus_name | grep -i deployed | wc -l").trim()
-                                    return num.toInteger() == config.compute_nodes.size()
+                                    num = runHeadNodeCmd("maas pod-maas nodes list | grep substatus_name | grep -i deployed | wc -l").trim()
+                                    return num.toInteger() == deployment_config.compute_nodes.size()
                                 } catch (exception) {
                                     return false
                                 }
@@ -134,55 +128,31 @@ node ("${config.dev_node.name}") {
                         timeout(time:45) {
                             waitUntil {
                                 try {
-                                    num = runCmd("${config.head.ip}",
-                                                 "${config.head.user}",
-                                                 "${config.head.pass}",
-                                                 "cord prov list '|' grep -i node '|' grep -i complete '|' wc -l").trim()
-                                    return num.toInteger() == config.compute_nodes.size()
+                                    num = runHeadNodeCmd("cord prov list | grep -i node | grep -i complete | wc -l").trim()
+                                    return num.toInteger() == deployment_config.compute_nodes.size()
                                 } catch (exception) {
                                     return false
                                 }
                             }
                         }
                     }
-
                 }
-                if (config.fabric_switches != null) {
 
+                if (deployment_config.fabric_switches != null) {
                     stage ("Wait for fabric switches to get deployed") {
-                        for(int i=0; i < config.fabric_switches.size(); i++) {
-                            runFabricCmd("${config.head.ip}",
-                                         "${config.head.user}",
-                                         "${config.head.pass}",
-                                         "${config.fabric_switches[i].ip}",
-                                         "${config.fabric_switches[i].user}",
-                                         "${config.fabric_switches[i].pass}",
-                                         "sudo onl-onie-boot-mode install")
-
-                            runFabricCmd("${config.head.ip}",
-                                         "${config.head.user}",
-                                         "${config.head.pass}",
-                                         "${config.fabric_switches[i].ip}",
-                                         "${config.fabric_switches[i].user}",
-                                         "${config.fabric_switches[i].pass}",
-                                         "sudo reboot")
-
+                        runFabricSwitchCmdAll("sudo onl-onie-boot-mode install")
+                        runFabricSwitchCmdAll("sudo reboot")
                             // Ensure that switches get provisioned after ONIE reinstall.
                             // Delete them if they were provisioned earlier.  If the switches are not
                             // present in 'cord prov list', this command has no effect.
-                            runCmd("${config.head.ip}",
-                                   "${config.head.user}",
-                                   "${config.head.pass}",
-                                   "cord prov delete ${config.fabric_switches[i].mac}")
+                        for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+                            runHeadNodeCmd("cord prov delete ${deployment_config.fabric_switches[i].mac}")
                         }
                         timeout(time: 45) {
                             waitUntil {
                                 try {
-                                    def harvestCompleted = runCmd("${config.head.ip}",
-                                                                  "${config.head.user}",
-                                                                  "${config.head.pass}",
-                                                                  "cord harvest list '|' grep -i fabric '|' wc -l").trim()
-                                    return harvestCompleted.toInteger() == config.fabric_switches.size()
+                                    def harvestCompleted = runHeadNodeCmd("cord harvest list | grep -i fabric | wc -l").trim()
+                                    return harvestCompleted.toInteger() == deployment_config.fabric_switches.size()
                                 } catch (exception) {
                                     return false
                                 }
@@ -195,14 +165,11 @@ node ("${config.dev_node.name}") {
                             waitUntil {
                                 try {
                                     def provCompleted = 0
-                                    for(int i=0; i < config.fabric_switches.size(); i++) {
-                                        def count = runCmd("${config.head.ip}",
-                                                           "${config.head.user}",
-                                                           "${config.head.pass}",
-                                                           "cord prov list '|' grep -i ${config.fabric_switches[i].ip} '|' grep -i complete '|' wc -l").trim()
+                                    for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+                                        def count = runHeadNodeCmd("cord prov list | grep -i ${deployment_config.fabric_switches[i].ip} | grep -i complete | wc -l").trim()
                                         provCompleted = provCompleted + count.toInteger()
                                     }
-                                    return provCompleted == config.fabric_switches.size()
+                                    return provCompleted == deployment_config.fabric_switches.size()
                                 } catch (exception) {
                                     return false
                                 }
@@ -210,40 +177,105 @@ node ("${config.dev_node.name}") {
                         }
                     }
 
-                    stage ("Configure fabric switches") {
-                          for(int i=0; i < config.fabric_switches.size(); i++) {
-                                  if (config.fabric_switches[i].breakout_ports != null) {
-                                     for(int j=0; j < config.fabric_switches[i].breakout_ports.size(); j++) {
-                                             runFabricCmd("${config.head.ip}",
-                                                "${config.head.user}",
-                                                "${config.head.pass}",
-                                                "${config.fabric_switches[i].ip}",
-                                                "${config.fabric_switches[i].user}",
-                                                "${config.fabric_switches[i].pass}",
-                                                "sed -i -e 's/#port_mode_${config.fabric_switches[i].breakout_ports[j]}=/port_mode_${config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
-                                     }
-                                     // Pre-pending killit command with ! ensures the command will return exit status 0
-                                     runFabricCmd("${config.head.ip}",
-                                        "${config.head.user}",
-                                        "${config.head.pass}",
-                                        "${config.fabric_switches[i].ip}",
-                                        "${config.fabric_switches[i].user}",
-                                        "${config.fabric_switches[i].pass}",
-                                        "! /root/killit")
-                                     runFabricCmd("${config.head.ip}",
-                                        "${config.head.user}",
-                                        "${config.head.pass}",
-                                        "${config.fabric_switches[i].ip}",
-                                        "${config.fabric_switches[i].user}",
-                                        "${config.fabric_switches[i].pass}",
-                                        "/root/connect -bg")
+                    // Post installation configuration starts here
+                    fabricIpPrefix = pod_config.fabric_ip.split(/\.\d+\.\d+\/24/)[0]
+                    xosUser = "xosadmin@opencord.org"
+                    xosPass = runHeadNodeCmd("cat /opt/credentials/xosadmin@opencord.org").trim()
+                    stage ("Connect fabric switches and compute nodes to ONOS") {
+                        // Configure breakout ports
+                        for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+                            if (deployment_config.fabric_switches[i].breakout_ports != null) {
+                                for(int j=0; j < deployment_config.fabric_switches[i].breakout_ports.size(); j++) {
+                                    runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
+                                                       "${deployment_config.fabric_switches[i].user}",
+                                                       "${deployment_config.fabric_switches[i].pass}",
+                                                       "sed -i -e 's/#port_mode_${config.fabric_switches[i].breakout_ports[j]}=/port_mode_${config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
                                 }
-                          }
+                            }
+                        }
+                        connectFabricAndComputeToOnos()
+                    }
+                    stage ("Configure the compute nodes") {
+                        leafSwitchNum = 0
+                        for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+                            if(deployment_config.fabric_switches[i].role.toLowerCase().contains("leaf")) {
+                                leafSwitchNum += 1
+                            }
+                        }
+                        // Configure head-node
+                        // Add routes to fabric subnets
+                        for(int i=2; i<=leafSwitchNum; i++) {
+                            runHeadNodeCmd("sudo ip route add ${fabricIpPrefix}." + i.toString() + ".0/24 via ${fabricIpPrefix}.1.254 || echo route already exists")
+                        }
+                        for(int i=1; i<=leafSwitchNum; i++) {
+                            // Figure out which compute node connects to which switch
+                            leafName = "leaf-" + i.toString()
+                            computeNames = getComputeNames(leafName)
+                            echo "Compute nodes connnected to " + leafName + " switch:"
+                            for(name in computeNames) { echo "${name}" }
+                            index = 1
+                            for(name in computeNames) {
+                                if(i>1) {
+                                    //Update fabric IP of compute nodes
+                                    index += 1
+                                    fabricIp = runComputeNodeCmd("${name}", "ip a | grep -o '${fabricIpPrefix}.[1-9][0-9]*.[0-9]*/24'").trim()
+                                    if (fabricIp != "") {
+                                        nodeId = sh(returnStdout: true, script: "curl -u ${xosUser}:${xosPass} -X GET http://${deployment_config.head.ip}/xosapi/v1/core/nodes | jq '.[\"items\"][] | select(.dataPlaneIp==\"${fabricIp}\") | .id'").trim()
+                                        newFabricIp = "${fabricIpPrefix}." + i.toString() + "." + index.toString() + "/24"
+                                        out = sh(returnStdout: true, script: "curl -u ${xosUser}:${xosPass} -X PUT -d '{\"dataPlaneIp\":\"${newFabricIp}\"}' http://${deployment_config.head.ip}/xosapi/v1/core/nodes/${nodeId}").trim()
+                                        // Wait until the new fabric IP gets configured
+                                        timeout(time: 5) {
+                                            waitUntil {
+                                                try {
+                                                    num = runComputeNodeCmd("${name}", "ip a | grep " + newFabricIp + " | wc -l").trim()
+                                                    return num.toInteger() == 1
+                                                } catch (exception) {
+                                                    return false
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else echo "Cannot find fabric IP matching pattern ${fabricIpPrefix}.[1-9][0-9]*.[0-9]*"
+                                }
+                                //Add routes to fabric subnets
+                                for(int j=1; j<=leafSwitchNum; j++) {
+                                    if(j!=i) {
+                                        runComputeNodeCmd("${name}", "sudo ip route add ${fabricIpPrefix}." + j.toString() + ".0/24 via ${fabricIpPrefix}." + i.toString() + ".254 || echo route already exists")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    stage ("Generate and load network configuration") {
+                        // Reconnect compute nodes to update the fabric IP in ONOS
+                        connectFabricAndComputeToOnos()
+                        // Generate network configuration
+                        runHeadNodeCmd("""
+                                       cd /opt/cord_profile/
+                                       cp fabric-network-cfg.json fabric-network-cfg.json.\$(date +%Y%m%d-%H%M%S)
+                                       cord generate > fabric-network-cfg.json
+                                       """)
+                        // Install httpie on the head-node
+                        runHeadNodeCmd("sudo pip install httpie")
+                        // Delete old ONOS netcfg
+                        runHeadNodeCmd("http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/")
+                        // Load new configuration
+                        runHeadNodeCmd("""
+                                       cd /opt/cord_profile
+                                       docker-compose -p ${pod_config.cord_profile} exec -T xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
+                                       """)
+                        // Restart ONOS apps
+                        runHeadNodeCmd("""
+                                       http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active; sleep 5
+                                       http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active; sleep 5
+                                       http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
+                                       http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
+                                       """)
                     }
                 }
             }
 
-            if (config.make_release == true) {
+            if (deployment_config.make_release == true) {
                 stage ("Trigger Build") {
                     url = 'https://jenkins.opencord.org/job/release-build/job/' + params.branch + '/build'
                     httpRequest authentication: 'auto-release', httpMode: 'POST', url: url, validResponseCodes: '201'
@@ -266,12 +298,13 @@ node ("${config.dev_node.name}") {
  * Returns a string used to bind IPs and MAC addresses, substituting the values
  * given.
  *
+ * @param word    the word used to generate the host name
  * @param counter the counter used to generate the host name
  * @param mac     the MAC address to substitute
  * @param ip      the IP address to substitute
  */
-def createMACIPbindingStr(counter, mac, ip) {
-    return """host fabric${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}"""
+def createMACIPbindingStr(word, counter, mac, ip) {
+    return """host ${word}-${counter} {'\n'hardware ethernet ${mac}';''\n'fixed-address ${ip}';''\n'}"""
 }
 
 /**
@@ -281,24 +314,168 @@ def createMACIPbindingStr(counter, mac, ip) {
  * @param user    the node user name
  * @param pass    the node password
  * @param command the command to run
+ * @param sshArgs arguments for the ssh command
  * @return the output of the command
  */
-def runCmd(ip, user, pass, command) {
-    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}")
+def runCmd(ip, user, pass, command, sshArgs="") {
+    return sh(returnStdout: true, script: "sshpass -p ${pass} ssh ${sshArgs} -oStrictHostKeyChecking=no -l ${user} ${ip} \"${command}\"")
+}
+
+/**
+ * Runs a command on the head node.
+ *
+ * @param command the command to run
+ * @param sshArgs arguments for the ssh command
+ * @return the output of the command
+ */
+def runHeadNodeCmd(command, sshArgs="") {
+    return sh(returnStdout: true, script: "sshpass -p ${deployment_config.head.pass} ssh ${sshArgs} -oStrictHostKeyChecking=no -l ${deployment_config.head.user} ${deployment_config.head.ip} \"${command}\"")
 }
 
 /**
  * Runs a command on a fabric switch.
  *
- * @param headIp         the head node IP address
- * @param headUser       the head node user name
- * @param headPass       the head node password
- * @param ip             the mgmt IP of the fabric switch, reachable from the head node
- * @param user           the mgmt user name of the fabric switch
- * @param pass           the mgmt password of the fabric switch
- * @param command        the command to run on the fabric switch
+ * @param ip      the mgmt IP of the fabric switch, reachable from the head node
+ * @param user    the mgmt user name of the fabric switch
+ * @param pass    the mgmt password of the fabric switch
+ * @param command the command to run on the fabric switch
+ * @param ssgArgs arguments for the ssh command
  * @return the output of the command
  */
-def runFabricCmd(headIp, headUser, headPass, ip, user, pass, command) {
-    return sh(returnStdout: true, script: "sshpass -p ${headPass} ssh -oStrictHostKeyChecking=no -l ${headUser} ${headIp} \"sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}\"")
+def runFabricSwitchCmd(ip, user, pass, command, sshArgs="") {
+    return sh(returnStdout: true, script: "sshpass -p ${deployment_config.head.pass} ssh ${sshArgs} -oStrictHostKeyChecking=no -l ${deployment_config.head.user} ${deployment_config.head.ip} \"sshpass -p ${pass} ssh ${sshArgs} -oStrictHostKeyChecking=no -l ${user} ${ip} ${command}\"")
+}
+
+/**
+ * Runs a command on all fabric switches
+ *
+ * @param command the command to run on the fabric switches
+ * @param ssgArgs arguments for the ssh command
+ */
+def runFabricSwitchCmdAll(command, sshArgs="") {
+    for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+        runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
+                           "${deployment_config.fabric_switches[i].user}",
+                           "${deployment_config.fabric_switches[i].pass}",
+                           "${command}",
+                           "${sshArgs}")
+    }
+}
+
+/**
+ * Runs a command on a compute node.
+ *
+ * @param name    the name of the compute node
+ * @param command the command to run on the compute node
+ * @param ssgArgs arguments for the ssh command
+ * @return the output of the command
+ */
+def runComputeNodeCmd(name, command, sshArgs="") {
+    return sh(returnStdout: true, script: "sshpass -p ${deployment_config.head.pass} ssh ${sshArgs} -oStrictHostKeyChecking=no -l ${deployment_config.head.user} ${deployment_config.head.ip} \"ssh ${sshArgs} ubuntu@${name} ${command}\"")
+}
+
+/**
+ * Runs a command on all compute nodes
+ *
+ * @param command the command to run on the compute nodes
+ * @param ssgArgs arguments for the ssh command
+ */
+def runComputeNodeCmdAll(command, sshArgs="") {
+    computeNamesAll = getComputeNames()
+    for (name in computeNamesAll) {
+        runComputeNodeCmd("${name}", "${command}", "${sshArgs}")
+    }
+}
+
+/**
+ * Runs an ONOS CLI command
+ *
+ * @param name    the onos node name, reachable from the head node
+ * @param port    the port used to login to ONOS CLI
+ * @param user    the user name to login to ONOS CLI
+ * @param pass    the password to login to ONOS CLI
+ * @param command the command to run in ONOS CLI
+ * @return the output of the command
+ */
+def runOnosCliCmd(name, port, user, pass, command) {
+    return sh(returnStdout: true, script: "sshpass -p ${deployment_config.head.pass} ssh -oStrictHostKeyChecking=no -l ${deployment_config.head.user} ${deployment_config.head.ip} \"sshpass -p ${pass} ssh -oStrictHostKeyChecking=no -l ${user} -p ${port} ${name} ${command}\"")
+}
+
+/**
+ * Returns a list of compute node names. When "role" is specified, returns only
+ * names of compute nodes connected to the switch
+ *
+ * @param role    the switch role, i.e. "leaf-1"
+ */
+def getComputeNames(role="") {
+    computeNamesAll = runHeadNodeCmd("cord prov list | grep node | awk '{print \\\$2}' | sed -e \\\"s/.*/'&'/\\\"").trim()
+    computeNamesAll = "${computeNamesAll}".split()
+    computeNamesAll = "${computeNamesAll}".replaceAll("'", "\"")
+    computeNamesAll = new JsonSlurperClassic().parseText("${computeNamesAll}")
+    if ("${role}" == "") return computeNamesAll
+    computeNames = []
+    switchMac = ""
+    for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+        if ("${deployment_config.fabric_switches[i].role}" == "${role}")
+            switchMac = "${deployment_config.fabric_switches[i].mac}"
+    }
+    if ("${switchMac}" != "") {
+        switchMac = switchMac.toLowerCase().replaceAll(':','')
+        // Get fabric IPs of compute nodes connected to the switch
+        computeFabricIps = runHeadNodeCmd("sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts -j | jq '.[] | select(.location.elementId | contains(\\\"${switchMac}\\\")) | .ipAddresses' | grep -o '\\\"${fabricIpPrefix}.[1-9][0-9]*.[0-9]*\\\"'",
+                                          "-q").trim()
+        computeFabricIps = "${computeFabricIps}".split()
+        computeFabricIps = new JsonSlurperClassic().parseText("${computeFabricIps}")
+        // Figure out which compute node connects to the switch
+        for (name in computeNamesAll) {
+            fabricIp = runComputeNodeCmd("${name}", "ip a | grep -o '${fabricIpPrefix}.[1-9][0-9]*.[0-9]*'").trim()
+            if (fabricIp in computeFabricIps) {
+                computeNames.add("${name}")
+            }
+        }
+    }
+    return computeNames
+}
+
+/**
+ * Connects all fabric switches and compute nodes to ONOS
+ */
+def connectFabricAndComputeToOnos() {
+    // Kill existing switch connections
+    runFabricSwitchCmdAll("./killit || echo no ofagentapp running")
+    // Clean stale ONOS data
+    runOnosCliCmd("onos-fabric", "8101", "onos", "rocks", "wipe-out -r -j please")
+    // Connect switches to ONOS
+    for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+        runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
+                           "${deployment_config.fabric_switches[i].user}",
+                           "${deployment_config.fabric_switches[i].pass}",
+                           "./connect -bg 2>&1 > ${deployment_config.fabric_switches[i].ip}.log",
+                           "-qftn")
+    }
+    // Verify ONOS has recognized the switches
+    timeout(time: 5) {
+        waitUntil {
+            try {
+                num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric devices | grep available=true | wc -l\"").trim()
+                return num.toInteger() == deployment_config.fabric_switches.size()
+            } catch (exception) {
+                return false
+            }
+        }
+    }
+    // Connect compute nodes to ONOS
+    runHeadNodeCmd("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
+    runComputeNodeCmdAll("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
+    // Verify ONOS has recognized the hosts
+    timeout(time: 5) {
+        waitUntil {
+            try {
+                num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts | grep id= | wc -l\"").trim()
+                return num.toInteger() == deployment_config.compute_nodes.size() + 1
+            } catch (exception) {
+                return false
+            }
+        }
+    }
 }
