@@ -26,7 +26,7 @@ build_cord_dir: /opt/cord
 
 # Vagrant VM configuration
 vagrant_box: "ubuntu/trusty64"
-head_vm_mem: 4096
+head_vm_mem: 8192
 head_vm_cpu: 8
 head_vm_ip: "192.168.46.100"
 
@@ -57,6 +57,9 @@ use_openstack: False
 create_configdirs_become: False
 xos_images: []
 
+# used in platform-install / roles/cord-profile/templates/docker-compose.yml.j2
+use_elasticstack: True
+
 # whitelist of images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
   - "xosproject/xos-base"
@@ -78,6 +81,7 @@ docker_image_whitelist:
   - "opencord/mavenrepo"
   - "redis"
   - "node"
+  - "sebp/elk"
 
 # Ansible Inventory
 inventory_groups:
