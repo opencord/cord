@@ -83,6 +83,12 @@
   with_items: "{{ profile_manifest.xos_services }}"
   when:  item.synchronizer is not defined or item.synchronizer
 
+- name: Add items to profile_container_list from profile_manifest.xos_dynamic_services
+  set_fact:
+    profile_container_list: "{{ profile_container_list }} + [ 'xosproject/{{ item.name }}-synchronizer' ]"
+  with_items: "{{ profile_manifest.xos_dynamic_services if 'xos_dynamic_services' in profile_manifest else [] }}"
+  when: item.synchronizer is not defined or item.synchronizer
+
 - name: Add items to profile_container_list from profile_manifest.enabled_gui_extensions
   set_fact:
     profile_container_list: "{{ profile_container_list }} + [ 'xosproject/gui-extension-{{ item.name }}' ]"
