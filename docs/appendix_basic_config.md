@@ -74,7 +74,7 @@ Before connecting to ONOS, the compute nodes must be configured with data plane 
 
 ###Assign IP addresses
 
-Log into the XOS GUI an click on `Core`, then `Tags`.  Each compute node is tagged with its data plane IP address.  For nodes connected to leaf2, change the `dataPlaneIp` tag to a unique IP address on the `10.6.2.0/24` subnet and click `Save`.
+Log into the XOS GUI an click on `Nodes`. For nodes connected to leaf2, change the `dataPlaneIp` attribute to a unique IP address on the `10.6.2.0/24` subnet and click `Save`.
 
 XOS will communicate the new IP address to the ONOS VTN app, which will change it on the nodes.  Once the switches are connected to ONOS as part of the fabric configuration process (see subsequent sections), log into each compute node and verify that `br-int` has the new IP address:
 
