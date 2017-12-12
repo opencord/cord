@@ -124,6 +124,7 @@ docker_image_whitelist:
   - "opencord/mavenrepo"
   - "redis"
   - "node"
+  - "sebp/elk"
 
 # node topology
 physical_node_list:

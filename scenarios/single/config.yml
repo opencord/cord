@@ -25,7 +25,7 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 build_cord_dir: /opt/cord
 
 # Vagrant VM configuration
-head_vm_mem: 4096
+head_vm_mem: 8192
 head_vm_cpu: 8
 head_vm_ip: "192.168.46.100"
 
@@ -77,6 +77,7 @@ docker_image_whitelist:
   - "opencord/mavenrepo"
   - "redis"
   - "node"
+  - "sebp/elk"
 
 # Ansible Inventory
 inventory_groups:
