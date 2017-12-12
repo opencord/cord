@@ -222,14 +222,21 @@ node ("${config.dev_node.name}") {
                                                 "${config.fabric_switches[i].pass}",
                                                 "sed -i -e 's/#port_mode_${config.fabric_switches[i].breakout_ports[j]}=/port_mode_${config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
                                      }
-				     // Prepending killit command with ! ensures the command will return exit status 0
+                                     // Pre-pending killit command with ! ensures the command will return exit status 0
                                      runFabricCmd("${config.head.ip}",
                                         "${config.head.user}",
                                         "${config.head.pass}",
                                         "${config.fabric_switches[i].ip}",
                                         "${config.fabric_switches[i].user}",
                                         "${config.fabric_switches[i].pass}",
-                                        "! /root/killit; /root/connect -bg")
+                                        "! /root/killit")
+                                     runFabricCmd("${config.head.ip}",
+                                        "${config.head.user}",
+                                        "${config.head.pass}",
+                                        "${config.fabric_switches[i].ip}",
+                                        "${config.fabric_switches[i].user}",
+                                        "${config.fabric_switches[i].pass}",
+                                        "/root/connect -bg")
                                 }
                           }
                     }
