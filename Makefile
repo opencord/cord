@@ -183,6 +183,15 @@ local-xos-teardown: xos-update-images
 	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
 	rm -f $(M)/local-onboard-profile
 
+# ===== usage: make xos-service-config NAME=exampleservice PATH=exampleservice KEYPAIR=exampleservice_rsa =======
+
+xos-service-config:
+	# NOTE check that variables are set before calling ansible?
+	$(ANSIBLE_PB) --extra-vars 'xos_dynamic_services={"name": $(NAME), "path"=$(PATH), "keypair"= $(KEYPAIR)}' $(PI)/xos-service-config.yml $(LOGCMD)
+
+xos-services-up:
+	$(ANSIBLE_PB) $(PI)/xos-services-up.yml $(LOGCMD)
+
 # docs
 .PHONY: docs
 docs:
