@@ -176,6 +176,13 @@ local-xos-teardown:
 	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
 	rm -f $(M)/local-onboard-profile
 
+# ===== usage: make xos-service-config NAME=exampleservice DIR=exampleservice =======
+xos-service-config:
+	$(ANSIBLE_PB) --extra-vars "service_name=$(NAME) service_dir=$(DIR)" $(PI)/xos-service-config.yml $(LOGCMD)
+
+xos-services-up:
+	$(ANSIBLE_PB) $(PI)/xos-services-up.yml $(LOGCMD)
+
 # docs
 .PHONY: docs
 docs:
