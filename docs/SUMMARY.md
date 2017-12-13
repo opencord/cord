@@ -14,6 +14,7 @@
     * [Troubleshooting and Build Internals](troubleshooting.md)
     * [Building Docker Images](build_images.md)
     * [Build System Config Glossary](build_glossary.md)
+    * [Operating CORD in China](cord_in_china.md)
 * [Operating and Managing CORD](operate/README.md)
     * [Powering Up a POD](operate/power_up.md)
     * [XOS Internals](xos/xos_internals.md)
