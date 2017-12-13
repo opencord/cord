@@ -189,7 +189,7 @@ node ("${deployment_config.dev_node.name}") {
                                     runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
                                                        "${deployment_config.fabric_switches[i].user}",
                                                        "${deployment_config.fabric_switches[i].pass}",
-                                                       "sed -i -e 's/#port_mode_${config.fabric_switches[i].breakout_ports[j]}=/port_mode_${config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
+                                                       "sed -i -e 's/#port_mode_${deployment_config.fabric_switches[i].breakout_ports[j]}=/port_mode_${deployment_config.fabric_switches[i].breakout_ports[j]}=/g' /etc/accton/ofdpa.conf")
                                 }
                             }
                         }
