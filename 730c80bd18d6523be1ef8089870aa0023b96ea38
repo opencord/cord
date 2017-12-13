@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "158e1590_682e2800",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000116
+      },
+      "writtenOn": "2017-12-13T10:45:12Z",
+      "side": 1,
+      "message": "I would suggest to add \"higher than CORD 4.1\"",
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62d105d5_86f3ebf3",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000116
+      },
+      "writtenOn": "2017-12-13T10:45:12Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 132,
+        "startChar": 75,
+        "endLine": 132,
+        "endChar": 76
+      },
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbe26a28_0980d45e",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000116
+      },
+      "writtenOn": "2017-12-13T10:45:12Z",
+      "side": 1,
+      "message": "I think a new paragraph is in order otherwise you\u0027re ready falls under E-CORD",
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
