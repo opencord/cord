@@ -32,7 +32,7 @@ MAKECMD="${MAKECMD:-make -j4}"
 REPO_BRANCH="${REPO_BRANCH:-master}"
 
 # Tool/OS versioning
-UBUNTU_VERSION="ubuntu/trusty64"
+UBUNTU_VERSION="${UBUNTU_VERSION:-ubuntu/trusty64}"
 
 HOST_RELEASE=`lsb_release -c -s`
 
