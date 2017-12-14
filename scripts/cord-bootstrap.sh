@@ -32,8 +32,6 @@ MAKECMD="${MAKECMD:-make -j4}"
 REPO_BRANCH="${REPO_BRANCH:-master}"
 
 # Tool/OS versioning
-UBUNTU_VERSION="ubuntu/trusty64"
-
 HOST_RELEASE=`lsb_release -c -s`
 
 if [ ${HOST_RELEASE} = "trusty" ]; then
@@ -126,18 +124,27 @@ function bootstrap_vagrant() {
 
   echo "Installing vagrant plugins if needed..."
   vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version ${VAGRANT_LIBVIRT_VERSION}
-  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
   vagrant plugin list | grep -q vagrant-hosts || vagrant plugin install vagrant-hosts
 
-  if ! vagrant box list | grep -q ${UBUNTU_VERSION}.*libvirt
-  then
-    add_box ${UBUNTU_VERSION}
+  echo "Obtaining libvirt image of Ubuntu"
+
+  if [[ $XENIAL -eq 1 ]]; then
+    add_xenial
+  else
+    add_trusty
   fi
 }
 
-function add_box() {
-  vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
-  vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
+function add_trusty() {
+  UBUNTU_VERSION=${UBUNTU_VERSION:-ubuntu/trusty64}
+  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
+  vagrant box list | grep ${UBUNTU_VERSION} | grep virtualbox || vagrant box add ${UBUNTU_VERSION}
+  vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant mutate ${UBUNTU_VERSION} libvirt --input-provider virtualbox
+}
+
+function add_xenial() {
+  UBUNTU_VERSION=${UBUNTU_VERSION:-generic/ubuntu1604}
+  vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant box add --provider libvirt ${UBUNTU_VERSION}
 }
 
 function cloudlab_setup() {
@@ -204,8 +211,9 @@ MAKE_TARGETS=()
 GROUP_LIST=()
 DOCKER=0
 VAGRANT=0
+XENIAL=0
 
-while getopts "dhp:t:v" opt; do
+while getopts "dhp:t:vx" opt; do
   case ${opt} in
     d ) DOCKER=1
         GROUP_LIST+=("docker")
@@ -216,6 +224,7 @@ while getopts "dhp:t:v" opt; do
       echo "  -p <project:change/revision> Download a patch from gerrit. Can be repeated."
       echo "  -t <target>                  Run '$MAKECMD <target>' in cord/build/. Can be repeated."
       echo "  -v                           Install Vagrant for mock/virtual/physical scenarios."
+      echo "  -x                           Use Xenial (16.04) in Vagrant VM's."
       exit 0
       ;;
     p ) GERRIT_PATCHES+=("$OPTARG")
@@ -224,6 +233,8 @@ while getopts "dhp:t:v" opt; do
       ;;
     v ) VAGRANT=1
         GROUP_LIST+=("libvirtd")
+      ;;
+    x ) XENIAL=1
       ;;
     \? ) echo "Invalid option: -$OPTARG"
       exit 1
