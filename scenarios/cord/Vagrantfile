@@ -68,6 +68,7 @@ Vagrant.configure(2) do |config|
       override.vm.provision :ansible do |ansible|
         ansible.playbook = $cordpath + "/build/ansible/add-extra-drive.yml" # Needs testing
       end
+      override.vm.synced_folder $cordpath, $ciab_dir, type: "nfs"
     end
   end
 
