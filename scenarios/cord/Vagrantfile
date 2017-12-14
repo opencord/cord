@@ -94,6 +94,7 @@ Vagrant.configure(2) do |config|
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
+      v.cpu_feature :name => 'avx2', :policy => 'disable'
     end
     c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
@@ -126,6 +127,7 @@ Vagrant.configure(2) do |config|
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
+      v.cpu_feature :name => 'avx2', :policy => 'disable'
     end
     c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
@@ -158,6 +160,7 @@ Vagrant.configure(2) do |config|
       v.boot 'network'
       v.boot 'hd'
       v.nested = true
+      v.cpu_feature :name => 'avx2', :policy => 'disable'
     end
     c.vm.provider :virtualbox do |v, override|
       override.vm.box = "clink15/pxe"
