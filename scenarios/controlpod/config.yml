@@ -1,0 +1,97 @@
+---
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# controlpod scenario
+# Brings up XOS with synchronizers and ONOS
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..') | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+build_cord_dir: /opt/cord
+
+# Vagrant VM configuration
+head_vagrant_box: "generic/ubuntu1604"
+head_vm_mem: 4096
+head_vm_cpu: 8
+head_vm_ip: "192.168.46.100"
+
+physical_node_list:
+  - name: head1
+    ipv4_last_octet: 1
+    aliases:
+      - head
+
+# make targets
+build_targets:
+  - onboard-profile
+
+cord_config_prereqs:
+  - vagrant-ssh-install
+
+prep_headnode_prereqs:
+  - prep-buildnode
+
+docker_images_prereqs:
+  - prep-headnode
+
+start_xos_prereqs:
+  - deploy-onos
+
+# controlpod scenario configuration
+frontend_only: False
+use_maas: False
+use_apt_cache: False
+use_openstack: False
+create_configdirs_become: False
+xos_images: []
+
+# whitelist of images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-builder"
+  - "xosproject/xos-libraries"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/xos-synchronizer-base"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "opencord/mavenrepo"
+  - "redis"
+  - "node"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    head1:
+
+  head:
+    head1:
+
+  compute:
+
