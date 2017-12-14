@@ -32,8 +32,6 @@ MAKECMD="${MAKECMD:-make -j4}"
 REPO_BRANCH="${REPO_BRANCH:-master}"
 
 # Tool/OS versioning
-UBUNTU_VERSION="ubuntu/trusty64"
-
 HOST_RELEASE=`lsb_release -c -s`
 
 if [ ${HOST_RELEASE} = "trusty" ]; then
@@ -126,18 +124,26 @@ function bootstrap_vagrant() {
 
   echo "Installing vagrant plugins if needed..."
   vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version ${VAGRANT_LIBVIRT_VERSION}
-  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
   vagrant plugin list | grep -q vagrant-hosts || vagrant plugin install vagrant-hosts
 
-  if ! vagrant box list | grep -q ${UBUNTU_VERSION}.*libvirt
-  then
-    add_box ${UBUNTU_VERSION}
+  echo "Obtaining libvirt image of Ubuntu"
+  if [ ${HOST_RELEASE} = "trusty" ]; then
+    add_trusty
+  else
+    add_xenial
   fi
 }
 
-function add_box() {
-  vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
-  vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
+function add_trusty() {
+  UBUNTU_VERSION=${UBUNTU_VERSION:-ubuntu/trusty64}
+  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
+  vagrant box list | grep ${UBUNTU_VERSION} | grep virtualbox || vagrant box add ${UBUNTU_VERSION}
+  vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant mutate ${UBUNTU_VERSION} libvirt --input-provider virtualbox
+}
+
+function add_xenial() {
+  UBUNTU_VERSION=${UBUNTU_VERSION:-generic/ubuntu1604}
+  vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant box add --provider libvirt ${UBUNTU_VERSION}
 }
 
 function cloudlab_setup() {
