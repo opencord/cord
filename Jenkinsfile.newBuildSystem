@@ -198,16 +198,11 @@ node ("${deployment_config.dev_node.name}") {
                     stage ("Configure the compute nodes") {
                         leafSwitchNum = 0
                         for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
-                            if(deployment_config.fabric_switches[i].containsKey("role") {
+                            if(deployment_config.fabric_switches[i].containsKey("role")) {
                                 if(deployment_config.fabric_switches[i].role.toLowerCase().contains("leaf")) {
                                     leafSwitchNum += 1
                                 }
                             }
-                        }
-                        // Configure head-node
-                        // Add routes to fabric subnets
-                        for(int i=2; i<=leafSwitchNum; i++) {
-                            runHeadNodeCmd("sudo ip route add ${fabricIpPrefix}." + i.toString() + ".0/24 via ${fabricIpPrefix}.1.254 || echo route already exists")
                         }
                         for(int i=1; i<=leafSwitchNum; i++) {
                             // Figure out which compute node connects to which switch
@@ -268,8 +263,6 @@ node ("${deployment_config.dev_node.name}") {
                                        """)
                         // Restart ONOS apps
                         runHeadNodeCmd("""
-                                       http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active; sleep 5
-                                       http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.vrouter/active; sleep 5
                                        http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
                                        http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
                                        """)
@@ -418,8 +411,10 @@ def getComputeNames(role="") {
     computeNames = []
     switchMac = ""
     for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
-        if ("${deployment_config.fabric_switches[i].role}" == "${role}")
-            switchMac = "${deployment_config.fabric_switches[i].mac}"
+        if(deployment_config.fabric_switches[i].containsKey("role")) {
+            if ("${deployment_config.fabric_switches[i].role}" == "${role}")
+                switchMac = "${deployment_config.fabric_switches[i].mac}"
+        }
     }
     if ("${switchMac}" != "") {
         switchMac = switchMac.toLowerCase().replaceAll(':','')
@@ -467,14 +462,13 @@ def connectFabricAndComputeToOnos() {
         }
     }
     // Connect compute nodes to ONOS
-    runHeadNodeCmd("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
     runComputeNodeCmdAll("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
     // Verify ONOS has recognized the hosts
     timeout(time: 5) {
         waitUntil {
             try {
                 num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts | grep id= | wc -l\"").trim()
-                return num.toInteger() == deployment_config.compute_nodes.size() + 1
+                return num.toInteger() == deployment_config.compute_nodes.size()
             } catch (exception) {
                 return false
             }
