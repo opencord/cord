@@ -198,8 +198,10 @@ node ("${deployment_config.dev_node.name}") {
                     stage ("Configure the compute nodes") {
                         leafSwitchNum = 0
                         for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
-                            if(deployment_config.fabric_switches[i].role.toLowerCase().contains("leaf")) {
-                                leafSwitchNum += 1
+                            if(deployment_config.fabric_switches[i].containsKey("role") {
+                                if(deployment_config.fabric_switches[i].role.toLowerCase().contains("leaf")) {
+                                    leafSwitchNum += 1
+                                }
                             }
                         }
                         // Configure head-node
