@@ -84,13 +84,10 @@ def parse_args():
     parser.add_argument('-a', '--actions_taken', default=None,
                         help="Save a YAML file with actions taken during run")
 
-    # FIXME - the -b and -p options are currently unimplemented
     group = parser.add_mutually_exclusive_group()
-
-    group.add_argument('-b', '--build_force', action="store_true",
-                       help="Build (don't fetch) all internal containers")
-
-    group.add_argument('-p', '--pull_force', action="store_true",
+    group.add_argument('-b', '--build', action="store_true", default=False,
+                       help="Build (don't fetch) all internal images, nocache")
+    group.add_argument('-p', '--pull', action="store_true", default=False,
                        help="Only pull containers, fail if build required")
 
     parser.add_argument('-d', '--dry_run', action="store_true",
@@ -453,6 +450,7 @@ class DockerImage():
                 r".*name$",
                 r".*vcs-url$",
                 r".*vcs-ref$",
+                r".*version$",
                 ]
 
         for clr in comparable_labels_re:  # loop on all comparable labels
@@ -466,6 +464,7 @@ class DockerImage():
                         LOG.info("Non-matching label: %s" % label)
                         return False  # False when first difference found
 
+        LOG.debug(" All labels matched")
         return True  # only when every label matches
 
     def same_name(self, other_name):
@@ -748,7 +747,6 @@ class DockerBuilder():
         self.images = []
 
         # arrays of images, used for write_actions
-        self.all = []
         self.preexisting = []
         self.obsolete = []
         self.pulled = []
@@ -795,7 +793,9 @@ class DockerBuilder():
             self._docker_connect()
 
         self.create_dependency()
-        self.find_preexisting()
+
+        if not args.build:  # if forcing build, don't use preexisting
+            self.find_preexisting()
 
         if args.graph is not None:
             self.dependency_graph(args.graph)
@@ -832,22 +832,36 @@ class DockerBuilder():
             for pe_image in pe_images:
                 raw_tags = pe_image['RepoTags']
 
-                self.all.append({
-                        'id': pe_image['Id'],
-                        'tags': raw_tags,
-                    })
+                if raw_tags:
+                    LOG.info("Preexisting Image - ID: %s, tags: %s" %
+                             (pe_image['Id'], ",".join(raw_tags)))
 
-                # ignoring all <none>:<none> images, reasonable?
-                if raw_tags and "<none>:<none>" not in raw_tags:
-                    LOG.debug(" Preexisting Image - ID: %s, tags: %s" %
-                              (pe_image['Id'], ",".join(raw_tags)))
+                    has_build_tag = False
+                    for tag in raw_tags:
+                        if build_tag in tag:
+                            LOG.debug(" image has build_tag: %s" % build_tag)
+                            has_build_tag = True
 
-                    image = self.find_image(raw_tags[0])
+                    base_name = raw_tags[0].split(":")[0]
+                    image = self.find_image(base_name)
 
+                    # only evaluate images in the list of desired images
                     if image is not None:
-                        if image.compare_labels(pe_image['Labels']):
-                            LOG.debug(" Image %s has up-to-date labels" %
-                                      pe_image['Id'])
+
+                        good_labels = image.compare_labels(pe_image['Labels'])
+
+                        if good_labels:
+                            if has_build_tag:
+                                LOG.info(" Image %s has up-to-date labels and"
+                                         " build_tag" % pe_image['Id'])
+                            else:
+                                LOG.info(" Image %s has up-to-date labels but"
+                                         " missing build_tag. Tagging image"
+                                         " with build_tag: %s" %
+                                         (pe_image['Id'], build_tag))
+
+                                self.dc.tag(pe_image['Id'], image.name,
+                                            tag=build_tag)
 
                             self.preexisting.append({
                                     'id': pe_image['Id'],
@@ -858,9 +872,18 @@ class DockerBuilder():
                             image.image_id = pe_image['Id']
                             image.status = DI_EXISTS
 
-                        else:
-                            LOG.debug(" Image %s has obsolete labels" %
-                                      pe_image['Id'])
+                        else:  # doesn't have good labels
+                            if has_build_tag:
+                                LOG.info(" Image %s has obsolete labels and"
+                                         " build_tag, remove" % pe_image['Id'])
+
+                                # remove build_tag from image
+                                name_bt = "%s:%s" % (base_name, build_tag)
+                                self.dc.remove_image(name_bt, False, True)
+
+                            else:
+                                LOG.info(" Image %s has obsolete labels, lacks"
+                                         " build_tag, ignore" % pe_image['Id'])
 
                             self.obsolete.append({
                                     'id': pe_image['Id'],
@@ -869,10 +892,11 @@ class DockerBuilder():
 
     def find_image(self, image_name):
         """ return image object matching name """
-        LOG.debug("attempting to find image for: %s" % image_name)
+        LOG.debug(" attempting to find image for: %s" % image_name)
 
         for image in self.images:
             if image.same_name(image_name):
+                LOG.debug(" found a match: %s" % image.raw_name)
                 return image
         return None
 
@@ -1014,20 +1038,20 @@ class DockerBuilder():
             LOG.debug(yaml.safe_dump(actions))
 
     def process_images(self):
-        """ determine whether to build/fetch images """
 
+        """ determine whether to build/fetch images """
         # upstream images (have no parents), must be fetched
-        must_fetch_a = filter(lambda img: img.parents is [], self.images)
+        must_fetch_a = filter(lambda img: not img.parents, self.images)
 
         for image in must_fetch_a:
             if image.status is not DI_EXISTS:
                 image.status = DI_FETCH
 
         # images that can be built or fetched (have parents)
-        b_or_f_a = filter(lambda img: img.parents is not [], self.images)
+        b_or_f_a = filter(lambda img: img.parents, self.images)
 
         for image in b_or_f_a:
-            if not image.parents_clean():
+            if not image.parents_clean() or args.build:
                 # must be built if not clean
                 image.status = DI_BUILD
             elif image.status is not DI_EXISTS:
@@ -1040,12 +1064,12 @@ class DockerBuilder():
                  ", ".join(c.name for c in c_and_e_a))
 
         upstream_a = filter(lambda img: (img.status is DI_FETCH and
-                                         img.parents is []), self.images)
+                                         not img.parents), self.images)
         LOG.info("Upstream images that must be fetched: %s" %
                  ", ".join(u.raw_name for u in upstream_a))
 
         fetch_a = filter(lambda img: (img.status is DI_FETCH and
-                                      img.parents is not []), self.images)
+                                      img.parents), self.images)
         LOG.info("Clean, buildable images to attempt to fetch: %s" %
                  ", ".join(f.raw_name for f in fetch_a))
 
@@ -1058,19 +1082,27 @@ class DockerBuilder():
 
         for image in upstream_a:
             if not self._fetch_image(image):
-                LOG.info("Unable to fetch upstream image: %s" % image.raw_name)
-                # FIXME: fail if the upstream image can't be fetched ?
+                LOG.error("Unable to fetch upstream image: %s" %
+                          image.raw_name)
+                sys.exit(1)
 
-        fetch_sort = sorted(fetch_a, key=(lambda img: len(img.children)),
-                            reverse=True)
+        # fetch if not forcing the build of all images
+        if not args.build:
+            fetch_sort = sorted(fetch_a, key=(lambda img: len(img.children)),
+                                reverse=True)
 
-        for image in fetch_sort:
-            if not self._fetch_image(image):
-                # if didn't fetch, build
-                image.status = DI_BUILD
+            for image in fetch_sort:
+                if not self._fetch_image(image):
+                    # if didn't fetch, build
+                    image.status = DI_BUILD
 
         while True:
             buildable_images = self.get_buildable()
+
+            if buildable_images and args.pull:
+                LOG.error("Images must be built, but --pull is specified")
+                exit(1)
+
             if buildable_images:
                 for image in buildable_images:
                     self._build_image(image)
@@ -1231,6 +1263,7 @@ class DockerBuilder():
 
                 for stat_d in self.dc.build(tag=build_tag,
                                             buildargs=buildargs,
+                                            nocache=args.build,
                                             custom_context=True,
                                             fileobj=context_tar,
                                             dockerfile=dockerfile,
@@ -1315,7 +1348,9 @@ if __name__ == "__main__":
             if LooseVersion(docker_version) >= LooseVersion('2.0.0'):
                 from docker import APIClient as DockerClient
             else:
-                from docker import Client as DockerClient
+                LOG.error("Unsupported python docker module - "
+                          "remove docker-py 1.x, install docker 2.x")
+                sys.exit(1)
 
             from docker import utils as DockerUtils
             from docker import errors as DockerErrors
