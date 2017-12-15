@@ -418,6 +418,26 @@ remove the appropriate file in the `milestones` directory prior to re-running.
 For more information about how the build works, see [Troubleshooting and Build
 Internals](troubleshooting.md).
 
+#### Failed: TASK \[maas-provision : Wait for node to become ready\]
+
+This issue occurs when the virtual compute node is not automatically enrolled
+in MAAS.  It may be useful to attach to the console of the compute node to
+see if there are any messages displayed.
+
+ * Create an SSH tunnel that forwards port 5902 from the local machine to the
+CIAB server: `ssh -L 5902:localhost:5902 <ciab-server>`
+
+ * Connect a VNC client (e.g., [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/))
+to `localhost:5902` on the local machine.  There is
+no password.
+
+If you see a stack trace or error message, please post it to the CORD Slack channel.
+
+#### Failed: TASK \[maas-provision : Wait for node to be fully provisioned\]
+
+This means that the node has enlisted in MAAS but something has gone wrong with
+the provisioning process.  In the `head1` VM look in `/etc/maas/ansible/logs/node-<id>.log`
+for the step that has failed.  Post it to the CORD Slack channel to get help.
 
 ## Congratulations!
 
