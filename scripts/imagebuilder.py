@@ -453,6 +453,7 @@ class DockerImage():
                 r".*name$",
                 r".*vcs-url$",
                 r".*vcs-ref$",
+                r".*version$",
                 ]
 
         for clr in comparable_labels_re:  # loop on all comparable labels
@@ -466,6 +467,7 @@ class DockerImage():
                         LOG.info("Non-matching label: %s" % label)
                         return False  # False when first difference found
 
+        LOG.debug("All labels matched")
         return True  # only when every label matches
 
     def same_name(self, other_name):
@@ -832,22 +834,28 @@ class DockerBuilder():
             for pe_image in pe_images:
                 raw_tags = pe_image['RepoTags']
 
-                self.all.append({
-                        'id': pe_image['Id'],
-                        'tags': raw_tags,
-                    })
-
-                # ignoring all <none>:<none> images, reasonable?
-                if raw_tags and "<none>:<none>" not in raw_tags:
+                if raw_tags:
                     LOG.debug(" Preexisting Image - ID: %s, tags: %s" %
                               (pe_image['Id'], ",".join(raw_tags)))
 
-                    image = self.find_image(raw_tags[0])
+                    has_build_tag = False
+                    raw_build_tag = ""
+                    for tag in raw_tags:
+                        if build_tag in tag:
+                            LOG.debug(" image has build_tag: %s" % build_tag)
+                            has_build_tag = True
+                            raw_build_tag = tag
+                            raw_tags.remove(tag)
 
-                    if image is not None:
+                    image = None
+                    if raw_tags:  # might be empty after removing build_tag
+                        image = self.find_image(raw_tags[0])
+
+                    # only evaluate images we can identify and ahve build tags
+                    if image is not None and has_build_tag:
                         if image.compare_labels(pe_image['Labels']):
-                            LOG.debug(" Image %s has up-to-date labels" %
-                                      pe_image['Id'])
+                            LOG.debug(" Image %s has up-to-date labels and "
+                                      " build_tag" % pe_image['Id'])
 
                             self.preexisting.append({
                                     'id': pe_image['Id'],
@@ -859,8 +867,12 @@ class DockerBuilder():
                             image.status = DI_EXISTS
 
                         else:
-                            LOG.debug(" Image %s has obsolete labels" %
-                                      pe_image['Id'])
+                            LOG.info(" Image %s has obsolete labels, remove"
+                                     " build_tag" % pe_image['Id'])
+
+                            # remove build tag
+                            self.dc.remove(image=raw_build_tag, force=True,
+                                           noprune=True)
 
                             self.obsolete.append({
                                     'id': pe_image['Id'],
@@ -873,6 +885,7 @@ class DockerBuilder():
 
         for image in self.images:
             if image.same_name(image_name):
+                LOG.debug(" found a match: %s" % image.raw_name)
                 return image
         return None
 
@@ -1315,7 +1328,9 @@ if __name__ == "__main__":
             if LooseVersion(docker_version) >= LooseVersion('2.0.0'):
                 from docker import APIClient as DockerClient
             else:
-                from docker import Client as DockerClient
+                LOG.error("Unsupported python docker module - "
+                          "remove docker-py 1.x, install docker 2.x")
+                sys.exit(1)
 
             from docker import utils as DockerUtils
             from docker import errors as DockerErrors
