@@ -839,15 +839,16 @@ class DockerBuilder():
 
                 # ignoring all <none>:<none> images, reasonable?
                 if raw_tags and "<none>:<none>" not in raw_tags:
+
                     LOG.debug(" Preexisting Image - ID: %s, tags: %s" %
                               (pe_image['Id'], ",".join(raw_tags)))
 
                     image = self.find_image(raw_tags[0])
 
-                    if image is not None:
+                    if image is not None and build_tag in raw_tags:
                         if image.compare_labels(pe_image['Labels']):
-                            LOG.debug(" Image %s has up-to-date labels" %
-                                      pe_image['Id'])
+                            LOG.debug(" Image %s has up-to-date labels and"
+                                      "marked with build_tag" % pe_image['Id'])
 
                             self.preexisting.append({
                                     'id': pe_image['Id'],
@@ -859,8 +860,8 @@ class DockerBuilder():
                             image.status = DI_EXISTS
 
                         else:
-                            LOG.debug(" Image %s has obsolete labels" %
-                                      pe_image['Id'])
+                            LOG.debug(" Image %s has obsolete labels or "
+                                      "lacks the build_tag" % pe_image['Id'])
 
                             self.obsolete.append({
                                     'id': pe_image['Id'],
