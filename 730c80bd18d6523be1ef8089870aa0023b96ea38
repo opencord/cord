@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c14d19a3_c420590c",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-12-15T18:24:40Z",
+      "side": 1,
+      "message": "This guide is used only for 4+ releases of CORD. No need to say",
+      "parentUuid": "158e1590_682e2800",
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0df8f6b9_d29c72e8",
         "filename": "docs/cord_in_china.md",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-12-14T23:18:44Z",
       "side": 1,
       "message": "visualize",
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "430bc9b6_54283666",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-12-15T18:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0df8f6b9_d29c72e8",
       "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "51363d20_0347be24",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-12-15T18:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62d105d5_86f3ebf3",
+      "range": {
+        "startLine": 132,
+        "startChar": 75,
+        "endLine": 132,
+        "endChar": 76
+      },
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbe26a28_0980d45e",
         "filename": "docs/cord_in_china.md",
         "patchSetId": 1
@@ -70,6 +130,24 @@
       "writtenOn": "2017-12-13T10:45:12Z",
       "side": 1,
       "message": "I think a new paragraph is in order otherwise you\u0027re ready falls under E-CORD",
+      "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5df76206_f4f5d7c9",
+        "filename": "docs/cord_in_china.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2017-12-15T18:24:40Z",
+      "side": 1,
+      "message": "Maybe (MAYBE) I\u0027ve understood... :)",
+      "parentUuid": "fbe26a28_0980d45e",
       "revId": "730c80bd18d6523be1ef8089870aa0023b96ea38",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
