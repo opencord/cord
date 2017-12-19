@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62aa172a_d5934708",
+        "filename": "ansible/roles/head-net/files/mgmtbridge.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-12-19T21:22:57Z",
+      "side": 1,
+      "message": "tailing space, and why? because `br` is not clear? isn\u0027t `br` sort of the standard suffix or at lease typically used suffix?",
+      "revId": "72786aa8d1a69fc5be0ea2734890d3790ae7d49d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
