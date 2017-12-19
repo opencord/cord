@@ -20,6 +20,7 @@
     * [XOS Internals](xos/xos_internals.md)
     * [REST API](operate/rest_apis.md)
     * [TOSCA](xos-tosca/README.md)
+    * [XOSSH](xos/xossh.md)
 * [Defining Models in CORD](xos/README.md)
     * [XOS Support for Models](xos/dev/xproto.md)
     * [Core Models](xos/core_models.md)
