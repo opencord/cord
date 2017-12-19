@@ -95,6 +95,7 @@ make: *** Waiting for unfinished jobs....
 make: *** [milestones/build-onos-apps] Error 2
 ```
 
+
 ## Collecting POD diagnostics
 
 There is a `collect-diag` make target that will collect diagnostic information
@@ -157,6 +158,80 @@ glance_image-list     neutron_net-list     nova_host-list
 keystone_tenant-list  neutron_port-list    nova_hypervisor-list
 keystone_user-list    neutron_subnet-list  nova_list_--all-tenants
 ```
+
+## prereqs-common failures
+
+### Hardware Requirements
+
+For a virtaul install, make sure the system you're using [meets the hardware requirements](install_virtual.md#what-you-need-prerequisites).
+
+### CPU Quantity Check
+
+The Head node must have at least 12 CPU cores.  Verify that your system
+has adequate CPU resources.
+
+### CPU KVM Check
+
+The nodes must support KVM virtualization on the CPUs being used.  You
+may have to turn it on in the firmware (BIOS, EFI, etc.) of your system.
+ Sometimes a firmware update is required to support this if the system
+is older.
+
+If you're trying to implement this in a "nested virtualization"
+environment, the virtualization system must support this and have it
+turned on for your VM. 
+
+Systems that support nested virtualization:
+
+-   VMWare - <https://communities.vmware.com/docs/DOC-8970>, <https://communities.vmware.com/community/vmtn/bestpractices/nested>
+-   Xen - <http://wiki.xenproject.org/wiki/Nested_Virtualization_in_Xen>
+-   KVM - <https://fedoraproject.org/wiki/How_to_enable_nested_virtualization_in_KVM> , <https://wiki.archlinux.org/index.php/KVM#Nested_virtualization>
+-   Hyper V - <https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/user_guide/nesting>
+
+Systems that lack nested virtualization:
+
+-   Virtualbox - track this feature request: <https://www.virtualbox.org/ticket/4032>
+
+### DNS Lookup Check
+
+The nodes must be able to look up hosts on the internet, to download software,
+VM images, and other items. This verifies that your DNS is working properly by
+performing lookups with the `dig` command, and that the query result is
+correct, not modified or redirected to another server.
+
+If this step fails please verify that DNS is set up properly (usually in
+`/etc/resolv.conf`).
+
+### DNS Global Root Connectivity Check
+
+A DNS server is run on the head node to resolve internal DNS for the pod, and
+for non-pod domains it makes requests to the global DNS root servers.
+
+If this step fails, verify that you do not have a firewall that is blocking
+outgoing DNS requests to the internet, or filtering DNS requests so that they
+go to only specific servers.
+
+### HTTP Download Check
+
+This verifies that you can download files from the internet, and the integrity
+of those files by checking a checksum on the download. If this fails, make sure
+you don't have a proxy or other firewall blocking or modifying network traffic.
+You can test this manually with `curl` or `wget`.
+
+### HTTPS Download Check
+
+The same as the HTTP check above, but over HTTPS. If this fails but the
+previous HTTP check succeeds, check that you don't have an HTTPS specific proxy
+or firewall, and that the date and time on the node is accurate.
+
+## dns-configure failures
+
+### Check that VM's can be found in DNS
+
+This likely means that something has gone wrong either with the
+connectivity or setup of the DNS server, or with the client
+configuration.  Verify that `/etc/resolv.conf` on all the nodes is using
+the IP address of the head node's default interface as the DNS server.
 
 ## Raising ONOS log levels
 
