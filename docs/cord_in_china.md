@@ -1,4 +1,4 @@
-# Opearting CORD in China
+# Operating CORD in China
 
 Different community members reported problems operating CORD in China. This section provides a practical guide and some suggestions on how to install the main platform, the use cases, as well as how to manage them after their setup.
 
