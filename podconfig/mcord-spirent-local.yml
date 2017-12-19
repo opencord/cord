@@ -1,4 +1,3 @@
----
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -14,9 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ecord-global-local POD Config
-# Starts a E-CORD Global container set in the local environment
+
+---
+# mock-mcord Pod Config
+# Creates a single-node mock M-CORD pod
 
 cord_scenario: local
-cord_profile: ecord-global
+cord_profile: mcord-spirent
 
