@@ -13,9 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ecord-local POD Config
-# Starts a E-CORD container set in the local environment
+# ecord-global-local POD Config
+# Starts a E-CORD Global container set in the local environment
 
 cord_scenario: local
-cord_profile: ecord
+cord_profile: ecord-global
 
