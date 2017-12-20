@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "764a18bd_92ca4af6",
+        "filename": "ansible/roles/head-net/files/mgmtbridge.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-12-20T01:03:24Z",
+      "side": 1,
+      "message": "also, why is this IP address hardcoded? Is this for CiaB? If not, this should be configurable.",
+      "revId": "7e3d020b2c0bc9ce787f588f43f3b588427a7900",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
