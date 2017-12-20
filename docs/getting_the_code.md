@@ -32,7 +32,7 @@ repo init -u https://gerrit.opencord.org/manifest -b {{ book.branch }} && \
 repo sync
 </code></pre>
 
-> NOTE: `-b` specifies the branch name. Development work goes on in `master,
+> NOTE: `-b` specifies the branch name. Development work goes on in `master`,
 > and there are also specific stable branches such as `cord-4.0` that can be
 > used.
 
@@ -69,4 +69,3 @@ Gerrit](https://wiki.opencord.org/display/CORD/Working+with+Gerrit).
 For a general introduction to ways you can participate and contribute to the
 project, see [Contributing to
 CORD](https://wiki.opencord.org/display/CORD/Contributing+to+CORD).
-
