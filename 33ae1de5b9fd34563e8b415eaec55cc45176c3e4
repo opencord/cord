@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b27b400_3f1e38c9",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-20T17:52:48Z",
+      "side": 1,
+      "message": "I do see the benefit in quickly being able to spin up an arbitrary service, but could these parameters be condensed down to a single filename, rather than a directory and service name set?\n\nFrom a process perspective, having config on disk lets people check the exact config and put it in version control, both of which are more persistent than trying to look through command line history to figure out what was done.",
+      "revId": "33ae1de5b9fd34563e8b415eaec55cc45176c3e4",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
