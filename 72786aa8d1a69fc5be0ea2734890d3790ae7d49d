@@ -16,6 +16,24 @@
       "revId": "72786aa8d1a69fc5be0ea2734890d3790ae7d49d",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce50d8b6_4429cb43",
+        "filename": "ansible/roles/head-net/files/mgmtbridge.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-20T22:12:12Z",
+      "side": 1,
+      "message": "Got rid of the trailing space. \n\nUsing the full `mgmtbridge` was mainly to match `mgmtbond`, and bonds don\u0027t have a commonly recognized shorter suffix.  I also considered `br-mgmt`. \n\nIt also had the side effect of ferreting out if we were hardcoding this name anywhere, which thankfully we weren\u0027t.",
+      "parentUuid": "62aa172a_d5934708",
+      "revId": "72786aa8d1a69fc5be0ea2734890d3790ae7d49d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
