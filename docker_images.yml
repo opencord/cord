@@ -201,10 +201,17 @@ buildable_images:
     repo: exampleservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/vmme-synchronizer
     repo: vMME
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/vhss-synchronizer
+    repo: vHSS
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/venb-synchronizer
     repo: venb
     path: "xos/synchronizer"
