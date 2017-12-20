@@ -20,7 +20,7 @@ ONOS needs to process a packet because it does not have a mechanism to automatic
 To remove stale data from ONOS, the ONOS CLI `wipe-out` command can be used:
 
 ```
-ssh -p 8101 onos@onos-fabric wipe-out -r -j please
+ssh -p 8101 onos@onos-fabric wipe-out please
 Warning: Permanently added '[onos-fabric]:8101,[10.6.0.1]:8101' (RSA) to the list of known hosts.
 Password authentication
 Password:  (password rocks)
