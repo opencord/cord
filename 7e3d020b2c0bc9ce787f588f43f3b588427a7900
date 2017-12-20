@@ -16,6 +16,24 @@
       "revId": "7e3d020b2c0bc9ce787f588f43f3b588427a7900",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0e987d4_7965bdd0",
+        "filename": "ansible/roles/head-net/files/mgmtbridge.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-20T22:06:39Z",
+      "side": 1,
+      "message": "This is for the virtual pod - that said, I\u0027d really like it to be configurable and not in the `cord` repo (so the virtual and physical pods have fewer differences, and we\u0027re less likely to break one or the other). \n\nInterfaces are being configured in both platform-install and maas, which I\u0027d like to consolidate as well.  I have a template based approach that seems to cover all cases in the platform-install `interface-config` role.",
+      "parentUuid": "764a18bd_92ca4af6",
+      "revId": "7e3d020b2c0bc9ce787f588f43f3b588427a7900",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
