@@ -41,7 +41,7 @@
 
     - name: Set profile_manifest_path fact
       set_fact:
-        profile_manifest_path:  "{{ (platform_install_dir ~ '/profile_manifests/' ~ cord_profile ~ '.yml') | realpath }}"
+        profile_manifest_path:  "{{ (cord_profile_src_dir ~ '/' ~ cord_profile ~ '.yml') | realpath }}"
 
     - name: Check for profile manifest
       stat:

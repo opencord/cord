@@ -20,9 +20,10 @@
 # `cord` is the standard CORD POD with XOS, ONOS, MaaS and OpenStack
 cord_scenario: cord
 
-# The name of the profile to use, found in the
-# platform-install/profile_manifests directory
-# Example values: `rcord`, `ecord`, `mcord`, `opencloud`
+# The name of the profile to use.  A use case (e.g., M-CORD) can have
+# multiple profiles.  Here, specify the name of the profile file without
+# the .yml extension.
+# Example values: `rcord`, `ecord`, `mcord-cavium`, `opencloud`
 cord_profile: <must_be_set>
 
 # Bring up the corddev VM. This is the `build` node as specified in ansible
