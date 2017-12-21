@@ -77,9 +77,9 @@
         scenario_config: "{{ lookup('file', scenario_config_path) | from_yaml }}"
         profile_manifest: "{{ lookup('file', profile_manifest_path) | from_yaml }}"
 
-    - name: Combine pod and scenario config into master config
+    - name: Combine pod and scenario configs and profile manifest into master config
       set_fact:
-        master_config: "{{ scenario_config | combine(pod_config) }}"
+        master_config: "{{ profile_manifest | combine(scenario_config) | combine(pod_config) }}"
 
     - name: Prime profile_container_list from with master_config.docker_image_whitelist
       set_fact:
