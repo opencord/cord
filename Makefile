@@ -14,11 +14,15 @@ MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
 
 # Configuration paths
-PODCONFIG_D      ?= $(BUILD)/podconfig
+USECASE          := $(shell echo $(PODCONFIG) | awk -F '-' '{ print $$1}')
+PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
+
+PODCONFIG_D      ?= $(PROFILE_D)/podconfig
 PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
 
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
+
 
 CONFIG_CORD_PROFILE_DIR ?= $(CORD)/../cord_profile
 
@@ -93,7 +97,7 @@ config: $(CONFIG_FILES)
 
 $(CONFIG_FILES):
 	test -e "$(PODCONFIG_PATH)" || { echo "PODCONFIG file $(PODCONFIG_PATH) doesn't exist!" ; exit 1; }
-	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)' platform_install_dir='$(PI)'" $(BUILD)/ansible/genconfig.yml $(LOGCMD)
+	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)' platform_install_dir='$(PI)' cord_profile_src_dir='$(PROFILE_D)' " $(BUILD)/ansible/genconfig.yml $(LOGCMD)
 
 printconfig:
 	@echo "Scenario: '$(SCENARIO)'"
