@@ -34,6 +34,24 @@
       "revId": "72786aa8d1a69fc5be0ea2734890d3790ae7d49d",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7eee0eff_c131e4d2",
+        "filename": "ansible/roles/head-net/files/mgmtbridge.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2017-12-21T03:05:31Z",
+      "side": 1,
+      "message": "But another point is that human operators trying to use and debug CORD have already come to expect the name mgmtbr - why change that on them for what seems like very little benefit?",
+      "parentUuid": "ce50d8b6_4429cb43",
+      "revId": "72786aa8d1a69fc5be0ea2734890d3790ae7d49d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
