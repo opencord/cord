@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7263e765_96ceb6ef",
+        "filename": "Makefile",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-22T18:16:02Z",
+      "side": 1,
+      "message": "`?\u003d` will allow this to be overridden in the command line.",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 18
+      },
+      "revId": "db735aa4e531dfdc0de4bce892053ce74fff77e1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5fb0c5_502849d1",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-22T18:16:02Z",
+      "side": 1,
+      "message": "Is this OK? I don\u0027t recall when these were changed...",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "db735aa4e531dfdc0de4bce892053ce74fff77e1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
