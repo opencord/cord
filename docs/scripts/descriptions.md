@@ -9,6 +9,22 @@ These variables are used in and apply to the following repositories:
  - [maas](https://github.com/opencord/maas)
  - [platform-install](https://github.com/opencord/platform-install)
 
+## addresspool_public_cidr
+
+CIDR address for Public AddressPool
+
+## addresspool_public_hwaddr_prefix
+
+MAC address prefix for Public AddressPool
+
+## addresspool_vsg_cidr
+
+CIDR address for vSG AddressPool
+
+## addresspool_vsg_hwaddr_prefix
+
+MAC address prefix for vSG AddressPool
+
 ## apt_cacher_name
 
 DNS name for the apt-cacher-ng server used by compute nodes and LXC containers
@@ -203,9 +219,21 @@ DPDK option concerning memory allocation.
 
 List of GUI extensions enabled and loaded into the Web UI
 
+## epc_blueprint
+
+Name of the blueprint to use with the [M-CORD](/profiles/mcord/) EPC service.
+
+## epc_sync_objects
+
+List of instances to wait for when testing the EPC service.
+
 ## fabric_interfaces
 
-External VTN interface connected to the fabric switches.
+External VTN interfaces connected to the fabric switches.
+
+## fabric_net_interfaces
+
+Physical interfaces connected to the VTN fabric network switches.
 
 ## fabric_network_cfg_json
 
@@ -292,9 +320,22 @@ Location on the headnode to create the `onos_fabric` directory, which contains
 configuration and the docker-compose.yml file for starting the ONOS instance
 that runs the Fabric app.
 
+## head_xos_admin_pass
+
+Contains the XOS admin password, used for loading TOSCA into XOS.  Can't use
+the standard [xos_admin_pass](#xosadminpass) as these playbooks are run from a
+context (like the MaaS provisioning container) where they may not have access
+to the same file with the password.
+
 ## headnode_dns
 
 DNS Name of the headnode on the system, used to configure NSD DNS aliases.
+
+## headnode_nat_interface
+
+Network interface on the head node that is connected to the internet.  NAT is
+performed on this interface giving the other nodes on the network access
+(mainly for nodes on the management network).
 
 ## hugepages
 
@@ -329,11 +370,7 @@ Port used by ONOS containers for sending log4j logging messages to ElasticStack.
 
 Hostname (or IP) for the ElasticStack logging host machine.
 
-## maas_xos_admin_pass
 
-Contains the XOS admin password, used for loading TOSCA with up MaaS.  Can't
-use the standard [xos_admin_pass](#xos_admin_pass) as these playbooks are run
-from the MaaS provisioner container.
 
 ## management_hosts_net_cidr
 
@@ -347,32 +384,35 @@ Last IP address to assign as a part of the management_hosts VTN network.
 
 First IP address to assign as a part of the management_hosts VTN network.
 
-## management_network_cidr
+## management_net_cidr
 
 CIDR of the head node management network that connects between the OpenStack
 LXC containers and compute nodes.
 
-## mgmt_interface
+## management_network_cidr
 
-Physical management network interface on head node.
+CIDR for VTN MANAGEMENT_LOCAL network
+
+## management_net_interfaces
+
+List of physical interfaces on a node connected to the management network.
+These are bonded together into `mgmtbond`.
+
+## mcord_ng40_license_email
+
+Email address used when licensing the [NG40 tester software](profiles/mcord/installation_guide.md#ng40-vtester-m-cord-license).
+
+## mcord_ng40_login
+
+Login used with the [NG40 tester software](profiles/mcord/installation_guide.md#ng40-vtester-m-cord-license).
+
+## mcord_ng40_password
+
+Password used with the [NG40 tester software](profiles/mcord/installation_guide.md#ng40-vtester-m-cord-license).
 
 ## mgmt_ipv4_first_octets
 
 First 3 octets of the IP address of the management network.
-
-## mgmt_name_reverse_unbound
-
-The same value as [mgmt_ipv4_first_octets](#mgmt_ipv4_first_octets) but
-formatted for Unbound for use as a reverse DNS lookup zone.
-
-## mgmtbr_ext_interface
-
-Network interface on head node to add to the `mgmtbr` bridge.
-
-## mgmtbr_nat_interface
-
-Network interface connected to the internet that NAT is performed on for
-nodes that use the `mgmtbr` bridge.
 
 ## min_memtotal_mb
 
@@ -394,6 +434,10 @@ Group used by the NSD nameserver.
 
 IP address of the NSD nameserver. Usually this is set to the loopback address,
 as Unbound runs on the external interfaces.
+
+## nsd_port
+
+Port that NSD will listen on.
 
 ## nsd_zones
 
@@ -556,9 +600,9 @@ Path for the Unbound recursive DNS resolver configuration file.
 
 Group name used by Unbound server.
 
-## unbound_interfaces
+## unbound_listen_zones
 
-List of network interfaces that Unbound should listen on.
+Toggle for listening on first IP address listed in the [nsd_zones](#nsdzones) list.
 
 ## unbound_listen_all
 
@@ -567,6 +611,14 @@ Whether Unbound should listen on all available network interfaces.
 ## unbound_listen_on_default
 
 Whether Unbound should listen on the default gateway interface (as known to Ansible).
+
+## use_addresspool_public
+
+Toggle whether to create the Public AddressPool NAT interface
+
+## use_addresspool_vsg
+
+Toggle whether to create the VSG AddressPool NAT interface
 
 ## use_apt_cache
 
@@ -600,6 +652,14 @@ Use redis as a message bus inside XOS.
 
 Use the ONOS VTN app to manage networks for virtual instances.
 
+## use_vtn_net_fabric
+
+Whether to enable the VTN FABRIC network.
+
+## use_vtn_net_management_host
+
+Whether to enable the VTN MANAGEMENT_HOST network.
+
 ## vcpu_pin_set
 
 DPDK setting to specify CPU pinning.
@@ -609,10 +669,30 @@ DPDK setting to specify CPU pinning.
 DNS name of the server to ping when running the vSG portion of the
 [pod-test](install_virtual.md#test-vsg).
 
+## vtn_data_plane_interface
+
+Physical interface network used for the VTN data plane.
+
+## vtn_net_management_host_hwaddr_prefix
+
+MAC address prefix for interfaces on the VTN MANAGEMENT_HOST network.
+
 ## vtn_management_host_net_interface
 
 Network interface to use on the head/compute nodes for the management_host
 network.
+
+## vtn_net_management_host_cidr
+
+CIDR for the MANAGEMENT_HOST VTN network.
+
+## vtn_net_public_cidr
+
+CIDR for the PUBLIC VTN network.
+
+## vtn_net_public_hwaddr_prefix
+
+MAC address prefix for interfaces on the VTN PUBLIC network.
 
 ## xos_admin_first
 
@@ -657,14 +737,6 @@ Path of XOS directory within Docker containers.
 ## xos_docker_networks
 
 Name of networks created in Docker for XOS containers.
-
-## xos_grpc_insecure_port
-
-Insecure (non-SSL) port used for GRPC connections to the XOS API.
-
-## xos_grpc_secure_port
-
-Secure (SSL) port used for GRPC connections to the XOS API.
 
 ## xos_gui_service_graph_constraints
 
