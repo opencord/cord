@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e9db666d_7537d4b9",
+        "filename": "Makefile",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-12-22T18:35:35Z",
+      "side": 1,
+      "message": "Overriding works now:\n\nmake PODCONFIG\u003drcord-mock.yml USECASE\u003dmcord config\nMakefile:51: genconfig/config.mk: No such file or directory\ntest -e \"../orchestration/profiles/mcord/podconfig/rcord-mock.yml\" || { echo \"PODCONFIG file ../orchestration/profiles/mcord/podconfig/rcord-mock.yml doesn\u0027t exist!\" ; exit 1; }\nPODCONFIG file ../orchestration/profiles/mcord/podconfig/rcord-mock.yml doesn\u0027t exist!\nmake: *** [genconfig/config.mk] Error 1\n\nI think we want :\u003d so that it\u0027s only evaluated once.",
+      "parentUuid": "7263e765_96ceb6ef",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 18
+      },
+      "revId": "db735aa4e531dfdc0de4bce892053ce74fff77e1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff5fb0c5_502849d1",
         "filename": "scenarios/mock/config.yml",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-22T18:16:02Z",
       "side": 1,
       "message": "Is this OK? I don\u0027t recall when these were changed...",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "db735aa4e531dfdc0de4bce892053ce74fff77e1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74812bc_1fe56117",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2017-12-22T18:35:35Z",
+      "side": 1,
+      "message": "Looks like memory was changed in this commit (and seems unrelated to the purpose of the commit, so I believe it was an error): https://github.com/opencord/cord/commit/bf7013d27fc1297c5da904c6404b077500a0e233#diff-ed572f93c00c66650fe52343d778e564\n\nI don\u0027t see any reason for 4 CPUs for the mock scenario, and my laptop only has 2 cores.",
+      "parentUuid": "ff5fb0c5_502849d1",
       "range": {
         "startLine": 26,
         "startChar": 3,
