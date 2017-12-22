@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1950e4de_4f7a1d2b",
+        "filename": "docs/troubleshooting.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2017-12-22T18:02:46Z",
+      "side": 1,
+      "message": "Actually, didn\u0027t specify retry method, as retries are already being done in the playbook, so manual retries are unlikely to help.",
+      "parentUuid": "04fded27_4c9b7a1c",
+      "range": {
+        "startLine": 199,
+        "startChar": 61,
+        "endLine": 199,
+        "endChar": 69
+      },
+      "revId": "af084766806135a170f6d5689d230158b8caf35d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a51125d4_e72abb93",
         "filename": "docs/troubleshooting.md",
         "patchSetId": 2
