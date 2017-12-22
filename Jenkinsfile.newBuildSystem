@@ -257,10 +257,7 @@ node ("${deployment_config.dev_node.name}") {
                         // Delete old ONOS netcfg
                         runHeadNodeCmd("http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/")
                         // Load new configuration
-                        runHeadNodeCmd("""
-                                       cd /opt/cord_profile
-                                       docker-compose -p ${pod_config.cord_profile} exec -T xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
-                                       """)
+                        runHeadNodeCmd("http -a onos:rocks POST http://onos-fabric:8181/onos/v1/network/configuration/ < /opt/cord_profile/fabric-network-cfg.json")
                         // Restart ONOS apps
                         runHeadNodeCmd("""
                                        http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
@@ -419,8 +416,12 @@ def getComputeNames(role="") {
     if ("${switchMac}" != "") {
         switchMac = switchMac.toLowerCase().replaceAll(':','')
         // Get fabric IPs of compute nodes connected to the switch
-        computeFabricIps = runHeadNodeCmd("sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts -j | jq '.[] | select(.location.elementId | contains(\\\"${switchMac}\\\")) | .ipAddresses' | grep -o '\\\"${fabricIpPrefix}.[1-9][0-9]*.[0-9]*\\\"'",
-                                          "-q").trim()
+        try {
+            computeFabricIps = runHeadNodeCmd("sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts -j | jq '.[] | select(.location.elementId | contains(\\\"${switchMac}\\\")) | .ipAddresses' | grep -o '\\\"${fabricIpPrefix}.[1-9][0-9]*.[0-9]*\\\"'",
+                                              "-q").trim()
+         }catch (exception) {
+            return computeNames
+        }
         computeFabricIps = "${computeFabricIps}".split()
         computeFabricIps = new JsonSlurperClassic().parseText("${computeFabricIps}")
         // Figure out which compute node connects to the switch
