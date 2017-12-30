@@ -75,6 +75,8 @@ setup_automation_prereqs:
   - deploy-openstack
 
 # Vagrant VM configuration
+vagrant_box: "ubuntu/trusty64"
+
 vagrant_vms:
   - corddev
   - head1

@@ -23,6 +23,7 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 build_cord_dir: /opt/cord
 
 # Vagrant VM configuration
+vagrant_box: "ubuntu/trusty64"
 head_vm_mem: 2048
 head_vm_cpu: 1
 head_vm_ip: "192.168.46.100"

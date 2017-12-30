@@ -125,26 +125,18 @@ function bootstrap_vagrant() {
   echo "Installing vagrant plugins if needed..."
   vagrant plugin list | grep -q vagrant-libvirt || vagrant plugin install vagrant-libvirt --plugin-version ${VAGRANT_LIBVIRT_VERSION}
   vagrant plugin list | grep -q vagrant-hosts || vagrant plugin install vagrant-hosts
+  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
 
   echo "Obtaining libvirt image of Ubuntu"
 
   if [[ $XENIAL -eq 1 ]]; then
-    add_xenial
+    UBUNTU_VERSION=${UBUNTU_VERSION:-bento/ubuntu-16.04}
   else
-    add_trusty
+    UBUNTU_VERSION=${UBUNTU_VERSION:-ubuntu/trusty64}
   fi
-}
 
-function add_trusty() {
-  UBUNTU_VERSION=${UBUNTU_VERSION:-ubuntu/trusty64}
-  vagrant plugin list | grep -q vagrant-mutate || vagrant plugin install vagrant-mutate
-  vagrant box list | grep ${UBUNTU_VERSION} | grep virtualbox || vagrant box add ${UBUNTU_VERSION}
+  vagrant box list | grep ${UBUNTU_VERSION} | grep virtualbox || vagrant box add --provider virtualbox ${UBUNTU_VERSION}
   vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant mutate ${UBUNTU_VERSION} libvirt --input-provider virtualbox
-}
-
-function add_xenial() {
-  UBUNTU_VERSION=${UBUNTU_VERSION:-generic/ubuntu1604}
-  vagrant box list | grep ${UBUNTU_VERSION} | grep libvirt || vagrant box add --provider libvirt ${UBUNTU_VERSION}
 }
 
 function cloudlab_setup() {

@@ -23,7 +23,7 @@ config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realp
 build_cord_dir: /opt/cord
 
 # Vagrant VM configuration
-head_vagrant_box: "generic/ubuntu1604"
+vagrant_box: "bento/ubuntu-16.04"
 head_vm_mem: 4096
 head_vm_cpu: 8
 head_vm_ip: "192.168.46.100"

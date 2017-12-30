@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# opencloud Scenario
-# For a virtual install, physical does not use VMs
+# preppedpod Scenario - install CORD on prepared systems with OS installed
+# Only used with a virtual install, physical does not use VMs
 
 # opencloud profile config
 frontend_only: False
@@ -54,11 +54,11 @@ docker_images_prereqs:
   - prep-headnode
 
 # Start elasticstack before XOS/ONOS, which log to it
-start_xos_prereqs:
-  - deploy-elasticstack
-
-deploy_onos_prereqs:
-  - deploy-elasticstack
+#start_xos_prereqs:
+#  - deploy-elasticstack
+#
+#deploy_onos_prereqs:
+#  - deploy-elasticstack
 
 # node topology, used to bring up management interfaces
 physical_node_list:
@@ -77,6 +77,8 @@ vagrant_vms:
   - compute1
   - compute2
 
+# Vagrant VM configuration
+vagrant_box: "ubuntu/trusty64"
 head_vm_mem: 16384
 head_vm_cpu: 8
 
