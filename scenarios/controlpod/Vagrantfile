@@ -8,7 +8,7 @@ settings = YAML.load_file('genconfig/config.yml')
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = settings["head_vagrant_box"]
+  config.vm.box = settings["vagrant_box"]
 
   # sync these folders with VM
   config.vm.synced_folder "../../../", "/opt/cord/", create: true
