@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81d249df_a57963d6",
+        "filename": "docker_images.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-02T16:34:27Z",
+      "side": 1,
+      "message": "Is there a reason we\u0027re using 5.x vs current 6.x version?",
+      "range": {
+        "startLine": 36,
+        "startChar": 5,
+        "endLine": 36,
+        "endChar": 17
+      },
+      "revId": "565655c53e87c3c5d823e8eb6cd37485f5bd13a3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ce316f8_a0cf81cf",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-02T16:34:27Z",
+      "side": 1,
+      "message": "`mock` doesn\u0027t get elasticstack",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 14
+      },
+      "revId": "565655c53e87c3c5d823e8eb6cd37485f5bd13a3",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
