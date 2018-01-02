@@ -79,11 +79,11 @@ node ("${deployment_config.dev_node.name}") {
                 }
 
                 stage ("Download CORD POD configuration") {
-                    sh "cd podconfig; git clone -b ${branch} ${deployment_config.pod_config.repo_url} automation"
+                    sh "cd ../orchestration/profiles; git clone -b ${branch} ${deployment_config.pod_config.repo_url} automation"
                 }
 
                 stage ("Generate CORD configuration") {
-                    sh "make PODCONFIG=automation/${deployment_config.pod_config.file_name} config"
+                    sh "make USECASE=${pod_config.cord_profile} PODCONFIG_D=../orchestration/profiles PODCONFIG=automation/${deployment_config.pod_config.file_name} config"
                 }
 
                 if (deployment_config.fabric_switches != null) {
