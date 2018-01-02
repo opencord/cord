@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20d1c171_8f33a596",
+        "filename": "scenarios/local/config.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-02T16:20:30Z",
+      "side": 1,
+      "message": "doesn\u0027t need to be in mock/local",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 14
+      },
+      "revId": "77981689ab4fa5232718e14039f2ed8c00009e8a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61f2c0f1_7f6006d5",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-02T16:20:30Z",
+      "side": 1,
+      "message": "doesn\u0027t need to be in mock/local",
+      "range": {
+        "startLine": 75,
+        "startChar": 10,
+        "endLine": 76,
+        "endChar": 14
+      },
+      "revId": "77981689ab4fa5232718e14039f2ed8c00009e8a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
