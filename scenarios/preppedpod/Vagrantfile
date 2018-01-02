@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "head1" do |h|
     h.vm.hostname = "head1"
-    h.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
+    h.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '0.0.0.0'
     h.vm.provider :libvirt do |v|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']

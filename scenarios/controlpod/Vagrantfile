@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
   # set the headnode VM
   config.vm.define "head1" do |d|
     d.vm.hostname = "head1"
-    d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '*'
+    d.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '0.0.0.0'
     d.vm.network "private_network",
       ip: settings['head_vm_ip']
     d.vm.provider :virtualbox do |vb|

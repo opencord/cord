@@ -14,7 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Ensure .ssh directory exists
+- name: Check for .ssh directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.ssh"
+  register: dotsshdir
+
+- name: Create .ssh directory if it doesn't exist
+  when: (not dotsshdir.stat.isdir) and (not dotsshdir.stat.islnk)
   file:
     path: "{{ ansible_env.HOME }}/.ssh"
     state: directory
