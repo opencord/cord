@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "519a63a0_f462212b",
+        "filename": "docs/scripts/descriptions.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2018-01-02T15:43:59Z",
+      "side": 1,
+      "message": "???",
+      "range": {
+        "startLine": 440,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 9
+      },
+      "revId": "1905c4a6bd77e5de4757359ad1ea694f18c30787",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
