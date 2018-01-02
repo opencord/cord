@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5d88340_2620232a",
+        "filename": "scenarios/local/config.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2018-01-02T20:11:44Z",
+      "side": 1,
+      "message": "Thanks. Dropped.",
+      "parentUuid": "20d1c171_8f33a596",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 14
+      },
+      "revId": "77981689ab4fa5232718e14039f2ed8c00009e8a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61f2c0f1_7f6006d5",
         "filename": "scenarios/mock/config.yml",
         "patchSetId": 7
