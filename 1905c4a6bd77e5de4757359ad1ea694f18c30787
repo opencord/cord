@@ -22,6 +22,30 @@
       "revId": "1905c4a6bd77e5de4757359ad1ea694f18c30787",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25bd6712_221fb3a7",
+        "filename": "docs/scripts/descriptions.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-03T00:24:49Z",
+      "side": 1,
+      "message": "Actually wrote a description :)",
+      "parentUuid": "519a63a0_f462212b",
+      "range": {
+        "startLine": 440,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 9
+      },
+      "revId": "1905c4a6bd77e5de4757359ad1ea694f18c30787",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
