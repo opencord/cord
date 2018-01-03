@@ -1,0 +1,77 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# controlkube Scenario Vagrantfile
+
+require 'yaml'
+settings = YAML.load_file('genconfig/config.yml')
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = settings["vagrant_box"]
+
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  # set the headnode VM
+  config.vm.define "head1" do |h|
+    h.vm.hostname = "head1"
+    h.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: '0.0.0.0'
+    h.vm.provider :virtualbox do |vb|
+      vb.memory = settings['head_vm_mem']
+      vb.cpus = settings['head_vm_cpu']
+      vb.linked_clone = true
+    end
+    h.vm.provider :libvirt do |v, override|
+      v.memory = settings['head_vm_mem']
+      v.cpus = settings['head_vm_cpu']
+    end
+    h.vm.network "private_network", # management network, eth1
+      ip: "0.1.1.0", # unused IP address (setting required)
+      auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+  end
+
+  config.vm.define "compute1" do |c|
+    c.vm.hostname = "compute1"
+    c.vm.provider :virtualbox do |vb|
+      vb.memory = settings['compute_vm_mem']
+      vb.cpus = settings['compute_vm_cpu']
+      vb.linked_clone = true
+    end
+    c.vm.provider :libvirt do |v|
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
+    end
+    c.vm.network "private_network", # management network, eth1
+      ip: "0.1.1.0", # unused IP address (setting required)
+      auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+  end
+
+  config.vm.define "compute2" do |c|
+    c.vm.hostname = "compute2"
+    c.vm.provider :virtualbox do |vb|
+      vb.memory = settings['compute_vm_mem']
+      vb.cpus = settings['compute_vm_cpu']
+      vb.linked_clone = true
+    end
+    c.vm.provider :libvirt do |v|
+      v.memory = settings['compute_vm_mem']
+      v.cpus = settings['compute_vm_cpu']
+    end
+    c.vm.network "private_network", # management network, eth1
+      ip: "0.1.1.0", # unused IP address (setting required)
+      auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
+      libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+  end
+end
+
