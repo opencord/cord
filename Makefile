@@ -7,6 +7,7 @@ TS               := $(shell date +'%Y%m%dT%H%M%SZ')
 BUILD            ?= .
 CORD             ?= ..
 PI               ?= $(BUILD)/platform-install
+KUBESPRAY        ?= $(BUILD)/kubespray
 MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
 
@@ -20,13 +21,10 @@ else
 endif
 
 PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
-
-PODCONFIG_D      ?= $(PROFILE_D)/podconfig
-PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
+PODCONFIG_PATH   ?= $(PROFILE_D)/podconfig/$(PODCONFIG)
 
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
-
 
 CONFIG_CORD_PROFILE_DIR ?= $(CORD)/../cord_profile
 
@@ -35,13 +33,14 @@ M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
 PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
 POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
 LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
-ALL_MILESTONES   ?= $(PREP_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS) $(LOCAL_MILESTONES)
+ALL_MILESTONES   ?= $(PREP_MS) $(KS_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS) $(LOCAL_MILESTONES)
 
 # Configuration files
 MASTER_CONFIG    ?= $(GENCONFIG_D)/config.yml
@@ -80,10 +79,11 @@ SHELL            = bash -o pipefail
 VAGRANT          ?= VAGRANT_CWD=$(VAGRANT_CWD) vagrant
 ANSIBLE          ?= ansible -i $(INVENTORY)
 ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG)
+ANSIBLE_PB_KS    ?= ANSIBLE_CONFIG=../ansible.cfg ansible-playbook $(ANSIBLE_ARGS) -b -i inventory/inventory.cord --extra-vars @../$(MASTER_CONFIG)
 ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
 ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py
-LOGCMD           ?= 2>&1 | tee -a $(LOGS)/$(TS)_$(@F)
+LOGCMD           ?= 2>&1 | tee -a $(abspath $(LOGS)/$(TS)_$(@F))
 SSH_HEAD         ?= ssh $(HEADNODE)
 SSH_BUILD        ?= ssh $(BUILDNODE)
 
@@ -140,6 +140,10 @@ clean-openstack:
 	$(SSH_HEAD) "/opt/cord/build/platform-install/scripts/clean_openstack.sh" $(LOGCMD)
 	rm -f $(M)/onboard-openstack
 
+clean-kubespray:
+	rm -f $(KS_MS)
+	rm -rf $(KUBESPRAY)
+
 collect-diag:
 	$(ANSIBLE_PB) $(PI)/collect-diag-playbook.yml $(LOGCMD)
 
@@ -184,6 +188,7 @@ CORD_CONFIG_PREREQS      ?=
 CONFIG_SSH_KEY_PREREQS   ?=
 PREP_BUILDNODE_PREREQS   ?=
 PREP_HEADNODE_PREREQS    ?=
+PREP_KUBESPRAY_PREREQS   ?=
 DOCKER_IMAGES_PREREQS    ?=
 START_XOS_PREREQS        ?=
 BUILD_ONOS_APPS_PREREQS  ?=
@@ -251,6 +256,16 @@ $(M)/deploy-elasticstack: | $(M)/prep-headnode
 
 $(M)/prep-computenode: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/prep-computenode-playbook.yml $(LOGCMD)
+	touch $@
+
+
+# kubespray targets
+$(M)/prep-kubespray: | $(M)/vagrant-ssh-install $(PREP_KUBESPRAY_PREREQS)
+	$(ANSIBLE_PB) $(BUILD)/ansible/prep-kubespray.yml $(LOGCMD)
+	touch $@
+
+$(M)/deploy-kubespray: | $(M)/prep-kubespray
+	cd $(KUBESPRAY); $(ANSIBLE_PB_KS) cluster.yml $(LOGCMD)
 	touch $@
 
 

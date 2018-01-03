@@ -1,0 +1,30 @@
+# created by prep-kubespray/templates/kubespray_inventory.j2
+
+[kube-master]
+{% for node in groups['head'] %}
+{{ node }}
+{% endfor %}
+{% for node in groups['compute'] %}
+{{ node }}
+{% endfor %}
+
+[etcd]
+{% for node in groups['head'] %}
+{{ node }}
+{% endfor %}
+{% for node in groups['compute'] %}
+{{ node }}
+{% endfor %}
+
+[kube-node]
+{% for node in groups['head'] %}
+{{ node }}
+{% endfor %}
+{% for node in groups['compute'] %}
+{{ node }}
+{% endfor %}
+
+[k8s-cluster:children]
+kube-node
+kube-master
+

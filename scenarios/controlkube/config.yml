@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# preppedpod Scenario - install CORD on prepared systems with OS installed
-# Only used with a virtual install, physical does not use VMs
+# controlkube Scenario - installs XOS/ONOS on kubernetes, similar to controlpod
 
 frontend_only: False
 use_maas: False
@@ -30,11 +29,10 @@ headnode: head1
 
 # Make build config
 build_targets:
-  - onos-debug
-  - onboard-openstack
-
-vagrant_up_prereqs:
-  - prereqs-check
+  - deploy-kubespray
+# - prep-computenode
+# - prep-headnode
+# - core-image
 
 config_ssh_key_prereqs:
   - vagrant-ssh-install
@@ -58,13 +56,6 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
-# Start elasticstack before XOS/ONOS, which log to it
-#start_xos_prereqs:
-#  - deploy-elasticstack
-#
-#deploy_onos_prereqs:
-#  - deploy-elasticstack
-
 # node topology, used to bring up management interfaces
 physical_node_list:
   - name: head1
@@ -72,9 +63,9 @@ physical_node_list:
     aliases:
       - head
   - name: compute1
-    ipv4_last_octet: 250
+    ipv4_last_octet: 17
   - name: compute2
-    ipv4_last_octet: 251
+    ipv4_last_octet: 18
 
 # Vagrant VM configuration
 vagrant_vms:
@@ -83,12 +74,13 @@ vagrant_vms:
   - compute2
 
 # Vagrant VM configuration
-vagrant_box: "ubuntu/trusty64"
-head_vm_mem: 16384
-head_vm_cpu: 8
+vagrant_box: "bento/ubuntu-16.04"
 
-compute_vm_mem: 16384
-compute_vm_cpu: 8
+head_vm_mem: 2048
+head_vm_cpu: 4
+
+compute_vm_mem: 2048
+compute_vm_cpu: 4
 
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
