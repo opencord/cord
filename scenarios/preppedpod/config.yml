@@ -16,8 +16,8 @@
 # preppedpod Scenario - install CORD on prepared systems with OS installed
 # Only used with a virtual install, physical does not use VMs
 
-# opencloud profile config
 frontend_only: False
+use_maas: False
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
@@ -36,7 +36,12 @@ build_targets:
 vagrant_up_prereqs:
   - prereqs-check
 
-# Copy cord and config to physical/virtual nodes
+config_ssh_key_prereqs:
+  - vagrant-ssh-install
+
+copy_cord_prereqs:
+  - vagrant-ssh-install
+
 cord_config_prereqs:
   - vagrant-ssh-install
   - copy-cord

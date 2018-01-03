@@ -67,6 +67,9 @@ PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}
 {% if prep_headnode_prereqs is defined %}
 PREP_HEADNODE_PREREQS   = $(M)/{{ prep_headnode_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if prep_kubespray_prereqs is defined %}
+PREP_KUBESPRAY_PREREQS   = $(M)/{{ prep_kubespray_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if docker_images_prereqs is defined %}
 DOCKER_IMAGES_PREREQS   = $(M)/{{ docker_images_prereqs | join(" $(M)/") }}
 {% endif %}
