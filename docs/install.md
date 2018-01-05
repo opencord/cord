@@ -133,12 +133,15 @@ directory under [build/scenarios](https://github.com/opencord/cord/tree/{{
 [build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/{{
   book.branch }}/profile_manifests).
 
-The included POD configs are generally named `<profile>-<scenario>.yml`, except
+The included POD configs must be named `<profile>-<scenario>.yml`, except
 for the `physical-example.yml` file which is used for a [Physical
   POD](install_physical.md) and requires a bit more work to configured.
 
 POD configs are used during a build by passing them with the `PODCONFIG`
 variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
+
+You can also specify a full path to the POD config file to use with
+`PODCONFIG_PATH`.  This will override the `PODCONFIG` variable.
 
 ### Profiles
 
