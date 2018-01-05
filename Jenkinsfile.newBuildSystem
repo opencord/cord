@@ -83,7 +83,7 @@ node ("${deployment_config.dev_node.name}") {
                 }
 
                 stage ("Generate CORD configuration") {
-                    sh "make USECASE=${pod_config.cord_profile} PODCONFIG_D=../orchestration/profiles PODCONFIG=automation/${deployment_config.pod_config.file_name} config"
+                    sh "make PODCONFIG_PATH=../orchestration/profiles/automation/${deployment_config.pod_config.file_name} config"
                 }
 
                 if (deployment_config.fabric_switches != null) {

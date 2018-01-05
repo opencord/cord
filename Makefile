@@ -3,9 +3,6 @@
 # Timestamp for log files
 TS               := $(shell date +'%Y%m%dT%H%M%SZ')
 
-# Podconfig must be specified, so an invalid default
-PODCONFIG        ?= invalid
-
 # Source path
 BUILD            ?= .
 CORD             ?= ..
@@ -14,7 +11,14 @@ MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
 
 # Configuration paths
-USECASE          := $(shell echo $(PODCONFIG) | awk -F '-' '{ print $$1}')
+ifdef PODCONFIG_PATH
+	USECASE      := $(shell grep cord_profile: $(PODCONFIG_PATH) | awk '{print $$2}')
+else ifdef PODCONFIG
+	USECASE      := $(shell echo $(PODCONFIG) | awk -F '-' '{print $$1}')
+else
+	USECASE      = invalid
+endif
+
 PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
 
 PODCONFIG_D      ?= $(PROFILE_D)/podconfig
@@ -96,7 +100,7 @@ config: $(CONFIG_FILES)
 	@echo "Run 'make -j4 build' to continue."
 
 $(CONFIG_FILES):
-	test -e "$(PODCONFIG_PATH)" || { echo "PODCONFIG file $(PODCONFIG_PATH) doesn't exist!" ; exit 1; }
+	@test -e "$(PODCONFIG_PATH)" || { echo ""; echo "PODCONFIG file $(PODCONFIG_PATH) doesn't exist!" ; echo "*** Specify a valid CORD config file using PODCONFIG or PODCONFIG_PATH ***"; echo ""; exit 1; }
 	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)' platform_install_dir='$(PI)' cord_profile_src_dir='$(PROFILE_D)' " $(BUILD)/ansible/genconfig.yml $(LOGCMD)
 
 printconfig:
