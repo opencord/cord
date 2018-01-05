@@ -3,9 +3,6 @@
 # Timestamp for log files
 TS               := $(shell date +'%Y%m%dT%H%M%SZ')
 
-# Podconfig must be specified, so an invalid default
-PODCONFIG        ?= invalid
-
 # Source path
 BUILD            ?= .
 CORD             ?= ..
@@ -13,13 +10,23 @@ PI               ?= $(BUILD)/platform-install
 MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
 
-# Configuration paths
-USECASE          := $(shell echo $(PODCONFIG) | awk -F '-' '{ print $$1}')
+# PODCONFIG or PODCONFIG_PATH must be specified, so an invalid default
+PODCONFIG        ?= invalid
+
+# if PODCONFIG is specified, it overrides PODCONFIG
+ifdef PODCONFIG_PATH
+	PODCONFIG := $(PODCONFIG_PATH)
+endif
+
+# sed regex takes "path/to/profile-scenario.yml" and returns just "profile"
+# / appended to front of PODCONFIG is to make regex work when not specified as a path
+# When testing w/sed, change the two $$'s into one (makefile escape of $ is $$)
+USECASE          := $(shell echo /$(PODCONFIG) | sed -En "s/.*\/([[:alpha:]]+)\-.+\.yml$$/\1/p")
+
 PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
+PODCONFIG_PATH   ?= $(PROFILE_D)/podconfig/$(PODCONFIG)
 
-PODCONFIG_D      ?= $(PROFILE_D)/podconfig
-PODCONFIG_PATH   ?= $(PODCONFIG_D)/$(PODCONFIG)
-
+# Configuration paths
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
 
