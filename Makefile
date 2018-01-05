@@ -3,9 +3,6 @@
 # Timestamp for log files
 TS               := $(shell date +'%Y%m%dT%H%M%SZ')
 
-# Podconfig must be specified, so an invalid default
-PODCONFIG        ?= invalid
-
 # Source path
 BUILD            ?= .
 CORD             ?= ..
@@ -14,7 +11,12 @@ MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
 
 # Configuration paths
-USECASE          := $(shell echo $(PODCONFIG) | awk -F '-' '{ print $$1}')
+ifdef PODCONFIG_PATH
+	USECASE		:= $(shell grep cord_profile: $(PODCONFIG_PATH) | awk '{print $$2}')
+else
+	USECASE		:= $(shell echo $(PODCONFIG) | awk -F '-' '{print $$1}')
+endif
+
 PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
 
 PODCONFIG_D      ?= $(PROFILE_D)/podconfig
