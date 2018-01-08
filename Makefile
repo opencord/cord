@@ -13,7 +13,7 @@ ONOS_APPS        ?= $(CORD)/onos-apps
 
 # Configuration paths
 ifdef PODCONFIG_PATH
-	USECASE      := $(shell grep cord_profile: $(PODCONFIG_PATH) | awk '{print $$2}')
+	USECASE      := $(shell grep cord_profile: $(PODCONFIG_PATH) | awk '{print $$2}' | awk -F '-' '{print $$1}')
 else ifdef PODCONFIG
 	USECASE      := $(shell echo $(PODCONFIG) | awk -F '-' '{print $$1}')
 else
