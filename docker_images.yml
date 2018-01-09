@@ -207,6 +207,11 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/hssdb-synchronizer
+    repo: hss_db
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/vhss-synchronizer
     repo: vHSS
     path: "xos/synchronizer"
