@@ -60,6 +60,9 @@ prep_headnode_prereqs:
   - copy-cord
   - copy-config
 
+publish_docker_images_prereqs:
+  - deploy-maas
+
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-maas
