@@ -1,0 +1,160 @@
+---
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# preppedkube Scenario - install CORD on kubernetes, on pre-prepared systems with OS installed
+
+frontend_only: False
+use_k8s: True
+use_maas: False
+use_openstack: False
+
+# create a cord_profile dir next to the cord checkout
+config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
+config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+create_configdirs_become: False
+
+build_cord_dir: /opt/cord
+
+# Vagrant VM configuration
+vagrant_box: "bento/ubuntu-16.04"
+
+head_vm_mem: 16384
+head_vm_cpu: 8
+
+compute_vm_mem: 16384
+compute_vm_cpu: 8
+
+buildnode: head1
+headnode: head1
+
+vagrant_vms:
+  - head1
+  - compute1
+  - compute2
+
+# Make build config
+build_targets:
+  - start-xos-helm
+
+vagrant_up_prereqs:
+  - prereqs-check
+
+config_ssh_key_prereqs:
+  - vagrant-ssh-install
+
+copy_cord_prereqs:
+  - vagrant-ssh-install
+
+cord_config_prereqs:
+  - vagrant-ssh-install
+  - copy-cord
+
+prep_buildnode_prereqs:
+  - copy-cord
+  - copy-config
+
+# Run build prep before head prep, when build == head
+prep_headnode_prereqs:
+  - prep-buildnode
+
+# Wait until headnode prepped before building containers, for consistent DNS
+docker_images_prereqs:
+  - prep-headnode
+
+# have kubespray skip docker installation
+skipTags:
+  - docker
+
+# node topology, used to bring up management interfaces
+physical_node_list:
+  - name: head1
+    ipv4_last_octet: 1
+    aliases:
+      - head
+  - name: compute1
+    ipv4_last_octet: 17
+  - name: compute2
+    ipv4_last_octet: 18
+
+management_net_bridge: "mgmtbridge"
+
+vm_management_network_name: cordmgmt
+vm_public_network_name: cordpub
+vm_public_network_cidr: "10.230.100.0/24"
+
+# which network interfaces belong to which bond on nodes
+management_net_interfaces:
+  - eth1
+
+fabric_net_interfaces:
+  - eth2
+
+# veth pair connected between a linux and integration bridge are described here
+# https://wiki.opencord.org/display/CORD/VTN+Manual+Tests#VTNManualTests-Testenvironmentsetup
+# but may not work?
+# vtn_integration_bridge_interface: vethfabric1
+
+vtn_integration_bridge_interface: fabricbond
+
+headnode_fabric_bridge: fabricbridge
+
+use_vtn_net_management_host: False
+
+vtn_net_management_host_interface: vethmgmt1
+
+use_addresspool_vsg: True
+use_addresspool_public: True
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos"
+  - "xosproject/xos-client"
+  - "xosproject/xos-corebuilder"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-builder"
+  - "xosproject/xos-libraries"
+  - "xosproject/xos-postgres"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/xos-synchronizer-base"
+  - "gliderlabs/consul-server"
+  - "gliderlabs/registrator"
+  - "nginx"
+  - "onosproject/onos"
+  - "opencord/mavenrepo"
+  - "redis"
+  - "node"
+  - "sebp/elk"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    head1:
+
+  head:
+    head1:
+
+  compute:
+    compute1:
+    compute2:
+
