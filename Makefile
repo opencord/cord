@@ -182,20 +182,21 @@ docs:
 	cd docs; make
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS       ?=
-COPY_CORD_PREREQS        ?=
-CORD_CONFIG_PREREQS      ?=
-CONFIG_SSH_KEY_PREREQS   ?=
-PREP_BUILDNODE_PREREQS   ?=
-PREP_HEADNODE_PREREQS    ?=
-PREP_KUBESPRAY_PREREQS   ?=
-DOCKER_IMAGES_PREREQS    ?=
-START_XOS_PREREQS        ?=
-BUILD_ONOS_APPS_PREREQS  ?=
-DEPLOY_ONOS_PREREQS      ?=
-DEPLOY_MAVENREPO_PREREQS ?=
-DEPLOY_OPENSTACK_PREREQS ?=
-SETUP_AUTOMATION_PREREQS ?=
+VAGRANT_UP_PREREQS        ?=
+COPY_CORD_PREREQS         ?=
+CORD_CONFIG_PREREQS       ?=
+CONFIG_SSH_KEY_PREREQS    ?=
+PREP_BUILDNODE_PREREQS    ?=
+PREP_HEADNODE_PREREQS     ?=
+PREP_KUBESPRAY_PREREQS    ?=
+DOCKER_IMAGES_PREREQS     ?=
+START_XOS_PREREQS         ?=
+BUILD_ONOS_APPS_PREREQS   ?=
+DEPLOY_ONOS_PREREQS       ?=
+DEPLOY_MAVENREPO_PREREQS  ?=
+DEPLOY_OPENSTACK_PREREQS  ?=
+ONBOARD_OPENSTACK_PREREQS ?=
+SETUP_AUTOMATION_PREREQS  ?=
 
 
 # == MILESTONES == #
@@ -329,15 +330,15 @@ $(M)/glance-images: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(PI)/glance-images-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-openstack: | $(M)/prep-headnode $(M)/prep-computenode $(DEPLOY_OPENSTACK_PREREQS)
+$(M)/deploy-openstack: | $(M)/prep-headnode $(DEPLOY_OPENSTACK_PREREQS)
 	$(ANSIBLE_PB) $(PI)/deploy-openstack-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/deploy-computenode: | $(M)/deploy-openstack
+$(M)/deploy-computenode: | $(M)/prep-computenode $(M)/deploy-openstack
 	$(ANSIBLE_PB) $(PI)/deploy-computenode-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/onboard-openstack: | $(M)/deploy-computenode $(M)/glance-images $(M)/deploy-onos $(M)/onboard-profile
+$(M)/onboard-openstack: | $(M)/deploy-computenode $(M)/glance-images $(M)/deploy-onos $(M)/onboard-profile $(ONBOARD_OPENSTACK_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/onboard-openstack-playbook.yml" $(LOGCMD)
 	touch $@
 
