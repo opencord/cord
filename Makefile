@@ -278,13 +278,31 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 	touch $@
 
 
-# kubespray targets
-$(M)/prep-kubespray: | $(M)/vagrant-ssh-install $(PREP_KUBESPRAY_PREREQS)
+# Docker registry setup
+$(M)/install-docker-registry: | $(M)/prep-headnode
+	$(ANSIBLE_PB) $(PI)/docker-registry-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/push-docker-images: | $(M)/install-docker-registry $(M)/docker-images $(M)/core-image
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB) $(PI)/publish-images-playbook.yml" $(LOGCMD)
+	touch $@
+
+
+# kubernetes targets
+$(M)/install-helm: | $(M)/prep-headnode
+	$(ANSIBLE_PB) $(PI)/install-helm-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/prep-kubespray: | $(M)/prep-headnode $(M)/prep-computenode $(PREP_KUBESPRAY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/prep-kubespray.yml $(LOGCMD)
 	touch $@
 
 $(M)/deploy-kubespray: | $(M)/prep-kubespray
 	cd $(KUBESPRAY); $(ANSIBLE_PB_KS) cluster.yml $(LOGCMD)
+	touch $@
+
+$(M)/start-xos-helm: | $(M)/install-helm $(M)/deploy-kubespray # $(M)/push-docker-images
+	$(ANSIBLE_PB) $(PI)/start-xos-helm-playbook.yml $(LOGCMD)
 	touch $@
 
 
