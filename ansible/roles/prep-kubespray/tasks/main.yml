@@ -27,4 +27,3 @@
     dest: "{{ kubespray_dir }}/inventory/inventory.cord"
     mode: 0644
 
-
