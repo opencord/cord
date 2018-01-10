@@ -33,7 +33,7 @@ M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
 PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
-KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray
+KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray t $(M)/install-kubernetes-tools $(M)/start-xos-helm
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
@@ -278,13 +278,35 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 	touch $@
 
 
-# kubespray targets
-$(M)/prep-kubespray: | $(M)/vagrant-ssh-install $(PREP_KUBESPRAY_PREREQS)
+# Docker registry setup
+$(M)/install-docker-registry: | $(M)/prep-headnode
+	$(ANSIBLE_PB) $(PI)/docker-registry-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/push-docker-images: | $(M)/install-docker-registry $(M)/docker-images $(M)/core-image
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB) $(PI)/publish-images-playbook.yml" $(LOGCMD)
+	touch $@
+
+
+# kubernetes targets
+$(M)/prep-kubespray: | $(M)/prep-headnode $(M)/prep-computenode $(PREP_KUBESPRAY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/prep-kubespray.yml $(LOGCMD)
 	touch $@
 
 $(M)/deploy-kubespray: | $(M)/prep-kubespray
 	cd $(KUBESPRAY); $(ANSIBLE_PB_KS) cluster.yml $(LOGCMD)
+	touch $@
+
+$(M)/finish-kubespray: | $(M)/deploy-kubespray
+	cd $(BUILD); $(ANSIBLE_PB) $(BUILD)/ansible/finish-kubespray.yml $(LOGCMD)
+	touch $@
+
+$(M)/install-kubernetes-tools: | $(M)/deploy-kubespray
+	$(ANSIBLE_PB) $(PI)/install-kubernetes-tools-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/finish-kubespray # $(M)/push-docker-images
+	$(ANSIBLE_PB) $(PI)/start-xos-helm-playbook.yml $(LOGCMD)
 	touch $@
 
 
