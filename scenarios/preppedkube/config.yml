@@ -13,24 +13,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# preppedpod Scenario - install CORD on prepared systems with OS installed
-# Only used with a virtual install, physical does not use VMs
+# preppedkube Scenario - install CORD on kubernetes, on pre-prepared systems with OS installed
 
 frontend_only: False
+use_k8s: True
 use_maas: False
+use_openstack: False
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
 
+create_configdirs_become: False
+
 build_cord_dir: /opt/cord
+
+# Vagrant VM configuration
+vagrant_box: "bento/ubuntu-16.04"
+
+head_vm_mem: 16384
+head_vm_cpu: 8
+
+compute_vm_mem: 16384
+compute_vm_cpu: 8
 
 buildnode: head1
 headnode: head1
 
+vagrant_vms:
+  - head1
+  - compute1
+  - compute2
+
 # Make build config
 build_targets:
-  - onboard-openstack
+  - start-xos-helm
 
 vagrant_up_prereqs:
   - prereqs-check
@@ -57,12 +74,9 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
-# enable ONOS debug before configuring OpenStack w/VTN
-onboard_openstack_prereqs:
-  - onos-debug
-
-testing_prereqs:
-  - collect-diag
+# have kubespray skip docker installation
+skipTags:
+  - docker
 
 # node topology, used to bring up management interfaces
 physical_node_list:
@@ -74,20 +88,6 @@ physical_node_list:
     ipv4_last_octet: 17
   - name: compute2
     ipv4_last_octet: 18
-
-# Vagrant VM configuration
-vagrant_vms:
-  - head1
-  - compute1
-  - compute2
-
-# Vagrant VM configuration
-vagrant_box: "ubuntu/trusty64"
-head_vm_mem: 16384
-head_vm_cpu: 8
-
-compute_vm_mem: 16384
-compute_vm_cpu: 8
 
 management_net_bridge: "mgmtbridge"
 
@@ -117,7 +117,6 @@ vtn_net_management_host_interface: vethmgmt1
 
 use_addresspool_vsg: True
 use_addresspool_public: True
-
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:

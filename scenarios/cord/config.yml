@@ -60,6 +60,9 @@ prep_headnode_prereqs:
   - copy-cord
   - copy-config
 
+publish_docker_images_prereqs:
+  - deploy-maas
+
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-maas
@@ -111,6 +114,9 @@ always_pull_xos_images: True
 
 # Used in platform-install / roles/cord-profile/templates/docker-compose.yml.j2
 use_elasticstack: True
+
+# Use the insecure MaaS-installed docker registry
+use_secure_docker_registry: False
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:

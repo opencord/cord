@@ -73,6 +73,9 @@ PREP_KUBESPRAY_PREREQS   = $(M)/{{ prep_kubespray_prereqs | join(" $(M)/") }}
 {% if docker_images_prereqs is defined %}
 DOCKER_IMAGES_PREREQS   = $(M)/{{ docker_images_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if publish_docker_images_prereqs is defined %}
+PUBLISH_DOCKER_IMAGES_PREREQS = $(M)/{{ publish_docker_images_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if start_xos_prereqs is defined %}
 START_XOS_PREREQS       = $(M)/{{ start_xos_prereqs | join(" $(M)/") }}
 {% endif %}

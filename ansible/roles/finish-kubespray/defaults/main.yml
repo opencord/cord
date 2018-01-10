@@ -13,16 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# prep-kubespray/tasks/main.yml
+# finish-kubespray/defaults/main.yml
 
-- name: Checkout kubespray repo
-  git:
-    repo: "https://github.com/kubernetes-incubator/kubespray"
-    dest: "{{ kubespray_dir }}"
-    version: "{{ kubespray_version }}"
+kubespray_dir: "../kubespray"
 
-- name: Create kubespray inventory
-  template:
-    src: kubespray_inventory.j2
-    dest: "{{ kubespray_dir }}/inventory/inventory.cord"
-    mode: 0644
+management_net_cidr: "10.1.0.0/24"
+
+head_vm_ip: "192.168.46.100"
+

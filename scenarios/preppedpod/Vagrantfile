@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
-# opencloud Vagrantfile
+# preppedpod Vagrantfile
 
 require 'yaml'
 settings = YAML.load_file('genconfig/config.yml')
@@ -17,13 +17,21 @@ Vagrant.configure(2) do |config|
       v.memory = settings['head_vm_mem']
       v.cpus = settings['head_vm_cpu']
       v.machine_virtual_size = 100
-      v.management_network_name = settings['vm_public_network_name'] # public network
-      v.management_network_address = settings['vm_public_network_cidr']
     end
     h.vm.network "private_network", # management network, eth1
-      ip: "0.1.1.0", # not used, ignore
+      adapter: 1,
+      ip: "0.1.0.0", # not used, ignore
       auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    h.vm.network "private_network", # public network, eth2
+      adapter: 2,
+      ip: "0.2.0.0", # not used, ignore
+      auto_config: false,
+      virtualbox__intnet: settings['vm_public_network_name'],
+      libvirt__network_name: settings['vm_public_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -35,13 +43,21 @@ Vagrant.configure(2) do |config|
       v.cpus = settings['compute_vm_cpu']
       v.machine_virtual_size = 50
       v.nested = true
-      v.management_network_name = settings['vm_public_network_name'] # public network
-      v.management_network_address = settings['vm_public_network_cidr']
     end
     c.vm.network "private_network", # management network, eth1
-      ip: "0.1.1.0",
+      adapter: 1,
+      ip: "0.1.0.0",
       auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.network "private_network", # public network, eth2
+      adapter: 2,
+      ip: "0.2.0.0", # not used, ignore
+      auto_config: false,
+      virtualbox__intnet: settings['vm_public_network_name'],
+      libvirt__network_name: settings['vm_public_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end
@@ -53,13 +69,21 @@ Vagrant.configure(2) do |config|
       v.cpus = settings['compute_vm_cpu']
       v.machine_virtual_size = 50
       v.nested = true
-      v.management_network_name = settings['vm_public_network_name'] # public network
-      v.management_network_address = settings['vm_public_network_cidr']
     end
     c.vm.network "private_network", # management network, eth1
-      ip: "0.1.1.0",
+      adapter: 1,
+      ip: "0.1.0.0",
       auto_config: false,
+      virtualbox__intnet: settings['vm_management_network_name'],
       libvirt__network_name: settings['vm_management_network_name'],
+      libvirt__forward_mode: "none",
+      libvirt__dhcp_enabled: false
+    c.vm.network "private_network", # public network, eth2
+      adapter: 2,
+      ip: "0.2.0.0", # not used, ignore
+      auto_config: false,
+      virtualbox__intnet: settings['vm_public_network_name'],
+      libvirt__network_name: settings['vm_public_network_name'],
       libvirt__forward_mode: "none",
       libvirt__dhcp_enabled: false
   end

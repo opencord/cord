@@ -13,16 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# prep-kubespray/tasks/main.yml
+# ansible/finish-kubespray.yml
 
-- name: Checkout kubespray repo
-  git:
-    repo: "https://github.com/kubernetes-incubator/kubespray"
-    dest: "{{ kubespray_dir }}"
-    version: "{{ kubespray_version }}"
+- name: Finish off kubespray install
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - finish-kubespray
 
-- name: Create kubespray inventory
-  template:
-    src: kubespray_inventory.j2
-    dest: "{{ kubespray_dir }}/inventory/inventory.cord"
-    mode: 0644

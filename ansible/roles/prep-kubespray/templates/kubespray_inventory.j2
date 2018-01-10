@@ -1,28 +1,28 @@
-# created by prep-kubespray/templates/kubespray_inventory.j2
+# created by CORD ansible role: prep-kubespray/templates/kubespray_inventory.j2
 
-[kube-master]
+[cord-headnodes]
 {% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
-{% for node in groups['compute'] %}
-{{ node }}
+{% set npi = ( physical_node_list | selectattr("name", "equalto", node) | first ) %}
+{{ node }} ip='{{ management_net_cidr | ipaddr(npi.ipv4_last_octet) |  ipaddr("address")  }}'
 {% endfor %}
 
-[etcd]
-{% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
+[cord-computenodes]
 {% for node in groups['compute'] %}
-{{ node }}
+{% set npi = ( physical_node_list | selectattr("name", "equalto", node) | first ) %}
+{{ node }} ip='{{ management_net_cidr | ipaddr(npi.ipv4_last_octet) |  ipaddr("address")  }}'
 {% endfor %}
 
-[kube-node]
-{% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
-{% for node in groups['compute'] %}
-{{ node }}
-{% endfor %}
+[kube-master:children]
+cord-headnodes
+cord-computenodes
+
+[etcd:children]
+cord-headnodes
+cord-computenodes
+
+[kube-node:children]
+cord-headnodes
+cord-computenodes
 
 [k8s-cluster:children]
 kube-node

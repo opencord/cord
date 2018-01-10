@@ -16,23 +16,38 @@
 # controlkube Scenario - installs XOS/ONOS on kubernetes, similar to controlpod
 
 frontend_only: False
+use_k8s: True
 use_maas: False
+use_openstack: False
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
 
+create_configdirs_become: False
+
 build_cord_dir: /opt/cord
+
+# Vagrant VM configuration
+vagrant_box: "bento/ubuntu-16.04"
+
+head_vm_mem: 2048
+head_vm_cpu: 4
+
+compute_vm_mem: 2048
+compute_vm_cpu: 4
 
 buildnode: head1
 headnode: head1
 
+vagrant_vms:
+  - head1
+  - compute1
+  - compute2
+
 # Make build config
 build_targets:
-  - deploy-kubespray
-# - prep-computenode
-# - prep-headnode
-# - core-image
+  - start-xos-helm
 
 config_ssh_key_prereqs:
   - vagrant-ssh-install
@@ -56,6 +71,10 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
+# have kubespray skip docker installation
+skipTags:
+  - docker
+
 # node topology, used to bring up management interfaces
 physical_node_list:
   - name: head1
@@ -67,24 +86,18 @@ physical_node_list:
   - name: compute2
     ipv4_last_octet: 18
 
-# Vagrant VM configuration
-vagrant_vms:
-  - head1
-  - compute1
-  - compute2
-
-# Vagrant VM configuration
-vagrant_box: "bento/ubuntu-16.04"
-
-head_vm_mem: 2048
-head_vm_cpu: 4
-
-compute_vm_mem: 2048
-compute_vm_cpu: 4
+management_net_bridge: "mgmtbridge"
 
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
 vm_public_network_cidr: "10.230.100.0/24"
+
+# which network interfaces belong to which bond on nodes
+management_net_interfaces:
+  - eth1
+
+fabric_net_interfaces:
+  - eth2
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
@@ -104,6 +117,7 @@ docker_image_whitelist:
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
+  - "opencord/mavenrepo"
   - "redis"
   - "node"
   - "sebp/elk"
