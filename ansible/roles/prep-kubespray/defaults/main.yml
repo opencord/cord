@@ -18,3 +18,5 @@
 kubespray_version: "master"
 kubespray_dir: "../kubespray"
 
+management_net_cidr: "10.1.0.0/24"
+
