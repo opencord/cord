@@ -1,28 +1,28 @@
-# created by prep-kubespray/templates/kubespray_inventory.j2
+# created by CORD ansible role: prep-kubespray/templates/kubespray_inventory.j2
+
+[cord-headnodes]
+{% for node in groups['head'] %}
+{% set npi = ( physical_node_list | selectattr("name", "equalto", node) | first ) %}
+{{ node }} ip='{{ management_network_cidr | ipaddr(npi.ipv4_last_octet) |  ipaddr("address")  }}'
+{% endfor %}
+
+[cord-computenodes]
+{% for node in groups['compute'] %}
+{% set npi = ( physical_node_list | selectattr("name", "equalto", node) | first ) %}
+{{ node }} ip='{{ management_network_cidr | ipaddr(npi.ipv4_last_octet) |  ipaddr("address")  }}'
+{% endfor %}
 
 [kube-master]
-{% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
-{% for node in groups['compute'] %}
-{{ node }}
-{% endfor %}
+cord-headnodes
+cord-computenodes
 
 [etcd]
-{% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
-{% for node in groups['compute'] %}
-{{ node }}
-{% endfor %}
+cord-headnodes
+cord-computenodes
 
 [kube-node]
-{% for node in groups['head'] %}
-{{ node }}
-{% endfor %}
-{% for node in groups['compute'] %}
-{{ node }}
-{% endfor %}
+cord-headnodes
+cord-computenodes
 
 [k8s-cluster:children]
 kube-node
