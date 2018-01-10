@@ -17,10 +17,13 @@
 
 frontend_only: False
 use_maas: False
+use_openstack: False
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
+
+create_configdirs_become: False
 
 build_cord_dir: /opt/cord
 
@@ -82,9 +85,18 @@ head_vm_cpu: 4
 compute_vm_mem: 2048
 compute_vm_cpu: 4
 
+management_net_bridge: "mgmtbridge"
+
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
 vm_public_network_cidr: "10.230.100.0/24"
+
+# which network interfaces belong to which bond on nodes
+management_net_interfaces:
+  - eth1
+
+fabric_net_interfaces:
+  - eth2
 
 # images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
