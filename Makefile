@@ -33,7 +33,7 @@ M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
 PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
-KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray
+KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray $(M)/install-kubernetes-tools $(M)/start-xos-helm
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
@@ -199,22 +199,23 @@ docs:
 	cd docs; make
 
 # == PREREQS == #
-VAGRANT_UP_PREREQS        ?=
-COPY_CORD_PREREQS         ?=
-CORD_CONFIG_PREREQS       ?=
-CONFIG_SSH_KEY_PREREQS    ?=
-PREP_BUILDNODE_PREREQS    ?=
-PREP_HEADNODE_PREREQS     ?=
-PREP_KUBESPRAY_PREREQS    ?=
-DOCKER_IMAGES_PREREQS     ?=
-START_XOS_PREREQS         ?=
-BUILD_ONOS_APPS_PREREQS   ?=
-DEPLOY_ONOS_PREREQS       ?=
-DEPLOY_MAVENREPO_PREREQS  ?=
-DEPLOY_OPENSTACK_PREREQS  ?=
-ONBOARD_OPENSTACK_PREREQS ?=
-SETUP_AUTOMATION_PREREQS  ?=
-TESTING_PREREQS           ?=
+VAGRANT_UP_PREREQS            ?=
+COPY_CORD_PREREQS             ?=
+CORD_CONFIG_PREREQS           ?=
+CONFIG_SSH_KEY_PREREQS        ?=
+PREP_BUILDNODE_PREREQS        ?=
+PREP_HEADNODE_PREREQS         ?=
+PREP_KUBESPRAY_PREREQS        ?=
+DOCKER_IMAGES_PREREQS         ?=
+PUBLISH_DOCKER_IMAGES_PREREQS ?=
+START_XOS_PREREQS             ?=
+BUILD_ONOS_APPS_PREREQS       ?=
+DEPLOY_ONOS_PREREQS           ?=
+DEPLOY_MAVENREPO_PREREQS      ?=
+DEPLOY_OPENSTACK_PREREQS      ?=
+ONBOARD_OPENSTACK_PREREQS     ?=
+SETUP_AUTOMATION_PREREQS      ?=
+TESTING_PREREQS               ?=
 
 # == MILESTONES == #
 # empty target files are touched in the milestones dir to indicate completion
@@ -278,13 +279,25 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 	touch $@
 
 
-# kubespray targets
-$(M)/prep-kubespray: | $(M)/vagrant-ssh-install $(PREP_KUBESPRAY_PREREQS)
+# kubernetes targets
+$(M)/prep-kubespray: | $(M)/prep-headnode $(M)/prep-computenode $(PREP_KUBESPRAY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/prep-kubespray.yml $(LOGCMD)
 	touch $@
 
 $(M)/deploy-kubespray: | $(M)/prep-kubespray
 	cd $(KUBESPRAY); $(ANSIBLE_PB_KS) cluster.yml $(LOGCMD)
+	touch $@
+
+$(M)/finish-kubespray: | $(M)/deploy-kubespray
+	cd $(BUILD); $(ANSIBLE_PB) $(BUILD)/ansible/finish-kubespray.yml $(LOGCMD)
+	touch $@
+
+$(M)/install-kubernetes-tools: | $(M)/deploy-kubespray
+	$(ANSIBLE_PB) $(PI)/install-kubernetes-tools-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/finish-kubespray $(M)/publish-docker-images
+	$(ANSIBLE_PB) $(PI)/start-xos-helm-playbook.yml $(LOGCMD)
 	touch $@
 
 
@@ -330,7 +343,7 @@ $(M)/core-image: | $(M)/docker-images
 	touch $@
 
 # Requires ib_actions.yml file which is on the build host
-$(M)/publish-docker-images: | $(M)/deploy-maas $(M)/docker-images $(M)/core-image
+$(M)/publish-docker-images: | $(M)/docker-images $(M)/core-image $(PUBLISH_DOCKER_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
