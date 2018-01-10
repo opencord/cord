@@ -71,6 +71,9 @@ deploy_openstack_prereqs:
 deploy_mavenrepo_prereqs:
   - publish-docker-images
 
+testing_prereqs:
+  - setup-automation
+
 setup_automation_prereqs:
   - deploy-openstack
 
