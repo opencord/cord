@@ -278,7 +278,7 @@ $(M)/prep-computenode: | $(M)/prep-headnode
 
 
 # kubespray targets
-$(M)/prep-kubespray: | $(M)/vagrant-ssh-install $(PREP_KUBESPRAY_PREREQS)
+$(M)/prep-kubespray: | $(M)/prep-headnode $(M)/prep-computenode $(PREP_KUBESPRAY_PREREQS)
 	$(ANSIBLE_PB) $(BUILD)/ansible/prep-kubespray.yml $(LOGCMD)
 	touch $@
 
