@@ -103,8 +103,10 @@ routes advertised by the CORD POD.
 Of course you are not obliged to use `10.0.1.0/24`, you should use a subnet
 that makes sense for your peering environment
 
-## Install and Configure vRouter on ONOS The vRouter will be run on the
-`onos-fabric` cluster that controls the physical fabric switches. 
+## Install and Configure vRouter on ONOS
+
+The vRouter will be run on the `onos-fabric` cluster that controls the physical 
+fabric switches.
 
 ### Interface Configuration
 
