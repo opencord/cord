@@ -22,4 +22,5 @@ cord_profile: rcord
 # copy kubespray config and install kubect on node running playbook
 kubeconfig_localhost: true
 kubectl_localhost: true
+helm_enabled: true
 
