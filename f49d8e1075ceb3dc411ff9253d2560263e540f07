@@ -22,6 +22,30 @@
       "revId": "f49d8e1075ceb3dc411ff9253d2560263e540f07",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "689a135f_0a663618",
+        "filename": "docs/operate/elk_stack.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2018-01-12T20:28:09Z",
+      "side": 1,
+      "message": "Ok, fixing.",
+      "parentUuid": "dbe20211_6fe24585",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 3
+      },
+      "revId": "f49d8e1075ceb3dc411ff9253d2560263e540f07",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
