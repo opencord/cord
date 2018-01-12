@@ -51,6 +51,7 @@ docker_image_whitelist:
   - "xosproject/xos-tosca"
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
+  - "xosproject/xos-synchronizer-base"
   - "gliderlabs/consul-server"
   - "gliderlabs/registrator"
   - "redis"
