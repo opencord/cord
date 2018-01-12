@@ -89,12 +89,13 @@
       set_fact:
         profile_container_list: "{{ profile_container_list }} + [ 'xosproject/{{ item.name }}-synchronizer' ]"
       with_items: "{{ profile_manifest.xos_services }}"
-      when:  item.synchronizer is not defined or item.synchronizer
+      when: (profile_manifest.xos_services is defined) and (item.synchronizer is not defined or item.synchronizer)
 
     - name: Add items to profile_container_list from profile_manifest.enabled_gui_extensions
       set_fact:
         profile_container_list: "{{ profile_container_list }} + [ 'xosproject/gui-extension-{{ item.name }}' ]"
       with_items: "{{ profile_manifest.enabled_gui_extensions }}"
+      when: profile_manifest.enabled_gui_extensions is defined
 
     - name: Update docker_image_whitelist to include containers specified by profile
       set_fact:
