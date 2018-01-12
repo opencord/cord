@@ -22,6 +22,7 @@ endif
 
 PROFILE_D        ?= $(CORD)/orchestration/profiles/$(USECASE)
 PODCONFIG_PATH   ?= $(PROFILE_D)/podconfig/$(PODCONFIG)
+PROFILE_VARS     ?=
 
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
@@ -51,7 +52,7 @@ SCENARIO_NAME_F  ?= $(GENCONFIG_D)/cord_scenario
 
 CONFIG_FILES     = $(MASTER_CONFIG) $(MAKEFILE_CONFIG) $(INVENTORY) $(PROFILE_NAME_F) $(SCENARIO_NAME_F)
 
-include $(MAKEFILE_CONFIG)
+-include $(MAKEFILE_CONFIG)
 
 # Set using files from genconfig
 SCENARIO          = $(shell cat $(SCENARIO_NAME_F))
@@ -78,9 +79,9 @@ EXTRA_VARS       ?= --extra-vars "@/opt/cord_profile/genconfig/config.yml"
 SHELL            = bash -o pipefail
 VAGRANT          ?= VAGRANT_CWD=$(VAGRANT_CWD) vagrant
 ANSIBLE          ?= ansible -i $(INVENTORY)
-ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG)
+ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG) $(PROFILE_VARS)
 ANSIBLE_PB_KS    ?= ANSIBLE_CONFIG=../ansible.cfg ansible-playbook $(ANSIBLE_ARGS) -b -i inventory/inventory.cord --extra-vars @../$(MASTER_CONFIG)
-ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
+ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS) $(PROFILE_VARS)
 ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py
 LOGCMD           ?= 2>&1 | tee -a $(abspath $(LOGS)/$(TS)_$(@F))
@@ -150,6 +151,9 @@ collect-diag:
 compute-node-refresh:
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/compute-node-refresh-playbook.yml" $(LOGCMD)
 
+update-profile:
+	rm -f $(M)/local-cord-config $(M)/cord-config $(M)/copy-config $(M)/onboard-profile $(M)/local-onboard-profile $(M)/onboard-openstack $(M)/refresh-fabric
+
 vagrant-destroy:
 	$(VAGRANT) destroy -f $(LOGCMD) || true
 	rm -f $(M)/vagrant-up $(M)/vagrant-ssh-install $(VAGRANT_SSH_CONF)
@@ -175,6 +179,58 @@ local-ubuntu-dev-env:
 local-xos-teardown:
 	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
 	rm -f $(M)/local-onboard-profile
+
+# Temporary targets, for testing / development
+
+# Platform bootstrap uses a PODCONFIG that specifies the base profile
+local:
+	make PODCONFIG_PATH=podconfig/local.yml PROFILE_D=./podconfig config
+	make -j4 build
+
+mock:
+	make PODCONFIG_PATH=podconfig/mock.yml PROFILE_D=./podconfig config
+	make -j4 build
+
+single:
+	make PODCONFIG_PATH=podconfig/single.yml PROFILE_D=./podconfig config
+	make -j4 build
+
+ciab-head:
+	make PODCONFIG_PATH=podconfig/virtual.yml PROFILE_D=./podconfig config
+	make -j4 build
+
+ciab-compute: $(M)/compute1-up
+
+# Profiles only specify information for XOS services -- no Juju, etc.
+# Below shows profile loading using existing build system mechanisms
+# This can be modified to use different tools (e.g., CLI) when they are available
+load-rcord:
+	make update-profile
+	make xos-update-images
+	make -j4 PROFILE_VARS='--extra-vars "@../orchestration/profiles/rcord/rcord-dsl.yml"' build
+
+load-mcord-ng40:
+	make update-profile
+	make xos-update-images
+	make -j4 PROFILE_VARS='--extra-vars "@../orchestration/profiles/mcord/mcord-ng40-dsl.yml"' build
+
+load-mcord-cavium:
+	make update-profile
+	make xos-update-images
+	make -j4 PROFILE_VARS='--extra-vars "@../orchestration/profiles/mcord/mcord-cavium-dsl.yml"' build
+
+# Ecord-global changes the site name, which is part of the initial_data.yml
+# Need to teardown XOS before loading this profile
+load-ecord-global:
+	make xos-teardown
+	make update-profile
+	make xos-update-images
+	make -j4 PROFILE_VARS='--extra-vars "@../orchestration/profiles/ecord/ecord-global-dsl.yml"' build
+
+load-ecord:
+	make update-profile
+	make xos-update-images
+	make -j4 PROFILE_VARS='--extra-vars "@../orchestration/profiles/ecord/ecord-dsl.yml"' build
 
 # docs
 .PHONY: docs
@@ -303,7 +359,7 @@ $(M)/onos-debug: | $(M)/onboard-profile $(M)/deploy-onos
 
 # XOS targets
 $(M)/docker-images: | $(M)/prep-buildnode $(DOCKER_IMAGES_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(IMAGEBUILDER) -f $(MASTER_CONFIG) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml " $(LOGCMD)
+	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(IMAGEBUILDER) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml " $(LOGCMD)
 	touch $@
 
 $(M)/core-image: | $(M)/docker-images
@@ -383,7 +439,7 @@ $(M)/local-cord-config:
 	touch $@
 
 $(M)/local-docker-images: | $(M)/local-cord-config
-	$(IMAGEBUILDER) -f $(MASTER_CONFIG) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml $(LOGCMD)
+	$(IMAGEBUILDER) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml $(LOGCMD)
 	touch $@
 
 $(M)/local-core-image: | $(M)/local-docker-images
