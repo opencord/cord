@@ -3,7 +3,7 @@
 CORD uses ELK Stack for logging information at all levels. CORD’s
 ELK Stack logger collects information from several components,
 including the XOS Core, API, and various Synchronizers. On a running
-POD, the logs can be accessed at `http://<head-node>:8080/kibana`.
+POD, the logs can be accessed at `http://<head-node>:8080/app/kibana`.
 
 There is also a second way of accessing low-level logs with additional
 verbosity that do not make it into ELK Stack. This involves accessing log
@@ -17,6 +17,17 @@ $ docker logs < container-name
 For most purposes, the logs in ELK Stack should contain enough information
 to diagnose problems. Furthermore, these logs thread together facts across
 multiple components by using the identifiers of XOS data model objects.
+
+> Important!
+> 
+> Before you can start using ELK stack, you must initialize its index. 
+> To do so:
+> 
+> 1) Replace `logstash-*` with `*` in the text box marked "Index pattern."
+> 
+> 2) Pick `@timestamp` as the "Time Filter Field Name."
+> 
+> Configuring the default logstash- index pattern will lead to HTTP errors in your browser. If you did this by accident, then delete it under Management -> Index Patterns, and create another pattern as described above.
 
 More information about using
 [Kibana](https://www.elastic.co/guide/en/kibana/current/getting-started.html)

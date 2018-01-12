@@ -19,6 +19,7 @@
     * [Powering Up a POD](operate/power_up.md)
     * [XOS Internals](xos/xos_internals.md)
     * [REST API](operate/rest_apis.md)
+    * [Debugging and Diagnostics](operate/elk_stack.md)
     * [TOSCA](xos-tosca/README.md)
     * [XOSSH](xos/dev/xossh.md)
 * [Defining Models in CORD](xos/README.md)
