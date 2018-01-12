@@ -95,6 +95,7 @@
       set_fact:
         profile_container_list: "{{ profile_container_list }} + [ 'xosproject/gui-extension-{{ item.name }}' ]"
       with_items: "{{ profile_manifest.enabled_gui_extensions }}"
+      when: profile_manifest.enabled_gui_extensions is defined
 
     - name: Update docker_image_whitelist to include containers specified by profile
       set_fact:

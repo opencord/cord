@@ -1,0 +1,200 @@
+---
+
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# profile_manifests/cord.yml
+# Base CORD Profile Manifest
+
+cord_use_case: none
+
+# Site configuration, used for PKI generation
+site_name: mysite
+site_humanname: MySite
+site_suffix: "cord.lab"
+deployment_type: MyDeployment
+
+# Feature toggles
+use_fabric: True
+use_maas: True
+
+# Juju config
+charm_versions:
+  ceilometer-agent: "cs:trusty/ceilometer-agent-13"
+  ceilometer: "cs:trusty/ceilometer-17"
+  glance: "cs:trusty/glance-28"
+  keystone: "cs:trusty/keystone-267"
+  mongodb: "cs:trusty/mongodb-33"
+  nagios: "cs:trusty/nagios-10"
+  neutron-api: "cs:~cordteam/trusty/neutron-api-6"
+  nova-cloud-controller: "cs:trusty/nova-cloud-controller-64"
+  nova-compute: "cs:~cordteam/trusty/nova-compute-4"
+  nrpe: "cs:trusty/nrpe-4"
+  ntp: "cs:trusty/ntp-14"
+  openstack-dashboard: "cs:trusty/openstack-dashboard-19"
+  percona-cluster: "cs:trusty/percona-cluster-31"
+  rabbitmq-server: "cs:trusty/rabbitmq-server-42"
+
+head_lxd_list:
+  - name: "juju-1"
+    service: "juju"
+    aliases:
+      - "juju"
+    ipv4_last_octet: 10
+
+  - name: "ceilometer-1"
+    service: "ceilometer"
+    aliases:
+      - "ceilometer"
+    ipv4_last_octet: 20
+    forwarded_ports:
+      - { ext: 8777, int: 8777 }
+
+  - name: "glance-1"
+    service: "glance"
+    aliases:
+      - "glance"
+    ipv4_last_octet: 30
+    forwarded_ports:
+      - { ext: 9292, int: 9292 }
+
+  - name: "keystone-1"
+    service: "keystone"
+    aliases:
+      - "keystone"
+    ipv4_last_octet: 40
+    forwarded_ports:
+      - { ext: 35357, int: 35357 }
+      - { ext: 4990, int: 4990 }
+      - { ext: 5000, int: 5000 }
+
+  - name: "percona-cluster-1"
+    service: "percona-cluster"
+    aliases:
+      - "percona-cluster"
+    ipv4_last_octet: 50
+
+  - name: "nagios-1"
+    service: "nagios"
+    aliases:
+      - "nagios"
+    ipv4_last_octet: 60
+    forwarded_ports:
+      - { ext: 3128, int: 80 }
+
+  - name: "neutron-api-1"
+    service: "neutron-api"
+    aliases:
+      - "neutron-api"
+    ipv4_last_octet: 70
+    forwarded_ports:
+      - { ext: 9696, int: 9696 }
+
+  - name: "nova-cloud-controller-1"
+    service: "nova-cloud-controller"
+    aliases:
+      - "nova-cloud-controller"
+    ipv4_last_octet: 80
+    forwarded_ports:
+      - { ext: 8774, int: 8774 }
+
+  - name: "openstack-dashboard-1"
+    service: "openstack-dashboard"
+    aliases:
+      - "openstack-dashboard"
+    ipv4_last_octet: 90
+    forwarded_ports:
+      - { ext: 8080, int: 80 }
+
+  - name: "rabbitmq-server-1"
+    service: "rabbitmq-server"
+    aliases:
+      - "rabbitmq-server"
+    ipv4_last_octet: 100
+
+  - name: "mongodb-1"
+    service: "mongodb"
+    aliases:
+      - "mongodb"
+    ipv4_last_octet: 110
+
+
+lxd_service_list:
+  - ceilometer
+  - glance
+  - keystone
+  - mongodb
+  - nagios
+  - neutron-api
+  - nova-cloud-controller
+  - openstack-dashboard
+  - percona-cluster
+  - rabbitmq-server
+
+
+standalone_service_list:
+  - ntp
+  - nrpe
+  - ceilometer-agent
+
+
+service_relations:
+  - name: keystone
+    relations: [ "percona-cluster", "nrpe", ]
+
+  - name: nova-cloud-controller
+    relations: [ "percona-cluster", "rabbitmq-server", "glance", "keystone", "nrpe", ]
+
+  - name: glance
+    relations: [ "percona-cluster", "keystone", "nrpe", ]
+
+  - name: neutron-api
+    relations: [ "keystone",  "percona-cluster", "rabbitmq-server", "nova-cloud-controller", "nrpe", ]
+
+  - name: openstack-dashboard
+    relations: [ "keystone", "nrpe", ]
+
+  - name: nagios
+    relations: [ "nrpe", ]
+
+  - name: "percona-cluster:juju-info"
+    relations: [ "nrpe:general-info", ]
+
+  - name: rabbitmq-server
+    relations: [ "nrpe", ]
+
+  - name: ceilometer
+    relations: [ "mongodb", "rabbitmq-server", "nagios", "nrpe", ]
+
+  - name: "ceilometer:identity-service"
+    relations: [ "keystone:identity-service", ]
+
+  - name: "ceilometer:ceilometer-service"
+    relations: [ "ceilometer-agent:ceilometer-service", ]
+
+
+compute_relations:
+  - name: nova-compute
+    relations: [ "ceilometer-agent", "glance", "nova-cloud-controller", "nagios", "nrpe", ]
+
+  - name: "nova-compute:shared-db"
+    relations: [ "percona-cluster:shared-db", ]
+
+  - name: "nova-compute:amqp"
+    relations: [ "rabbitmq-server:amqp", ]
+
+  - name: ntp
+    relations: [ "nova-compute", ]
+
+
