@@ -15,9 +15,9 @@
 
 
 ---
-# mock-mcord Pod Config
-# Creates a single-node mock M-CORD pod
+# local-ecord Pod Config
+# Starts a E-CORD container set in the local environment
 
 cord_scenario: local
-cord_profile: mcord-spirent
+cord_profile: base-profile
 

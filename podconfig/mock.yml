@@ -17,5 +17,5 @@
 # Creates a single-node mock CORD pod
 
 cord_scenario: mock
-cord_profile: base-cord
+cord_profile: base-profile
 
