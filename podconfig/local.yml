@@ -1,4 +1,4 @@
----
+
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# base-mock Pod Config
-# Creates a single-node mock CORD pod
 
-cord_scenario: mock
-cord_profile: base-cord
+---
+# local-ecord Pod Config
+# Starts a E-CORD container set in the local environment
 
+cord_scenario: local
+cord_profile: base-profile
+frontend_only: False

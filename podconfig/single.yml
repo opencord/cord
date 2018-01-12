@@ -1,4 +1,4 @@
-
+---
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# base-single Pod Config
+# Creates a single-node mock CORD pod w/synchronizers
 
----
-# mock-mcord Pod Config
-# Creates a single-node mock M-CORD pod
-
-cord_scenario: local
-cord_profile: mcord-spirent
+cord_scenario: single
+cord_profile: base-profile
 
