@@ -873,7 +873,9 @@ class DockerBuilder():
                             image.status = DI_EXISTS
 
                         else:  # doesn't have good labels
-                            if has_build_tag:
+
+                            # if it has a build_tag, and a good image hasn't already been tagged
+                            if has_build_tag and (image.status != DI_EXISTS):
                                 LOG.info(" Image %s has obsolete labels and"
                                          " build_tag, remove" % pe_image['Id'])
 
