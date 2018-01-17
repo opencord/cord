@@ -212,6 +212,11 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/hssdb-synchronizer
+    repo: hss_db
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/venb-synchronizer
     repo: venb
     path: "xos/synchronizer"
@@ -251,4 +256,3 @@ buildable_images:
     repo: templateservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
-
