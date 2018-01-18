@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23276769_fd9f3a38",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-18T21:12:29Z",
+      "side": 1,
+      "message": "Do we want to use `ciab` or `virtual` here, as the podconfig name is `virtual`?",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 4
+      },
+      "revId": "b44529f6ffe910205ff903e260cf1a21261b395d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89d38a97_e5575eb6",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-18T21:12:29Z",
+      "side": 1,
+      "message": "Could all of these targets be turned into something generated in `config.mk`, rather than codifying all the profile names?\n\nHave  `make ... config` could look for files matching `../orchestration/profiles/*/*dsl.yml` and autogenerate these targets?",
+      "range": {
+        "startLine": 203,
+        "startChar": 1,
+        "endLine": 208,
+        "endChar": 1
+      },
+      "revId": "b44529f6ffe910205ff903e260cf1a21261b395d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3da9110_101a8e3b",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-18T21:12:29Z",
+      "side": 1,
+      "message": "In the future, most profiles will do this - the reason we\u0027re using `cord.lab` is that it\u0027s hardcoded in maas: https://jira.opencord.org/browse/CORD-1520",
+      "range": {
+        "startLine": 218,
+        "startChar": 2,
+        "endLine": 218,
+        "endChar": 75
+      },
+      "revId": "b44529f6ffe910205ff903e260cf1a21261b395d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdba1db9_1936afdf",
+        "filename": "podconfig/cord.yml",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-18T21:12:29Z",
+      "side": 1,
+      "message": "A lot of these items were previously in profiles - is the idea that they\u0027ll be out of profiles and in the podconfig now?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 15
+      },
+      "revId": "b44529f6ffe910205ff903e260cf1a21261b395d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
