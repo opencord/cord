@@ -217,11 +217,6 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
-  - name: xosproject/venb-synchronizer
-    repo: venb
-    path: "xos/synchronizer"
-    dockerfile: "Dockerfile.synchronizer"
-
   - name: xosproject/internetemulator-synchronizer
     repo: internetemulator
     path: "xos/synchronizer"
