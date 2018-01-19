@@ -30,7 +30,6 @@ headnode: head1
 
 # Make build config
 build_targets:
-  - onos-debug
   - onboard-openstack
 
 vagrant_up_prereqs:
@@ -58,12 +57,12 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
-# Start elasticstack before XOS/ONOS, which log to it
-#start_xos_prereqs:
-#  - deploy-elasticstack
-#
-#deploy_onos_prereqs:
-#  - deploy-elasticstack
+# enable ONOS debug before configuring OpenStack w/VTN
+onboard_openstack_prereqs:
+  - onos-debug
+
+testing_prereqs:
+  - collect-diag
 
 # node topology, used to bring up management interfaces
 physical_node_list:
@@ -90,6 +89,8 @@ head_vm_cpu: 8
 compute_vm_mem: 16384
 compute_vm_cpu: 8
 
+management_net_bridge: "mgmtbridge"
+
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
 vm_public_network_cidr: "10.230.100.0/24"
@@ -112,6 +113,7 @@ docker_image_whitelist:
   - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
+  - "opencord/mavenrepo"
   - "redis"
   - "node"
   - "sebp/elk"
