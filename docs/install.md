@@ -66,8 +66,8 @@ Usage for ./cord-bootstrap.sh:
 ```
 
 Using the `-v` option is required to install Vagrant for running a [Virtual Pod
-(CiaB)](install_virtual.md), whereas `-d` is required to install Docker for a
-[Local Workflow](/xos/dev/workflow_local.md).
+(CiaB)](install_virtual.md) or [Physical Pod](install_physical.md), whereas `-d`
+is required to install Docker for a [Local Workflow](/xos/dev/workflow_local.md).
 
 The `-p` option downloads a patch from gerrit, and the syntax for this is
 `<project path>:<changeset>/<revision>`.  It can be used multiple
