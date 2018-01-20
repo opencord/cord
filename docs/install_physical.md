@@ -326,7 +326,7 @@ file should be generated with the following command.
 
 ```
 cd ~/cord/build && \
-make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config
+make PODCONFIG_PATH={PATH_TO_YOUR_PODCONFIG_FILE.yml} config
 ```
 
 The process generates a set of files in `~/cord/build/genconfig`
