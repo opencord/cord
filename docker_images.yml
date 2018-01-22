@@ -251,3 +251,8 @@ buildable_images:
     repo: templateservice
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/rcord-synchronizer
+    repo: rcord
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
