@@ -241,6 +241,7 @@ $(M)/copy-cord: | $(COPY_CORD_PREREQS)
 
 $(M)/cord-config: | $(CORD_CONFIG_PREREQS)
 	$(ANSIBLE_PB) $(PI)/cord-config-playbook.yml $(LOGCMD)
+	rm -rf $(CONFIG_CORD_PROFILE_DIR)/genconfig
 	cp -r $(GENCONFIG_D) $(CONFIG_CORD_PROFILE_DIR)/genconfig
 	touch $@
 
