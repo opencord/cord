@@ -244,3 +244,7 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xpsproject/rcord-synchronizer
+    repo: rcord
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
