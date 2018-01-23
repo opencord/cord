@@ -382,6 +382,9 @@ mcord-ng40-test: | $(TESTING_PREREQS)
 mcord-cavium-test: | $(TESTING_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-cavium-test-playbook.yml" $(LOGCMD)
 
+mcord-mwc-demo: | $(TESTING_PREREQS)
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-mwc-demo-playbook.yml" $(LOGCMD)
+
 fabric-pingtest: $(M)/refresh-fabric
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
 
