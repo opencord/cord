@@ -376,11 +376,9 @@ $(M)/refresh-fabric: | $(M)/compute1-up
 pod-test: | $(TESTING_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/pod-test-playbook.yml" $(LOGCMD)
 
-mcord-ng40-test: | $(TESTING_PREREQS)
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-ng40-test-playbook.yml" $(LOGCMD)
-
-mcord-cavium-test: | $(TESTING_PREREQS)
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/mcord-cavium-test-playbook.yml" $(LOGCMD)
+# M-CORD-specific targets
+mcord-%:
+	$(ANSIBLE_PB) ../orchestration/profiles/mcord/test/mcord-$*-playbook.yml $(LOGCMD)
 
 fabric-pingtest: $(M)/refresh-fabric
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
