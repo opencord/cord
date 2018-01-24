@@ -469,7 +469,7 @@ def connectFabricAndComputeToOnos() {
         waitUntil {
             try {
                 num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts | grep id= | wc -l\"").trim()
-                return num.toInteger() == deployment_config.compute_nodes.size()
+                return num.toInteger() >= deployment_config.compute_nodes.size()
             } catch (exception) {
                 return false
             }
