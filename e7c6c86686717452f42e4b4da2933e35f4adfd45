@@ -46,6 +46,30 @@
       "revId": "e7c6c86686717452f42e4b4da2933e35f4adfd45",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56218095_ea076228",
+        "filename": "ansible/genconfig.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-24T17:41:01Z",
+      "side": 1,
+      "message": "Having them all in one role would be fine.  The major reasons to separate sets of plays in a playbook is to:\n\n 1. Cause the handlers to run (for example if you need to restart a daemon before the next play happens)\n 2. To switch the hosts targeted by the play\n\nWe\u0027re not doing either in this case, so separating them is just extra lines in the file.",
+      "parentUuid": "81dcf165_df3fe80d",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "e7c6c86686717452f42e4b4da2933e35f4adfd45",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
