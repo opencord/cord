@@ -22,6 +22,30 @@
       "revId": "e7c6c86686717452f42e4b4da2933e35f4adfd45",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81dcf165_df3fe80d",
+        "filename": "ansible/genconfig.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2018-01-24T17:16:59Z",
+      "side": 1,
+      "message": "I left those as they were separated before, I could also have placed all in the same role, do you prever that way?",
+      "parentUuid": "09d2bd42_bc7f012d",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "e7c6c86686717452f42e4b4da2933e35f4adfd45",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
