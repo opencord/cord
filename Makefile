@@ -179,7 +179,7 @@ clean-local: local-xos-teardown clean-profile clean-genconfig clean-images
 local-ubuntu-dev-env:
 	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
 
-local-xos-teardown:
+local-xos-teardown: xos-update-images
 	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
 	rm -f $(M)/local-onboard-profile
 
