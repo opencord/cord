@@ -38,7 +38,7 @@ to the fabric and puts these NICs into a bonded interface. The name of this
 bond is fabric, so if you run `ifconfig` on the compute node you have selected
 to deploy Quagga, you should see this bonded interface appear in the output.
 
-```
+```shell
 ubuntu@fumbling-reason:~$ ifconfig fabric
 fabric    Link encap:Ethernet  HWaddr 00:02:c9:1e:b4:e0
           inet addr:10.6.1.2  Bcast:10.6.1.255  Mask:255.255.255.0
@@ -49,25 +49,25 @@ fabric    Link encap:Ethernet  HWaddr 00:02:c9:1e:b4:e0
           collisions:0 txqueuelen:0
           RX bytes:89101760 (89.1 MB)  TX bytes:0 (0.0 B)
 ```
-          
+
 We need to dedicate one of these fabric interfaces to the Quagga container, so
 we'll need to remove it from the bond. You should first identify the name of
 the interface that you want to dedicate. In this example we'll assume it is
 called mlx1. You can then remove it from the bond by editing the
 /etc/network/interfaces file:
 
-```
+```shell
 sudo vi /etc/network/interfaces
 ```
 
 You should see a stanza that looks like this:
 
-```
+```shell
 auto mlx1
 iface mlx1 inet manual
     bond-master fabric
 ```
-    
+
 Simply remove the line `bond-master fabric`, save the file then restart the
 networking service on the compute node.
 
@@ -105,7 +105,7 @@ that makes sense for your peering environment
 
 ## Install and Configure vRouter on ONOS
 
-The vRouter will be run on the `onos-fabric` cluster that controls the physical 
+The vRouter will be run on the `onos-fabric` cluster that controls the physical
 fabric switches.
 
 ### Interface Configuration
@@ -115,7 +115,7 @@ interfaces where the Quagga and upstream router are attached to the fabric.
 This is where we configure the second IP address that we allocated from the
 peering subnet. The following shows a configuration example:
 
-```
+```json
 {
     "ports" : {
         "of:0000000000000001/1" : {
@@ -155,7 +155,7 @@ The interface configuration can be added to the
 initial fabric configuration. Then you can run the following command to refresh
 the configuration in ONOS:
 
-```
+```shell
 docker-compose -p rcord exec xos_ui python /opt/xos/tosca/run.py xosadmin@opencord.org /opt/cord_profile/fabric-service.yaml
 ```
 
@@ -167,13 +167,13 @@ restarted so that it will notice the new interface configuration.
 The `onos-fabric` CLI can be accessed with the following command run on the
 head node:
 
-```
-$ ssh karaf@onos-fabric -p 8101
+```shell
+ssh karaf@onos-fabric -p 8101
 ```
 
 On the `onos-fabric` CLI, deactivate and reactivate segment routing:
 
-```
+```shell
 onos> app deactivate org.onosproject.segmentrouting
 onos> app activate org.onosproject.segmentrouting
 ```
@@ -189,14 +189,14 @@ activate it.
 CORD uses a slightly modified version of Quagga, so the easiest way to deploy
 this is to use the provided docker image.
 
-```
+```shell
 docker pull opencord/quagga
 ```
 
 We also need to download the `pipework` tool which will be used to connect the
 docker image to the physical interface that we set aside earlier.
 
-```
+```shell
 wget https://raw.githubusercontent.com/jpetazzo/pipework/master/pipework
 chmod +x pipework
 ```
@@ -204,21 +204,21 @@ chmod +x pipework
 Create a directory for your Quagga configuration files, and create a
 `bgpd.conf` and `zebra.conf` in there. More on configuring Quagga later.
 
-```
+```shell
 mkdir configs
 ```
 
 Now run the docker image (make sure the path the config directory matches what
 is on your system):
 
-```
+```shell
 sudo docker run --privileged -d -v configs:/etc/quagga -n quagga opencord/quagga
 ```
 
 Finally, we can use the pipework tool to add the physical interface into the
 container so that Quagga can talk out over the fabric:
 
-```
+```shell
 sudo ./pipework mlx1 -i eth1 quagga 10.0.1.3/24
 ```
 
@@ -231,7 +231,7 @@ If you need to change anything about the container (for example if you change
 the Quagga configuration) you can remove the original container and run a new
 one:
 
-```
+```shell
 docker rm -f quagga
 sudo docker run --privileged -d -v configs:/etc/quagga -n quagga opencord/quagga
 ```
@@ -260,7 +260,7 @@ when we installed Quagga.
 
 A minimal Zebra configuration might look like this:
 
-```
+```shell
 !
 hostname cord-zebra
 password cord
@@ -268,6 +268,7 @@ password cord
 fpm connection ip 10.6.0.1 port 2620
 !
 ```
+
 The FPM connection IP address is the IP address of one of the `onos-fabric`
 cluster instance that is running the vRouter app.
 
@@ -279,7 +280,7 @@ that here as well.
 An example simple BGP configuration for peering with one BGP peer might look
 like this:
 
-```
+```shell
 hostname bgp
 password cord
 !

@@ -19,9 +19,9 @@ in a Vagrant VM (used to deploy CORD) as well as CiaB itself.
 ### Target server requirements
 
 * 64-bit AMD64/x86-64 server, with:
-  * 48GB+ RAM
-  * 12+ CPU cores
-  * 200GB+ disk
+    * 48GB+ RAM
+    * 12+ CPU cores
+    * 200GB+ disk
 * Access to the Internet (no enterprise proxies)
 * Ubuntu 14.04.5 LTS freshly installed with updates
 * User account used to install CORD-in-a-Box has password-less *sudo*
@@ -82,7 +82,7 @@ if required, or [download patches manually from gerrit using
 Once the system has been bootstrapped, run the following `make` commands to
 launch the build:
 
-```
+```shell
 cd ~/cord/build
 make PODCONFIG=rcord-virtual.yml config
 make -j4 build |& tee ~/build.out
@@ -99,11 +99,13 @@ patient - if it hasn't completely failed yet, then assume all is well!
 If the build completed without errors, you can use the following command to run
 basic end-to-end tests:
 
-```
+```shell
 cd ~/cord/build
 make pod-test
 ```
-> NOTE: This test can only be conducted on the `rcord-virtual` profile. Other profile tests are still WIP. 
+
+> NOTE: This test can only be conducted on the `rcord-virtual` profile. Other
+> profile tests are still WIP.
 
 The output of the tests will be displayed, as well as stored in
 `~/cord/build/logs/<iso8601_datetime>_pod-test`.
@@ -115,7 +117,7 @@ backend. You can inspect the status of the VM's by setting the `VAGRANT_CWD`
 environmental variable to `~/cord/build/scenarios/cord` and running `vagrant
 status`:
 
-```
+```shell
 ~$ cd cord/build
 ~/cord/build$ export VAGRANT_CWD=~/cord/build/scenarios/cord
 ~/cord/build$ vagrant status
@@ -140,8 +142,8 @@ node (see below). It then installs MAAS on the virtual head node (for
 bare-metal provisioning) and the ONOS, XOS, and OpenStack services in
 containers.  This VM can be entered as follows:
 
-```
-$ ssh corddev
+```shell
+ssh corddev
 ```
 
 The CORD source tree is mounted at `/opt/cord` inside this VM.
@@ -152,13 +154,13 @@ The `head1` VM is the virtual head node of the POD.  It runs the OpenStack,
 ONOS, and XOS services inside containers.  It also simulates a subscriber
 devices using a container.  To enter it, simply type:
 
-```
-$ ssh head1
+```shell
+ssh head1
 ```
 
 Inside the VM, a number of services run in Docker and LXD containers.
 
-```
+```shell
 vagrant@head1:~$ docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}"
 CONTAINER ID        NAMES                                 IMAGE
 84c09b156774        rcord_xos_gui_1                       docker-registry:5000/xosproject/xos-gui:candidate
@@ -199,7 +201,7 @@ with `rcord`).  Containers starting with `onos` are running ONOS.  There is
 also a Docker image registry, a Maven repository containing the CORD ONOS apps,
 and a number of microservices used in bare-metal provisioning.
 
-```
+```shell
 vagrant@head1:~$ sudo lxc list
 +-------------------------+---------+------------------------------+------+------------+-----------+
 |          NAME           |  STATE  |             IPV4             | IPV6 |    TYPE    | SNAPSHOTS |
@@ -234,16 +236,16 @@ The LXD containers ending with names ending with `-1` are running
 OpenStack-related services. These containers can be
 entered as follows:
 
-```
-$ ssh ubuntu@<container-name>
+```shell
+ssh ubuntu@<container-name>
 ```
 
 The `testclient` container runs the simulated subscriber device used
 for running simple end-to-end connectivity tests. Its only connectivity is
 to the vSG, but it can be entered using:
 
-```
-$ sudo lxc exec testclient bash
+```shell
+sudo lxc exec testclient bash
 ```
 
 ### compute1 VM
@@ -253,15 +255,15 @@ This VM can be entered from the `head1` VM.  Run `cord prov list` to get the
 node name (assigned by MAAS).  The node name will be something like
 `bony-alley.cord.lab`; in this case, to login you'd run:
 
-```
-$ ssh ubuntu@bony-alley.cord.lab
+```shell
+ssh ubuntu@bony-alley.cord.lab
 ```
 
 Virtual machines created via XOS/OpenStack will be instantiated on this
 compute node.  To login to an OpenStack VM, first get the management IP
 address (172.27.0.x):
 
-```
+```shell
 vagrant@head1:~$ source /opt/cord_profile/admin-openrc.sh
 vagrant@head1:~$ nova list --all-tenants
 +--------------------------------------+-------------------------+--------+------------+-------------+---------------------------------------------------+
@@ -276,7 +278,7 @@ The VM hosting the vSG is called `mysite_vsg-1` and we see it has a management
 IP of 172.27.0.2.  Then run `ssh-agent` and add the default key (used to access
 the OpenStack VMs):
 
-```
+```shell
 vagrant@head1:~$ ssh-agent bash
 vagrant@head1:~$ ssh-add
 ```
@@ -285,14 +287,13 @@ SSH to the compute node with the `-A` option and then to the VM using the
 management IP obtained above.  So if the compute node name is
 `bony-alley.cord.lab` and the management IP is 172.27.0.2:
 
-```
+```shell
 vagrant@head1:~$ ssh -A ubuntu@bony-alley.cord.lab
 ubuntu@bony-alley:~$ ssh ubuntu@172.27.0.2
 
 # Now you're inside the mysite-vsg-1 VM
 ubuntu@mysite-vsg-1:~$
 ```
-
 
 ### MAAS GUI
 
@@ -345,18 +346,18 @@ found near the end of `~/build.out`.
 
 This tests the E2E connectivity of the POD by performing the following steps:
 
- * Sets up a sample CORD subscriber in XOS
- * Launches a vSG for that subscriber on the CORD POD
- * Creates a test client, corresponding to a device in the subscriber's
-   household
- * Connects the test client to the vSG using a simulated OLT
- * Runs `ping` in the client to a public IP address in the Internet
+* Sets up a sample CORD subscriber in XOS
+* Launches a vSG for that subscriber on the CORD POD
+* Creates a test client, corresponding to a device in the subscriber's
+  household
+* Connects the test client to the vSG using a simulated OLT
+* Runs `ping` in the client to a public IP address in the Internet
 
 Success means that traffic is flowing between the subscriber household and the
 Internet via the vSG.  If it succeeded, you should see some lines like these in
 the output:
 
-```
+```shell
 TASK [test-vsg : Output from ping test] ****************************************
 Thursday 27 October 2016  15:29:17 +0000 (0:00:03.144)       0:19:21.336 ******
 ok: [10.100.198.201] => {
@@ -380,18 +381,18 @@ This test builds on `test-vsg` by loading the *exampleservice* described in the
 the *exampleservice* is to demonstrate how new subscriber-facing services can
 be easily deployed to a CORD POD. This test performs the following steps:
 
- * On-boards *exampleservice* into the CORD POD
- * Creates an *exampleservice* tenant, which causes a VM to be created and
-   Apache to be loaded and configured inside
- * Runs a `curl` from the subscriber test client, through the vSG, to the
-   Apache server.
+* On-boards *exampleservice* into the CORD POD
+* Creates an *exampleservice* tenant, which causes a VM to be created and
+  Apache to be loaded and configured inside
+* Runs a `curl` from the subscriber test client, through the vSG, to the Apache
+  server.
 
 Success means that the Apache server launched by the *exampleservice* tenant is
 fully configured and is reachable from the subscriber client via the vSG.  If
 it succeeded, you should see the following lines near the end the `make
 pod-test` output:
 
-```
+```shell
 TASK [test-exampleservice : Output from curl test] *****************************
 Thursday 27 October 2016  15:34:40 +0000 (0:00:01.116)       0:24:44.732 ******
 ok: [10.100.198.201] => {
@@ -418,28 +419,28 @@ remove the appropriate file in the `milestones` directory prior to re-running.
 For more information about how the build works, see [Troubleshooting and Build
 Internals](troubleshooting.md).
 
-#### Failed: TASK \[maas-provision : Wait for node to become ready\]
+### Failed: TASK \[maas-provision : Wait for node to become ready\]
 
 This issue occurs when the virtual compute node is not automatically enrolled
 in MAAS.  It may be useful to attach to the console of the compute node to
 see if there are any messages displayed.
 
- * Create an SSH tunnel that forwards port 5902 from the local machine to the
-CIAB server: `ssh -L 5902:localhost:5902 <ciab-server>`
+* Create an SSH tunnel that forwards port 5902 from the local machine to the
+  CIAB server: `ssh -L 5902:localhost:5902 <ciab-server>`
 
- * Connect a VNC client (e.g., [VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/))
-to `localhost:5902` on the local machine.  There is
-no password.
+* Connect a VNC client (e.g., [VNC
+  Viewer](https://www.realvnc.com/en/connect/download/viewer/)) to
+  `localhost:5902` on the local machine.  There is no password.
 
 If you see a stack trace or error message, please post it to the CORD Slack channel.
 
-#### Failed: TASK \[maas-provision : Wait for node to be fully provisioned\]
+### Failed: TASK \[maas-provision : Wait for node to be fully provisioned\]
 
 This means that the node has enlisted in MAAS but something has gone wrong with
 the provisioning process.  In the `head1` VM look in `/etc/maas/ansible/logs/node-<id>.log`
 for the step that has failed.  Post it to the CORD Slack channel to get help.
 
-## Congratulations!
+## Congratulations
 
 If you got this far, you successfully built, deployed, and tested your first
 (virtual) CORD POD.

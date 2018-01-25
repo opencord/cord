@@ -34,7 +34,7 @@ If an image is not found on Dockerhub, you may see a 404 error like the
 following in the logs. If this happens, imagebuilder will attempt to build the
 image from scratch rather than pulling it:
 
-```
+```python
 NotFound: 404 Client Error: Not Found ("{"message":"manifest for xosproject/xos-gui-extension-builder:<hash> not found"}")
 ```
 
@@ -44,46 +44,47 @@ Run `imagebuilder.py -h` for a list of other supported arguments.
 
 The imagebuilder program performs the following steps when run:
 
- 1. Reads the [repo manifest file](https://github.com/opencord/manifest/blob/master/default.xml)
-    (checked out as `.repo/manifest`) to get a list of the CORD git repositories.
+1. Reads the [repo manifest file](https://github.com/opencord/manifest/blob/master/default.xml)
+   (checked out as `.repo/manifest`) to get a list of the CORD git repositories.
 
- 2. Reads the [build/docker_images.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/docker_images.yml)
-    file and the generated `cord/build/genconfig/config.yml` file (which
-    contains a `docker_image_whitelist` list from the scenario), to determine
-    which containers are needed for this POD configuration.
+2. Reads the [build/docker_images.yml](https://github.com/opencord/cord/blob/{{
+   book.branch }}/docker_images.yml) file and the generated
+   `cord/build/genconfig/config.yml` file (which contains a
+   `docker_image_whitelist` list from the scenario), to determine which
+   containers are needed for this POD configuration.
 
- 3. For every container that is needed, reads the Dockerfile and determines if
-    any parent images are needed, and creates a tree to order image building.
+3. For every container that is needed, reads the Dockerfile and determines if
+   any parent images are needed, and creates a tree to order image building.
 
- 4. Determines which images need to be rebuilt based on:
+4. Determines which images need to be rebuilt based on:
 
-   - Whether the image exists and is has current tags added to it.
-   - If the Docker build context is *dirty* or differs (is on a different
-     branch) from the git tag specified in the repo manifest
-   - If the image's parent (or grandparent, etc.) needs to be rebuilt
+    * Whether the image exists and is has current tags added to it.
+    * If the Docker build context is *dirty* or differs (is on a different
+      branch) from the git tag specified in the repo manifest
+    * If the image's parent (or grandparent, etc.) needs to be rebuilt
 
- 5. Using this information downloads (pulls) or builds images as needed in a
-    way that is consistent with the CORD source that is on disk.  If an image
-    build is needed, the Docker output of that build is saved to
-    `build/image_logs` on the system where Imagebuilder executes (the
-    `buildhost` in inventory).
+5. Using this information downloads (pulls) or builds images as needed in a
+   way that is consistent with the CORD source that is on disk.  If an image
+   build is needed, the Docker output of that build is saved to
+   `build/image_logs` on the system where Imagebuilder executes (the
+   `buildhost` in inventory).
 
- 6. Tags the image with the `candidate` and (if clean) git hash tags.
+6. Tags the image with the `candidate` and (if clean) git hash tags.
 
- 7. Creates a YAML output file that describes the work it performed, for later
-    use (pushing images, retagging, etc.), and optional a graphviz `.dot` graph
-    file showing the relationships between images.
+7. Creates a YAML output file that describes the work it performed, for later
+   use (pushing images, retagging, etc.), and optional a graphviz `.dot` graph
+   file showing the relationships between images.
 
 ## Image Tagging
 
 CORD container images frequently have multiple tags. The two most common ones
 are:
 
- * The string `candidate`, which says that the container is ready to be
-   deployed on a CORD POD
- * The git commit hash, which is either pulled from DockerHub, or applied when
-   a container is built from an untouched (according to git) source tree.
-   Images built from a modified source tree will not be tagged in this way.
+* The string `candidate`, which says that the container is ready to be deployed
+  on a CORD POD
+* The git commit hash, which is either pulled from DockerHub, or applied when a
+  container is built from an untouched (according to git) source tree.  Images
+  built from a modified source tree will not be tagged in this way.
 
 Imagebuilder use this git hash tag as well as labels on the image of the git
 repos of parent images to determine whether an image is correctly built from
@@ -99,26 +100,26 @@ for a few notes that clear up the ambiguity within that spec.
 
 Required labels for every CORD image:
 
- - `org.label-schema.version`
- - `org.label-schema.name`
- - `org.label-schema.vcs-url`
- - `org.label-schema.build-date`
+* `org.label-schema.version`
+* `org.label-schema.name`
+* `org.label-schema.vcs-url`
+* `org.label-schema.build-date`
 
 Required for clean builds:
 
- - `org.label-schema.version` : *git branch name, ex: `opencord/master`,
-   `opencord/cord-4.0`, , etc.*
- - `org.label-schema.vcs-ref` : *the full 40 character SHA-1 git commit hash,
-   not shortened*
+* `org.label-schema.version` : *git branch name, ex: `opencord/master`,
+  `opencord/cord-4.0`, , etc.*
+* `org.label-schema.vcs-ref` : *the full 40 character SHA-1 git commit hash,
+  not shortened*
 
 Required for dirty builds:
 
- - `org.label-schema.version` : *set to the string `dirty` if there is any
-   differences from the master commit to the build context (either on a
-   different branch, or untracked/changed files in context)*
- - `org.label-schema.vcs-ref` - *set to a commit hash if build context is clean
-   (ie, on another unnamed branch/patchset), or the empty string if the build
-   context contains untracked/changed files.*
+* `org.label-schema.version` : *set to the string `dirty` if there is any
+  differences from the master commit to the build context (either on a
+  different branch, or untracked/changed files in context)*
+* `org.label-schema.vcs-ref` - *set to a commit hash if build context is clean
+  (ie, on another unnamed branch/patchset), or the empty string if the build
+  context contains untracked/changed files.*
 
 For images that use components from another repo (like chameleon being
 integrated with the XOS containers, or maven repo which contains artifacts from
@@ -127,15 +128,15 @@ sub-component, with the repo name (same as org.label-schema.name) replacing
 `<reponame>`, and the value being the same value as the label-schema
 one would be:
 
- - `org.opencord.component.<reponame>.version`
- - `org.opencord.component.<reponame>.vcs-ref`
- - `org.opencord.component.<reponame>.vcs-url`
+* `org.opencord.component.<reponame>.version`
+* `org.opencord.component.<reponame>.vcs-ref`
+* `org.opencord.component.<reponame>.vcs-url`
 
 These labels are applied by using the `ARG` and `LABEL` option in the
 Dockerfile. The following is an example set of labels for an image that uses
 files from the chameleon and XOS repositories as components:
 
-```
+```dockerfile
 # Label image
 ARG org_label_schema_schema_version=1.0
 ARG org_label_schema_name=openstack-synchronizer

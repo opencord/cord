@@ -15,26 +15,30 @@ locally. The CORD head/compute nodes must be able to access the host that is
 acting as a mirror using http. If the head node host has enough disk space, it
 can be the mirror repository.
 
-### Creating the Mirror
+## Creating the Mirror
+
 To create the mirror you will need a host running `Ubtunu 14.04LTS Server`
 that has access, at least temporarily, to the Internet. On this host
 `apt-mirror` and `docker-engine` should be installed. `apt-mirror` is a
 utility used to download the Debian packages and index files for the mirror and
 `docker-engine` is used to front the mirror using an `nginx` container.
 
-#### Installing `apt-mirror`
+### Installing `apt-mirror`
+
 To install `apt-mirror` the following commands should suffice.
 
-```
+```shell
 sudo apt-get update
 sudo apt-get install -y apt-mirror
 ```
 
-#### Installing `docker-engine`
-To install `docker-engine` please follow the directions provided by Docker at
-https://docs.docker.com/engine/installation/linux/ubuntulinux/.
+### Installing `docker-engine`
 
-#### `apt-mirror` Configuration
+To install `docker-engine` please follow the directions provided by Docker at
+[https://docs.docker.com/engine/installation/linux/ubuntulinux/](https://docs.docker.com/engine/installation/linux/ubuntulinux/).
+
+### `apt-mirror` Configuration
+
 `apt-mirror` takes a configuration that downloads the Debian packages and
 indexes to support a mirror. Save the following `apt-mirror` configuration to
 a local file, e.g., `cord-mirror.list`. This will create a mirror for
@@ -48,7 +52,7 @@ mirror in your enterprise it is possible to augment that to pull in the
 additional repositories required by CORD, but this is an exercise left up to
 the reader.
 
-```
+```shell
 ############# config ##################
 #
 # set base_path    /var/spool/apt-mirror
@@ -86,7 +90,7 @@ clean http://ppa.launchpad.net/juju/stable/ubuntu
 After the `apt-mirror` configuration is ready, you can start the mirroring
 process using the command
 
-```
+```shell
 sudo apt-mirror cord-mirror.list
 ```
 
@@ -99,14 +103,15 @@ download and process about **90 Gigabytes** of data. So get a cup of coffee,
 take a nap, enjoy the great out doors, or simply spend some time on
 Facebook or Netflix.
 
-#### Staring the `HTTP` Archive Server
+## Staring the `HTTP` Archive Server
+
 Before the archive server is started, the `nginx` docker image should be
 downloaded from dockerhub.com. Once this image is download the host should
 no longer require Internet access and thus the install of CORD can be
 completed offline. To download (pull) the `nginx` image use the following
 command:
 
-```
+```shell
 sudo docker pull nginx:1.10
 ```
 
@@ -117,7 +122,7 @@ of the host machine. This can be changed by modifying the command line option
 `-p`. The command line option `-v` is used to specify the location where
 the mirror files were downloaded, `/var/spool/apt-mirror` by default.
 
-```
+```shell
 sudo docker run \
     --name local-repository \
     --restart unless-stopped \
@@ -126,7 +131,8 @@ sudo docker run \
     -d nginx:1.10
 ```
 
-### Using the Local Repository
+## Using the Local Repository
+
 To use a local repository to deploy CORD, the POD deployment configuration must
 be modified to point to the mirror or local repository that you will be using.
 This is done by setting the following variables in the POD deployment
@@ -137,7 +143,7 @@ have to be customized for you deployment. The simple way of looking at these
 values is that this is the value that will be used in the *Ansible*
 `apt_repository` task under the parameter `repo`.
 
-```
+```yaml
 seedServer
   extraVars:
     - ubuntu_apt_repo="deb [arch=amd64] http://10.10.10.10:8888/mirror/archive.ubuntu.com/ubuntu trusty main universe"
@@ -149,3 +155,4 @@ seedServer
     - dell_apt_repo="deb [arch-amd64] http://10.10.10.10:8888/mirror/linux.dell.com/repo/community trusty openmanage"
     - juju_apt_repo="deb [arch-amd64] http://10.10.10.10:8888/mirror/ppa.launchpad.net/juju/stable/ubuntu trusty main"
 ```
+

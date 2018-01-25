@@ -20,17 +20,17 @@
 # Request for licensing clarification made on 2017-09-19
 # Contains improvements to support more types (bool/int/etc.)
 
-import yaml
 from yaml.composer import Composer
-from yaml.reader import Reader
-from yaml.scanner import Scanner
-from yaml.composer import Composer
-from yaml.resolver import Resolver
+from yaml.constructor import SafeConstructor
 from yaml.parser import Parser
-from yaml.constructor import Constructor, BaseConstructor, SafeConstructor
+from yaml.reader import Reader
+from yaml.resolver import Resolver
+from yaml.scanner import Scanner
+
 
 def create_node_class(cls):
     class node_class(cls):
+
         def __init__(self, x, start_mark, end_mark):
             cls.__init__(self, x)
             self.start_mark = start_mark
@@ -41,11 +41,13 @@ def create_node_class(cls):
     node_class.__name__ = '%s_node' % cls.__name__
     return node_class
 
+
 dict_node = create_node_class(dict)
 list_node = create_node_class(list)
 unicode_node = create_node_class(unicode)
 int_node = create_node_class(int)
 float_node = create_node_class(float)
+
 
 class NodeConstructor(SafeConstructor):
     # To support lazy loading, the original constructors first yield
@@ -53,6 +55,7 @@ class NodeConstructor(SafeConstructor):
     # laziness we omit this behaviour (and will only do "deep
     # construction") by first exhausting iterators, then yielding
     # copies.
+
     def construct_yaml_map(self, node):
         obj, = SafeConstructor.construct_yaml_map(self, node)
         return dict_node(obj, node.start_mark, node.end_mark)
@@ -80,31 +83,33 @@ class NodeConstructor(SafeConstructor):
 
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:map',
-        NodeConstructor.construct_yaml_map)
+    u'tag:yaml.org,2002:map',
+    NodeConstructor.construct_yaml_map)
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:seq',
-        NodeConstructor.construct_yaml_seq)
+    u'tag:yaml.org,2002:seq',
+    NodeConstructor.construct_yaml_seq)
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:str',
-        NodeConstructor.construct_yaml_str)
+    u'tag:yaml.org,2002:str',
+    NodeConstructor.construct_yaml_str)
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:bool',
-        NodeConstructor.construct_yaml_bool)
+    u'tag:yaml.org,2002:bool',
+    NodeConstructor.construct_yaml_bool)
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:int',
-        NodeConstructor.construct_yaml_int)
+    u'tag:yaml.org,2002:int',
+    NodeConstructor.construct_yaml_int)
 
 NodeConstructor.add_constructor(
-        u'tag:yaml.org,2002:float',
-        NodeConstructor.construct_yaml_float)
+    u'tag:yaml.org,2002:float',
+    NodeConstructor.construct_yaml_float)
 
 
-class MarkedLoader(Reader, Scanner, Parser, Composer, NodeConstructor, Resolver):
+class MarkedLoader(Reader, Scanner, Parser, Composer,
+                   NodeConstructor, Resolver):
+
     def __init__(self, stream):
         Reader.__init__(self, stream)
         Scanner.__init__(self)
@@ -113,6 +118,6 @@ class MarkedLoader(Reader, Scanner, Parser, Composer, NodeConstructor, Resolver)
         NodeConstructor.__init__(self)
         Resolver.__init__(self)
 
+
 def get_data(stream):
     return MarkedLoader(stream).get_data()
-

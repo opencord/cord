@@ -19,7 +19,7 @@ To address the first issue most CORD `make` targets will create a per-target
 log file in the `~/cord/build/logs` directory - this output isn't interleaved
 with other make targets and will be much easier to read.
 
-```
+```shell
 ~/cord/build$ make printconfig
 Scenario: 'cord'
 Profile: 'rcord'
@@ -55,7 +55,7 @@ There are two solutions to the second issue. If you compare the list of
 milestones to the list of logs, you can determine which logs failed to result
 in a milestone, and thus did not complete:
 
-```
+```shell
 $ cd ~/cord/build
 $ ls -ltr milestones ; ls -ltr logs
 -rw-r--r-- 1 zdw xos-PG0 181 Oct  3 13:23 README.md
@@ -88,13 +88,12 @@ Additionally, `make` job failures generally have this syntax:
 `make: *** [targetname] Error #`, and can be found in log files with this
 `grep` command:
 
-```
+```shell
 $ grep -F "make: ***" ~/build.out
 make: *** [milestones/build-maas-images] Error 2
 make: *** Waiting for unfinished jobs....
 make: *** [milestones/build-onos-apps] Error 2
 ```
-
 
 ## Collecting POD diagnostics
 
@@ -102,9 +101,9 @@ There is a `collect-diag` make target that will collect diagnostic information
 for a Virtual or Physical POD. It is run automatically when the `pod-test`
 target is run, but can be run manually at any time:
 
-```
-$ cd ~/cord/build
-$ make collect-diag
+```shell
+cd ~/cord/build
+make collect-diag
 ```
 
 Once it's finished running, ssh to the head node and look for a directory named
@@ -114,7 +113,7 @@ These directories  will contain subfolders with docker container logs, various
 diagnostic commands run on the head node, Juju status, ONOS diagnostics, and
 OpenStack status:
 
-```
+```shell
 $ ssh head1
 vagrant@head1:~$ ls
 diag-20171003T203058
@@ -183,14 +182,14 @@ turned on for your VM. 
 
 Systems that support nested virtualization:
 
--   VMWare - <https://communities.vmware.com/docs/DOC-8970>, <https://communities.vmware.com/community/vmtn/bestpractices/nested>
--   Xen - <http://wiki.xenproject.org/wiki/Nested_Virtualization_in_Xen>
--   KVM - <https://fedoraproject.org/wiki/How_to_enable_nested_virtualization_in_KVM> , <https://wiki.archlinux.org/index.php/KVM#Nested_virtualization>
--   Hyper V - <https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/user_guide/nesting>
+- VMWare - <https://communities.vmware.com/docs/DOC-8970>, <https://communities.vmware.com/community/vmtn/bestpractices/nested>
+- Xen - <http://wiki.xenproject.org/wiki/Nested_Virtualization_in_Xen>
+- KVM - <https://fedoraproject.org/wiki/How_to_enable_nested_virtualization_in_KVM> , <https://wiki.archlinux.org/index.php/KVM#Nested_virtualization>
+- Hyper V - <https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/user_guide/nesting>
 
 Systems that lack nested virtualization:
 
--   Virtualbox - track this feature request: <https://www.virtualbox.org/ticket/4032>
+- Virtualbox - track this feature request: <https://www.virtualbox.org/ticket/4032>
 
 ### DNS Lookup Check
 
@@ -309,45 +308,45 @@ write a placeholder file (aka "sentinels" or "empty targets") in the
 
 There are various utility targets:
 
- - `printconfig`: Prints the configured scenario and profile.
+- `printconfig`: Prints the configured scenario and profile.
 
- - `xos-teardown`: Stop and remove a running set of XOS docker containers,
-   removing the database.
+- `xos-teardown`: Stop and remove a running set of XOS docker containers,
+  removing the database.
 
- - `xos-update-images`: Rebuild the images used by XOS, without tearing down
-   running XOS containers.
+- `xos-update-images`: Rebuild the images used by XOS, without tearing down
+  running XOS containers.
 
- - `collect-diag`: Collect detailed diagnostic information on a deployed head
-   and compute nodes, into `diag-<datestamp>` directory on the head node.
+- `collect-diag`: Collect detailed diagnostic information on a deployed head
+  and compute nodes, into `diag-<datestamp>` directory on the head node.
 
- - `compute-node-refresh`: Reload compute nodes brought up by MaaS into XOS,
-   useful in the cord virtual and physical scenarios
+- `compute-node-refresh`: Reload compute nodes brought up by MaaS into XOS,
+  useful in the cord virtual and physical scenarios
 
- - `pod-test`: Run the `platform-install/pod-test-playbook.yml`, testing the
-   virtual/physical cord scenario.
+- `pod-test`: Run the `platform-install/pod-test-playbook.yml`, testing the
+  virtual/physical cord scenario.
 
- - `vagrant-destroy`: Destroy Vagrant containers (for mock/virtual/physical
-   installs)
+- `vagrant-destroy`: Destroy Vagrant containers (for mock/virtual/physical
+  installs)
 
- - `clean-images`: Have containers rebuild during the next build cycle. Does
-   not actually delete any images, just causes imagebuilder to be run again.
+- `clean-images`: Have containers rebuild during the next build cycle. Does
+  not actually delete any images, just causes imagebuilder to be run again.
 
- - `clean-genconfig`: Deletes the `make config` generated config files in
-   `genconfig`, useful when switching between POD configs
+- `clean-genconfig`: Deletes the `make config` generated config files in
+  `genconfig`, useful when switching between POD configs
 
- - `clean-onos`: Stops the ONOS containers on the head node
+- `clean-onos`: Stops the ONOS containers on the head node
 
- - `clean-openstack`: Cleans up and deletes all instances and networks created
-   in OpenStack.
+- `clean-openstack`: Cleans up and deletes all instances and networks created
+  in OpenStack.
 
- - `clean-profile`: Deletes the `cord_profile` directory
+- `clean-profile`: Deletes the `cord_profile` directory
 
- - `clean-all`: Runs `vagrant-destroy`, `clean-genconfig`, and `clean-profile`
-   targets, removes all milestones. Good for resetting a dev environment back
-   to an unconfigured state.
+- `clean-all`: Runs `vagrant-destroy`, `clean-genconfig`, and `clean-profile`
+  targets, removes all milestones. Good for resetting a dev environment back
+  to an unconfigured state.
 
- - `clean-local`:  `clean-all` but for the `local` scenario - Runs
-   `clean-genconfig` and `clean-profile` targets, removes local milestones.
+- `clean-local`:  `clean-all` but for the `local` scenario - Runs
+  `clean-genconfig` and `clean-profile` targets, removes local milestones.
 
 The `clean-*` utility targets should modify the contents of the milestones
 directory appropriately to cause the steps they clean up after to be rerun on
@@ -359,7 +358,7 @@ the next `make build` cycle.
 
 To rebuild and update XOS container images, run:
 
-```
+```shell
 make xos-update-images
 make -j4 build
 ```
@@ -370,7 +369,7 @@ built containers will be restarted.
 If you additionally want to stop all the XOS containers, clear the database,
 and reload the profile, use `xos-teardown`:
 
-```
+```shell
 make xos-teardown
 make -j4 build
 ```

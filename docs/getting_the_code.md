@@ -18,19 +18,22 @@ sudo mv /tmp/repo /usr/local/bin/repo
 sudo chmod a+x /usr/local/bin/repo
 ```
 
-**NOTE**: As mentioned above, you may want to install *repo* using the official repository instead. We forked the original repository and host a copy of the file to make repo downloadable also by organizations that don't have access to Google servers.
+> NOTE: As mentioned above, you may want to install *repo* using the official
+> repository instead. We forked the original repository and host a copy of the
+> file to make repo downloadable also by organizations that don't have access
+> to Google servers.
 
 ## Download CORD repositories
 
 The `cord` repositories are usually checked out to `~/cord` in most of our
 examples and deployments:
 
-<pre><code>
+```shell
 mkdir ~/cord && \
 cd ~/cord && \
 repo init -u https://gerrit.opencord.org/manifest -b {{ book.branch }} && \
 repo sync
-</code></pre>
+```
 
 > NOTE: `-b` specifies the branch name. Development work goes on in `master,
 > and there are also specific stable branches such as `cord-4.0` that can be
@@ -41,7 +44,7 @@ output similar to:
 
 ```sh
 $ ls
-build		component	incubator	onos-apps	orchestration	test
+build component incubator onos-apps orchestration test
 ```
 
 ## Download patchsets
@@ -49,7 +52,7 @@ build		component	incubator	onos-apps	orchestration	test
 Once you've downloaded a CORD source tree, you can download patchsets from
 Gerrit with the following command:
 
-```
+```shell
 repo download orchestration/xos 1234/3
 ```
 
