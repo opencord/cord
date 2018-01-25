@@ -78,8 +78,8 @@ def parse_args():
                         help="YAML Config and master container list")
 
     # -f is optional, so using type=argparse.FileType is problematic
-    parser.add_argument('-f', '--filter_images', default=None, action='store',
-                        help="YAML file restricting images to build/fetch")
+    parser.add_argument('-f', '--filter_images', default=None, action='store', nargs='+',
+                        help="YAML file(s) restricting images to build/fetch")
 
     parser.add_argument('-a', '--actions_taken', default=None,
                         help="Save a YAML file with actions taken during run")
@@ -123,6 +123,9 @@ def load_config():
     global pull_only_images
     global build_tag
 
+    buildable_images = []
+    pull_only_images = []
+
     try:
         cl_abs = os.path.abspath(args.container_list.name)
         LOG.info("Master container list file: %s" % cl_abs)
@@ -141,39 +144,39 @@ def load_config():
         buildable_images = conf['buildable_images']
         pull_only_images = conf['pull_only_images']
     else:
-        fi_abs = os.path.abspath(args.filter_images)
+        for filterfile in args.filter_images:
+            fi_abs = os.path.abspath(filterfile)
 
-        LOG.info("Filtering image list per 'docker_image_whitelist' in: %s" %
-                 fi_abs)
-        try:
-            fi_fh = open(fi_abs, 'r')
-            filter_list = yaml.safe_load(fi_fh)
-            fi_fh.close()
+            LOG.info("Filtering image list per 'docker_image_whitelist' in: %s" %
+                    fi_abs)
+            try:
+                fi_fh = open(fi_abs, 'r')
+                filter_list = yaml.safe_load(fi_fh)
+                fi_fh.close()
 
-            if 'docker_image_whitelist' not in filter_list:
-                LOG.error("No 'docker_image_whitelist' defined in: %s" %
-                          fi_abs)
-                sys.exit(1)
-
-            # fail if filter list specifies tags
-            for f_i in filter_list['docker_image_whitelist']:
-                (name, tag) = split_name(f_i)
-                if tag:
-                    LOG.error("filter list may not be tagged")
+                if 'docker_image_whitelist' not in filter_list:
+                    LOG.error("No 'docker_image_whitelist' defined in: %s" %
+                            fi_abs)
                     sys.exit(1)
 
-            buildable_images = [img for img in conf['buildable_images']
-                                if split_name(img['name'])[0]
-                                in filter_list['docker_image_whitelist']]
+                # fail if filter list specifies tags
+                for f_i in filter_list['docker_image_whitelist']:
+                    (name, tag) = split_name(f_i)
+                    if tag:
+                        LOG.error("filter list may not be tagged")
+                        sys.exit(1)
 
-            pull_only_images = [img for img in conf['pull_only_images']
-                                if split_name(img)[0]
-                                in filter_list['docker_image_whitelist']]
+                buildable_images += [img for img in conf['buildable_images']
+                                    if split_name(img['name'])[0]
+                                    in filter_list['docker_image_whitelist']]
 
-        except:
-            LOG.exception("Problem with filter list file")
-            sys.exit(1)
+                pull_only_images += [img for img in conf['pull_only_images']
+                                    if split_name(img)[0]
+                                    in filter_list['docker_image_whitelist']]
 
+            except:
+                LOG.exception("Problem with filter list file: %s" % filterfile)
+                sys.exit(1)
 
 def split_name(input_name):
     """ split a docker image name in the 'name:tag' format into components """
