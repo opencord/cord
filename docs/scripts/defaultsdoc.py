@@ -69,10 +69,7 @@ except Exception:
 role_defs = []
 profile_defs = []
 group_defs = []
-
-# frontmatter section is any text at the top of the descriptions.md file, and
-# comes before all other sections
-def_docs = {'frontmatter':{'description':''}}
+def_docs = {}
 
 # find all the files to be processed
 for dirpath, dirnames, filenames in os.walk(args.playbook_dir):
@@ -102,7 +99,6 @@ for rd in role_defs:
         # partial URL, without line nums
         rd_url = "https://github.com/opencord/platform-install/tree/%s/%s" % (repo_branch, rd)
 
-        
         rd_fh= open(rd_fullpath, 'r')
 
         # markedloader is for line #'s
@@ -158,7 +154,7 @@ with open(args.descriptions, 'r') as descfile:
 
         if desc_header:
             # add previous description to dict
-            descriptions[desc_name] = desc_lines
+            descriptions[desc_name] = desc_lines.strip()
 
             # set this as the next name, wipe out lines
             desc_name = desc_header.group(1)
@@ -166,7 +162,10 @@ with open(args.descriptions, 'r') as descfile:
         else:
             desc_lines += d_l
 
-    descriptions[desc_name] = desc_lines
+    descriptions[desc_name] = desc_lines.strip()
+
+# Get the frontmatter out of descriptions
+frontmatter = descriptions.pop('frontmatter', None)
 
 # add descriptions to def_docs
 for d_name, d_text in descriptions.iteritems():
@@ -188,4 +187,4 @@ j2env = jinja2.Environment(
 template = j2env.get_template(args.template)
 
 with open(args.output, 'w') as f:
-    f.write(template.render(def_docs=def_docs))
+    f.write(template.render(def_docs=def_docs, frontmatter=frontmatter))

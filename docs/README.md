@@ -28,15 +28,15 @@ wiki](https://wiki.opencord.org/display/CORD).
 
 ## Making Changes to Documentation
 
-The [http://guide.opencord.org](http://guide.opencord.org) website is built using the
-[GitBook Toolchain](https://toolchain.gitbook.com/), with the documentation
-root in [build/docs](https://github.com/opencord/cord/blob/{{ book.branch
-}}/docs) in a checked out source tree.  It is build with `make`, and requires
-that gitbook, python, and a few other tools are installed.
+The [http://guide.opencord.org](http://guide.opencord.org) website is built
+using the [GitBook Toolchain](https://toolchain.gitbook.com/), with the
+documentation root in
+[build/docs](https://github.com/opencord/cord/blob/{{ book.branch }}/docs) in a
+checked out source tree.  It is build with `make`, and requires that gitbook,
+python, and a few other tools are installed.
 
 Source for individual guides is available in the [CORD code
 repository](https://gerrit.opencord.org); look in the `docs` directory of each
 project, with the documentation rooted in `build/docs`. Updates and
 improvements to this documentation can be submitted through Gerrit.
-
 
