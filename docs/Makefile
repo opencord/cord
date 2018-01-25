@@ -40,6 +40,15 @@ profiles:
 	ln -s ../../../orchestration/profiles/mcord/docs profiles/mcord
 	ln -s ../../../orchestration/profiles/opencloud/docs profiles/opencloud
 
+lint:
+	@echo "markdownlint(mdl) version: `mdl --version`"
+	@echo "rule descriptions: https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md"
+	@echo "style config:"
+	@echo "---"
+	@cat mdlstyle.rb
+	@echo "---"
+	mdl -s mdlstyle.rb `find . ! -path "./_book/*" ! -path "./node_modules/*" ! -path "./cord-tester/modules/*" -name "*.md"`
+
 xos:
 	ln -s ../../orchestration/xos/docs xos
 

@@ -17,13 +17,13 @@ switches, and three standard x86 servers.  The following figure does not show
 access devices or any upstream connectivity to the metro network; those details
 are included later in this section.
 
-<img src="images/physical-overview.png" alt="Drawing" style="width: 400px;"/>
+![Physical Network Overview](images/physical-overview.png)
 
 ### Logical Configuration: Data Plane Network
 
 The following diagram is a high level logical representation of a typical CORD POD.
 
-<img src="images/dataplane.png" alt="Drawing" style="width: 700px;"/>
+![Logical Data Plane Network](images/dataplane.png)
 
 The figure shows 40G data plane connections (red), where end-user traffic
 goes from the access devices to the metro network (green). User traffic
@@ -37,7 +37,7 @@ node are connected to a port of one of the leaf switches.
 The following diagram shows in blue how the components of the system are
 connected through the management network.
 
-<img src="images/controlplane.png" alt="Drawing" style="width: 500px;"/>
+![Logical Control Plane Network](images/controlplane.png)
 
 As shown in this figure, the head node is the only server in the POD connected
 both to Internet and to the other components of the system. The compute nodes
@@ -95,15 +95,15 @@ The section provides a list of hardware required to build a full CORD POD.
 * 3x Physical Servers: one to be used as head node, two to be used as compute
   nodes.
 
-   * Suggested Model: OCP-qualified QuantaGrid D51B-1U server. Each server is
-     configured with 2x Intel E5-2630 v4 10C 2.2GHz 85W, 64GB of RAM 2133MHz
-     DDR4, 2x 500GB HDD, and a 40 Gig adapter.
+    * Suggested Model: OCP-qualified QuantaGrid D51B-1U server. Each server is
+      configured with 2x Intel E5-2630 v4 10C 2.2GHz 85W, 64GB of RAM 2133MHz
+      DDR4, 2x 500GB HDD, and a 40 Gig adapter.
 
-   * Strongly Suggested NIC:
-       * Intel Ethernet Converged Network Adapters XL710 10/40 GbE PCIe 3.0, x8
-         Dual port.
-       * ConnectX®-3 EN Single/Dual-Port 10/40/56GbE Adapters w/ PCI Express
-         3.0.
+    * Strongly Suggested NIC:
+        * Intel Ethernet Converged Network Adapters XL710 10/40 GbE PCIe 3.0, x8
+          Dual port.
+        * ConnectX®-3 EN Single/Dual-Port 10/40/56GbE Adapters w/ PCI Express
+          3.0.
 
 > NOTE: while the machines mentioned above are generic standard x86 servers,
 > and can be potentially substituted with any other machine, it’s quite
@@ -113,14 +113,14 @@ The section provides a list of hardware required to build a full CORD POD.
 > see [Network Settings](appendix_network_settings.md) for more information.
 
 * 4x Fabric Switches
-     * Suggested Model: OCP-qualified Accton 6712 switch. Each switch is
-       configured with 32x40GE ports; produced by EdgeCore and HP.
+    * Suggested Model: OCP-qualified Accton 6712 switch. Each switch is
+      configured with 32x40GE ports; produced by EdgeCore and HP.
 
 * 7x Fiber Cables with QSFP+ (Intel compatible) or 7 DAC QSFP+ (Intel
   compatible) cables
 
-     * Suggested Model: Robofiber QSFP-40G-03C QSFP+ 40G direct attach passive
-       copper cable, 3m length - S/N: QSFP-40G-03C.
+    * Suggested Model: Robofiber QSFP-40G-03C QSFP+ 40G direct attach passive
+      copper cable, 3m length - S/N: QSFP-40G-03C.
 
 * 1x 1G L2 copper management switch supporting VLANs or 2x 1G L2 copper
   management switches
@@ -147,21 +147,23 @@ switches inside the POD (called "internal" or "management" and shown in blue).
 The figure also shows data plane connections in red (as described in the next
 paragraph).
 
-<img src="images/physical-cabling-diagram.png" alt="Drawing" style="width: 800px;"/>
+![Physical Cabling Diagram](images/physical-cabling-diagram.png)
 
 The external and the management networks can be separated either using two
 different switches, or the same physical switch and by using VLANs.
 
-> NOTE: Head node IPMI connectivity is optional.
+#### IPMI Management
 
-> NOTE: IPMI ports do not have to be necessarily connected to the external
-> network. The requirement is that compute node IPMI interfaces need to be
-> reachable from the head node. This is possible also through the internal /
-> management network.
+Head node IPMI connectivity is optional.
 
-> NOTE: Vendors often allow a shared management port to provide IPMI
-> functionalities. One of the NICs used for system management (e.g., eth0) can
-> be shared, to be used at the same time also as IPMI port.
+IPMI ports do not have to be necessarily connected to the external
+network. The requirement is that compute node IPMI interfaces need to be
+reachable from the head node. This is possible also through the internal /
+management network.
+
+Vendors often allow a shared management port to provide IPMI
+functionalities. One of the NICs used for system management (e.g., eth0) can
+be shared, to be used at the same time also as IPMI port.
 
 #### External Network
 
@@ -201,7 +203,7 @@ The data plane network (represented in red in the figure) carries user traffic
 (in green), from the access devices to the point the POD connects to the metro
 network.
 
-<img src="images/dataplane.png" alt="Drawing" style="width: 700px;"/>
+![Logical Data Plane Network](images/dataplane.png)
 
 The fabric switches are assembled to form a leaf and spine topology. A typical
 full POD has two leafs and two spines. Currently, this is a pure 40G network.
@@ -263,7 +265,7 @@ It should run Ubuntu 14.04 LTS.  Then, configure the following.
 
 #### Create a User with "sudoer" permissions (no password)
 
-```
+```shell
 sudo adduser cord && \
 sudo adduser cord sudo && \
 echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
@@ -324,7 +326,7 @@ System Variable Glossary](build_glossary.md).
 Once the POD config YAML file has been created, the composite configuration
 file should be generated with the following command.
 
-```
+```shell
 cd ~/cord/build && \
 make PODCONFIG_PATH={PATH_TO_YOUR_PODCONFIG_FILE.yml} config
 ```
@@ -349,18 +351,18 @@ Head node deployment works as follows:
 
 This step is started with the following command:
 
-```
+```shell
 cd ~/cord/build && \
 make build
 ```
 
-> NOTE: Be patient: this step can take an hour to complete.
+> NOTE: Be patient: this step can take over an hour to complete.
+
+This step is complete when the command successfully runs.
 
 > WARNING: This command sometimes fails for various reasons.  Simply re-running
 > the command often solves the problem. If the command fails it’s better to
 > start from a clean head node.
-
-This step is complete when the command successfully runs.
 
 ### MAAS
 
@@ -384,7 +386,7 @@ complete. The status of the download can be verified through the UI by visiting
 the URL `http://head-node-ip-address/MAAS/images/`, or via the command line
 from head node via the following command:
 
-```
+```shell
 APIKEY=$(sudo maas-region-admin apikey --user=cord) && \
 maas login cord http://localhost/MAAS/api/1.0 "$APIKEY" && \
 maas cord boot-resources read | jq 'map(select(.type != "Synced"))'
@@ -426,7 +428,7 @@ provisioning. They can be used from the head node CLI.
   should appear here, as soon as they get an IP and are recognized by MaaS. To
   see if your devices have been recognized, use the following command:
 
-```
+```shell
 cord harvest list
 ```
 
@@ -434,7 +436,7 @@ cord harvest list
   process that happen soon after the OS has been installed on your devices. To
   see the provisioning status of your devices, use the following command:
 
-```
+```shell
 cord prov list
 ```
 
@@ -454,7 +456,7 @@ Logs of the post deployment provisioning can be found in
 For a given node, the provisioning re-starts automatically if the related entry
 gets manually removed. This can be done with the following command:
 
-```
+```shell
 cord prov delete node_name
 ```
 
@@ -467,14 +469,14 @@ configuration file: `/etc/dhcp/dhcpd.reservations`.
 To help you, a sample file is available: `/etc/dhcp/dhcpd.reservations.sample`.
 For each host you want to statically assign an IP, use this syntax:
 
-```
+```shell
 host <name-of-your choice> {
-	hardware ethernet <host-mac-address>;
-	fixed-address  <desired-ip>;
-	}
+  hardware ethernet <host-mac-address>;
+  fixed-address  <desired-ip>;
+  }
 ```
 
-#### Compute Nodes
+#### Compute Node Provisioning
 
 The compute node provisioning process installs the servers as
 OpenStack compute nodes.
@@ -492,7 +494,7 @@ After this is complete, an entry for each node will be visible:
 
 * From the OpenStack CLI on the head node, using the command
 
-```
+```shell
 source /opt/cord_profile/admin-openrc.sh && \
 nova hypervisor-list
 ```
@@ -511,8 +513,8 @@ The post deployment provisioning of the compute nodes can be queried using the
 
 After a correct provisioning you should see something similar to:
 
-```
-cord prov list
+```shell
+$ cord prov list
 ID                                         NAME                   MAC                IP          STATUS      MESSAGE
 node-c22534a2-bd0f-11e6-a36d-2c600ce3c239  steel-ghost.cord.lab   2c:60:0c:cb:00:3c  10.6.0.107  Complete
 node-c238ea9c-bd0f-11e6-8206-2c600ce3c239  feline-shirt.cord.lab  2c:60:0c:e3:c4:2e  10.6.0.108  Complete
@@ -536,8 +538,8 @@ should be visible in MaaS, under the devices tab
 As with the compute nodes, following the harvest process, the provisioning will
 happen.  After a correct provisioning you should see something similar to:
 
-```
-cord prov list
+```shell
+$ cord prov list
 ID                                         NAME                    MAC                IP          STATUS      MESSAGE
 cc:37:ab:7c:b7:4c                          UKN-ABCD                cc:37:ab:7c:b7:4c  10.6.0.23   Complete
 cc:37:ab:7c:ba:58                          UKN-EFGH                cc:37:ab:7c:ba:58  10.6.0.20   Complete
@@ -551,7 +553,7 @@ cc:37:ab:7c:bf:6c                          UKN-OPQR                cc:37:ab:7c:b
 Once the post deployment provisioning on the fabric switches is complete, the
 task is complete.
 
-##Access to CORD Services
+## Access to CORD Services
 
 Your POD is now installed. You can now try to access the basic services as
 described below.
@@ -578,15 +580,15 @@ infrastructure (tenant networks). You can access it with password `rocks`:
 
 From the head node CLI
 
-```
-$ sudo lxc list
+```shell
+sudo lxc list
 ```
 
 lists the set of LXC containers running the various OpenStack-related services.
 These containers can be entered as follows:
 
-```
-$ ssh ubuntu@<container-name>
+```shell
+ssh ubuntu@<container-name>
 ```
 
 ### XOS UI
@@ -595,5 +597,7 @@ XOS is the cloud orchestrator that controls the entire POD. It allows you to
 define new service and service dependencies. You can access XOS at:
 
 * Using the XOS GUI at `http://<head-node-ip>/xos`
-* The username is `xosadmin@opencord.org` and the auto-generated password can be found in `/opt/credentials/xosadmin@opencord.org` on the head node
+
+* The username is `xosadmin@opencord.org` and the auto-generated password can
+  be found in `/opt/credentials/xosadmin@opencord.org` on the head node
 

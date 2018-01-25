@@ -1,22 +1,21 @@
 # Build System Config Glossary
 
-{{ def_docs['frontmatter']['description'] }}
-
+{{ frontmatter }}
 {% for key, val in def_docs|dictsort %}
-### {{ key }}
-
+## {{ key }}
+{% if val['description'] != ''%}
 {{ val['description'] }}
-
+{% endif %}
 Default value:
-```
+
+```yaml
 {{ val['defval_pp'] }}
 ```
 
 Used in:
 
 {% for file in val['reflist']|sort(attribute='path') -%}
- - [{{ file.path }}]({{ file.link }})
+- [{{ file.path }}]({{ file.link }})
 {% endfor -%}
-
 {% endfor %}
 

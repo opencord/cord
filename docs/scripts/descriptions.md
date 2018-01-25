@@ -1,3 +1,4 @@
+# Build Variable Descriptions
 
 This page documents all the configuration variables that can be set in a [POD
 config](install.md#pod-config), [scenario](install.md#scenarios), or
@@ -5,9 +6,9 @@ config](install.md#pod-config), [scenario](install.md#scenarios), or
 
 These variables are used in and apply to the following repositories:
 
- - [cord](https://github.com/opencord/cord) (aka "build" when checked out)
- - [maas](https://github.com/opencord/maas)
- - [platform-install](https://github.com/opencord/platform-install)
+- [cord](https://github.com/opencord/cord) (aka "build" when checked out)
+- [maas](https://github.com/opencord/maas)
+- [platform-install](https://github.com/opencord/platform-install)
 
 ## addresspool_public_cidr
 
@@ -370,8 +371,6 @@ Port used by ONOS containers for sending log4j logging messages to ElasticStack.
 
 Hostname (or IP) for the ElasticStack logging host machine.
 
-
-
 ## management_hosts_net_cidr
 
 CIDR for the management_hosts VTN network.
@@ -536,11 +535,13 @@ Human readable name to use for the CORD site.
 
 ## site_name
 
-Machine readable name to use for the CORD site. This should be one word, without spaces.
+Machine readable name to use for the CORD site. This should be one word,
+without spaces.
 
 ## site_suffix
 
-The DNS suffix applied to all machines created for this site. Must be a valid DNS name.
+The DNS suffix applied to all machines created for this site. Must be a valid
+DNS name.
 
 ## ssh_ca_phrase
 
@@ -763,6 +764,7 @@ List of XOS tosca templates to load that make up the service graph of a
 profile. Deprecated, see: [xos_new_tosca_config_templates](#xosnewtoscaconfigtemplates)
 
 ## xos_new_tosca_config_templates
+
 List of XOS tosca templates to load that make up the service graph of a
 profile.
 
