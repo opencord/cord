@@ -23,18 +23,18 @@ please see [Troubleshooting and Build Internals](troubleshooting.md).
 CORD has a unified build system for development and deployment which uses the
 following tools:
 
- - [Ansible](https://docs.ansible.com/ansible/intro_installation.html), *tested
-   with v2.4*
- - [Repo](https://source.android.com/source/downloading#installing-repo),
-   *tested with v1.23 of repo (launcher)*
+- [Ansible](https://docs.ansible.com/ansible/intro_installation.html), *tested
+  with v2.4*
+- [Repo](https://source.android.com/source/downloading#installing-repo),
+  *tested with v1.23 of repo (launcher)*
 
 And either:
 
- - [Docker](https://www.docker.com/community-edition), for *local* build
-   scenarios, *tested with Community Edition version 17.06*
- - [Vagrant](https://www.vagrantup.com/downloads.html), for all other scenarios
-   *tested with version 1.9.3, requires specific plugins and modules if using
-   with libvirt, see `cord-bootstrap.sh` for more details *
+- [Docker](https://www.docker.com/community-edition), for *local* build
+  scenarios, *tested with Community Edition version 17.06*
+- [Vagrant](https://www.vagrantup.com/downloads.html), for all other scenarios
+  *tested with version 1.9.3, requires specific plugins and modules if using
+  with libvirt, see `cord-bootstrap.sh` for more details *
 
 You can manually install these on your development system - see [Getting the
 Source Code](getting_the_code.md) for a more detailed instructions for checking
@@ -46,14 +46,17 @@ If you're working on an cleanly installed Ubuntu 14.04 system, you can use the
 `cord-bootstrap.sh` script to install these tools and check out the CORD source
 tree to `~/cord`.
 
-<pre><code>
+```shell
 curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
 chmod +x cord-bootstrap.sh
-</code></pre>
+```
+
+> NOTE: Change the `master` path component in the URL to your desired version
+> branch (ex: `cord-5.0`) if required.
 
 The bootstrap script has the following options:
 
-```
+``` shell
 Usage for ./cord-bootstrap.sh:
   -d                           Install Docker for local scenario.
   -h                           Display this help message.
@@ -70,7 +73,7 @@ The `-p` option downloads a patch from gerrit, and the syntax for this is
 `<project path>:<changeset>/<revision>`.  It can be used multiple
 time. For example:
 
-```
+```shell
 ./cord-bootstrap.sh -p build/platform-install:1233/4 -p orchestration/xos:1234/2
 ```
 
@@ -87,7 +90,7 @@ and downloads have completed.
 In some cases, you may see a message like this if you install software that
 adds you to a group and you aren't already a member:
 
-```
+```shell
 You are not in the group: libvirtd, please logout/login.
 You are not in the group: docker, please logout/login.
 ```
@@ -95,7 +98,7 @@ You are not in the group: docker, please logout/login.
 In such cases, please logout and login to the system to gain the proper group
 membership.  Another way to tell if you're in the right groups:
 
-```
+```shell
 ~$ groups
 xos-PG0 root
 ~$ vagrant status
@@ -118,24 +121,24 @@ handful of YAML files.
 ### POD Config
 
 The top level configuration for a build is the *POD config* file, which is a
-YAML file stored in
-[build/podconfig](https://github.com/opencord/cord/tree/{{ book.branch }}/podconfig) that
-contains a list of variables that control how the build proceeds, and can
-override the configuration of the rest of the build.
+YAML file stored in [build/podconfig](https://github.com/opencord/cord/tree/{{
+book.branch }}/podconfig) that contains a list of variables that control how
+the build proceeds, and can override the configuration of the rest of the
+build.
 
 A minimal POD Config file must define two variables:
 
 `cord_scenario` - the name of the *scenario* to use, which is defined in a
 directory under [build/scenarios](https://github.com/opencord/cord/tree/{{
-  book.branch }}/scenarios).
+book.branch }}/scenarios).
 
 `cord_profile` - the name of a *profile* to use, defined as a YAML file in
 [build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/{{
-  book.branch }}/profile_manifests).
+book.branch }}/profile_manifests).
 
-The included POD configs must be named `<profile>-<scenario>.yml`, except
-for the `physical-example.yml` file which is used for a [Physical
-  POD](install_physical.md) and requires a bit more work to configured.
+The included POD configs must be named `<profile>-<scenario>.yml`, except for
+the `physical-example.yml` file which is used for a [Physical
+POD](install_physical.md) and requires a bit more work to configured.
 
 POD configs are used during a build by passing them with the `PODCONFIG`
 variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`

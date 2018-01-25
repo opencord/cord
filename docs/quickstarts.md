@@ -11,20 +11,24 @@ To prepare a newly installed Ubuntu 14.04 system for either a Physical or
 Virtual pod, you can use the
 [cord-bootstrap.sh](install.html#cord-bootstrapsh-script) script:
 
-<pre><code>
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
+```shell
+curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
 chmod +x cord-bootstrap.sh
 ./cord-bootstrap.sh -v
-</code></pre>
+```
+
+> NOTE: Change the `master` path component in the URL to your desired version
+> branch (ex: `cord-5.0`) if required.
 
 ## Virtual POD (CORD-in-a-Box)
 
-This is a summary of [Installing a Virtual Pod (CORD-in-a-Box)](install_virtual.md).
+This is a summary of [Installing a Virtual Pod
+(CORD-in-a-Box)](install_virtual.md).
 
 To install a CiaB, on a [suitable](#target-server-requirements) Ubuntu 14.04
 system, run the following commands:
 
-```
+```shell
 cd ~/cord/build && \
 make PODCONFIG=rcord-virtual.yml config && \
 make -j4 build |& tee ~/build.out && \
@@ -39,7 +43,7 @@ If you'll be running these commands frequently, a shortcut is to use the `-t`
 option on the `cord-bootstrap.sh` script to download source, then run all the
 make targets involved in doing a build and test cycle:
 
-```
+```shell
 ./cord-bootstrap.sh -v -t "PODCONFIG=rcord-virtual.yml config" -t "build" -t "pod-test"
 ```
 
@@ -52,7 +56,7 @@ configuration](install_physical.md#physical-configuration), install Ubuntu
 14.04 on a [suitable head node](install_physical.md#detailed-requirements). On
 the target head node, add a `cord` user with `sudo` rights:
 
-```
+```shell
 sudo adduser cord && \
 sudo usermod -a -G sudo cord && \
 echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
@@ -61,7 +65,7 @@ echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-i
 [Create a POD configuration](install.md#pod-config) file in the
 `~/cord/build/podconfig` directory, then run:
 
-```
+```shell
 cd ~/cord/build && \
 make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config && \
 make -j4 build |& tee ~/build.out

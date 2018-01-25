@@ -20,7 +20,6 @@ import fnmatch
 import jinja2
 import logging
 import os
-import pprint
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -56,7 +55,7 @@ parser.add_argument('-o', '--output', default='defaults.md',
 args = parser.parse_args()
 
 # find the branch we're on via the repo manifest
-manifest_path =  os.path.abspath("../../.repo/manifest.xml")
+manifest_path = os.path.abspath("../../.repo/manifest.xml")
 try:
     tree = ET.parse(manifest_path)
     manifest_xml = tree.getroot()
@@ -69,15 +68,12 @@ except Exception:
 role_defs = []
 profile_defs = []
 group_defs = []
-
-# frontmatter section is any text at the top of the descriptions.md file, and
-# comes before all other sections
-def_docs = {'frontmatter':{'description':''}}
+def_docs = {}
 
 # find all the files to be processed
 for dirpath, dirnames, filenames in os.walk(args.playbook_dir):
     basepath = re.sub(args.playbook_dir, '', dirpath)
-    for filename in filenames :
+    for filename in filenames:
         filepath = os.path.join(basepath, filename)
 
         if fnmatch.fnmatch(filepath, "roles/*/defaults/*.yml"):
@@ -90,7 +86,6 @@ for dirpath, dirnames, filenames in os.walk(args.playbook_dir):
             group_defs.append(filepath)
 
 
-
 for rd in role_defs:
     rd_vars = {}
     # trim slash so basename grabs the final directory name
@@ -100,10 +95,10 @@ for rd in role_defs:
         rd_partialpath = os.path.join(rd_basedir, rd)
 
         # partial URL, without line nums
-        rd_url = "https://github.com/opencord/platform-install/tree/%s/%s" % (repo_branch, rd)
+        rd_url = "https://github.com/opencord/platform-install/tree/%s/%s" % (
+            repo_branch, rd)
 
-        
-        rd_fh= open(rd_fullpath, 'r')
+        rd_fh = open(rd_fullpath, 'r')
 
         # markedloader is for line #'s
         loader = markedyaml.MarkedLoader(rd_fh.read())
@@ -124,27 +119,39 @@ for rd in role_defs:
 
         for key, val in rd_vars.iteritems():
 
-           # build full URL to lines. Lines numbered from zero, so +1 on them to match github
-           if marked_vars[key].start_mark.line == marked_vars[key].end_mark.line:
-               full_url = "%s#L%d" % (rd_url, marked_vars[key].start_mark.line+1)
-           else:
-               full_url = "%s#L%d-L%d" % (rd_url, marked_vars[key].start_mark.line, marked_vars[key].end_mark.line)
+            # build full URL to lines. Lines numbered from zero, so +1 on them
+            # to match github
+            if marked_vars[key].start_mark.line == marked_vars[
+                    key].end_mark.line:
+                full_url = "%s#L%d" % (rd_url,
+                                       marked_vars[key].start_mark.line + 1)
+            else:
+                full_url = "%s#L%d-L%d" % (rd_url,
+                                           marked_vars[key].start_mark.line,
+                                           marked_vars[key].end_mark.line)
 
-           if key in def_docs:
+            if key in def_docs:
                 if def_docs[key]['defval'] == val:
-                    def_docs[key]['reflist'].append({'path':rd_partialpath, 'link':full_url})
+                    def_docs[key]['reflist'].append(
+                        {'path': rd_partialpath, 'link': full_url})
                 else:
-                    LOG.error(" %s has different default > %s : %s" % (rd, key, val))
-           else:
-                to_print = { str(key): val }
-                pp = yaml.dump(to_print, indent=4, allow_unicode=False, default_flow_style=False)
+                    LOG.error(
+                        " %s has different default > %s : %s" %
+                        (rd, key, val))
+            else:
+                to_print = {str(key): val}
+                pp = yaml.dump(
+                    to_print,
+                    indent=4,
+                    allow_unicode=False,
+                    default_flow_style=False)
 
                 def_docs[key] = {
-                        'defval': val,
-                        'defval_pp': pp,
-                        'description': "",
-                        'reflist': [{'path':rd_partialpath, 'link':full_url}],
-                        }
+                    'defval': val,
+                    'defval_pp': pp,
+                    'description': "",
+                    'reflist': [{'path': rd_partialpath, 'link': full_url}],
+                }
 
 # read in descriptions file
 descriptions = {}
@@ -158,7 +165,7 @@ with open(args.descriptions, 'r') as descfile:
 
         if desc_header:
             # add previous description to dict
-            descriptions[desc_name] = desc_lines
+            descriptions[desc_name] = desc_lines.strip()
 
             # set this as the next name, wipe out lines
             desc_name = desc_header.group(1)
@@ -166,14 +173,19 @@ with open(args.descriptions, 'r') as descfile:
         else:
             desc_lines += d_l
 
-    descriptions[desc_name] = desc_lines
+    descriptions[desc_name] = desc_lines.strip()
+
+# Get the frontmatter out of descriptions, and remove the header line
+frontmatter = re.sub(r'^#.*\n\n', '', descriptions.pop('frontmatter', None))
 
 # add descriptions to def_docs
 for d_name, d_text in descriptions.iteritems():
     if d_name in def_docs:
         def_docs[d_name]['description'] = d_text
     else:
-        LOG.error("Description exists for '%s' but doesn't exist in defaults" % d_name)
+        LOG.error(
+            "Description exists for '%s' but doesn't exist in defaults" %
+            d_name)
 
 # check for missing descriptions
 for key in sorted(def_docs):
@@ -182,10 +194,10 @@ for key in sorted(def_docs):
 
 # Add to template and write to output file
 j2env = jinja2.Environment(
-    loader = jinja2.FileSystemLoader('.')
+    loader=jinja2.FileSystemLoader('.')
 )
 
 template = j2env.get_template(args.template)
 
 with open(args.output, 'w') as f:
-    f.write(template.render(def_docs=def_docs))
+    f.write(template.render(def_docs=def_docs, frontmatter=frontmatter))
