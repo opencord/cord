@@ -256,3 +256,8 @@ buildable_images:
     repo: rcord
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/progran-synchronizer
+    repo: progran
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
