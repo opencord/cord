@@ -180,7 +180,8 @@ local-ubuntu-dev-env:
 	$(ANSIBLE_PB) $(PI)/bootstrap-dev-env.yml $(LOGCMD)
 
 local-xos-teardown: xos-update-images
-	cd $(CONFIG_CORD_PROFILE_DIR); docker-compose -p $(PROFILE) rm -s -f || true
+	$(eval COMPOSE_FILE := $(shell cd $(CONFIG_CORD_PROFILE_DIR); ls dynamic_load/* 2>/dev/null | tr '\n' ':')docker-compose.yml)
+	cd $(CONFIG_CORD_PROFILE_DIR); COMPOSE_FILE=$(COMPOSE_FILE) docker-compose -p $(PROFILE) rm -s -f || true
 	rm -f $(M)/local-onboard-profile
 
 # ===== usage: make xos-service-config NAME=exampleservice PATH=exampleservice KEYPAIR=exampleservice_rsa =======
