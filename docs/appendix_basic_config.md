@@ -192,49 +192,22 @@ id=3C:FD:FE:9E:94:28/None, mac=3C:FD:FE:9E:94:28, location=of:0000cc37ab7cba58/4
 
 > NOTE: When prompted, use password `rocks`
 
-## Generate the Network Configuration
+## Generate and Load the Network Configuration
 
-To modify the fabric configuration for your environment, generate on the head
-node a new network configuration using the following commands:
-
-```shell
-cd /opt/cord_profile && \
-cp fabric-network-cfg.json{,.$(date +%Y%m%d-%H%M%S)} && \
-cord generate > fabric-network-cfg.json
-```
-
-## Load Network Configuration
-
-Once these steps are done load the new configuration into XOS, and restart the
-apps in ONOS:
-
-### Install Dependencies
+To modify the fabric configuration for your environment, run the following
+on the dev machine:
 
 ```shell
-sudo pip install httpie
+cd ~/cord/build && \
+make fabric-refresh
 ```
 
-### Delete Old Configuration
+This generates a new fabric configuration using the `cord generate`
+command.  It then uploads the new configuration to XOS, which pushes it to
+ONOS.
 
-```shell
-http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/
-```
-
-### Load New Configuration
-
-```shell
-http -a onos:rocks POST http://onos-fabric:8181/onos/v1/network/configuration/ < /opt/cord_profile/fabric-network-cfg.json
-```
-
-### Restart ONOS Apps
-
-```shell
-http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
-http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active
-```
-
-To verify that XOS has pushed the configuration to ONOS, log into ONOS in the
-onos-fabric VM and run netcfg:
+To verify that XOS has pushed the configuration to ONOS, log into the
+`onos-fabric` container and run `netcfg`:
 
 ```shell
 $ ssh -p 8101 onos@onos-fabric netcfg
@@ -265,7 +238,7 @@ Password:
     ...
 ```
 
->NOTE: When prompt, use password "rocks"
+>NOTE: When prompted, use password "rocks"
 
 ## Verify Connectivity over the Fabric
 
