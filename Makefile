@@ -376,9 +376,16 @@ $(M)/compute%-up: | $(M)/setup-ciab-pcu
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) ansible/maas-provision.yml --extra-vars='maas_user=maas vagrant_name=cord_compute$*'" $(LOGCMD)
 	touch $@
 
-$(M)/refresh-fabric: | $(M)/compute1-up
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-refresh-fabric.yml" $(LOGCMD)
-	touch $@
+
+# Fabric targets
+$(M)/fabric-refresh: | $(M)/setup-automation
+	# $(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/cord-refresh-fabric.yml" $(LOGCMD)
+	$(ANSIBLE_PB) $(PI)/cord-refresh-fabric.yml $(LOGCMD)
+
+fabric-refresh: | $(M)/fabric-refresh
+
+fabric-pingtest: | $(M)/fabric-refresh
+	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) --private-key ~/.ssh/cord_rsa $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
 
 
 # Testing targets
@@ -389,8 +396,7 @@ pod-test: | $(TESTING_PREREQS)
 mcord-%:
 	$(ANSIBLE_PB) ../orchestration/profiles/mcord/test/mcord-$*-playbook.yml $(LOGCMD)
 
-fabric-pingtest: $(M)/refresh-fabric
-	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_MAAS) $(PI)/cord-fabric-pingtest.yml" $(LOGCMD)
+
 
 
 # Local Targets, bring up XOS containers without a VM
