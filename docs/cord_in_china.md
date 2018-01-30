@@ -206,5 +206,5 @@ that in order to receive automated updates.  To subscribe to a mailing list, so
 to see emails from the rest of the community, send a blank email to
 
 `NAME_OF_THE_ML+subscribe@opencord.org`, for example
-[cord-dev+subscribe@opencord.org](cord-dev+subscribe@opencord.org).
+[cord-dev+subscribe@opencord.org](mailto:cord-dev+subscribe@opencord.org).
 

@@ -28,12 +28,7 @@ sudo chmod a+x /usr/local/bin/repo
 The `cord` repositories are usually checked out to `~/cord` in most of our
 examples and deployments:
 
-```shell
-mkdir ~/cord && \
-cd ~/cord && \
-repo init -u https://gerrit.opencord.org/manifest -b {{ book.branch }} && \
-repo sync
-```
+{% include "/partials/repo-download.md" %}
 
 > NOTE: `-b` specifies the branch name. Development work goes on in `master,
 > and there are also specific stable branches such as `cord-4.0` that can be
