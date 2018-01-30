@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0ef4901_1528403e",
+        "filename": "ansible/roles/maas-provision/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2018-01-30T17:30:29Z",
+      "side": 1,
+      "message": "It has been a while since I have dug around here, this is no longer used for maas prov? where is that happening now?",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c736577a_5bf6edfb",
+        "filename": "scripts/bootstrap_ansible.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2018-01-30T17:30:29Z",
+      "side": 1,
+      "message": "This is no longer used by the Vagrant file?",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
