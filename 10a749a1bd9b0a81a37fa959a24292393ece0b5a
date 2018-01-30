@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "635de81e_fc7aae26",
+        "filename": "ansible/roles/maas-provision/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-30T17:46:47Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right. This is being used - the invocation method I searched for didn\u0027t take into account running this playbook on the head node.   I\u0027ll restore it.",
+      "parentUuid": "c0ef4901_1528403e",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c736577a_5bf6edfb",
         "filename": "scripts/bootstrap_ansible.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-01-30T17:30:29Z",
       "side": 1,
       "message": "This is no longer used by the Vagrant file?",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7929012a_1c2f5b78",
+        "filename": "scripts/bootstrap_ansible.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-30T17:46:47Z",
+      "side": 1,
+      "message": "This was only used by the `cord-in-a-box.sh` script.",
+      "parentUuid": "c736577a_5bf6edfb",
       "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
