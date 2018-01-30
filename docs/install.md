@@ -46,10 +46,7 @@ If you're working on an cleanly installed Ubuntu 14.04 system, you can use the
 `cord-bootstrap.sh` script to install these tools and check out the CORD source
 tree to `~/cord`.
 
-```shell
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
-chmod +x cord-bootstrap.sh
-```
+{% include "/partials/cord-bootstrap.md" %}
 
 > NOTE: Change the `master` path component in the URL to your desired version
 > branch (ex: `cord-5.0`) if required.

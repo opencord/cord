@@ -11,11 +11,7 @@ To prepare a newly installed Ubuntu 14.04 system for either a Physical or
 Virtual pod, you can use the
 [cord-bootstrap.sh](install.html#cord-bootstrapsh-script) script:
 
-```shell
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
-chmod +x cord-bootstrap.sh
-./cord-bootstrap.sh -v
-```
+{% include "/partials/cord-bootstrap.md" %}
 
 > NOTE: Change the `master` path component in the URL to your desired version
 > branch (ex: `cord-5.0`) if required.
@@ -29,6 +25,7 @@ To install a CiaB, on a [suitable](#target-server-requirements) Ubuntu 14.04
 system, run the following commands:
 
 ```shell
+./cord-bootstrap.sh -v
 cd ~/cord/build && \
 make PODCONFIG=rcord-virtual.yml config && \
 make -j4 build |& tee ~/build.out && \
