@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bc7f67e_c2f40ca7",
+        "filename": "docs/appendix_basic_config.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-30T20:05:48Z",
+      "side": 1,
+      "message": "Add a space after the #\u0027s or `markdownlint` will complain.",
+      "range": {
+        "startLine": 195,
+        "startChar": 1,
+        "endLine": 195,
+        "endChar": 3
+      },
+      "revId": "42acd227c28aa11ba1def46dba72119ccebe6c6e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
