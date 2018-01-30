@@ -87,6 +87,24 @@
       "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69b00b11_7d201ea7",
+        "filename": "scripts/bootstrap_ansible.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-01-30T18:17:16Z",
+      "side": 1,
+      "message": "Ansible is installed using this method on `corddev` (which is the \"build node\"): https://github.com/opencord/platform-install/blob/master/prep-buildnode-playbook.yml#L21-L24",
+      "parentUuid": "c9702d96_88b57104",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
