@@ -18,11 +18,11 @@ serve: setup
 build: setup
 	gitbook build
 
-setup: clean platform-install cord-tester profiles xos xos-gui xos-tosca swagger $(GENERATED_DOCS)
+setup: clean platform-install cord-tester profiles xos xos-gui xos-tosca api $(GENERATED_DOCS)
 	gitbook init
 	gitbook install
 
-test: linkcheck
+test: linkcheck lint
 
 linkcheck: build
 	linkchecker --check-extern -a _book/
@@ -38,7 +38,6 @@ profiles:
 	ln -s ../../../orchestration/profiles/rcord/docs profiles/rcord
 	ln -s ../../../orchestration/profiles/ecord/docs profiles/ecord
 	ln -s ../../../orchestration/profiles/mcord/docs profiles/mcord
-	ln -s ../../../orchestration/profiles/opencloud/docs profiles/opencloud
 
 lint:
 	@echo "markdownlint(mdl) version: `mdl --version`"
@@ -47,7 +46,7 @@ lint:
 	@echo "---"
 	@cat mdlstyle.rb
 	@echo "---"
-	mdl -s mdlstyle.rb `find . ! -path "./_book/*" ! -path "./node_modules/*" ! -path "./cord-tester/modules/*" -name "*.md"`
+	mdl -s mdlstyle.rb `find -L . ! -path "./_book/*" ! -path "./node_modules/*" ! -path "./cord-tester/modules/*" -name "*.md"`
 
 xos:
 	ln -s ../../orchestration/xos/docs xos
@@ -61,12 +60,15 @@ xos-tosca:
 build_glossary.md: scripts/descriptions.md scripts/defaults.md.j2 scripts/defaultsdoc.py scripts/markedyaml.py
 	python scripts/defaultsdoc.py -o build_glossary.md
 
-swagger: xos
+api: xos
 	pushd ../../orchestration/xos/docs/; make swagger_docs; popd;
+	cp -r xos/swagger/ui api
+	cp xos/swagger/specs/swagger.yaml api/swagger.yaml
 
 clean:
 	rm -rf $(GENERATED_DOCS)
 	rm -rf _book
 	rm -rf node_modules
 	rm -rf platform-install test profiles xos xos-gui xos-tosca
+	rm -rf api
 

@@ -41,6 +41,7 @@
     * [Tutorials](xos/tutorials/tutorials.md)
         * [Example Service](xos/tutorials/example_service.md)
         * [Synchronizer in the local scenario](xos/tutorials/local_synchronizer_dev_loop.md)
+    * [VTN and Service Composition](xos/xos_vtn.md)
     * [GUI Development](xos-gui/developer/README.md)
         * [Quickstart](xos-gui/developer/quickstart.md)
         * [Service Graph](xos-gui/developer/service_graph.md)
