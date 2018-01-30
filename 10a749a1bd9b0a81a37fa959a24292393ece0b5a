@@ -69,6 +69,24 @@
       "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9702d96_88b57104",
+        "filename": "scripts/bootstrap_ansible.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2018-01-30T17:51:39Z",
+      "side": 1,
+      "message": "i thought corddev vagrant used this as well?",
+      "parentUuid": "7929012a_1c2f5b78",
+      "revId": "10a749a1bd9b0a81a37fa959a24292393ece0b5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
