@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "savepersist"
-exit 0
