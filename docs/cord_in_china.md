@@ -1,22 +1,17 @@
-# Operating CORD in China
+# Installing CORD in China
 
-Different community members reported problems operating CORD in China. This
-section provides a practical guide and some suggestions on how to install the
-main platform, the use cases, as well as how to manage them after their setup.
+There are several complications in installing and operating CORD in
+China. This section provides some practical suggestions on how to work
+around these issues.
 
-## Install the CORD platform (4+)
-
-The guide explains how to install the CORD platform in China, providing some
-specific suggestions and customizations.
-
-> Note: the guide assumes you've already read the main [CORD installation
+> Note: The following assumes you've already read the main [CORD installation
 > guide](install_physical.md), that you've understood the hardware and software
 > requirements, and that you're well aware of how the standard installation
 > process works.
 
-### Update Ubuntu repositories
+## Update Ubuntu Repositories
 
-We know that the default Ubuntu repositories are quite slow in China. The
+The default Ubuntu repositories are quite slow in China. The
 following repository should work faster:
 
 [https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
@@ -24,7 +19,7 @@ following repository should work faster:
 Update your Ubuntu repository, both on the development machine and on the head
 node.
 
-### Prepare the dev node machine
+## Prepare the Development Machine
 
 By default, CORD uses an [automated script](quickstarts.md#pod-quickstarts) to
 prepare the development machine. Unfortunately, the script won't work in China,
@@ -82,15 +77,13 @@ sudo chmod a+x /usr/local/bin/repo
 > This special version will let you connect to ONF instead at every
 > initialization.
 
-### Download the CORD software
+## Download Source Code
 
 Before it wasn't possible to download directly the CORD repository using repo,
 since the tool was trying to connect at every initialization to Google to check
 for updates.
 
-With the custom version (see above) this is not anymore an issue. You can now
-download the code as anyone else!
-
+With the custom version (see above) this is not an issue any more.
 To download the code, follow the steps below:
 
 ```shell
@@ -101,26 +94,26 @@ repo init -u https://gerrit.opencord.org/manifest -b master
 repo sync
 ```
 
-> Warning: please, note that master is just an example. You can replace it with
+> Warning: Note that master is just an example. You can replace it with
 > the branch you prefer.
 
 From now on in the guide, the cord directory just extracted will be referenced
 as CORD_ROOT. The CORD_ROOT directory should be ~/cord.
 
-## Replace google.com address with opennetworking.org
+## Replace google.com with opennetworking.org
 
-The repository has been generally cleaned-up from references to Google to avoid
-issues. Anyway, there are still some portions of code referring to it. We
+The repository has been generally cleaned up from references to
+Google, but there are places in the code that refer to it. We
 suggest you to look carefully in the entire repositories and replace any
-google.com occurrence with opennetworking.org (or any other preferred address).
+`google.com` occurrence with `opennetworking.org` (or any other preferred address).
 
-### Replace Google DNS
+## Replace Google DNS
 
-Google DNS won't work over there. Unfortunately, it is still the default for
+Google DNS won't work in China. Unfortunately, it is still the default for
 all CORD services. Look in the entire repository for all the occurrences of
 8.8.8.8, 8.8.8.4, or 8.8.4.4, and replace them with your preferred DNS server.
 
-### Replace Maven mirror
+## Replace Maven Mirror
 
 Maven is used to build ONOS apps. The default Maven mirror doesn't work. In
 CORD_ROOT/onos-apps/settings.xml, add:
@@ -134,7 +127,7 @@ CORD_ROOT/onos-apps/settings.xml, add:
 </mirror>
 ```
 
-### Replace Docker mirror
+## Replace Docker Mirror
 
 The default Docker mirror won't work. Docker just opened a new mirror in China,
 which should be used instead.
@@ -146,7 +139,7 @@ following files:
 * CORD_ROOT/build/ansible/roles/docker/templates/docker.cfg
 * CORD_ROOT/build/maas/roles/compute-node/tasks/main.yml
 
-## Replace NPM mirrors
+## Replace NPM Mirror
 
 Add a line `npm config set registry https://registry.npm.taobao.org` just
 before the “npm install” command is invoked, in the following files:
@@ -170,7 +163,7 @@ variable is defined:
 * CORD_ROOT/orchestration/xos-gui/Dockerfile
 * CORD_ROOT/orchestration/xos-gui/Dockerfile.xos-gui-extension-builder
 
-### Fix Google Maps for China
+## Fix Google Maps for China
 
 This is specific to `E-CORD`, which uses Google Maps to visualize where
 Central Offices are located. Default Google Maps APIs are not available from
@@ -192,26 +185,21 @@ in
 CORD_ROOT/orchestration/xos_services/vnaas/xos/gui/src/app/components/vnaasMap.component.html
 ```
 
-### You're all set
-
-You're finally ready to deploy CORD following the standard installation
-procedure described [here](install_physical.md)!
-
 ## Developing for CORD
 
 Now that repo issues have been solved, you can start developing for CORD also
 from China, and go through the default developer workflow described
 [here](develop.md). Happy coding!
 
-## Mailing lists
+## Mailing Lists
 
 CORD mailing lists are hosted on Google, but this doesn't mean you can't send
 and receive emails!
 
 Mailing lists are:
 
-* <cord-discuss@opencord.org>
-* <cord-dev@opencord.org>
+* `cord-discuss@opencord.org`
+* `cord-dev@opencord.org`
 
 You don't need to join the mailing list to be able to write to it, but you need
 that in order to receive automated updates.  To subscribe to a mailing list, so
