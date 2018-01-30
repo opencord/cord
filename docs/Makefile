@@ -22,7 +22,7 @@ setup: clean platform-install cord-tester profiles xos xos-gui xos-tosca swagger
 	gitbook init
 	gitbook install
 
-test: linkcheck
+test: linkcheck lint
 
 linkcheck: build
 	linkchecker --check-extern -a _book/
@@ -38,7 +38,6 @@ profiles:
 	ln -s ../../../orchestration/profiles/rcord/docs profiles/rcord
 	ln -s ../../../orchestration/profiles/ecord/docs profiles/ecord
 	ln -s ../../../orchestration/profiles/mcord/docs profiles/mcord
-	ln -s ../../../orchestration/profiles/opencloud/docs profiles/opencloud
 
 lint:
 	@echo "markdownlint(mdl) version: `mdl --version`"
@@ -47,7 +46,7 @@ lint:
 	@echo "---"
 	@cat mdlstyle.rb
 	@echo "---"
-	mdl -s mdlstyle.rb `find . ! -path "./_book/*" ! -path "./node_modules/*" ! -path "./cord-tester/modules/*" -name "*.md"`
+	mdl -s mdlstyle.rb `find -L . ! -path "./partials/*" ! -path "./_book/*" ! -path "./node_modules/*" ! -path "./cord-tester/modules/*" -name "*.md"`
 
 xos:
 	ln -s ../../orchestration/xos/docs xos
