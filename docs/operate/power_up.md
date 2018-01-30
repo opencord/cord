@@ -16,22 +16,24 @@ cd ~/cord/build; VAGRANT_CWD=~/cord/build/scenarios/cord vagrant up head1 --prov
 ## Check the Head Node Services
 
 1. Verify that `mgmtbr` and `fabric` interfaces are up and have IP addresses
+
 2. Verify that MAAS UI is running and accessible:
+
     * **Physical POD:** `http://<head-node>/MAAS`
     * **CiaB:** `http://<ciab-server>:8080/MAAS`
 
-> **Troubleshooting: MAAS UI not available on CiaB.** If you are running a CiaB
-> and there is no webserver on port 8080, it might be necessary to refresh port
-> forwarding to the prod VM.  Run `ps ax|grep 8080` and look for an SSH command
-> (will look something like this):
+    > **Troubleshooting: MAAS UI not available on CiaB.** If you are running a CiaB
+    > and there is no webserver on port 8080, it might be necessary to refresh port
+    > forwarding to the prod VM.  Run `ps ax|grep 8080` and look for an SSH command
+    > (will look something like this):
 
-```shell
-31353 pts/5    S      0:00 ssh -o User=vagrant -o Port=22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PasswordAuthentication=no -o ForwardX11=no -o IdentityFile="/users/acb/cord/build/scenarios/cord/.vagrant/machines/head1/libvirt/private_key" -L *:8080:192.168.121.14:80 -N 192.168.121.14
-```
+    ```shell
+    31353 pts/5    S      0:00 ssh -o User=vagrant -o Port=22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PasswordAuthentication=no -o ForwardX11=no -o IdentityFile="/users/acb/cord/build/scenarios/cord/.vagrant/machines/head1/libvirt/private_key" -L *:8080:192.168.121.14:80 -N 192.168.121.14
+    ```
 
-> A workaround is to kill this process, and then copy and paste the command
-> above into another window on the CiaB server to set up a new SSH port
-> forwarding connection.
+    > A workaround is to kill this process, and then copy and paste the command
+    > above into another window on the CiaB server to set up a new SSH port
+    > forwarding connection.
 
 3. Verify that the following Docker containers are running: mavenrepo, switchq,
    automation, provisioner, generator, harvester, storage, allocator, registry
@@ -42,14 +44,15 @@ cd ~/cord/build; VAGRANT_CWD=~/cord/build/scenarios/cord vagrant up head1 --prov
 5. Run: `source /opt/cord_profile/admin-openrc.sh`
 
 6. Verify that the following OpenStack commands work:
+
     * `$ keystone user-list`
     * `$ nova list --all-tenants`
     * `$ neutron net-list`
 
-> **Troubleshooting: OpenStack commands give SSL error.** Sometimes Keystone
-> starts up in a strange state and OpenStack commands will fail with various
-> SSL errors.  To fix this, it is often sufficient to run: `ssh ubuntu@keystone
-> sudo service apache2 restart`
+    > **Troubleshooting: OpenStack commands give SSL error.** Sometimes Keystone
+    > starts up in a strange state and OpenStack commands will fail with various
+    > SSL errors.  To fix this, it is often sufficient to run: `ssh ubuntu@keystone
+    > sudo service apache2 restart`
 
 ## Power on Leaf and Spine Switches
 
@@ -78,7 +81,7 @@ Once the compute nodes are up:
 2. Run: `source /opt/cord_profile/admin-openrc.sh`
 3. Verify that nova service-list shows the compute node as “up”.
 
-> It may take a few minutes until the node's status is updated in Nova.
+    > It may take a few minutes until the node's status is updated in Nova.
 
 4. Verify that you can log into the compute nodes from the head node as the
    ubuntu user

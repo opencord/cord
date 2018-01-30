@@ -374,9 +374,9 @@ ok: [10.100.198.201] => {
 ### test-exampleservice
 
 This test builds on `test-vsg` by loading the *exampleservice* described in the
-[Developing for Cord:ExampleService](xos/example_service.md).  The purpose of
-the *exampleservice* is to demonstrate how new subscriber-facing services can
-be easily deployed to a CORD POD. This test performs the following steps:
+[ExampleService](xos/tutorials/example_service.md).  The purpose of the
+*exampleservice* is to demonstrate how new subscriber-facing services can be
+easily deployed to a CORD POD. This test performs the following steps:
 
 * On-boards *exampleservice* into the CORD POD
 * Creates an *exampleservice* tenant, which causes a VM to be created and
