@@ -95,9 +95,9 @@ The section provides a list of hardware required to build a full CORD POD.
 * 3x Physical Servers: one to be used as head node, two to be used as compute
   nodes.
 
-    * Suggested Model: OCP Inspired&trade; QuantaGrid D51B-1U server. Each server is
-      configured with 2x Intel E5-2630 v4 10C 2.2GHz 85W, 64GB of RAM 2133MHz
-      DDR4, 2x 500GB HDD, and a 40 Gig adapter.
+    * Suggested Model: OCP Inspired&trade; QuantaGrid D51B-1U server. Each
+      server is configured with 2x Intel E5-2630 v4 10C 2.2GHz 85W, 64GB of RAM
+      2133MHz DDR4, 2x 500GB HDD, and a 40 Gig adapter.
 
     * Strongly Suggested NIC:
         * Intel Ethernet Converged Network Adapters XL710 10/40 GbE PCIe 3.0, x8
@@ -261,7 +261,7 @@ This documentation assumes that you checked out the CORD source tree into
 
 #### Give "sudoer" permissions (no password)
 
-```
+```bash
 sudo adduser YOUR_USER_NAME sudo && \
 echo 'YOUR_USER_NAME ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
 ```
