@@ -47,7 +47,7 @@ If you're working on an cleanly installed Ubuntu 14.04 system, you can use the
 tree to `~/cord`.
 
 ```shell
-curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
+curl -o ~/cord-bootstrap.sh https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-bootstrap.sh
 chmod +x cord-bootstrap.sh
 ```
 
