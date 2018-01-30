@@ -39,6 +39,7 @@
     * [Workflow: CiaB Scenario](xos/dev/workflow_pod.md)
     * [Example Service](xos/example_service.md)
     * [TOSCA Development](platform-install/bootstrap_models_in_xos.md)
+    * [VTN and Service Composition](xos/xos_vtn.md)
     * [GUI Development](xos-gui/developer/README.md)
         * [Quickstart](xos-gui/developer/quickstart.md)
         * [Service Graph](xos-gui/developer/service_graph.md)
