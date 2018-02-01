@@ -761,12 +761,12 @@ should be included for the services.
 ## xos_tosca_config_templates
 
 List of XOS tosca templates to load that make up the service graph of a
-profile. Deprecated, see: [xos_new_tosca_config_templates](#xosnewtoscaconfigtemplates)
+profile.
 
 ## xos_new_tosca_config_templates
 
 List of XOS tosca templates to load that make up the service graph of a
-profile.
+profile. Deprecated, see: [xos_tosca_config_templates](#xostoscaconfigtemplates)
 
 ## xos_tosca_url
 
