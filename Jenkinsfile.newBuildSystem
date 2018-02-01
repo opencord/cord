@@ -417,7 +417,7 @@ def getComputeNames(role="") {
         switchMac = switchMac.toLowerCase().replaceAll(':','')
         // Get fabric IPs of compute nodes connected to the switch
         try {
-            computeFabricIps = runHeadNodeCmd("sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts -j | jq '.[] | select(.location.elementId | contains(\\\"${switchMac}\\\")) | .ipAddresses' | grep -o '\\\"${fabricIpPrefix}.[1-9][0-9]*.[0-9]*\\\"'",
+            computeFabricIps = runHeadNodeCmd("sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts -j | jq '.[] | select(.locations[].elementId | contains(\\\"${switchMac}\\\")) | .ipAddresses' | grep -o '\\\"${fabricIpPrefix}.[1-9][0-9]*.[0-9]*\\\"'",
                                               "-q").trim()
          }catch (exception) {
             return computeNames
