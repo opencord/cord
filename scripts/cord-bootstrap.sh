@@ -29,7 +29,7 @@ CORDDIR="${CORDDIR:-${HOME}/cord}"
 MAKECMD="${MAKECMD:-make -j4}"
 
 # CORD versioning
-REPO_BRANCH="${REPO_BRANCH:-master}"
+REPO_BRANCH="${REPO_BRANCH:-cord-5.0}"
 
 # Tool/OS versioning
 HOST_RELEASE=`lsb_release -c -s`
