@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71fbfd22_17608e7f",
+        "filename": "docs/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-02-05T20:08:14Z",
+      "side": 1,
+      "message": "Is there a reason we\u0027re setting this?  5000 is used by docker registry, keystone, etc.",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "1c14fa59930b79f7b41186bede0d2e0b3b1b684c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
