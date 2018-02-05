@@ -13,7 +13,7 @@ SHELL = bash -o pipefail
 GENERATED_DOCS = build_glossary.md
 
 serve: setup
-	gitbook serve
+	gitbook serve --port 5000
 
 build: setup
 	gitbook build
