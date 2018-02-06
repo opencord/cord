@@ -246,23 +246,8 @@ node ("${deployment_config.dev_node.name}") {
                     stage ("Generate and load network configuration") {
                         // Reconnect compute nodes to update the fabric IP in ONOS
                         connectFabricAndComputeToOnos()
-                        // Generate network configuration
-                        runHeadNodeCmd("""
-                                       cd /opt/cord_profile/
-                                       cp fabric-network-cfg.json fabric-network-cfg.json.\$(date +%Y%m%d-%H%M%S)
-                                       cord generate > fabric-network-cfg.json
-                                       """)
-                        // Install httpie on the head-node
-                        runHeadNodeCmd("sudo pip install httpie")
-                        // Delete old ONOS netcfg
-                        runHeadNodeCmd("http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/network/configuration/")
-                        // Load new configuration
-                        runHeadNodeCmd("http -a onos:rocks POST http://onos-fabric:8181/onos/v1/network/configuration/ < /opt/cord_profile/fabric-network-cfg.json")
-                        // Restart ONOS apps
-                        runHeadNodeCmd("""
-                                       http -a onos:rocks DELETE http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
-                                       http -a onos:rocks POST http://onos-fabric:8181/onos/v1/applications/org.onosproject.segmentrouting/active; sleep 5
-                                       """)
+                        // Refresh fabric configurations
+                        sh "make fabric-refresh"
                     }
                 }
             }
