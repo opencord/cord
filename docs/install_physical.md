@@ -259,6 +259,13 @@ details.
 This documentation assumes that you checked out the CORD source tree into
 `~/cord`.
 
+#### Give "sudoer" permissions (no password)
+
+```
+sudo adduser YOUR_USER_NAME sudo && \
+echo 'YOUR_USER_NAME ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
+```
+
 ### Head Node
 
 It should run Ubuntu 14.04 LTS.  Then, configure the following.
