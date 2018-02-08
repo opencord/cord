@@ -22,6 +22,30 @@
       "revId": "1c14fa59930b79f7b41186bede0d2e0b3b1b684c",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a812a19b_8653f61a",
+        "filename": "docs/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2018-02-08T21:18:34Z",
+      "side": 1,
+      "message": "This is only for local development of the guide. It won\u0027t be used on a pod. I moved it to 5000 as in the local scenario no one is using that port, while the default 4000 is used by the GUI",
+      "parentUuid": "71fbfd22_17608e7f",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "1c14fa59930b79f7b41186bede0d2e0b3b1b684c",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
