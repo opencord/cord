@@ -387,14 +387,18 @@ fabric-pingtest:
 
 
 # Testing targets
+
+# R-CORD specific targets
 pod-test: | $(TESTING_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/pod-test-playbook.yml" $(LOGCMD)
 
-# M-CORD-specific targets
+# M-CORD specific targets
 mcord-%:
 	$(ANSIBLE_PB) ../orchestration/profiles/mcord/test/mcord-$*-playbook.yml $(LOGCMD)
 
-
+# E-CORD specific targets
+ecord-%:
+	$(ANSIBLE_PB) ../orchestration/profiles/ecord/test/ecord-$*-playbook.yml $(LOGCMD)
 
 
 # Local Targets, bring up XOS containers without a VM
