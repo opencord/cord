@@ -424,39 +424,41 @@ def getComputeNames(role="") {
  * Connects all fabric switches and compute nodes to ONOS
  */
 def connectFabricAndComputeToOnos() {
-    // Kill existing switch connections
-    runFabricSwitchCmdAll("./killit || echo no ofagentapp running")
-    // Clean stale ONOS data
-    runOnosCliCmd("onos-fabric", "8101", "onos", "rocks", "wipe-out -r -j please")
-    // Connect switches to ONOS
-    for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
-        runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
-                           "${deployment_config.fabric_switches[i].user}",
-                           "${deployment_config.fabric_switches[i].pass}",
-                           "./connect -bg 2>&1 > ${deployment_config.fabric_switches[i].ip}.log",
-                           "-qftn")
-    }
-    // Verify ONOS has recognized the switches
-    timeout(time: 5) {
-        waitUntil {
-            try {
-                num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric devices | grep available=true | wc -l\"").trim()
-                return num.toInteger() == deployment_config.fabric_switches.size()
-            } catch (exception) {
-                return false
+    retry(3) {
+        // Kill existing switch connections
+        runFabricSwitchCmdAll("./killit || echo no ofagentapp running")
+        // Clean stale ONOS data
+        runOnosCliCmd("onos-fabric", "8101", "onos", "rocks", "wipe-out -r -j please")
+        // Connect switches to ONOS
+        for(int i=0; i < deployment_config.fabric_switches.size(); i++) {
+            runFabricSwitchCmd("${deployment_config.fabric_switches[i].ip}",
+                               "${deployment_config.fabric_switches[i].user}",
+                               "${deployment_config.fabric_switches[i].pass}",
+                               "./connect -bg 2>&1 > ${deployment_config.fabric_switches[i].ip}.log",
+                               "-qftn")
+        }
+        // Verify ONOS has recognized the switches
+        timeout(time: 5) {
+            waitUntil {
+                try {
+                    num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric devices | grep available=true | wc -l\"").trim()
+                    return num.toInteger() == deployment_config.fabric_switches.size()
+                } catch (exception) {
+                    return false
+                }
             }
         }
-    }
-    // Connect compute nodes to ONOS
-    runComputeNodeCmdAll("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
-    // Verify ONOS has recognized the hosts
-    timeout(time: 5) {
-        waitUntil {
-            try {
-                num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts | grep id= | wc -l\"").trim()
-                return num.toInteger() >= deployment_config.compute_nodes.size()
-            } catch (exception) {
-                return false
+        // Connect compute nodes to ONOS
+        runComputeNodeCmdAll("ping -c 1 ${fabricIpPrefix}.1.254", "-qftn")
+        // Verify ONOS has recognized the hosts
+        timeout(time: 5) {
+            waitUntil {
+                try {
+                    num = runHeadNodeCmd("\"sshpass -p rocks ssh -q -oStrictHostKeyChecking=no -l onos -p 8101 onos-fabric hosts | grep id= | wc -l\"").trim()
+                    return num.toInteger() >= deployment_config.compute_nodes.size()
+                } catch (exception) {
+                    return false
+                }
             }
         }
     }
