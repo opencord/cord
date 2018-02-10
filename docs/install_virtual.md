@@ -180,8 +180,6 @@ c99b203f5a7e        rcord_vtn-synchronizer_1              docker-registry:5000/x
 26f8cd2e32df        rcord_fabric-synchronizer_1           docker-registry:5000/xosproject/fabric-synchronizer:candidate
 d99b09ec8e2c        rcord_xos_db_1                        docker-registry:5000/xosproject/xos-postgres:candidate
 2a22f4836172        rcord_xos_redis_1                     docker-registry:5000/redis:candidate
-392e6e4aa4cf        rcord_registrator_1                   docker-registry:5000/gliderlabs/registrator:candidate
-1899d7d561f9        rcord_consul_1                        docker-registry:5000/gliderlabs/consul-server:candidate
 ba4e6640a4f0        onosfabric_xos-onos_1                 docker-registry:5000/onosproject/onos:candidate
 35517eec96e1        onoscord_xos-onos_1                   xos/onos:candidate
 b591fd1c406f        mavenrepo                             docker-registry:5000/opencord/mavenrepo:candidate
@@ -190,7 +188,6 @@ c79f358d03c9        automation                            docker-registry:5000/o
 c02fd40982f6        provisioner                           docker-registry:5000/opencord/maas-provisioner:candidate
 9b4b481bf2f5        allocator                             docker-registry:5000/opencord/maas-allocator:candidate
 2276a0f258ad        generator                             docker-registry:5000/opencord/maas-generator:candidate
-bec8d53ebe12        storage                               docker-registry:5000/consul:candidate
 4475dddba35a        harvester                             docker-registry:5000/opencord/maas-harvester:candidate
 30d4996337bd        registry                              registry:2.4.0
 21289d8b63ff        registry-mirror                       registry:2.4.0

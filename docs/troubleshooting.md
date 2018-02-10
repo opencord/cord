@@ -129,12 +129,11 @@ onoscord_xos-onos_1                  rcord_xos_core_1
 onosfabric_xos-onos_1                rcord_xos_db_1
 provisioner                          rcord_xos_gui_1
 rcord_addressmanager-synchronizer_1  rcord_xos_redis_1
-rcord_consul_1                       rcord_xos_tosca_1
+rcord_xos_tosca_1                    storage
 rcord_exampleservice-synchronizer_1  rcord_xos_ui_1
 rcord_fabric-synchronizer_1          rcord_xos_ws_1
 rcord_onos-synchronizer_1            registry
 rcord_openstack-synchronizer_1       registry-mirror
-rcord_registrator_1                  storage
 rcord_volt-synchronizer_1            switchq
 
 head:

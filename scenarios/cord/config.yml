@@ -132,8 +132,6 @@ docker_image_whitelist:
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
   - "xosproject/xos-synchronizer-base"
-  - "gliderlabs/consul-server"
-  - "gliderlabs/registrator"
   - "nginx"
   - "onosproject/onos"
   - "opencord/mavenrepo"
