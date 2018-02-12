@@ -1,0 +1,21 @@
+--- main.yml	2018-03-03 22:56:43.079491722 +0800
++++ main.yml	2018-03-03 22:56:26.188273942 +0800
+@@ -6,7 +6,7 @@
+       - cilium
+ 
+   - role: network_plugin/calico
+-    when: kube_network_plugin == 'calico'
++    when: kube_network_plugin == 'calico' or kube_network_plugin == 'multus'
+     tags:
+       - calico
+ 
+@@ -32,3 +32,9 @@
+ 
+   - role: network_plugin/cloud
+     when: kube_network_plugin == 'cloud'
++
++  - role: network_plugin/ovs
++    when: kube_network_plugin == 'multus'
++
++  - role: network_plugin/multus
++    when: kube_network_plugin == 'multus'

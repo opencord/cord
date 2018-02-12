@@ -1,0 +1,23 @@
+apiVersion: "kubernetes.com/v1"
+kind: Network
+metadata:
+  name: ovs-net
+plugin: ovs
+args: '[
+        {
+        "name": "ovs-network",
+        "cniVersion":"0.3.1",
+        "type": "ovs",
+        "ovsBridge":"br1",
+        "ipam":{
+               "type":"centralip",
+               "ipType": "cluster",
+               "network":"{{ovs_network_ip}}",
+               "etcdURL": "https://{{etcd_access_address}}:2379",
+               "etcdCertFile": "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem",
+               "etcdKeyFile": "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem",
+               "etcdTrustedCAFileFile": "{{ etcd_cert_dir }}/ca.pem"
+        },
+	"isDefaultGateway": true
+        }
+]'

@@ -1,0 +1,78 @@
+---
+
+- name: Multus-CNI | Copy Multus-CNI
+  command: "{{ docker_bin_dir }}/docker run --rm -v /opt/cni/bin:/opt/cni/bin hwchiu/docker-multus-cni:latest -b /opt/cni/bin"
+  register: multus_cni_task_result
+  until: multus_cni_task_result.rc == 0
+  retries: 4
+  delay: "{{ retry_stagger | random + 3 }}"
+  changed_when: false
+
+- name: Multus-CNI | Remove all existing ccni config
+  shell: /bin/rm -rf /etc/cni/net.d/*
+
+- name: Multus-CNI | Copy multus cni config
+  template:
+    src: "{{item.file}}.j2"
+    dest: "/etc/cni/net.d/{{item.file}}"
+  with_items:
+    - {name: mulus-cni, file: multus-cni.conf, type: deployment }
+  owner: kube
+
+- name: Multus-CNI | Fetch the kubeconfig from master server
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: files/admin.conf
+    flat: yes
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Copy the kubeconfig from master to minion node
+  copy:
+    src: files/admin.conf
+    dest: /etc/kubernetes/admin.conf
+  when: inventory_hostname not in groups['kube-master']
+
+- name: Multus-CNI | Remove kubeconfig
+  local_action: file path=files/admin.conf state=absent
+  become: no
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Create Directory for Multus config
+  file:
+    path: "/opt/cni/multus"
+    state: directory
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Copy the CRD network config
+  copy:
+    src: "{{item.file}}"
+    dest: "/opt/cni/multus/{{item.file}}"
+  with_items:
+    - {file: crdnetwork.yml}
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Copy the ovs network cni config
+  template:
+    src: "{{item.file}}.j2"
+    dest: "/opt/cni/multus/{{item.file}}"
+  with_items:
+    - {file: ovs-net.yml}
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Create the network CRD for multus
+  command: "{{ bin_dir }}/kubectl create -f /opt/cni/multus/crdnetwork.yml"
+  retries: 4
+  delay: "{{ retry_stagger | random + 3 }}"
+  register: create_multus_crd
+  until: create_multus_crd.rc == 0
+  changed_when: False
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Multus-CNI | Create multus network resource
+  command: "{{ bin_dir }}/kubectl create -f /opt/cni/multus/ovs-net.yml"
+  retries: 4
+  delay: "{{ retry_stagger | random + 3 }}"
+  register: create_ovs_second_network
+  until: create_ovs_second_network.rc == 0
+  changed_when: False
+  when: inventory_hostname == groups['kube-master'][0]

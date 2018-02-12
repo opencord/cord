@@ -1,0 +1,11 @@
+--- main.yml	2018-03-04 21:17:11.557759626 +0800
++++ main.yml	2018-03-04 21:47:55.297475969 +0800
+@@ -6,7 +6,7 @@
+       - cilium
+ 
+   - role: kubernetes-apps/network_plugin/calico
+-    when: kube_network_plugin == 'calico'
++    when: kube_network_plugin == 'calico' or kube_network_plugin == 'multus'
+     tags:
+       - calico
+ 
