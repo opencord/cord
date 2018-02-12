@@ -1,0 +1,12 @@
+--- a/roles/kubernetes/preinstall/tasks/main.yml
++++ b/roles/kubernetes/preinstall/tasks/main.yml
+@@ -85,7 +85,7 @@
+     - "/etc/cni/net.d"
+     - "/opt/cni/bin"
+   when:
+-    - kube_network_plugin in ["calico", "weave", "canal", "flannel", "contiv", "cilium"]
++    - kube_network_plugin in ["calico", "weave", "canal", "flannel", "contiv", "cilium", "multus"]
+     - inventory_hostname in groups['k8s-cluster']
+   tags:
+     - network
+

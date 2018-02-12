@@ -42,3 +42,25 @@
     src: kubespray_inventory.j2
     dest: "{{ kubespray_dir }}/inventory/cord/hosts.ini"
     mode: 0644
+
+- name: Patch kubespray files for Multus support
+  when: kube_network_plugin == "multus"
+  patch:
+    src: "diff/{{ item }}"
+    basedir: "{{ kubespray_dir }}"
+    strip: 1
+  with_items:
+    - "kubernetes-apps/network_plugin/meta/main.yml.patch"
+    - "kubernetes/node/templates/kubelet.standard.env.j2.patch"
+    - "kubernetes/preinstall/tasks/main.yml.patch"
+    - "network_plugin/meta/main.yml.patch"
+
+- name: Copy Multus/OVS network plugin and ansible script
+  when: kube_network_plugin == "multus"
+  copy:
+    src: "multus_network/network_plugin/{{ item }}/"
+    dest: "{{ kubespray_dir }}/roles/network_plugin/{{ item }}"
+  with_items:
+    - "multus"
+    - "ovs"
+

@@ -1,0 +1,11 @@
+--- a/roles/kubernetes-apps/network_plugin/meta/main.yml
++++ b/roles/kubernetes-apps/network_plugin/meta/main.yml
+@@ -6,7 +6,7 @@ dependencies:
+       - cilium
+ 
+   - role: kubernetes-apps/network_plugin/calico
+-    when: kube_network_plugin == 'calico'
++    when: kube_network_plugin == 'calico' or kube_network_plugin == 'multus'
+     tags:
+       - calico
+ 
