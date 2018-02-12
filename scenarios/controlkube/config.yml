@@ -19,6 +19,7 @@ frontend_only: False
 use_k8s: True
 use_maas: False
 use_openstack: False
+kube_network_plugin: multus
 
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"

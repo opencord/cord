@@ -26,3 +26,19 @@
     src: kubespray_inventory.j2
     dest: "{{ kubespray_dir }}/inventory/inventory.cord"
     mode: 0644
+
+- name: Create Directory for Multus/OVS network plugin
+  file: 
+    path: "{{ kubespray_dir }}/roles/{{ item.path }}"
+    state: directory
+  with_items:
+    - {path: 'network_plugin/ovs/tasks'} 
+    - {path: 'network_plugin/multus/tasks'} 
+    - {path: 'network_plugin/multus/defaults'} 
+    - {path: 'network_plugin/multus/templates'} 
+    - {path: 'network_plugin/multus/files'} 
+
+- name: Copy Multus/OVS network plugin related ansible script
+  copy:
+    src: multus_network/
+    dest: "{{ kubespray_dir }}/roles/"
