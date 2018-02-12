@@ -390,6 +390,9 @@ $(M)/compute%-up: | $(M)/setup-ciab-pcu
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) ansible/maas-provision.yml --extra-vars='maas_user=maas vagrant_name=cord_compute$*'" $(LOGCMD)
 	touch $@
 
+compute1-up: | $(M)/compute1-up
+compute2-up: | $(M)/compute2-up
+compute3-up: | $(M)/compute3-up
 
 # Fabric targets
 fabric-refresh: | $(M)/setup-automation

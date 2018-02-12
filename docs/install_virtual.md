@@ -94,6 +94,20 @@ Also logs for individual steps of the build are stored in `~/cord/build/logs`.
 The `make -j4 build` step takes a *long time* (at least 1 hour) to run.  Be
 patient - if it hasn't completely failed yet, then assume all is well!
 
+### (Optional) Bring up more virtual compute nodes
+
+The build brings up a single virtual compute node by default.  If your system
+has enough resources, you can bring up two more virtual nodes as follows:
+
+```shell
+cd ~/cord/build
+make compute2-up
+make compute3-up
+```
+
+Note that, due to a limitation in CiaB, compute nodes need to be brought up
+sequentially as shown above.
+
 ### (Optional) Run End-to-End (E2E) tests
 
 If the build completed without errors, you can use the following command to run

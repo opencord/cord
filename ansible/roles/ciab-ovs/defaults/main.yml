@@ -14,18 +14,18 @@
 
 ovs_bridges:
   - leaf1
-#  - leaf2
+  - leaf2
   - spine1
 #  - spine2
 
 ovs_patch_ports:
   - { bridge: leaf1, port: leaf1-spine1, peer: spine1-leaf1 }
-#  - { bridge: leaf2, port: leaf2-spine1, peer: spine1-leaf2 }
+  - { bridge: leaf2, port: leaf2-spine1, peer: spine1-leaf2 }
 #  - { bridge: leaf1, port: leaf1-spine2, peer: spine2-leaf1 }
 #  - { bridge: leaf2, port: leaf2-spine2, peer: spine2-leaf2 }
   - { bridge: spine1, port: spine1-leaf1, peer: leaf1-spine1 }
 #  - { bridge: spine2, port: spine2-leaf1, peer: leaf1-spine2 }
-#  - { bridge: spine1, port: spine1-leaf2, peer: leaf2-spine1 }
+  - { bridge: spine1, port: spine1-leaf2, peer: leaf2-spine1 }
 #  - { bridge: spine2, port: spine2-leaf2, peer: leaf2-spine2 }
 
 enable_fabric: False
