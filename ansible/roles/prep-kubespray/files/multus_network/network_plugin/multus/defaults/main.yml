@@ -1,0 +1,4 @@
+---
+ovs_cert_dir: /etc/ovs/certs
+etcd_cert_dir: /etc/ssl/etcd/ssl
+ovs_network_ip: 10.56.0.0/16
