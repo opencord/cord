@@ -56,12 +56,19 @@
     set: "Interface {{ item.port }} type=patch"
   with_items: "{{ ovs_patch_ports }}"
 
+# This returns OK but doesn't actually set up the peer
+#- name: Create peers
+#  openvswitch_port:
+#    bridge: "{{ item.bridge }}"
+#    port: "{{ item.port }}"
+#    set: "Interface {{ item.port }} options:peer={{ item.peer }}"
+#  with_items: "{{ ovs_patch_ports }}"
+
 - name: Create peers
-  openvswitch_port:
-    bridge: "{{ item.bridge }}"
-    port: "{{ item.port }}"
-    set: "Interface {{ item.port }} options:peer={{ item.peer }}"
+  command: ovs-vsctl set interface {{ item.port }} options:peer={{ item.peer }}
   with_items: "{{ ovs_patch_ports }}"
+  tags:
+    - skip_ansible_lint # running a sub job
 
 # "set" argument to openvswitch_bridge wasn't working...
 - name: Set bridges to OpenFlow 1.3
