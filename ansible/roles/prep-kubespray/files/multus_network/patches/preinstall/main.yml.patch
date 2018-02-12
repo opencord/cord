@@ -1,0 +1,11 @@
+--- main.yml	2018-03-03 22:55:15.503547292 +0800
++++ main.yml	2018-03-03 22:52:47.142417706 +0800
+@@ -89,7 +89,7 @@
+     - "/etc/cni/net.d"
+     - "/opt/cni/bin"
+   when:
+-    - kube_network_plugin in ["calico", "weave", "canal", "flannel", "contiv", "cilium"]
++    - kube_network_plugin in ["calico", "weave", "canal", "flannel", "contiv", "cilium", "multus"]
+     - inventory_hostname in groups['k8s-cluster']
+   tags:
+     - network

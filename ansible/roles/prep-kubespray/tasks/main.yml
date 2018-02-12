@@ -42,3 +42,32 @@
     src: kubespray_inventory.j2
     dest: "{{ kubespray_dir }}/inventory/cord/hosts.ini"
     mode: 0644
+
+- name: Create Directory for Multus/OVS network plugin
+  file:
+    path: "{{ kubespray_dir }}/roles/{{ item.path }}"
+    state: directory
+  with_items:
+    - {path: 'network_plugin/ovs/tasks'}
+    - {path: 'network_plugin/multus/tasks'}
+    - {path: 'network_plugin/multus/defaults'}
+    - {path: 'network_plugin/multus/templates'}
+    - {path: 'network_plugin/multus/files'}
+
+- name: Patch the existing files
+  patch:
+    src: "{{ item.src }}"
+    basedir: "{{ item.basedir}}"
+  with_items:
+    - {src: "multus_network/patches/node/kubelet.standard.env.j2.patch", basedir: "{{ kubespray_dir }}/roles/kubernetes/node/templates/"}
+    - {src: "multus_network/patches/preinstall/main.yml.patch", basedir: "{{ kubespray_dir }}/roles/kubernetes/preinstall/tasks/"}
+    - {src: "multus_network/patches/network_plugin/main.yml.patch", basedir: "{{ kubespray_dir }}/roles/network_plugin/meta/"}
+    - {src: "multus_network/patches/kubernetes-apps/network_plugin/main.yml.patch", basedir: "{{ kubespray_dir }}/roles/kubernetes-apps/network_plugin/meta/"}
+
+- name: Copy Multus/OVS network plugin related ansible script
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - {src: "multus_network/network_plugin/ovs/", dest: "{{ kubespray_dir }}/roles/network_plugin/ovs"}
+    - {src: "multus_network/network_plugin/multus/", dest: "{{ kubespray_dir }}/roles/network_plugin/multus"}
