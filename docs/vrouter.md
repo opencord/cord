@@ -211,13 +211,16 @@ Now run the docker image (make sure the path the config directory matches what
 is on your system):
 
 ```
-sudo docker run --privileged -d -v configs:/etc/quagga -n quagga opencord/quagga
+sudo docker run --privileged -d -v configs:/etc/quagga --name quagga opencord/quagga
 ```
 
 Finally, we can use the pipework tool to add the physical interface into the
-container so that Quagga can talk out over the fabric:
+container so that Quagga can talk out over the fabric (we need to bring the physical
+interface down first). The pipework command will emit a warning about arping, but
+you can ignore that.
 
 ```
+sudo ip link set mlx1 down
 sudo ./pipework mlx1 -i eth1 quagga 10.0.1.3/24
 ```
 
@@ -226,13 +229,16 @@ interface name `eth1` inside the container. The newly added interface will have
 the IP `10.0.1.3`. This IP address should be the peering subnet address that
 you want to assign to Quagga.
 
+### Restart the container
+
 If you need to change anything about the container (for example if you change
 the Quagga configuration) you can remove the original container and run a new
 one:
 
 ```
 docker rm -f quagga
-sudo docker run --privileged -d -v configs:/etc/quagga -n quagga opencord/quagga
+sudo docker run --privileged -d -v configs:/etc/quagga --name quagga opencord/quagga
+sudo ./pipework mlx1 -i eth1 quagga 10.0.1.3/24
 ```
 
 ## Configure Quagga
@@ -309,3 +315,7 @@ Quagga is using to peer with the external router. As mentioned above, it is
 important that this rewriting is done correctly so that the fabric switch is
 able to distinguish data plane and control plane traffic.
 
+### Restart
+
+Remember you must [restart the container](#restart-the-container) whenever
+you change the Quagga configuration files.
