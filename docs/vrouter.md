@@ -185,10 +185,11 @@ activate it.
 ### Download the image and pipework
 
 CORD uses a slightly modified version of Quagga, so the easiest way to deploy
-this is to use the provided docker image.
+this is to use the provided docker image. In CORD 4.x we use ONOS 1.10.x, so
+we will pull a version of Quagga that maches the ONOS version.
 
 ```
-docker pull opencord/quagga
+docker pull opencord/quagga:onos-1.10
 ```
 
 We also need to download the `pipework` tool which will be used to connect the
