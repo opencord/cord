@@ -36,6 +36,7 @@
     * [Workflow: Mock/Single Scenario](xos/dev/workflow_mock_single.md)
     * [Workflow: Local Scenario](xos/dev/workflow_local.md)
     * [Workflow: CiaB Scenario](xos/dev/workflow_pod.md)
+    * [Experimental Workflow: K8S Virtual Scenario](controlkube_scenario.md)
     * [TOSCA Development](platform-install/bootstrap_models_in_xos.md)
     * [GUI Development](xos-gui/developer/README.md)
         * [Quickstart](xos-gui/developer/quickstart.md)
