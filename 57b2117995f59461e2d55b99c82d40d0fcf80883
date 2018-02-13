@@ -22,6 +22,30 @@
       "revId": "57b2117995f59461e2d55b99c82d40d0fcf80883",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "501cbee6_e710b063",
+        "filename": "scenarios/mock/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2018-02-13T20:53:34Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "087ae1d4_c9e40278",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 26
+      },
+      "revId": "57b2117995f59461e2d55b99c82d40d0fcf80883",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
