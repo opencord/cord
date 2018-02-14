@@ -67,5 +67,5 @@
         * [Installation](profiles/mcord/installation_guide.md)
         * [Developers](profiles/mcord/dev_guide.md)
         * [Troubleshooting](profiles/mcord/troubleshooting.md)
-* [Release Notes](release-notes/sd-dot-one.md)
+* [Release Notes](release-notes/satisfying-cactus.md)
 
