@@ -59,12 +59,13 @@ sudo usermod -a -G sudo cord && \
 echo 'cord ALL=(ALL) NOPASSWD:ALL' | sudo tee --append /etc/sudoers.d/90-cloud-init-users
 ```
 
-[Create a POD configuration](install.md#pod-config) file in the
-`~/cord/build/podconfig` directory, then run:
+[Create a POD configuration](install.md#pod-config) file using
+[physical-example.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/podconfig/physical-example.yml)
+as a template.  Then run:
 
 ```shell
 cd ~/cord/build && \
-make PODCONFIG={YOUR_PODCONFIG_FILE.yml} config && \
+make PODCONFIG_PATH={PATH_TO_YOUR_PODCONFIG_FILE.yml} config && \
 make -j4 build |& tee ~/build.out
 ```
 

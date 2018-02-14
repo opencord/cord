@@ -117,31 +117,41 @@ handful of YAML files.
 
 ### POD Config
 
-The top level configuration for a build is the *POD config* file, which is a
-YAML file stored in [build/podconfig](https://github.com/opencord/cord/tree/{{
-book.branch }}/podconfig) that contains a list of variables that control how
-the build proceeds, and can override the configuration of the rest of the
-build.
+Each CORD *use-case* (e.g., R-CORD, M-CORD, E-CORD) has its own repository
+containing configuration files for that type of POD.  All of these
+repositories appear in the source tree under `orchestration/profiles/`.
+For example, R-CORD's repository is
+[orchestration/profiles/rcord](https://github.com/opencord/rcord/tree/{{ book.branch }}).
 
-A minimal POD Config file must define two variables:
+The top level configuration for a build is the *POD config* file, a
+YAML file stored in each use-case repository's `podconfig` subdirectory.
+Each Pod config file contains a list of variables that control how
+the build proceeds, and can override the configuration of the rest of the
+build.  A minimal POD config file must define two variables:
 
 `cord_scenario` - the name of the *scenario* to use, which is defined in a
-directory under [build/scenarios](https://github.com/opencord/cord/tree/{{
-book.branch }}/scenarios).
+directory under [build/scenarios](https://github.com/opencord/cord/tree/{{ book.branch }}/scenarios).
 
-`cord_profile` - the name of a *profile* to use, defined as a YAML file in
-[build/platform-install/profile_manifests](https://github.com/opencord/platform-install/tree/{{
-book.branch }}/profile_manifests).
+`cord_profile` - the name of a *profile* to use, defined as a YAML file at
+the top level of the use-case repository - ex:
+[mcord-ng40.yml](https://github.com/opencord/mcord/blob/{{ book.branch }}/mcord-ng40.yml).
 
-The included POD configs must be named `<profile>-<scenario>.yml`, except for
-the `physical-example.yml` file which is used for a [Physical
-POD](install_physical.md) and requires a bit more work to configured.
+The naming convention for POD configs stored in the use case
+repository is `<profile>-<scenario>.yml` - ex:
+[mcord-ng40-virtual.yml](https://github.com/opencord/mcord/blob/{{ book.branch }}/podconfig/mcord-ng40-virtual.yml) builds the `virtual` scenario using the
+`mcord-ng40` profile.  All such POD configs can be specified during a
+build using the `PODCONFIG` variable:
 
-POD configs are used during a build by passing them with the `PODCONFIG`
-variable to `make` - ex: `make PODCONFIG=rcord-virtual.yml config`
+```shell
+make PODCONFIG=rcord-virtual.yml config
+```
 
-You can also specify a full path to the POD config file to use with
+POD configs with arbitrary names can be specified using
 `PODCONFIG_PATH`.  This will override the `PODCONFIG` variable.
+
+```shell
+make PODCONFIG_PATH=./podconfig/my-pod-config.yml config
+```
 
 ### Profiles
 
