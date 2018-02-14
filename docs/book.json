@@ -5,7 +5,7 @@
     "summary": "SUMMARY.md"
   },
   "variables": {
-    "branch": "master"
+    "branch": "cord-5.0"
   },
   "plugins": [
     "anchorjs",
