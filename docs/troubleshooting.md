@@ -241,7 +241,7 @@ set the level of the any services in the
 [onos_debug_level](build_glossary.html#onosdebuglevel).
 
 Add the names of the ONOS apps to `onos_debug_appnames` and add `onos-debug`
-to the `build_targets` list in your POD config file in `~/cord/build/podconfig/`.
+to the `build_targets` list in your POD config file.
 
 This must be done before running the `make config` target - it won't affect an
 already-running POD.
@@ -256,9 +256,11 @@ available which describes these variables and where they are used.
 When a command to generate config such as `make PODCONFIG=rcord-mock.yml
 config` is run, the following steps happen:
 
-1. The POD Config file is read, in this case `genconfig/rcord-mock.yml`, which
-   specifies the scenario and profile.
-2. The Scenario config file is read, in this case `scenario/mock/config.yml`.
+1. The POD Config file is read, in this case
+[orchestration/profiles/rcord/podconfig/rcord-mock.yml](https://github.com/opencord/rcord/blob/{{ book.branch }}/podconfig/rcord-mock.yml),
+which specifies the scenario and profile.
+2. The Scenario config file is read, in this case
+[build/scenarios/mock/config.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/scenarios/mock/config.yml).
 3. The contents of these files are combined into a master config variable, with
    the POD Config overwriting any config set in the Scenario.
 4. The entire master config is written to `genconfig/config.yml`.
@@ -284,8 +286,8 @@ handy to use during development.
 
 ### `config` make target
 
-`config` requires a `PODCONFIG` argument, which is a name of a file in the
-`podconfig` directory.  `PODCONFIG` defaults to `invalid`, so if you get errors
+`config` requires a `PODCONFIG` argument, which is the name of a file in
+`orchestration/profiles/<use-case>/podconfig/`. `PODCONFIG` defaults to `invalid`, so if you get errors
 claiming an invalid config, you probably didn't set it, or set it to a filename
 that doesn't exist.
 
