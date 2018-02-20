@@ -120,12 +120,12 @@ function bootstrap_vagrant() {
 
   if ! vagrant box list | grep -q ubuntu/trusty64.*libvirt
   then
-    add_box ubuntu/trusty64
+    add_box ubuntu/trusty64 https://app.vagrantup.com/ubuntu/boxes/trusty64
   fi
 }
 
 function add_box() {
-  vagrant box list | grep $1 | grep virtualbox || vagrant box add $1
+  vagrant box list | grep $1 | grep virtualbox || vagrant box add $2
   vagrant box list | grep $1 | grep libvirt || vagrant mutate $1 libvirt --input-provider virtualbox
 }
 
