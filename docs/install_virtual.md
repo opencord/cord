@@ -427,8 +427,11 @@ It will skip over the steps that have already completed.
 If you need to force `make build` to re-run steps that have already completed,
 remove the appropriate file in the `milestones` directory prior to re-running.
 
-For more information about how the build works, see [Troubleshooting and Build
-Internals](troubleshooting.md).
+More troubleshooting information can be found in the
+[Troubleshooting](troubleshooting.md) section.
+
+For more information about how the build works, see [Build
+Internals](build_internals.md).
 
 ### Failed: TASK \[maas-provision : Wait for node to become ready\]
 

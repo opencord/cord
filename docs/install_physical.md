@@ -316,12 +316,12 @@ the system should be configured, including what IP addresses should be used for
 the external and the internal networks, what users the system should run during
 the automated installation, and much more.
 
-POD configuration files are YAML files with extension .yml. You can either create a new
-file with your favorite editor or copy-and-edit an existing file. The
-[physical-example.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/podconfig/physical-example.yml)
-configuration file is there for this purpose, and the most commonly set
-parameters are described. Optional lines have been commented out, but can be
-used as needed.
+POD configuration files are YAML files with extension .yml. You can either
+create a new file with your favorite editor or copy-and-edit an existing file.
+The [physical-example.yml](https://github.com/opencord/cord/blob/{{ book.branch
+}}/podconfig/physical-example.yml) configuration file is there for this
+purpose, and the most commonly set parameters are described. Optional lines
+have been commented out, but can be used as needed.
 
 More information about how the network configuration for the POD can be
 customized can be found in [Network Settings](appendix_network_settings.md).
