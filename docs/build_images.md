@@ -7,7 +7,8 @@ tree on disk is a challenge and required a tool,
 }}/scripts/imagebuilder.py), to be developed to perform image rebuilds in a
 consistent and efficient manner.
 
-Imagebuilder is currently used for XOS and ONOS images, but not MaaS images.
+Imagebuilder is currently used for XOS, ONOS, and the `mavenrepo` (source of
+ONOS Apps used in CORD) images, but not MaaS images.
 
 While imagebuilder will pull down required images from DockerHub and build/tag
 images, it does not push those images or delete obsolete ones.  These tasks are
@@ -23,6 +24,51 @@ a part of the build process.
 If you do need to rebuild images, there is a `make clean-images` target that
 will force imagebuilder to be run again and images to be moved into place.
 
+## Adding a new Docker image to CORD
+
+There are several cases where an Image would need to be added to CORD.
+
+### Adding an image developed outside of CORD
+
+There are cases where a 3rd party image developed outside of CORD may be
+needed. This is the case with ONOS, Redis, and a few other pieces of software
+that are already containerized, and we deploy as-is (or with minor
+modifications).
+
+To do this, add the full name of the image, including a version tag, to the
+`pull_only_images` list in the `docker_images.yml` file, and to
+`docker_image_whitelist` list in the `scenarios/<scenario name>/config.yml`
+file.
+
+These images will be retagged with a `candidate` tag after being pulled.
+
+### Adding a synchronizer image
+
+Adding a synchronizer image is usually as simple as adding it to the
+`buildable_images` list in the
+[docker_images.yml](https://github.com/opencord/cord/blob/{{ book.branch
+}}/docker_images.yml) file.  The name of the synchronizer container is added to
+the `docker_images_whitelist` dynamically, based on whether it is in the
+`xos_services` list of the profile, so it doesn't need to be added manually to
+`docker_images_whitelist`.
+
+If you are adding a new service that is not in the repo manifest yet, you may
+have to add your service's directory to the `.repo/manifest.xml` file and then
+list it in `build/docker_images.yml`, so it can build the synchronizer image
+locally.
+
+### Adding other CORD images
+
+If you want imagebuilder to build an image from a Dockerfile somewhere in the
+CORD source tree, you need to add it to the `buildable_images` list in the
+`docker_images.yml` file (see that file for the specific format), then making
+sure the image name is listed in the `docker_image_whitelist` list in the
+`scenarios/<scenario name>/config.yml` file.
+
+Note that you don't need to add external parent images to the
+`pull_only_images` in this manner - those are determined by the `FROM` line in
+`Dockerfile`
+
 ## Debugging imagebuilder
 
 If you get a different error or  think that imagebuilder isn't working
@@ -30,9 +76,11 @@ correctly, please rerun it with the `-vv` ("very verbose") option, read through
 the output carefully, and then post about the issue on the mailing list or
 Slack.
 
-If an image is not found on Dockerhub, you may see a 404 error like the
-following in the logs. If this happens, imagebuilder will attempt to build the
-image from scratch rather than pulling it:
+If an image is not found on Dockerhub (for example, if you have local
+modifications to the `Dockerfile` or context, or are have a patchset checked
+out), you may see a 404 error like the following in the logs. If this happens,
+imagebuilder will attempt to build the image from scratch rather than pulling
+it:
 
 ```python
 NotFound: 404 Client Error: Not Found ("{"message":"manifest for xosproject/xos-gui-extension-builder:<hash> not found"}")
@@ -58,7 +106,8 @@ The imagebuilder program performs the following steps when run:
 
 4. Determines which images need to be rebuilt based on:
 
-    * Whether the image exists and is has current tags added to it.
+    * Whether the image exists and has current tags on it. If an image is
+      tagged with the `candidate` tag, but shouldn't be this tag is removed.
     * If the Docker build context is *dirty* or differs (is on a different
       branch) from the git tag specified in the repo manifest
     * If the image's parent (or grandparent, etc.) needs to be rebuilt
@@ -168,49 +217,6 @@ LABEL org.label-schema.schema-version=$org_label_schema_schema_version \
 ```
 
 Labels on a built image can be seen by running `docker inspect <image name or id>`
-
-## Adding a new Docker image to CORD
-
-There are a few cases when an image would be needed to be added to CORD during
-the development process.
-
-### Adding an image developed outside of CORD
-
-There are cases where a 3rd party image developed outside of CORD may be
-needed. This is the case with ONOS, Redis, and a few other pieces of software
-that are already containerized, and we deploy as-is (or with minor
-modifications).
-
-To do this, add the full name of the image, including a version tag, to the
-`pull_only_images` list in the `docker_images.yml` file, and to
-`docker_image_whitelist` list in the `scenarios/<scenario name>/config.yml`
-file.
-
-These images will be retagged with a `candidate` tag after being pulled.
-
-### Adding a synchronizer image
-
-Adding a synchronizer image is usually as simple as adding it to the
-`buildable_images` list in the `docker_images.yml` file (see that file for the
-), then making sure the image name is listed in the `docker_image_whitelist`
-list in the `scenarios/<scenario name>/config.yml` file.
-
-If you are adding a new service that is not in the repo manifest yet, you may
-have to your service's directory to the `.repo/manifest.xml` file and then list
-it in `build/docker_images.yml`, so it will then build the  synchronizer image
-locally.
-
-### Adding other CORD images
-
-If you want imagebuilder to build an image from a Dockerfile somewhere in the
-CORD source tree, you need to add it to the `buildable_images` list in the
-`docker_images.yml` file (see that file for the specific format), then making
-sure the image name is listed in the `docker_image_whitelist` list in the
-`scenarios/<scenario name>/config.yml` file.
-
-Note that you don't need to add external parent images to the
-`pull_only_images` in this manner - those are determined by the `FROM` line in
-`Dockerfile`
 
 ## Automating image builds
 
