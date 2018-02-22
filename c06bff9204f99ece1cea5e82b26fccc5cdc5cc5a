@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d0ad7e7_5c2e49b5",
+        "filename": "docs/install.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2018-02-22T17:33:28Z",
+      "side": 1,
+      "message": "is to enable or disable (?)",
+      "range": {
+        "startLine": 239,
+        "startChar": 72,
+        "endLine": 240,
+        "endChar": 18
+      },
+      "revId": "c06bff9204f99ece1cea5e82b26fccc5cdc5cc5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9fcf3f2_8f462f46",
+        "filename": "docs/install.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2018-02-22T17:33:28Z",
+      "side": 1,
+      "message": "something missing?",
+      "range": {
+        "startLine": 248,
+        "startChar": 62,
+        "endLine": 248,
+        "endChar": 71
+      },
+      "revId": "c06bff9204f99ece1cea5e82b26fccc5cdc5cc5a",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
