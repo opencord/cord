@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a8d8f29_94b8d592",
+        "filename": "ansible/roles/prep-kubespray/tasks/main.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-02-23T20:53:34Z",
+      "side": 1,
+      "message": "It looks like you\u0027re overwriting files in the kubespray directory that come with kubespray. \n\nCould these modifications either come as pulling down a different fork of kubespray (we would clone a fork that has these changes already added), or could the changes to pre-existing files be patches that are applied (with http://docs.ansible.com/ansible/latest/patch_module.html) ?\n\nI\u0027m concerned that our copied version here could get out of sync with kubespray master.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 38
+      },
+      "revId": "3aee9349a561028c997a4a22e12c3dd785ebf296",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
