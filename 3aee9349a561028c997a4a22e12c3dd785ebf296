@@ -22,6 +22,30 @@
       "revId": "3aee9349a561028c997a4a22e12c3dd785ebf296",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac9ece9_74144ecc",
+        "filename": "ansible/roles/prep-kubespray/tasks/main.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000416
+      },
+      "writtenOn": "2018-02-24T08:02:07Z",
+      "side": 1,
+      "message": "Yes, you\u0027re right, In this implementation, I add new directory to handle the muluts/ovs network and also override some existing files which defines what kind of the `kube_network_plugin` should use the CNI.\nJust like you says, I can try to use the patches action to patch pre-existing files and use the `copy` action to specific copy our implementation into the kubespray directory.\nBoth fork kubespray or patch pre-existing are fine to me.\nDo you have any preference for ?\nThanks your suggestion.",
+      "parentUuid": "2a8d8f29_94b8d592",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 38
+      },
+      "revId": "3aee9349a561028c997a4a22e12c3dd785ebf296",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
