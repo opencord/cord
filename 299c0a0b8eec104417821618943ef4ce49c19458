@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3172b1b_bc6bc915",
+        "filename": "scenarios/preppedkube/Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000346
+      },
+      "writtenOn": "2018-02-24T10:41:04Z",
+      "side": 1,
+      "message": "remove it",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 2
+      },
+      "revId": "299c0a0b8eec104417821618943ef4ce49c19458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
