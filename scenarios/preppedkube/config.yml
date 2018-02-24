@@ -29,7 +29,7 @@ create_configdirs_become: False
 build_cord_dir: /opt/cord
 
 # Vagrant VM configuration
-vagrant_box: "bento/ubuntu-16.04"
+vagrant_box: "stephenpearson/ubuntu-16.04"
 
 head_vm_mem: 16384
 head_vm_cpu: 8
@@ -44,6 +44,7 @@ vagrant_vms:
   - head1
   - compute1
   - compute2
+  - compute3
 
 # Make build config
 build_targets:
@@ -88,6 +89,8 @@ physical_node_list:
     ipv4_last_octet: 17
   - name: compute2
     ipv4_last_octet: 18
+  - name: compute3
+    ipv4_last_octet: 19
 
 vm_management_network_name: cordmgmt
 vm_public_network_name: cordpub
@@ -130,4 +133,5 @@ inventory_groups:
   compute:
     compute1:
     compute2:
+    compute3:
 
