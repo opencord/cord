@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "46ad02ec_6026c7d6",
+        "filename": "scenarios/preppedkube/Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-02-26T08:37:28Z",
+      "side": 1,
+      "message": "Rather than making new networks, it would be preferable to use the eth1 as the openstack management network, and have eth2 be the neutron network, managed with the `onosvtn` adapter, which connects to external networks over the fabric.",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "299c0a0b8eec104417821618943ef4ce49c19458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3172b1b_bc6bc915",
         "filename": "scenarios/preppedkube/Vagrantfile",
         "patchSetId": 1
