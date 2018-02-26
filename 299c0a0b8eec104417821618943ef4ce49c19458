@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "86d49a03_ce5b72e5",
+        "filename": "scenarios/preppedkube/Vagrantfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000346
+      },
+      "writtenOn": "2018-02-26T11:58:52Z",
+      "side": 1,
+      "message": "You\u0027re right, but I\u0027m not familiar with the network Settings in cord,\nso i am create new networks",
+      "parentUuid": "46ad02ec_6026c7d6",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "299c0a0b8eec104417821618943ef4ce49c19458",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3172b1b_bc6bc915",
         "filename": "scenarios/preppedkube/Vagrantfile",
         "patchSetId": 1
