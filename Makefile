@@ -168,6 +168,7 @@ virsh-domain-destroy:
 xos-teardown: xos-update-images
 	$(ANSIBLE_PB) $(PI)/teardown-xos-playbook.yml $(LOGCMD)
 	rm -f $(M)/onboard-profile
+	rm -f $(M)/local-onboard-profile
 
 xos-update-images: clean-images
 	rm -f $(M)/start-xos $(M)/local-start-xos
