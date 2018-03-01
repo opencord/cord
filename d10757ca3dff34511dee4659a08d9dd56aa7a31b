@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ccf9d85_686e1a46",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-01T20:19:09Z",
+      "side": 1,
+      "message": "Looks good.  These could be put in one line, as in the task immediately following this one.",
+      "range": {
+        "startLine": 170,
+        "startChar": 1,
+        "endLine": 171,
+        "endChar": 33
+      },
+      "revId": "d10757ca3dff34511dee4659a08d9dd56aa7a31b",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
