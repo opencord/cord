@@ -34,7 +34,7 @@ LOGS             ?= $(BUILD)/logs
 
 PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray $(M)/install-kubernetes-tools $(M)/start-xos-helm
-MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
+MAAS_MS          ?= $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
@@ -120,7 +120,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -302,15 +302,11 @@ $(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/finish-kubespray $(M)/
 
 
 # MaaS targets
-$(M)/build-maas-images: | $(M)/prep-buildnode $(BUILD_MAAS_IMAGES_PREREQS)
-	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.image; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
-	touch $@
-
 $(M)/maas-prime: | $(M)/prep-headnode
 	$(ANSIBLE_PB) $(MAAS)/prime-node.yml $(LOGCMD)
 	touch $@
 
-$(M)/publish-maas-images: | $(M)/maas-prime $(M)/build-maas-images
+$(M)/publish-maas-images: | $(M)/maas-prime
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.publish; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
