@@ -155,11 +155,11 @@ def load_config():
                           fi_abs)
                 sys.exit(1)
 
-            # fail if filter list specifies tags
-            for f_i in filter_list['docker_image_whitelist']:
-                (name, tag) = split_name(f_i)
-                if tag:
-                    LOG.error("filter list may not be tagged")
+            # fail if pull_only_images in docker_images.yml doesn't have tags
+            for i in conf['pull_only_images']:
+                (name, tag) = split_name(i)
+                if not tag:
+                    LOG.error("Images in docker_images.yml must be tagged")
                     sys.exit(1)
 
             buildable_images = [img for img in conf['buildable_images']
@@ -168,12 +168,22 @@ def load_config():
 
             pull_only_images = [img for img in conf['pull_only_images']
                                 if split_name(img)[0]
-                                in filter_list['docker_image_whitelist']]
+                                in map(lambda x: split_name(x)[0], filter_list['docker_image_whitelist'])]
 
+            pull_only_images = map(override_tags(filter_list['docker_image_whitelist']), pull_only_images)
         except:
             LOG.exception("Problem with filter list file")
             sys.exit(1)
 
+def override_tags(image_list_with_tags):
+    untagged_whitelist = map(lambda x: split_name(x)[0], image_list_with_tags)
+    def inner(i):
+        img_name = split_name(i)[0]
+        tag_override = split_name(image_list_with_tags[untagged_whitelist.index(img_name)])[1]
+        if tag_override:
+            return "%s:%s" % (img_name, tag_override)
+        return i
+    return inner
 
 def split_name(input_name):
     """ split a docker image name in the 'name:tag' format into components """
