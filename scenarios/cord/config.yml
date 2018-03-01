@@ -63,6 +63,9 @@ prep_headnode_prereqs:
 publish_docker_images_prereqs:
   - deploy-maas
 
+deploy_maas_prereqs:
+  - publish-maas-images
+
 # Start elasticstack before XOS/ONOS, which log to it
 start_xos_prereqs:
   - deploy-maas
