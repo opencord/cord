@@ -79,6 +79,9 @@ PUBLISH_DOCKER_IMAGES_PREREQS = $(M)/{{ publish_docker_images_prereqs | join(" $
 {% if start_xos_prereqs is defined %}
 START_XOS_PREREQS       = $(M)/{{ start_xos_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if deploy_maas_prereqs is defined %}
+DEPLOY_MAAS_PREREQS     = $(M)/{{ deploy_maas_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if deploy_onos_prereqs is defined %}
 DEPLOY_ONOS_PREREQS     = $(M)/{{ deploy_onos_prereqs | join(" $(M)/") }}
 {% endif %}

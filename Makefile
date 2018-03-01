@@ -34,7 +34,7 @@ LOGS             ?= $(BUILD)/logs
 
 PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray $(M)/install-kubernetes-tools $(M)/start-xos-helm
-MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
+MAAS_MS          ?= $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
 XOS_MS           ?= $(M)/docker-images $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
@@ -120,7 +120,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -211,6 +211,7 @@ DOCKER_IMAGES_PREREQS         ?=
 PUBLISH_DOCKER_IMAGES_PREREQS ?=
 START_XOS_PREREQS             ?=
 BUILD_ONOS_APPS_PREREQS       ?=
+DEPLOY_MAAS_PREREQS           ?=
 DEPLOY_ONOS_PREREQS           ?=
 DEPLOY_MAVENREPO_PREREQS      ?=
 DEPLOY_OPENSTACK_PREREQS      ?=
@@ -303,7 +304,7 @@ $(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/publish-docker-images
 
 
 # MaaS targets
-$(M)/build-maas-images: | $(M)/prep-buildnode $(BUILD_MAAS_IMAGES_PREREQS)
+$(M)/build-maas-images: | $(M)/prep-buildnode
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.image; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) build" $(LOGCMD)
 	touch $@
 
@@ -315,7 +316,7 @@ $(M)/publish-maas-images: | $(M)/maas-prime $(M)/build-maas-images
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build/maas; rm -f consul.publish; make MAKE_CONFIG=../$(MAKEFILE_CONFIG) publish" $(LOGCMD)
 	touch $@
 
-$(M)/deploy-maas: | $(M)/publish-maas-images $(M)/cord-config $(M)/copy-config
+$(M)/deploy-maas: | $(M)/cord-config $(M)/copy-config $(M)/publish-docker-images $(DEPLOY_MAAS_PREREQS)
 	$(ANSIBLE_PB) $(MAAS)/head-node.yml $(LOGCMD)
 	touch $@
 
@@ -340,7 +341,7 @@ $(M)/docker-images: | $(M)/prep-buildnode $(DOCKER_IMAGES_PREREQS)
 	touch $@
 
 # Requires ib_actions.yml file which is on the build host
-$(M)/publish-docker-images: | $(M)/docker-images $(PUBLISH_DOCKER_IMAGES_PREREQS)
+$(M)/publish-docker-images: | $(M)/docker-images $/prep-headnode $(PUBLISH_DOCKER_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
@@ -433,4 +434,3 @@ $(M)/local-start-xos: | $(M)/local-docker-images
 $(M)/local-onboard-profile: | $(M)/local-start-xos
 	$(ANSIBLE_PB) $(PI)/onboard-profile-playbook.yml $(LOGCMD)
 	touch $@
-
