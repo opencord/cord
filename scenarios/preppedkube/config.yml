@@ -17,7 +17,7 @@
 
 frontend_only: False
 use_k8s: True
-use_maas: False
+use_maas: True
 use_openstack: False
 
 # create a cord_profile dir next to the cord checkout
@@ -109,6 +109,10 @@ docker_image_whitelist:
   - "xosproject/xos-synchronizer-base"
   - "nginx"
   - "onosproject/onos"
+  - "opencord/maas-switchq:cord-1604"
+  - "opencord/maas-provisioner:cord-1604"
+  - "opencord/maas-allocator:cord-1604"
+  - "opencord/maas-automation:cord-1604"
   - "opencord/mavenrepo"
   - "redis"
   - "node"
