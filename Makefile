@@ -79,7 +79,7 @@ SHELL            = bash -o pipefail
 VAGRANT          ?= VAGRANT_CWD=$(VAGRANT_CWD) vagrant
 ANSIBLE          ?= ansible -i $(INVENTORY)
 ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-vars @$(MASTER_CONFIG)
-ANSIBLE_PB_KS    ?= ANSIBLE_CONFIG=../ansible.cfg ansible-playbook $(ANSIBLE_ARGS) -b -i inventory/inventory.cord --extra-vars @../$(MASTER_CONFIG)
+ANSIBLE_PB_KS    ?= ANSIBLE_CONFIG=../ansible.cfg ansible-playbook $(ANSIBLE_ARGS) -b -i inventory/cord/hosts.ini --extra-vars @../$(MASTER_CONFIG)
 ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
 ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py

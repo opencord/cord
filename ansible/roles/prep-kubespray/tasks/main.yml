@@ -21,8 +21,24 @@
     dest: "{{ kubespray_dir }}"
     version: "{{ kubespray_version }}"
 
-- name: Create kubespray inventory
+- name: Create kubespray inventory directory
+  file:
+    state: directory
+    dest: "{{ kubespray_dir }}/inventory/cord"
+    mode: 0755
+  with_items:
+    - "{{ kubespray_dir }}/inventory/cord/group_vars"
+
+# NOTE: override vars set in kubespray group_vars files using the scenario
+# config.yml file
+- name: Link group_vars directory from sample to cord directory
+  file:
+    state: link
+    src: "{{ kubespray_dir }}/inventory/sample/group_vars"
+    dest: "{{ kubespray_dir }}/inventory/cord/group_vars"
+
+- name: Create kubespray inventory file
   template:
     src: kubespray_inventory.j2
-    dest: "{{ kubespray_dir }}/inventory/inventory.cord"
+    dest: "{{ kubespray_dir }}/inventory/cord/hosts.ini"
     mode: 0644

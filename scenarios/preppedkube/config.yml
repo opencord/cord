@@ -74,6 +74,10 @@ prep_headnode_prereqs:
 docker_images_prereqs:
   - prep-headnode
 
+# FIXME: check out and use this kubespray commit (set on 2018-03-02 by zdw):
+# https://github.com/kubernetes-incubator/kubespray/commit/b75b6b513b7d26a0fce3dd55a77ef538d18433a5
+kubespray_version: b75b6b513b7d26a0fce3dd55a77ef538d18433a5
+
 # have kubespray skip docker installation
 skipTags:
   - docker
