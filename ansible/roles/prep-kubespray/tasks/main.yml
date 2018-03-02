@@ -21,8 +21,14 @@
     dest: "{{ kubespray_dir }}"
     version: "{{ kubespray_version }}"
 
-- name: Create kubespray inventory
+- name: Create kubespray inventory directory
+  file:
+    state: directory
+    dest: "{{ kubespray_dir }}/inventory/cord"
+    mode: 0755
+
+- name: Create kubespray inventory file
   template:
     src: kubespray_inventory.j2
-    dest: "{{ kubespray_dir }}/inventory/inventory.cord"
+    dest: "{{ kubespray_dir }}/inventory/cord/hosts.ini"
     mode: 0644
