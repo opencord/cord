@@ -22,6 +22,30 @@
       "revId": "6fc22507b80098d7aec64c851a4562a444dc1c62",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c5e29e8_946b45a1",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2018-03-02T22:46:41Z",
+      "side": 1,
+      "message": "No. This will use the default tag. You need to put the tag only if you want to override the main one (like in the prepped-kube case)",
+      "parentUuid": "90ccf55f_652a7c29",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 26
+      },
+      "revId": "6fc22507b80098d7aec64c851a4562a444dc1c62",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
