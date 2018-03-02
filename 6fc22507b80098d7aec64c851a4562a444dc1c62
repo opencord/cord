@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90ccf55f_652a7c29",
+        "filename": "scenarios/cord/config.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2018-03-02T22:45:28Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this images be tagged as well?",
+      "range": {
+        "startLine": 144,
+        "startChar": 5,
+        "endLine": 144,
+        "endChar": 26
+      },
+      "revId": "6fc22507b80098d7aec64c851a4562a444dc1c62",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
