@@ -21,8 +21,27 @@
     dest: "{{ kubespray_dir }}"
     version: "{{ kubespray_version }}"
 
-- name: Create kubespray inventory
+- name: Create kubespray inventory directories
+  file:
+    state: directory
+    dest: "{{ kubespray_dir }}/inventory/cord"
+    mode: 0755
+  with_items:
+    - "{{ kubespray_dir }}/inventory/cord"
+    - "{{ kubespray_dir }}/inventory/cord/group_vars"
+
+- name: Copy group variables from sample to cord kubespray directory
+  copy:
+    remote_src: yes
+    src: "{{ kubespray_dir }}/inventory/sample/group_vars/{{ item }}"
+    dest: "{{ kubespray_dir }}/inventory/cord/group_vars/{{ item }}"
+    mode: 0644
+  with_items:
+    - "all.yml"
+    - "k8s-cluster.yml"
+
+- name: Create kubespray inventory file
   template:
     src: kubespray_inventory.j2
-    dest: "{{ kubespray_dir }}/inventory/inventory.cord"
+    dest: "{{ kubespray_dir }}/inventory/cord/hosts.ini"
     mode: 0644
