@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e32a3e9b_df252f5b",
+        "filename": "docker_images.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-05T09:51:43Z",
+      "side": 1,
+      "message": "How do you ensure that \"latest\" \u003d\u003d \"whatever code on disk is checked out\"?\n\nFor example, if someone wants to modify one of the automation containers and test it in an automated way through the QA pipeline, how could that happen?",
+      "range": {
+        "startLine": 32,
+        "startChar": 5,
+        "endLine": 32,
+        "endChar": 33
+      },
+      "revId": "6fc22507b80098d7aec64c851a4562a444dc1c62",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90ccf55f_652a7c29",
         "filename": "scenarios/cord/config.yml",
         "patchSetId": 2
