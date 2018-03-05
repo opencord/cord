@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a896d6c_4202e846",
+        "filename": "ansible/roles/prep-kubespray/files/multus_network/network_plugin/multus/templates/multus-cni.conf.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-05T09:59:08Z",
+      "side": 1,
+      "message": "don\u0027t mix spaces/tabs.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 2
+      },
+      "revId": "15e5462eb7c4b2ef259de75df40ac54194d4ac31",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69a94c77_ed1c7541",
+        "filename": "ansible/roles/prep-kubespray/files/multus_network/patches/network_plugin/main.yml.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-05T09:59:08Z",
+      "side": 1,
+      "message": "Is multus independent/separate from calico?  Or are both required?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "15e5462eb7c4b2ef259de75df40ac54194d4ac31",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c44e4998_61c6d410",
+        "filename": "ansible/roles/prep-kubespray/tasks/main.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-05T09:59:08Z",
+      "side": 1,
+      "message": "Do all these paths need to be created if the copy is of the entire \"ovs\" and \"multus\" directories and all subdirectories?",
+      "range": {
+        "startLine": 52,
+        "startChar": 35,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "15e5462eb7c4b2ef259de75df40ac54194d4ac31",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad3cfe0_dfe7f2fc",
+        "filename": "scenarios/controlkube/config.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-05T09:59:08Z",
+      "side": 1,
+      "message": "If this is going to be a new default plugin, please set it in the ansible/roles/prep-kubespray/defaults/main.yml",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 27
+      },
+      "revId": "15e5462eb7c4b2ef259de75df40ac54194d4ac31",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
