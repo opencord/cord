@@ -68,6 +68,12 @@ buildable_images:
     dockerfile: "Dockerfile.xos"
     context: "../.."
 
+  - name: xosproject/xos-ui
+    repo: xos
+    path: "containers/xos"
+    dockerfile: "Dockerfile.UI"
+    context: "../.."
+
   - name: xosproject/xos-libraries
     repo: xos
     path: "containers/xos"
