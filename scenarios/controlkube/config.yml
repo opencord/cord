@@ -100,6 +100,7 @@ vm_public_network_cidr: "10.230.100.0/24"
 docker_image_whitelist:
   - "xosproject/xos-base"
   - "xosproject/xos"
+  - "xosproject/xos-ui"
   - "xosproject/xos-client"
   - "xosproject/xos-corebuilder"
   - "xosproject/xos-gui"
