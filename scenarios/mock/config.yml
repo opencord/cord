@@ -62,6 +62,7 @@ xos_images: []
 docker_image_whitelist:
   - "xosproject/xos-base"
   - "xosproject/xos"
+  - "xosproject/xos-ui"
   - "xosproject/xos-client"
   - "xosproject/xos-corebuilder"
   - "xosproject/xos-gui"

@@ -129,6 +129,7 @@ use_secure_docker_registry: False
 docker_image_whitelist:
   - "xosproject/xos-base"
   - "xosproject/xos"
+  - "xosproject/xos-ui"
   - "xosproject/xos-client"
   - "xosproject/xos-corebuilder"
   - "xosproject/xos-gui"

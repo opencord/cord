@@ -36,10 +36,10 @@ PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs 
 KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray $(M)/install-kubernetes-tools $(M)/start-xos-helm
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
-XOS_MS           ?= $(M)/docker-images $(M)/core-image $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
+XOS_MS           ?= $(M)/docker-images $(M)/publish-docker-images $(M)/start-xos $(M)/onboard-profile
 ONOS_MS          ?= $(M)/build-onos-apps $(M)/publish-onos-apps $(M)/deploy-onos $(M)/deploy-mavenrepo
 POST_INSTALL_MS  ?= $(M)/setup-automation $(M)/setup-ciab-pcu $(M)/compute1-up $(M)/compute2-up $(M)/compute3-up
-LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-core-image $(M)/local-start-xos $(M)/local-onboard-profile
+LOCAL_MILESTONES ?= $(M)/local-cord-config $(M)/local-docker-images $(M)/local-start-xos $(M)/local-onboard-profile
 ALL_MILESTONES   ?= $(PREP_MS) $(KS_MS) $(MAAS_MS) $(OPENSTACK_MS) $(XOS_MS) $(ONOS_MS) $(POST_INSTALL_MS) $(LOCAL_MILESTONES)
 
 # Configuration files
@@ -120,7 +120,7 @@ ansible-setup:
 	$(ANSIBLE) -m setup all $(LOGCMD)
 
 clean-images:
-	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/core-image $(M)/local-core-image $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
+	rm -f $(M)/docker-images $(M)/local-docker-images $(M)/copy-cord $(M)/build-maas-images $(M)/build-onos-apps $(M)/publish-maas-images $(M)/publish-docker-images $(M)/publish-onos-apps
 
 clean-genconfig:
 	rm -f $(CONFIG_FILES)
@@ -338,16 +338,12 @@ $(M)/docker-images: | $(M)/prep-buildnode $(DOCKER_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(IMAGEBUILDER) -f $(MASTER_CONFIG) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml " $(LOGCMD)
 	touch $@
 
-$(M)/core-image: | $(M)/docker-images
-	$(ANSIBLE_PB) $(PI)/build-core-image-playbook.yml $(LOGCMD)
-	touch $@
-
 # Requires ib_actions.yml file which is on the build host
-$(M)/publish-docker-images: | $(M)/docker-images $(M)/core-image $(PUBLISH_DOCKER_IMAGES_PREREQS)
+$(M)/publish-docker-images: | $(M)/docker-images $(PUBLISH_DOCKER_IMAGES_PREREQS)
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
-$(M)/start-xos: | $(M)/prep-headnode $(M)/cord-config $(M)/core-image $(START_XOS_PREREQS)
+$(M)/start-xos: | $(M)/prep-headnode $(M)/cord-config $(START_XOS_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/start-xos-playbook.yml" $(LOGCMD)
 	touch $@
 
@@ -429,11 +425,7 @@ $(M)/local-docker-images: | $(M)/local-cord-config
 	$(IMAGEBUILDER) -f $(MASTER_CONFIG) -l $(BUILD)/image_logs -g $(BUILD)/ib_graph.dot -a $(BUILD)/ib_actions.yml $(LOGCMD)
 	touch $@
 
-$(M)/local-core-image: | $(M)/local-docker-images
-	$(ANSIBLE_PB) $(PI)/build-core-image-playbook.yml $(LOGCMD)
-	touch $@
-
-$(M)/local-start-xos: | $(M)/local-core-image
+$(M)/local-start-xos: | $(M)/local-docker-images
 	$(ANSIBLE_PB) $(PI)/start-xos-playbook.yml $(LOGCMD)
 	touch $@
 
