@@ -59,5 +59,7 @@ docs/xos-tosca
 ib_actions.yml
 ib_graph.dot
 
-# kubespray
+# kubespray and helm charts
 kubespray
+helm-charts
+
