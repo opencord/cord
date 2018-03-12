@@ -41,7 +41,6 @@ profiles:
 
 lint:
 	@echo "markdownlint(mdl) version: `mdl --version`"
-	@echo "rule descriptions: https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md"
 	@echo "style config:"
 	@echo "---"
 	@cat mdlstyle.rb
