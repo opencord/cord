@@ -293,11 +293,11 @@ $(M)/finish-kubespray: | $(M)/deploy-kubespray
 	cd $(BUILD); $(ANSIBLE_PB) $(BUILD)/ansible/finish-kubespray.yml $(LOGCMD)
 	touch $@
 
-$(M)/install-kubernetes-tools: | $(M)/deploy-kubespray
+$(M)/install-kubernetes-tools: | $(M)/finish-kubespray
 	$(ANSIBLE_PB) $(PI)/install-kubernetes-tools-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/finish-kubespray $(M)/publish-docker-images
+$(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/publish-docker-images
 	$(ANSIBLE_PB) $(PI)/start-xos-helm-playbook.yml $(LOGCMD)
 	touch $@
 
