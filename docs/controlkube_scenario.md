@@ -34,7 +34,7 @@ tmux
 ```
 # Install CORD with kubernetes and XOS Helm chart (this is a single command wordwrapped)
 time bash ./cord-bootstrap.sh -v -x -t "PODCONFIG=rcord-controlkube.yml config" \
--t "build" |& tee -a ~/setup.log
+-t "build" | tee -a ~/setup.log
 ```
 
 Once this command finishes successfully, you will find the XOS Core
