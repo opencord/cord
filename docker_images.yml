@@ -80,12 +80,6 @@ buildable_images:
     dockerfile: "Dockerfile.libraries"
     context: "../.."
 
-  - name: xosproject/xos-corebuilder
-    repo: xos
-    path: "containers/xos"
-    dockerfile: "Dockerfile.corebuilder"
-    context: "../.."
-
   - name: xosproject/chameleon
     repo: xos
     path: "containers/chameleon"
