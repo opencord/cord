@@ -400,6 +400,15 @@ fabric-pingtest:
 
 
 # Testing targets
+venv-xosapitest:
+	bash ../test/cord-tester/src/test/setup/venv-apitests.sh || true
+
+xos-api-test: venv-xosapitest
+	bash -c "source venv-xosapitest/bin/activate && $(ANSIBLE_PB) $(PI)/xos-api-test-playbook.yml" $(LOGCMD)
+
+clean-xos-api-tests:
+	rm -rf ../test/cord-tester/src/test/cord-api/Tests/Logs/*
+	rm -rf venv-xosapitest || true
 
 # R-CORD specific targets
 pod-test: | $(TESTING_PREREQS)
