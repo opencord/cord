@@ -54,8 +54,8 @@ function bootstrap_ansible() {
     echo "Installing Ansible..."
     sudo apt-get update
     sudo apt-get -y install apt-transport-https build-essential curl git python-dev \
-                            python-netaddr python-pip software-properties-common sshpass
-    sudo pip install gitpython graphviz "Jinja2>=2.9"
+                            python-netaddr python-pip software-properties-common sshpass 
+    sudo pip install gitpython graphviz "Jinja2>=2.9" virtualenv
     sudo apt-add-repository -y ppa:ansible/ansible  # latest supported version
     sudo apt-get update
     sudo apt-get install -y ansible
