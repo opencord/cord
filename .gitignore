@@ -63,3 +63,5 @@ ib_graph.dot
 kubespray
 helm-charts
 
+# venv
+venv-xosapitest
