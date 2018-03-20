@@ -168,22 +168,31 @@ def load_config():
 
             pull_only_images = [img for img in conf['pull_only_images']
                                 if split_name(img)[0]
-                                in map(lambda x: split_name(x)[0], filter_list['docker_image_whitelist'])]
+                                in map(lambda x: split_name(x)[0],
+                                       filter_list['docker_image_whitelist'])]
 
-            pull_only_images = map(override_tags(filter_list['docker_image_whitelist']), pull_only_images)
+            pull_only_images = map(override_tags(
+                                   filter_list['docker_image_whitelist']),
+                                   pull_only_images)
+
         except:
             LOG.exception("Problem with filter list file")
             sys.exit(1)
 
+
 def override_tags(image_list_with_tags):
+
     untagged_whitelist = map(lambda x: split_name(x)[0], image_list_with_tags)
+
     def inner(i):
         img_name = split_name(i)[0]
-        tag_override = split_name(image_list_with_tags[untagged_whitelist.index(img_name)])[1]
+        tag_override = split_name(image_list_with_tags[
+                untagged_whitelist.index(img_name)])[1]
         if tag_override:
             return "%s:%s" % (img_name, tag_override)
         return i
     return inner
+
 
 def split_name(input_name):
     """ split a docker image name in the 'name:tag' format into components """
@@ -204,14 +213,14 @@ def split_name(input_name):
 class RepoRepo():
     """ git repo managed by repo tool"""
 
-    manifest_branch = ""
-
-    def __init__(self, name, path, remote):
+    def __init__(self, name, path, remote_url, remote_branch, short_branch):
 
         self.name = name
         self.path = path
-        self.remote = remote
-        self.git_url = "%s%s" % (remote, name)
+        self.git_url = "%s%s" % (remote_url, name)
+        self.remote_branch = remote_branch
+        self.short_branch = short_branch
+        self.git_tags = []
 
         try:
             self.git_repo_o = git.Repo(self.abspath())
@@ -223,6 +232,16 @@ class RepoRepo():
             commit_t = time.gmtime(self.git_repo_o.head.commit.committed_date)
             self.head_commit_t = time.strftime("%Y-%m-%dT%H:%M:%SZ", commit_t)
             LOG.debug(" commit date: %s" % self.head_commit_t)
+
+            for tag in self.git_repo_o.tags:
+                if tag.commit == self.git_repo_o.head.commit:
+                    self.git_tags.append(str(tag))
+
+            if self.git_tags:
+                LOG.debug(" tags referring to this commit: %s" %
+                          ", ".join(self.git_tags))
+            else:
+                LOG.debug(" No git tags refer to this commit")
 
             self.clean = not self.git_repo_o.is_dirty(untracked_files=True)
             LOG.debug(" clean: %s" % self.clean)
@@ -245,7 +264,7 @@ class RepoRepo():
         global conf
 
         if not branch:
-            branch = self.manifest_branch
+            branch = self.remote_branch
 
         LOG.debug("  Looking for changes in path: %s" % test_path)
 
@@ -297,17 +316,19 @@ class RepoManifest():
             LOG.exception("Error loading repo manifest")
             sys.exit(1)
 
-        # Find the default branch
+        # Find the branch names
         default = self.manifest_xml.find('default')
-        self.branch = "%s/%s" % (default.attrib['remote'],
-                                 default.attrib['revision'])
+
+        self.short_branch = default.attrib['revision']
+        self.remote_branch = "%s/%s" % (default.attrib['remote'],
+                                        default.attrib['revision'])
 
         # Find the remote URL for these repos
         remote = self.manifest_xml.find('remote')
-        self.remote = remote.attrib['review']
+        self.remote_url = remote.attrib['review']
 
-        LOG.info("Manifest is on branch '%s' with remote '%s'" %
-                 (self.branch, self.remote))
+        LOG.info("Manifest is on remote branch '%s' with remote url '%s'" %
+                 (self.remote_branch, self.remote_url))
 
         project_repos = {}
 
@@ -324,8 +345,10 @@ class RepoManifest():
                           repo_name)
 
         for repo_name, repo_path in project_repos.iteritems():
-            self.repos[repo_name] = RepoRepo(repo_name, repo_path, self.remote)
-            self.repos[repo_name].manifest_branch = self.branch
+            self.repos[repo_name] = RepoRepo(repo_name, repo_path,
+                                             self.remote_url,
+                                             self.remote_branch,
+                                             self.short_branch)
 
     def get_repo(self, repo_name):
         return self.repos[repo_name]
@@ -439,7 +462,7 @@ class DockerImage():
         return True  # unbuildable images are clean
 
     def parents_clean(self):
-        """ if all parents are clean """
+        """ Returns true if self and all parents are clean """
 
         if self.buildable():
             if not self.clean:
@@ -522,7 +545,8 @@ class DockerImage():
                     clean = False
 
                 if clean:
-                    comp_l[prefix + "version"] = self.repo_d.manifest_branch
+                    comp_l[prefix + "version"] = "%s-%s" % \
+                            (self.repo_d.short_branch, self.repo_d.head_commit)
                     comp_l[prefix + "vcs-ref"] = \
                         component['repo_d'].head_commit
                 else:
@@ -555,7 +579,8 @@ class DockerImage():
             cl[prefix + "vcs-url"] = self.repo_d.git_url
 
             if self.clean:
-                cl[prefix + "version"] = self.repo_d.manifest_branch
+                cl[prefix + "version"] = "%s-%s" % (self.repo_d.short_branch,
+                                                    self.repo_d.head_commit)
                 cl[prefix + "vcs-ref"] = self.repo_d.head_commit
             else:
                 cl[prefix + "version"] = "dirty"
@@ -594,7 +619,8 @@ class DockerImage():
 
             if self.clean:
                 self.labels['org.label-schema.version'] = \
-                    self.repo_d.manifest_branch
+                   "%s-%s" % (self.repo_d.short_branch,
+                              self.repo_d.head_commit)
                 self.labels['org.label-schema.vcs-ref'] = \
                     self.repo_d.head_commit
                 self.labels['org.opencord.vcs-commit-date'] = \
@@ -615,15 +641,29 @@ class DockerImage():
 
             # if clean and parents clean, add tags for branch/commit
             if self.parents_clean():
+
+                # add build tag
                 if build_tag not in self.tags:
                     self.tags.append(build_tag)
 
-                commit_tag = self.repo_d.head_commit
+                # add branch tag
+                branch_tag = self.repo_d.short_branch
+                if branch_tag not in self.tags:
+                    self.tags.append(branch_tag)
+
+                # Add <branch>-<commit> tag, which is used to pull
+                commit_tag = "%s-%s" % (self.repo_d.short_branch,
+                                        self.repo_d.head_commit)
                 if commit_tag not in self.tags:
                     self.tags.append(commit_tag)
 
-                    # pulling is done via raw_name, set tag to commit
+                    # this is most specific tag, so pull using it
                     self.raw_name = "%s:%s" % (self.name, commit_tag)
+
+                # add all tags in git that point at the commit
+                for gt in self.repo_d.git_tags:
+                    if gt not in self.tags:
+                        self.tags.append(gt)
 
             LOG.debug("All tags: %s" % ", ".join(self.tags))
 
@@ -819,7 +859,10 @@ class DockerBuilder():
         """ Connect to docker daemon """
 
         try:
-            self.dc = DockerClient()
+            # get a "high level" Docker object with conf from the environment
+            hl_dc = docker.from_env()
+            # use the low level APIClient (same as the 1.x API)
+            self.dc = hl_dc.api
         except requests.ConnectionError:
             LOG.debug("Docker connection not available")
             sys.exit(1)
@@ -884,7 +927,8 @@ class DockerBuilder():
 
                         else:  # doesn't have good labels
 
-                            # if it has a build_tag, and a good image hasn't already been tagged
+                            # if it has a build_tag, and a good image hasn't
+                            # already been tagged
                             if has_build_tag and (image.status != DI_EXISTS):
                                 LOG.info(" Image %s has obsolete labels and"
                                          " build_tag, remove" % pe_image['Id'])
@@ -1187,8 +1231,7 @@ class DockerBuilder():
                             sys.exit(1)
 
             except (DockerErrors.NotFound, DockerErrors.ImageNotFound) as e:
-                LOG.warning("Image could not be pulled: %s , %s" %
-                            (e.errno, e.strerror))
+                LOG.warning("Image could not be pulled: %s" % e)
 
                 self.failed_pull.append({
                         "tags": [image.raw_name, ],
@@ -1243,11 +1286,13 @@ class DockerBuilder():
 
     def _build_image(self, image):
 
+        global build_tag
+
         LOG.info("Building docker image for %s" % image.raw_name)
 
         if self.dc is not None:
 
-            build_tag = "%s:%s" % (image.name, image.tags[0])
+            image_build_tag = "%s:%s" % (image.name, build_tag)
 
             buildargs = image.buildargs()
             context_tar = image.context_tarball()
@@ -1273,7 +1318,7 @@ class DockerBuilder():
             try:
                 LOG.info("Building image: %s" % image)
 
-                for stat_d in self.dc.build(tag=build_tag,
+                for stat_d in self.dc.build(tag=image_build_tag,
                                             buildargs=buildargs,
                                             nocache=args.build,
                                             custom_context=True,
@@ -1312,7 +1357,7 @@ class DockerBuilder():
                 LOG.exception("Error building docker image")
 
                 self.failed_build.append({
-                        "tags": [build_tag, ],
+                        "tags": [image_build_tag, ],
                     })
 
                 return
@@ -1332,16 +1377,20 @@ class DockerBuilder():
             LOG.info("Built Image: %s, duration: %s, id: %s" %
                      (image.name, duration, image.image_id))
 
+            self.tag_image(image)
+
+            # don't push the build_tag to dockerhub
+            built_tags = list(image.tags)
+            built_tags.remove(build_tag)
+
             self.built.append({
                     "id": image.image_id,
-                    "tags": [build_tag, ],
-                    "push_name": image.raw_name,
+                    "tags": built_tags,
                     "build_log": bl_path,
                     "duration": duration.total_seconds(),
                     "base": image.name.split(":")[0],
                 })
 
-            self.tag_image(image)
             image.status = DI_EXISTS
 
 
@@ -1357,13 +1406,12 @@ if __name__ == "__main__":
             from docker import __version__ as docker_version
 
             # handle the docker-py v1 to v2 API differences
-            if LooseVersion(docker_version) >= LooseVersion('2.0.0'):
-                from docker import APIClient as DockerClient
-            else:
+            if LooseVersion(docker_version) < LooseVersion('2.0.0'):
                 LOG.error("Unsupported python docker module - "
                           "remove docker-py 1.x, install docker 2.x")
                 sys.exit(1)
 
+            import docker
             from docker import utils as DockerUtils
             from docker import errors as DockerErrors
 
