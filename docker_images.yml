@@ -185,6 +185,11 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/vsg-hw-synchronizer
+    repo: vsg-hw
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/vsg-synchronizer
     repo: vsg
     path: "xos/synchronizer"
