@@ -36,8 +36,10 @@ stage('push'){
 
     withDockerRegistry([credentialsId: 'docker-artifact-push-credentials']) {
       for(image in ib_actions.ib_built){
-        echo "Pushing image: " + image.push_name
-        docker.image(image.push_name).push()
+        for(tag in image.tags){
+          echo "Pushing image: " + tag
+          docker.image(tag).push()
+        }
       }
     }
   }
