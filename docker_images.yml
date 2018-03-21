@@ -202,7 +202,6 @@ buildable_images:
 
   - name: xosproject/exampleservice-synchronizer
     repo: exampleservice
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vmme-synchronizer
