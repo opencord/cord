@@ -137,7 +137,6 @@ buildable_images:
 
   - name: xosproject/addressmanager-synchronizer
     repo: addressmanager
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/openstack-synchronizer
@@ -167,7 +166,6 @@ buildable_images:
 
   - name: xosproject/volt-synchronizer
     repo: olt-service
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vrouter-synchronizer
@@ -187,12 +185,10 @@ buildable_images:
 
   - name: xosproject/vsg-hw-synchronizer
     repo: vsg-hw
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vsg-synchronizer
     repo: vsg
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/fabric-synchronizer
@@ -202,7 +198,6 @@ buildable_images:
 
   - name: xosproject/exampleservice-synchronizer
     repo: exampleservice
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vmme-synchronizer
