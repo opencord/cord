@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36e0b20e_5134f023",
+        "filename": "scripts/imagebuilder.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2018-03-21T16:29:26Z",
+      "side": 1,
+      "message": "Why are we reverting this to prevent scenarios to define tagged images?",
+      "range": {
+        "startLine": 158,
+        "startChar": 12,
+        "endLine": 171,
+        "endChar": 73
+      },
+      "revId": "1aa707f80983a6936eece005dfd797907b77de4e",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
+    }
+  ]
+}
