@@ -1,4 +1,4 @@
-# Using CORD on Kubernetes (Exeperimental)
+# Using CORD on Kubernetes (Experimental)
 
 ## Podconfigs & Scenarios
 
