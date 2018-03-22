@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e2ac136_fa23cfa5",
+        "filename": "docs/controlkube_scenario.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-03-22T13:53:10Z",
+      "side": 0,
+      "message": "This is a bash 4-ism, an abbreviation of `2\u003e\u00261 |` for combining the redirecting stdout and stderr into stdout for logging purposes.\n\nDid this not work for you on some platform with a different version of bash?",
+      "range": {
+        "startLine": 37,
+        "startChar": 9,
+        "endLine": 37,
+        "endChar": 13
+      },
+      "revId": "917cceb1be6810a466db2df708289e2e3789223d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
