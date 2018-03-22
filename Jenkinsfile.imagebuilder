@@ -26,7 +26,7 @@ stage('checkout') {
 
 stage('imagebuilder'){
   node('master') {
-    sh '$WORKSPACE/imagebuilder.py -v -b -r cord/ -c cord/docker_images.yml -l image_logs -a ib_actions.yml -g ib_graph.dot'
+    sh '$WORKSPACE/imagebuilder.py -v -r cord/ -c cord/docker_images.yml -l image_logs -a ib_actions.yml -g ib_graph.dot'
   }
 }
 
@@ -37,8 +37,9 @@ stage('push'){
     withDockerRegistry([credentialsId: 'docker-artifact-push-credentials']) {
       for(image in ib_actions.ib_built){
         for(tag in image.tags){
-          echo "Pushing image: " + tag
-          docker.image(tag).push()
+          push_tag = image.base + ":" + tag
+          echo "Pushing image: " + push_tag
+          docker.image(push_tag).push()
         }
       }
     }
