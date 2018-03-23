@@ -22,6 +22,30 @@
       "revId": "917cceb1be6810a466db2df708289e2e3789223d",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f91929cb_45d50552",
+        "filename": "docs/controlkube_scenario.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000266
+      },
+      "writtenOn": "2018-03-23T13:54:49Z",
+      "side": 0,
+      "message": "My fault, this command didn\u0027t work on cloudlab previously, but after checked, it worked now, I will abandon this patch.",
+      "parentUuid": "6e2ac136_fa23cfa5",
+      "range": {
+        "startLine": 37,
+        "startChar": 9,
+        "endLine": 37,
+        "endChar": 13
+      },
+      "revId": "917cceb1be6810a466db2df708289e2e3789223d",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
     }
   ]
 }
