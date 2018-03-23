@@ -168,7 +168,6 @@ buildable_images:
 
   - name: xosproject/vrouter-synchronizer
     repo: vrouter
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/vtn-synchronizer
@@ -252,7 +251,6 @@ buildable_images:
 
   - name: xosproject/rcord-synchronizer
     repo: rcord
-    path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
   - name: xosproject/progran-synchronizer
