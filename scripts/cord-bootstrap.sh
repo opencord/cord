@@ -197,6 +197,23 @@ function bootstrap_docker() {
   fi
 }
 
+function bootstrap_minikube() {
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    chmod +x ./kubectl
+    sudo mv ./kubectl /usr/local/bin/kubectl
+    curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.25.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+    wget https://github.com/kubernetes/helm/archive/v2.8.2.tar.gz
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.8.2-linux-amd64.tar.gz
+    tar -xzf helm-v2.8.2-linux-amd64.tar.gz
+    sudo mv linux-amd64/helm /usr/local/bin/helm
+    sudo bash -c "curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-ubuntu16.04 > /usr/local/bin/docker-machine-driver-kvm"
+    sudo chmod +x /usr/local/bin/docker-machine-driver-kvm
+    sudo mkdir /mnt/extra/minikube_home
+    sudo chown $USER /mnt/extra/minikube_home
+    export MINIKUBE_HOME=/mnt/extra/minikube_home
+    minikube start --vm-driver kvm --memory 3072
+}
+
 # Parse options
 GERRIT_PATCHES=()
 MAKE_TARGETS=()
@@ -204,11 +221,15 @@ GROUP_LIST=()
 DOCKER=0
 VAGRANT=0
 XENIAL=0
+MINIKUBE=0
 
-while getopts "dhp:t:vx" opt; do
+while getopts "dkhp:t:vx" opt; do
   case ${opt} in
     d ) DOCKER=1
         GROUP_LIST+=("docker")
+      ;;
+    k ) MINIKUBE=1
+        GROUP_LIST+=("minikube")
       ;;
     h ) echo "Usage for $0:"
       echo "  -d                           Install Docker for local scenario."
@@ -217,6 +238,7 @@ while getopts "dhp:t:vx" opt; do
       echo "  -t <target>                  Run '$MAKECMD <target>' in cord/build/. Can be repeated."
       echo "  -v                           Install Vagrant for mock/virtual/physical scenarios."
       echo "  -x                           Use Xenial (16.04) in Vagrant VM's."
+      echo "  -k                           Install minikube"
       exit 0
       ;;
     p ) GERRIT_PATCHES+=("$OPTARG")
@@ -246,6 +268,11 @@ fi
 if [[ $DOCKER -ne 0 ]]
 then
   run_stage bootstrap_docker
+fi
+
+if [[ $MINIKUBE -ne 0 ]]
+then
+  run_stage bootstrap_minikube
 fi
 
 # Check for group membership when needed
