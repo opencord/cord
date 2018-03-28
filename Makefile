@@ -344,7 +344,7 @@ $(M)/publish-docker-images: | $(M)/docker-images $(PUBLISH_DOCKER_IMAGES_PREREQS
 	$(SSH_BUILD) "cd $(BUILD_CORD_DIR)/build; $(ANSIBLE_PB_LOCAL) $(PI)/publish-images-playbook.yml" $(LOGCMD)
 	touch $@
 
-$(M)/start-xos: | $(M)/prep-headnode $(M)/cord-config $(START_XOS_PREREQS)
+$(M)/start-xos: | $(M)/prep-headnode $(M)/cord-config $(M)/docker-images $(START_XOS_PREREQS)
 	$(SSH_HEAD) "cd /opt/cord/build; $(ANSIBLE_PB_LOCAL) $(PI)/start-xos-playbook.yml" $(LOGCMD)
 	touch $@
 
