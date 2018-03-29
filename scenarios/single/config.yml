@@ -66,8 +66,7 @@ use_elasticstack: True
 # whitelist of images for imagebuilder to build/pull (tagged elsewhere)
 docker_image_whitelist:
   - "xosproject/xos-base"
-  - "xosproject/xos"
-  - "xosproject/xos-ui"
+  - "xosproject/xos-core"
   - "xosproject/xos-client"
   - "xosproject/xos-gui"
   - "xosproject/xos-gui-builder"

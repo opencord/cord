@@ -181,8 +181,7 @@ CONTAINER ID        NAMES                                 IMAGE
 52e477e9b188        rcord_xos_ws_1                        docker-registry:5000/xosproject/xos-ws:candidate
 10a54a4a4f03        rcord_xos_chameleon_1                 docker-registry:5000/xosproject/chameleon:candidate
 257f4c29967d        rcord_xos_tosca_1                     docker-registry:5000/xosproject/xos-tosca:candidate
-b2c78cf4de7b        rcord_xos_ui_1                        docker-registry:5000/xosproject/xos-ui:candidate
-526a4282610d        rcord_xos_core_1                      docker-registry:5000/xosproject/xos-ui:candidate
+526a4282610d        rcord_xos_core_1                      docker-registry:5000/xosproject/xos-core:candidate
 0783438bba1e        rcord_vtr-synchronizer_1              docker-registry:5000/xosproject/vtr-synchronizer:candidate
 e66bd071bdba        rcord_vsg-synchronizer_1              docker-registry:5000/xosproject/vsg-synchronizer:candidate
 961ce2793217        rcord_onos-synchronizer_1             docker-registry:5000/xosproject/onos-synchronizer:candidate
