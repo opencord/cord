@@ -68,3 +68,18 @@ For a general introduction to ways you can participate and contribute to the
 project, see [Contributing to
 CORD](https://wiki.opencord.org/display/CORD/Contributing+to+CORD).
 
+## Downloading testing and QA repositories
+
+Whie not useful for deploying a CORD POD, the repo manifests files and the
+infrastructure code used to configure our test and QA systems, including
+Jenkins jobs created with [Jenkins Job
+Builder](https://docs.openstack.org/infra/jenkins-job-builder/) can be
+downloaded with repo:
+
+```shell
+mkdir cordqa
+cd cordqa
+repo init -u https://gerrit.opencord.org/qa-manifest -b master
+repo sync
+```
+

@@ -23,7 +23,7 @@ deployments, you are welcome to do so.
 You should run the following commands on a clean Linux machine in the
 home directory to install this scenario:
 
-```
+```shell
 # Pull down cord-bootstrap.sh script and start a tmux session
 curl -o ~/cord-bootstrap.sh \
 https://raw.githubusercontent.com/opencord/cord/{{ book.branch }}/scripts/cord-bootstrap.sh
@@ -31,7 +31,7 @@ chmod +x cord-bootstrap.sh
 tmux
 ```
 
-```
+```shell
 # Install CORD with kubernetes and XOS Helm chart (this is a single command wordwrapped)
 time bash ./cord-bootstrap.sh -v -x -t "PODCONFIG=rcord-controlkube.yml config" \
 -t "build" |& tee -a ~/setup.log

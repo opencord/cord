@@ -663,6 +663,7 @@ CIDR for the MANAGEMENT_HOST VTN network.
 
 ## vtn_net_management_host_interface
 
+Interface name for the MANAGEMENT_HOST VTN network.
 
 ## vtn_net_management_host_range_xos_high
 
