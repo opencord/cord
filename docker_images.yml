@@ -31,6 +31,7 @@ pull_only_images:
   - "onosproject/onos:1.12.0"
   - "redis:3.2"
   - "node:7.9.0" # remove once the issue with node:candidate is resolved
+  - "postgres:10.3-alpine"
   - "sebp/elk:564"
 
 # buildable_images - list of images that we build from Dockerfiles

@@ -111,10 +111,11 @@ docker_image_whitelist:
   - "xosproject/chameleon"
   - "xosproject/xos-synchronizer-base"
   - "nginx"
+  - "node"
   - "onosproject/onos"
   - "opencord/mavenrepo"
+  - "postgres"
   - "redis"
-  - "node"
   - "sebp/elk"
 
 # Ansible Inventory
