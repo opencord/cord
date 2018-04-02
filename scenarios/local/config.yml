@@ -51,9 +51,10 @@ docker_image_whitelist:
   - "xosproject/xos-ws"
   - "xosproject/chameleon"
   - "xosproject/xos-synchronizer-base"
-  - "redis"
   - "nginx"
   - "node"
+  - "postgres"
+  - "redis"
 
 # Ansible Inventory
 inventory_groups:
