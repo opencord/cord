@@ -39,6 +39,8 @@ global build_tag
 global buildable_images
 global pull_only_images
 
+DOCKER_PY_VERSION = 0
+
 
 def setup_logging(name=None, logfile=False):
     global args
@@ -108,6 +110,9 @@ def parse_args():
     parser.add_argument('-v', '--verbosity', action='count', default=1,
                         help="Repeat to increase log level")
 
+    parser.add_argument('-x', '--force', action="store_true",
+                        help="Force removal of tags (may delete images)")
+
     args = parser.parse_args()
 
     if args.verbosity > 1:
@@ -175,7 +180,7 @@ def load_config():
                                    filter_list['docker_image_whitelist']),
                                    pull_only_images)
 
-        except:
+        except KeyError:
             LOG.exception("Problem with filter list file")
             sys.exit(1)
 
@@ -935,7 +940,7 @@ class DockerBuilder():
 
                                 # remove build_tag from image
                                 name_bt = "%s:%s" % (base_name, build_tag)
-                                self.dc.remove_image(name_bt, False, True)
+                                self.dc.remove_image(name_bt, args.force, True)
 
                             else:
                                 LOG.info(" Image %s has obsolete labels, lacks"
@@ -1318,17 +1323,23 @@ class DockerBuilder():
             try:
                 LOG.info("Building image: %s" % image)
 
-                for stat_d in self.dc.build(tag=image_build_tag,
-                                            buildargs=buildargs,
-                                            nocache=args.build,
-                                            custom_context=True,
-                                            fileobj=context_tar,
-                                            dockerfile=dockerfile,
-                                            rm=True,
-                                            forcerm=True,
-                                            pull=False,
-                                            stream=True,
-                                            decode=True):
+                buildparams = dict(
+                    tag=image_build_tag,
+                    buildargs=buildargs,
+                    nocache=args.build,
+                    custom_context=True,
+                    fileobj=context_tar,
+                    dockerfile=dockerfile,
+                    rm=True,
+                    forcerm=True,
+                    pull=False,
+                    decode=True
+                )
+
+                if DOCKER_PY_VERSION == 2:
+                    buildparams['stream'] = True
+
+                for stat_d in self.dc.build(**buildparams):
 
                     if 'stream' in stat_d:
 
@@ -1410,6 +1421,10 @@ if __name__ == "__main__":
                 LOG.error("Unsupported python docker module - "
                           "remove docker-py 1.x, install docker 2.x")
                 sys.exit(1)
+
+            DOCKER_PY_VERSION = 2
+            if LooseVersion(docker_version) >= LooseVersion('3.0.0'):
+                DOCKER_PY_VERSION = 3
 
             import docker
             from docker import utils as DockerUtils
