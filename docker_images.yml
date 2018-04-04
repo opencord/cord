@@ -59,10 +59,6 @@ buildable_images:
     path: "containers/xos"
     dockerfile: "Dockerfile.base"
 
-  - name: xosproject/xos-postgres
-    repo: xos
-    path: "containers/postgresql"
-
   - name: xosproject/xos-core
     repo: xos
     path: "containers/xos"
