@@ -173,6 +173,10 @@ buildable_images:
     repo: vsg-hw
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/kubernetes-synchronizer
+    repo: kubernetes-service
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/vsg-synchronizer
     repo: vsg
     dockerfile: "Dockerfile.synchronizer"
