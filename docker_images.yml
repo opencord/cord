@@ -248,3 +248,8 @@ buildable_images:
     repo: progran
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
+
+  - name: xosproject/xos-api-tester
+    repo: cord-tester
+    path: "src/test/cord-api"
+    dockerfile: "Dockerfile.k8s-api-tester"
