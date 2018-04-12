@@ -46,6 +46,30 @@
       "revId": "23ae0309d39c123cf79b3f221ed030e9440de5f8",
       "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b5e44ec_59b81168",
+        "filename": "ansible/roles/prep-kubespray/tasks/main.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-04-12T02:10:07Z",
+      "side": 1,
+      "message": "Hung-Wei, did you plan to make the change Andy suggested, or should I make those changes to this patch?",
+      "parentUuid": "4d719b04_f63ff004",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 109
+      },
+      "revId": "23ae0309d39c123cf79b3f221ed030e9440de5f8",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": false
     }
   ]
 }
