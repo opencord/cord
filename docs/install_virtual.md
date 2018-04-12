@@ -312,7 +312,7 @@ the URL `http://<target-server>:8080/MAAS/`.  E.g., if you are running on
 CloudLab, your `<target-server>` is the hostname of your CloudLab node.  The
 username is `cord` and the auto-generated password is found in
 `~/cord/build/maas/passwords/maas_user.txt` on the CiaB server.  For more
-information on MAAS, see [the MAAS documentation](http://maas.io/docs).
+information on MAAS, see [the MAAS documentation](http://docs.maas.io).
 
 ### XOS GUI
 
