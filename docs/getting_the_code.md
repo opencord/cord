@@ -74,12 +74,16 @@ Whie not useful for deploying a CORD POD, the repo manifests files and the
 infrastructure code used to configure our test and QA systems, including
 Jenkins jobs created with [Jenkins Job
 Builder](https://docs.openstack.org/infra/jenkins-job-builder/) can be
-downloaded with repo:
+downloaded with repo.  The `ci-management` repo uses git submodules, so those
+need to be checked out as well:
 
 ```shell
 mkdir cordqa
 cd cordqa
 repo init -u https://gerrit.opencord.org/qa-manifest -b master
 repo sync
+cd ci-management
+git submodule init
+git submodule update
 ```
 
