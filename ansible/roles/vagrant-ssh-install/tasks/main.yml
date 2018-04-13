@@ -20,7 +20,7 @@
   register: dotsshdir
 
 - name: Create .ssh directory if it doesn't exist
-  when: (not dotsshdir.stat.isdir) and (not dotsshdir.stat.islnk)
+  when: (not dotsshdir.stat.exists) or ((not dotsshdir.stat.isdir) and (not dotsshdir.stat.islnk))
   file:
     path: "{{ ansible_env.HOME }}/.ssh"
     state: directory
