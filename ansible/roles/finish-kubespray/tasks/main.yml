@@ -23,7 +23,7 @@
 - name: Move kubespray admin.conf to ~/.kube/config
   copy:
     remote_src: true
-    src: "{{ kubespray_dir }}/artifacts/admin.conf"
+    src: "{{ kubespray_dir }}/inventory/cord/artifacts/admin.conf"
     dest: "~/.kube/config"
 
 - name: Find Vagrant head VM IP address
