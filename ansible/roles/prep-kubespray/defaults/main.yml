@@ -15,7 +15,7 @@
 
 # prep-kubespray/defaults/main.yml
 
-kubespray_version: "master"
+kubespray_version: "v2.5.0"
 kubespray_dir: "{{ 'kubespray' | realpath }}"
 
 management_net_cidr: "10.1.0.0/24"
