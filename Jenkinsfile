@@ -14,7 +14,7 @@
 
 import groovy.json.JsonSlurperClassic
 
-def filename = 'manifest-${GERRIT_BRANCH}.xml'
+def filename = 'manifest-${branch}.xml'
 def manifestUrl = 'https://gerrit.opencord.org/manifest'
 deployment_config = null;
 pod_config = null;
@@ -27,7 +27,7 @@ node ("${devNodeName}") {
         }
         stage ("Parse deployment configuration file") {
             sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
-            sh returnStdout: true, script: 'git clone -b ${GERRIT_BRANCH} ${configRepoUrl}'
+            sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
             deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
             pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
         }
@@ -73,7 +73,7 @@ node ("${devNodeName}") {
                 }
 
                 stage ("Download CORD POD configuration") {
-                    sh "cd ../orchestration/profiles; git clone -b ${GERRIT_BRANCH} ${deployment_config.pod_config.repo_url} automation"
+                    sh "cd ../orchestration/profiles; git clone -b ${branch} ${deployment_config.pod_config.repo_url} automation"
                 }
 
                 stage ("Generate CORD configuration") {
