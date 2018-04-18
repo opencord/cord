@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import groovy.json.JsonSlurperClassic
+import groovy.json.JsonSlurper
 
 def filename = 'manifest-${branch}.xml'
 def manifestUrl = 'https://gerrit.opencord.org/manifest'
@@ -379,7 +379,7 @@ def getComputeNames(role="") {
     computeNamesAll = runHeadNodeCmd("cord prov list | grep node | awk '{print \\\$2}' | sed -e \\\"s/.*/'&'/\\\"").trim()
     computeNamesAll = "${computeNamesAll}".split()
     computeNamesAll = "${computeNamesAll}".replaceAll("'", "\"")
-    computeNamesAll = new JsonSlurperClassic().parseText("${computeNamesAll}")
+    computeNamesAll = new JsonSlurper().parseText("${computeNamesAll}")
     if ("${role}" == "") return computeNamesAll
     computeNames = []
     switchMac = ""
@@ -399,7 +399,7 @@ def getComputeNames(role="") {
             return computeNames
         }
         computeFabricIps = "${computeFabricIps}".split()
-        computeFabricIps = new JsonSlurperClassic().parseText("${computeFabricIps}")
+        computeFabricIps = new JsonSlurper().parseText("${computeFabricIps}")
         // Figure out which compute node connects to the switch
         for (name in computeNamesAll) {
             fabricIp = runComputeNodeCmd("${name}", "ip a | grep -o '${fabricIpPrefix}.[1-9][0-9]*.[0-9]*'").trim()
