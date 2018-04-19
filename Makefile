@@ -10,6 +10,7 @@ PI               ?= $(BUILD)/platform-install
 KUBESPRAY        ?= $(BUILD)/kubespray
 MAAS             ?= $(BUILD)/maas
 ONOS_APPS        ?= $(CORD)/onos-apps
+HELM_CHARTS      ?= $(BUILD)/helm-charts
 
 # Configuration paths
 ifdef PODCONFIG_PATH
@@ -26,13 +27,16 @@ PODCONFIG_PATH   ?= $(PROFILE_D)/podconfig/$(PODCONFIG)
 SCENARIOS_D      ?= $(BUILD)/scenarios
 GENCONFIG_D      ?= $(BUILD)/genconfig
 
+
 CONFIG_CORD_PROFILE_DIR ?= $(CORD)/../cord_profile
+
+CORD_VALUES_DIR  ?= $(CORD)/../cord_values
 
 # Milestones/logs paths
 M                ?= $(BUILD)/milestones
 LOGS             ?= $(BUILD)/logs
 
-PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
+PREP_MS          ?= $(M)/prereqs-check $(M)/build-local-bootstrap $(M)/ciab-ovs $(M)/vagrant-up $(M)/vagrant-ssh-install $(M)/copy-cord $(M)/cord-config $(M)/cord-helm-values $(M)/copy-config $(M)/prep-buildnode $(M)/prep-headnode $(M)/deploy-elasticstack $(M)/prep-computenode
 KS_MS            ?= $(M)/prep-kubespray $(M)/deploy-kubespray $(M)/finish-kubespray $(M)/install-kubernetes-tools $(M)/start-xos-helm
 MAAS_MS          ?= $(M)/build-maas-images $(M)/maas-prime $(M)/publish-maas-images $(M)/deploy-maas
 OPENSTACK_MS     ?= $(M)/glance-images $(M)/deploy-openstack  $(M)/deploy-computenode $(M)/onboard-openstack
@@ -73,6 +77,7 @@ VIRSH_CORDDEV_DOMAIN ?= cord_corddev
 # Ansible args, for verbosity and other runtime parameters
 ANSIBLE_ARGS     ?=
 EXTRA_VARS       ?= --extra-vars "@/opt/cord_profile/genconfig/config.yml"
+HELM_ARGS        ?=
 
 # Commands
 SHELL            = bash -o pipefail
@@ -82,6 +87,7 @@ ANSIBLE_PB       ?= ansible-playbook $(ANSIBLE_ARGS) -i $(INVENTORY) --extra-var
 ANSIBLE_PB_KS    ?= ANSIBLE_CONFIG=../ansible.cfg ansible-playbook $(ANSIBLE_ARGS) -b -i inventory/cord/hosts.ini --extra-vars @../$(MASTER_CONFIG)
 ANSIBLE_PB_LOCAL ?= ansible-playbook $(ANSIBLE_ARGS) -i $(PI)/inventory/head-localhost $(EXTRA_VARS)
 ANSIBLE_PB_MAAS  ?= ansible-playbook $(ANSIBLE_ARGS) -i /etc/maas/ansible/pod-inventory $(EXTRA_VARS)
+HELM             ?= helm $(HELM_ARGS)
 IMAGEBUILDER     ?= python $(BUILD)/scripts/imagebuilder.py
 LOGCMD           ?= 2>&1 | tee -a $(abspath $(LOGS)/$(TS)_$(@F))
 SSH_HEAD         ?= ssh $(HEADNODE)
@@ -128,6 +134,10 @@ clean-genconfig:
 clean-profile:
 	rm -rf $(CONFIG_CORD_PROFILE_DIR)/*
 	rm -f $(M)/cord-config $(M)/copy-config $(M)/onboard-profile $(M)/local-onboard-profile $(M)/onboard-openstack $(M)/refresh-fabric
+
+clean-helm:
+	rm -rf $(CORD_VALUES_DIR)/*
+	rm -f $(M)/cord-helm-values
 
 clean-all: virsh-domain-destroy vagrant-destroy clean-profile clean-genconfig
 	rm -f $(ALL_MILESTONES)
@@ -203,6 +213,7 @@ docs:
 VAGRANT_UP_PREREQS            ?=
 COPY_CORD_PREREQS             ?=
 CORD_CONFIG_PREREQS           ?=
+CORD_HELM_VALUES_PREREQS      ?=
 CONFIG_SSH_KEY_PREREQS        ?=
 PREP_BUILDNODE_PREREQS        ?=
 PREP_HEADNODE_PREREQS         ?=
@@ -261,13 +272,17 @@ $(M)/copy-config: | $(M)/cord-config
 	$(ANSIBLE_PB) $(PI)/copy-profile-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/prep-buildnode: | $(M)/cord-config $(PREP_BUILDNODE_PREREQS)
+$(M)/cord-helm-values: | $(CORD_HELM_VALUES_PREREQS)
+	$(ANSIBLE_PB) $(PI)/cord-helm-values-playbook.yml $(LOGCMD)
+	touch $@
+
+$(M)/prep-buildnode: | $(PREP_BUILDNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-buildnode-playbook.yml $(LOGCMD)
 	@echo Waiting 20 seconds to timeout SSH ControlPersist, and so future ansible commands gain docker group membership
 	sleep 20
 	touch $@
 
-$(M)/prep-headnode: | $(M)/cord-config $(PREP_HEADNODE_PREREQS)
+$(M)/prep-headnode: | $(PREP_HEADNODE_PREREQS)
 	$(ANSIBLE_PB) $(PI)/prep-headnode-playbook.yml $(LOGCMD)
 	touch $@
 
@@ -297,8 +312,25 @@ $(M)/install-kubernetes-tools: | $(M)/finish-kubespray
 	$(ANSIBLE_PB) $(PI)/install-kubernetes-tools-playbook.yml $(LOGCMD)
 	touch $@
 
-$(M)/start-xos-helm: | $(M)/install-kubernetes-tools $(M)/publish-docker-images
-	$(ANSIBLE_PB) $(PI)/start-xos-helm-playbook.yml $(LOGCMD)
+
+# helm targets
+$(M)/helm-install-xos-core: | $(M)/install-kubernetes-tools $(M)/cord-helm-values $(M)/publish-docker-images
+	cd $(HELM_CHARTS)
+	$(HELM) test xos-core
+	$(HELM) install xos-core -n xos-core -f $(CORD_VALUES_DIR)/xos-core.yaml
+	touch $@
+
+$(M)/helm-install-onos-fabric: | $(M)/install-kubernetes-tools
+	cd $(HELM_CHARTS)
+	$(HELM) test onos-fabric
+	$(HELM) install onos-fabric -n onos-fabric -f $(CORD_VALUES_DIR)/onos-fabric.yaml
+	touch $@
+
+$(M)/helm-install-rcord-lite: | $(M)/helm-install-xos-core $(M)/helm-install-onos-fabric
+	cd $(HELM_CHARTS);
+	$(HELM) dep update xos-profiles/rcord-lite
+	$(HELM) test xos-profiles/rcord-lite
+	$(HELM) install xos-profiles/rcord-lite -n rcord-lite -f $(CORD_VALUES_DIR)/rcord-lite.yaml
 	touch $@
 
 

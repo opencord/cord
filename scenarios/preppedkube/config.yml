@@ -20,6 +20,11 @@ use_k8s: True
 use_maas: False
 use_openstack: False
 
+# apache proxied ports are different when using k8s
+portnumber_xos_ws: 30008
+portnumber_xos_gui: 30001
+portnumber_chameleon: 30006
+
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
@@ -47,7 +52,7 @@ vagrant_vms:
 
 # Make build config
 build_targets:
-  - start-xos-helm
+  - helm-install-xos-core
 
 vagrant_up_prereqs:
   - prereqs-check
@@ -58,13 +63,12 @@ config_ssh_key_prereqs:
 copy_cord_prereqs:
   - vagrant-ssh-install
 
-cord_config_prereqs:
+cord_helm_values_prereqs:
   - vagrant-ssh-install
   - copy-cord
 
 prep_buildnode_prereqs:
   - copy-cord
-  - copy-config
 
 # Run build prep before head prep, when build == head
 prep_headnode_prereqs:
