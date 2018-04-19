@@ -38,6 +38,7 @@ vagrant_up_prereqs:
 config_ssh_key_prereqs:
   - vagrant-ssh-install
 
+
 copy_cord_prereqs:
   - vagrant-ssh-install
 
@@ -47,10 +48,12 @@ cord_config_prereqs:
 
 prep_buildnode_prereqs:
   - copy-cord
+  - cord-config
   - copy-config
 
 # Run build prep before head prep, when build == head
 prep_headnode_prereqs:
+  - cord-config
   - prep-buildnode
 
 # Wait until headnode prepped before building containers, for consistent DNS
