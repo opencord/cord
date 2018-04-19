@@ -48,6 +48,9 @@ ANSIBLE_ARGS           += --skip-tags "{{ skipTags | join(",") }}"
 {# openstack's models are in core, so it can't be dynamically loaded #}
 DYNAMICLOAD_MODELS      = {{ master_config.xos_services | rejectattr('name','equalto','openstack') | map(attribute='name') | join(' ') }}
 {% endif %}
+{% if kubernetes_version is defined %}
+KUBERNETES_VERSION      = {{ kubernetes_version }}
+{% endif %}
 
 # Targets and prerequisties
 {% if build_targets is defined %}
@@ -57,13 +60,19 @@ BUILD_TARGETS           = $(M)/{{ build_targets | join(" $(M)/") }}
 VAGRANT_UP_PREREQS      = $(M)/{{ vagrant_up_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if config_ssh_key_prereqs is defined %}
-CONFIG_SSH_KEY_PREREQS      = $(M)/{{ config_ssh_key_prereqs | join(" $(M)/") }}
+CONFIG_SSH_KEY_PREREQS  = $(M)/{{ config_ssh_key_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if copy_cord_prereqs is defined %}
 COPY_CORD_PREREQS       = $(M)/{{ copy_cord_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if cord_config_prereqs is defined %}
 CORD_CONFIG_PREREQS     = $(M)/{{ cord_config_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if cord_helm_values_prereqs is defined %}
+CORD_HELM_VALUES_PREREQS = $(M)/{{ cord_helm_values_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if cord_helm_images_prereqs is defined %}
+CORD_HELM_IMAGES_PREREQS = $(M)/{{ cord_helm_images_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if prep_buildnode_prereqs is defined %}
 PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}
@@ -72,7 +81,7 @@ PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}
 PREP_HEADNODE_PREREQS   = $(M)/{{ prep_headnode_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if prep_kubespray_prereqs is defined %}
-PREP_KUBESPRAY_PREREQS   = $(M)/{{ prep_kubespray_prereqs | join(" $(M)/") }}
+PREP_KUBESPRAY_PREREQS  = $(M)/{{ prep_kubespray_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if docker_images_prereqs is defined %}
 DOCKER_IMAGES_PREREQS   = $(M)/{{ docker_images_prereqs | join(" $(M)/") }}
@@ -87,7 +96,7 @@ START_XOS_PREREQS       = $(M)/{{ start_xos_prereqs | join(" $(M)/") }}
 DEPLOY_ONOS_PREREQS     = $(M)/{{ deploy_onos_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if deploy_mavenrepo_prereqs is defined %}
-DEPLOY_MAVENREPO_PREREQS     = $(M)/{{ deploy_mavenrepo_prereqs | join(" $(M)/") }}
+DEPLOY_MAVENREPO_PREREQS = $(M)/{{ deploy_mavenrepo_prereqs | join(" $(M)/") }}
 {% endif %}
 {% if deploy_openstack_prereqs is defined %}
 DEPLOY_OPENSTACK_PREREQS = $(M)/{{ deploy_openstack_prereqs | join(" $(M)/") }}
@@ -98,7 +107,16 @@ ONBOARD_OPENSTACK_PREREQS = $(M)/{{ onboard_openstack_prereqs | join(" $(M)/") }
 {% if setup_automation_prereqs is defined %}
 SETUP_AUTOMATION_PREREQS = $(M)/{{ setup_automation_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if kubernetes_tools_prereqs is defined %}
+KUBERNETES_TOOLS_PREREQS = $(M)/{{ kubernetes_tools_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if deploy_tiller_prereqs is defined %}
+DEPLOY_TILLER_PREREQS    = $(M)/{{ deploy_tiller_prereqs | join(" $(M)/") }}
+{% endif %}
+{% if helm_up_prereqs is defined %}
+HELM_UP_PREREQS          = $(M)/{{ helm_up_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if testing_prereqs is defined %}
-TESTING_PREREQS = $(M)/{{ testing_prereqs | join(" $(M)/") }}
+TESTING_PREREQS          = $(M)/{{ testing_prereqs | join(" $(M)/") }}
 {% endif %}
 
