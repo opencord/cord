@@ -56,8 +56,12 @@ cord_config_prereqs:
   - vagrant-ssh-install
   - copy-cord
 
+prep_buildnode_prereqs:
+  - cord-config
+
 prep_headnode_prereqs:
   - copy-cord
+  - cord-config
   - copy-config
 
 publish_docker_images_prereqs:
