@@ -20,6 +20,11 @@ use_k8s: True
 use_maas: False
 use_openstack: False
 
+# apache proxied ports are different when using k8s
+portnumber_xos_ws: 30008
+portnumber_xos_gui: 30001
+portnumber_chameleon: 30006
+
 # create a cord_profile dir next to the cord checkout
 config_cord_dir: "{{ ( playbook_dir ~ '/../..' ) | realpath }}"
 config_cord_profile_dir: "{{ ( playbook_dir ~ '/../../../cord_profile' ) | realpath }}"
@@ -47,7 +52,7 @@ vagrant_vms:
 
 # Make build config
 build_targets:
-  - start-xos-helm
+  - helm-install-xos-core
 
 config_ssh_key_prereqs:
   - vagrant-ssh-install
@@ -55,7 +60,7 @@ config_ssh_key_prereqs:
 copy_cord_prereqs:
   - vagrant-ssh-install
 
-cord_config_prereqs:
+cord_helm_values_prereqs:
   - vagrant-ssh-install
   - copy-cord
 
@@ -67,9 +72,8 @@ prep_buildnode_prereqs:
 prep_headnode_prereqs:
   - prep-buildnode
 
-# Wait until headnode prepped before building containers, for consistent DNS
-docker_images_prereqs:
-  - prep-headnode
+publish_docker_images_prereqs:
+  - helm-docker-images
 
 # have kubespray skip docker installation
 skipTags:
