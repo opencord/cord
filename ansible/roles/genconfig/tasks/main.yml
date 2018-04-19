@@ -83,7 +83,7 @@
       {{ profile_container_list | union(profile_manifest.xos_services | map(attribute='name') | map('regex_replace', '(.*)','xosproject/\1-synchronizer') | list) }}
 
 - name: Add items to profile_container_list from profile_manifest.xos_dynamic_services
-  when: profile_manifest.xos_dynamic_services
+  when: profile_manifest.xos_dynamic_services is defined
   set_fact:
     profile_container_list: |
       {{ profile_container_list | union(profile_manifest.xos_dynamic_services | map(attribute='name') | map('regex_replace', '(.*)','xosproject/\1-synchronizer') | list) }}
