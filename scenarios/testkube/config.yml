@@ -1,0 +1,67 @@
+---
+# Copyright 2017-present Open Networking Foundation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# testkube Scenario
+# brings up minikube for basic testing
+
+# create a cord_values dir next to the cord checkout
+config_cord_values_dir: "{{ ( playbook_dir ~ '/../../../cord_values' ) | realpath }}"
+
+# testkube scenario configuration
+use_minikube: true
+kubernetes_version: 1.9.5
+
+# make targets
+build_targets:
+  - helm-up-xos-core
+
+helm_up_prereqs:
+  - deploy-minikube
+  - local-docker-images
+
+# images for imagebuilder to build/pull (tagged elsewhere)
+docker_image_whitelist:
+  - "xosproject/xos-base"
+  - "xosproject/xos-core"
+  - "xosproject/xos-client"
+  - "xosproject/xos-gui"
+  - "xosproject/xos-gui-builder"
+  - "xosproject/xos-libraries"
+  - "xosproject/xos-tosca"
+  - "xosproject/xos-ws"
+  - "xosproject/chameleon"
+  - "xosproject/xos-synchronizer-base"
+  - "nginx"
+  - "node"
+  - "postgres"
+  - "redis"
+
+# Ansible Inventory
+inventory_groups:
+
+  config:
+    localhost:
+      ansible_connection: local
+
+  build:
+    localhost:
+      ansible_connection: local
+
+  head:
+    localhost:
+      ansible_connection: local
+
+  compute:
+
