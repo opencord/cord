@@ -44,7 +44,11 @@ build_targets:
 cord_config_prereqs:
   - vagrant-ssh-install
 
+prep_buildnode_prereqs:
+  - cord-config
+
 prep_headnode_prereqs:
+  - cord-config
   - prep-buildnode
 
 docker_images_prereqs:
