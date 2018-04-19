@@ -12,7 +12,7 @@
 {{ node }} ip='{{ management_net_cidr | ipaddr(npi.ipv4_last_octet) |  ipaddr("address")  }}'
 {% endfor %}
 
-[cord-headnodes:vars]
+[all:vars]
 supplementary_addresses_in_ssl_keys=['{{ hostvars[groups["head"][0]].ansible_default_ipv4.address }}']
 
 [kube-master:children]
