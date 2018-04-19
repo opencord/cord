@@ -33,6 +33,7 @@ pull_only_images:
   - "node:7.9.0" # remove once the issue with node:candidate is resolved
   - "postgres:10.3-alpine"
   - "sebp/elk:564"
+  - "clue/httpie:latest"
 
 # buildable_images - list of images that we build from Dockerfiles
 #
