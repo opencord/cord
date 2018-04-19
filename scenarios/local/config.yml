@@ -32,6 +32,9 @@ xos_tosca_url: "http://127.0.0.1:9102"
 build_targets:
   - local-onboard-profile
 
+docker_image_prereqs:
+  - local-cord-config
+
 # local scenario configuration
 frontend_only: True
 create_configdirs_become: False
