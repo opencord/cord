@@ -21,15 +21,16 @@ pod_config = null;
 
 node ("${devNodeName}") {
     timeout (time: 240) {
-        stage ("Clean-up previous build") {
-            sh "make -C build clean-all || true"
-            sh "rm -rf *"
-        }
         stage ("Parse deployment configuration file") {
             sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
             sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
             deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
             pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
+        }
+        stage ("Clean-up previous build") {
+            sh "make -C build PODCONFIG_PATH=../orchestration/profiles/automation/${deployment_config.pod_config.file_name} config"
+            sh "make -C build clean-all || true"
+            sh "rm -rf *"
         }
         stage ('Remove old head node from known hosts') {
             sh "ssh-keygen -R ${deployment_config.head.ip}"
