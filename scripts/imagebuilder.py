@@ -647,15 +647,6 @@ class DockerImage():
             # if clean and parents clean, add tags for branch/commit
             if self.parents_clean():
 
-                # add build tag
-                if build_tag not in self.tags:
-                    self.tags.append(build_tag)
-
-                # add branch tag
-                branch_tag = self.repo_d.short_branch
-                if branch_tag not in self.tags:
-                    self.tags.append(branch_tag)
-
                 # Add <branch>-<commit> tag, which is used to pull
                 commit_tag = "%s-%s" % (self.repo_d.short_branch,
                                         self.repo_d.head_commit)
@@ -665,10 +656,19 @@ class DockerImage():
                     # this is most specific tag, so pull using it
                     self.raw_name = "%s:%s" % (self.name, commit_tag)
 
+                # add branch tag
+                branch_tag = self.repo_d.short_branch
+                if branch_tag not in self.tags:
+                    self.tags.append(branch_tag)
+
                 # add all tags in git that point at the commit
                 for gt in self.repo_d.git_tags:
                     if gt not in self.tags:
                         self.tags.append(gt)
+
+                # add build tag
+                if build_tag not in self.tags:
+                    self.tags.append(build_tag)
 
             LOG.debug("All tags: %s" % ", ".join(self.tags))
 
