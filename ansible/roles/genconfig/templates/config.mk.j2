@@ -61,6 +61,9 @@ COPY_CORD_PREREQS       = $(M)/{{ copy_cord_prereqs | join(" $(M)/") }}
 {% if cord_config_prereqs is defined %}
 CORD_CONFIG_PREREQS     = $(M)/{{ cord_config_prereqs | join(" $(M)/") }}
 {% endif %}
+{% if cord_values_prereqs is defined %}
+CORD_VALUES_PREREQS     = $(M)/{{ cord_values_prereqs | join(" $(M)/") }}
+{% endif %}
 {% if prep_buildnode_prereqs is defined %}
 PREP_BUILDNODE_PREREQS  = $(M)/{{ prep_buildnode_prereqs | join(" $(M)/") }}
 {% endif %}
