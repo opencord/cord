@@ -79,20 +79,19 @@
 
 - name: Add items to profile_container_list from profile_manifest.xos_services
   set_fact:
-    profile_container_list: "{{ profile_container_list }} + [ 'xosproject/{{ item.name }}-synchronizer' ]"
-  with_items: "{{ profile_manifest.xos_services }}"
-  when:  item.synchronizer is not defined or item.synchronizer
+    profile_container_list: |
+      {{ profile_container_list | union(profile_manifest.xos_services | map(attribute='name') | map('regex_replace', '(.*)','xosproject/\1-synchronizer') | list) }}
 
 - name: Add items to profile_container_list from profile_manifest.xos_dynamic_services
+  when: profile_manifest.xos_dynamic_services is defined
   set_fact:
-    profile_container_list: "{{ profile_container_list }} + [ 'xosproject/{{ item.name }}-synchronizer' ]"
-  with_items: "{{ profile_manifest.xos_dynamic_services if 'xos_dynamic_services' in profile_manifest else [] }}"
-  when: item.synchronizer is not defined or item.synchronizer
+    profile_container_list: |
+      {{ profile_container_list | union(profile_manifest.xos_dynamic_services | map(attribute='name') | map('regex_replace', '(.*)','xosproject/\1-synchronizer') | list) }}
 
 - name: Add items to profile_container_list from profile_manifest.enabled_gui_extensions
   set_fact:
-    profile_container_list: "{{ profile_container_list }} + [ 'xosproject/gui-extension-{{ item.name }}' ]"
-  with_items: "{{ profile_manifest.enabled_gui_extensions }}"
+    profile_container_list: |
+      {{ profile_container_list | union(profile_manifest.enabled_gui_extensions | map(attribute='name') | map('regex_replace', '(.*)','xosproject/gui-extension-\1') | list) }}
 
 - name: Update docker_image_whitelist to include containers specified by profile
   set_fact:
