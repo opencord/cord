@@ -101,7 +101,7 @@ config: $(CONFIG_FILES)
 
 $(CONFIG_FILES):
 	@test -e "$(PODCONFIG_PATH)" || { echo ""; echo "PODCONFIG file $(PODCONFIG_PATH) doesn't exist!" ; echo "*** Specify a valid CORD config file using PODCONFIG or PODCONFIG_PATH ***"; echo ""; exit 1; }
-	ansible-playbook -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)' platform_install_dir='$(PI)' cord_profile_src_dir='$(PROFILE_D)' " $(BUILD)/ansible/genconfig.yml $(LOGCMD)
+	ansible-playbook $(ANSIBLE_ARGS) -i 'localhost,' --extra-vars="cord_podconfig='$(PODCONFIG_PATH)' genconfig_dir='$(GENCONFIG_D)' scenarios_dir='$(SCENARIOS_D)' platform_install_dir='$(PI)' cord_profile_src_dir='$(PROFILE_D)' " $(BUILD)/ansible/genconfig.yml $(LOGCMD)
 
 printconfig:
 	@echo "Scenario: '$(SCENARIO)'"
