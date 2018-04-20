@@ -273,6 +273,9 @@ node ('${devNodeName}') {
         } catch (err) {
             currentBuild.result = 'FAILURE'
             step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
+        } finally {
+            sh "make -C build clean-all || true"
+            sh "rm -rf *"
         }
         echo "RESULT: ${currentBuild.result}"
     }
