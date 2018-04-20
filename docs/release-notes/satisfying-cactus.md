@@ -8,33 +8,32 @@ summarizes the new features.
 ## Platform and Build System
 
 * Added support for dynamically loading new services and service profiles into
-a running system. R-CORD and E-CORD services converted to use new
-dynamic loading mechanism, but M-CORD still uses `corebuilder`.
+  a running system. R-CORD and E-CORD services converted to use new dynamic
+  loading mechanism, but M-CORD still uses `corebuilder`.
 
-* Refactored build to isolate profile-specific information (e.g., models,
-TOSCA templates). R-CORD, M-CORD, and E-CORD converted to use
-refactoring.
+* Refactored build to isolate profile-specific information (e.g., models, TOSCA
+  templates). R-CORD, M-CORD, and E-CORD converted to use refactoring.
 
-* Added support for logging and diagnostics. See the
-[Logging and Diagnostics](../operate/elk_stack.md) section of the
-guide for more information.
+* Added support for logging and diagnostics. See the [Logging and
+  Diagnostics](../operate/elk_stack.md) section of the guide for more
+  information.
 
 * Added new scenarios to build:
 
-  * `preppedpod`: Installs a CORD POD without MaaS on pre-prepared systems,
-  which can run the R-CORD test suite.
+    * `preppedpod`: Installs a CORD POD without MaaS on pre-prepared systems,
+      which can run the R-CORD test suite.
 
-  * `controlpod`: Installs XOS and ONOS without VNF support. Runs on Ubuntu
-16.04 in preparation for updating the entire CORD platform.
+    * `controlpod`: Installs XOS and ONOS without VNF support. Runs on Ubuntu
+      16.04 in preparation for updating the entire CORD platform.
 
-  * `controlkube`: Preliminary support for running XOS on Kubernetes, in preparation
-  for greater functionality in the next release.
+    * `controlkube`: Preliminary support for running XOS on Kubernetes, in
+      preparation for greater functionality in the next release.
 
 * Preliminary integration of Kubernetes into CORD (pre-alpha):
 
-  * Manages XOS containers
+    * Manages XOS containers
 
-  * Works with `controlkube` Scenario
+    * Works with `controlkube` Scenario
 
 * Removed old TOSCA Engine.
 
@@ -57,3 +56,4 @@ guide for more information.
 ## E-CORD
 
 * Automated Monitoring at EVC creation
+
