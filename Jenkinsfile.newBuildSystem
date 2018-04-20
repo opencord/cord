@@ -19,7 +19,7 @@ def manifestUrl = 'https://gerrit.opencord.org/manifest'
 deployment_config = null;
 pod_config = null;
 
-node ('${devNodeName}') {
+node ("${devNodeName}") {
     timeout (time: 240) {
         stage ("Parse deployment configuration file") {
             sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
