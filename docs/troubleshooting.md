@@ -257,10 +257,12 @@ When a command to generate config such as `make PODCONFIG=rcord-mock.yml
 config` is run, the following steps happen:
 
 1. The POD Config file is read, in this case
-[orchestration/profiles/rcord/podconfig/rcord-mock.yml](https://github.com/opencord/rcord/blob/{{ book.branch }}/podconfig/rcord-mock.yml),
-which specifies the scenario and profile.
+   [orchestration/profiles/rcord/podconfig/rcord-mock.yml](https://github.com/opencord/rcord/blob/{{
+     book.branch }}/podconfig/rcord-mock.yml), which specifies the scenario and
+     profile.
 2. The Scenario config file is read, in this case
-[build/scenarios/mock/config.yml](https://github.com/opencord/cord/blob/{{ book.branch }}/scenarios/mock/config.yml).
+   [build/scenarios/mock/config.yml](https://github.com/opencord/cord/blob/{{
+     book.branch }}/scenarios/mock/config.yml).
 3. The contents of these files are combined into a master config variable, with
    the POD Config overwriting any config set in the Scenario.
 4. The entire master config is written to `genconfig/config.yml`.
@@ -270,13 +272,12 @@ which specifies the scenario and profile.
    `genconfig/config.mk`. This sets the targets invoked by `make build`
 
 Note that the combination of the POD and Scenaro config in step #3 is not a
-merge. If you define an item in the root of the POD Config that has subkeys,
-it will overwrite every subkey defined in the Scenario.  This is most noticeable
-when setting the `inventory_groups` or `docker_image_whitelist`
-variable. If changing either in a POD Config, you must recreate the
-entire structure or list. This may seem inconvenient, but other list
-or tree merging strategies lack a way to remove items from a tree
-structure.
+merge. If you define an item in the root of the POD Config that has subkeys, it
+will overwrite every subkey defined in the Scenario.  This is most noticeable
+when setting the `inventory_groups` or `docker_image_whitelist` variable. If
+changing either in a POD Config, you must recreate the entire structure or
+list. This may seem inconvenient, but other list or tree merging strategies
+lack a way to remove items from a tree structure.
 
 ## Build Process Overview
 
@@ -287,9 +288,9 @@ handy to use during development.
 ### `config` make target
 
 `config` requires a `PODCONFIG` argument, which is the name of a file in
-`orchestration/profiles/<use-case>/podconfig/`. `PODCONFIG` defaults to `invalid`, so if you get errors
-claiming an invalid config, you probably didn't set it, or set it to a filename
-that doesn't exist.
+`orchestration/profiles/<use-case>/podconfig/`. `PODCONFIG` defaults to
+`invalid`, so if you get errors claiming an invalid config, you probably didn't
+set it, or set it to a filename that doesn't exist.
 
 #### Examples: `make config`
 
