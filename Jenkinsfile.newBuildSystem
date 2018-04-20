@@ -12,31 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import groovy.json.JsonSlurperClassic
+import groovy.json.JsonSlurper
 
 def filename = 'manifest-${branch}.xml'
 def manifestUrl = 'https://gerrit.opencord.org/manifest'
 deployment_config = null;
 pod_config = null;
 
-node ('master') {
-    checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
-
-    stage ("Generate and Copy Manifest file") {
-        sh returnStdout: true, script: 'repo manifest -r -o ' + filename
-        sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
-    }
-
-    stage ("Parse deployment configuration file") {
-        sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
-        sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
-        deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
-        pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
-    }
-}
-
-node ("${deployment_config.dev_node.name}") {
+node ('${devNodeName}') {
     timeout (time: 240) {
+        stage ("Parse deployment configuration file") {
+            sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
+            sh returnStdout: true, script: 'git clone -b ${branch} ${configRepoUrl}'
+            deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
+            pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
+        }
+        stage ("Clean-up previous build") {
+            sh "make -C build PODCONFIG_PATH=../orchestration/profiles/automation/${deployment_config.pod_config.file_name} config"
+            sh "make -C build clean-all || true"
+            sh "rm -rf *"
+        }
         stage ('Remove old head node from known hosts') {
             sh "ssh-keygen -R ${deployment_config.head.ip}"
         }
@@ -278,9 +273,6 @@ node ("${deployment_config.dev_node.name}") {
         } catch (err) {
             currentBuild.result = 'FAILURE'
             step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
-        } finally {
-            sh "make -C build clean-all || true"
-            sh "rm -rf *"
         }
         echo "RESULT: ${currentBuild.result}"
     }
@@ -403,7 +395,7 @@ def getComputeNames(role="") {
     computeNamesAll = runHeadNodeCmd("cord prov list | grep node | awk '{print \\\$2}' | sed -e \\\"s/.*/'&'/\\\"").trim()
     computeNamesAll = "${computeNamesAll}".split()
     computeNamesAll = "${computeNamesAll}".replaceAll("'", "\"")
-    computeNamesAll = new JsonSlurperClassic().parseText("${computeNamesAll}")
+    computeNamesAll = new JsonSlurper().parseText("${computeNamesAll}")
     if ("${role}" == "") return computeNamesAll
     computeNames = []
     switchMac = ""
@@ -423,7 +415,7 @@ def getComputeNames(role="") {
             return computeNames
         }
         computeFabricIps = "${computeFabricIps}".split()
-        computeFabricIps = new JsonSlurperClassic().parseText("${computeFabricIps}")
+        computeFabricIps = new JsonSlurper().parseText("${computeFabricIps}")
         // Figure out which compute node connects to the switch
         for (name in computeNamesAll) {
             fabricIp = runComputeNodeCmd("${name}", "ip a | grep -o '${fabricIpPrefix}.[1-9][0-9]*.[0-9]*'").trim()
