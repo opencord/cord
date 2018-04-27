@@ -111,6 +111,7 @@ printconfig:
 # This is entirely determined by the podconfig/scenario, and should generally
 # be set to only one value - everything else should be a dependency
 build: $(BUILD_TARGETS)
+	@echo "make build finished sucessfully"
 
 # Utility targets
 ansible-ping:
