@@ -22,6 +22,7 @@ in a Vagrant VM (used to deploy CORD) as well as CiaB itself.
     * 48GB+ RAM
     * 12+ CPU cores
     * 200GB+ disk
+* Bare metal machine (not a virtual machine)
 * Access to the Internet (no enterprise proxies)
 * Ubuntu 14.04.5 LTS freshly installed with updates
 * User account used to install CORD-in-a-Box has password-less *sudo*
