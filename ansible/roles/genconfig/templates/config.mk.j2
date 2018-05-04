@@ -39,10 +39,14 @@ DEPLOY_DOCKER_TAG       = {{ deploy_docker_tag }}
 CONFIG_CORD_PROFILE_DIR = {{ config_cord_profile_dir }}
 {% endif %}
 {% if build_cord_dir is defined %}
-BUILD_CORD_DIR = {{ build_cord_dir }}
+BUILD_CORD_DIR          = {{ build_cord_dir }}
 {% endif %}
 {% if skipTags is defined and skipTags %}
-ANSIBLE_ARGS += --skip-tags "{{ skipTags | join(",") }}"
+ANSIBLE_ARGS           += --skip-tags "{{ skipTags | join(",") }}"
+{% endif %}
+{% if master_config.xos_services is defined %}
+{# openstack's models are in core, so it can't be dynamically loaded #}
+DYNAMICLOAD_MODELS      = {{ master_config.xos_services | rejectattr('name','equalto','openstack') | map(attribute='name') | join(' ') }}
 {% endif %}
 
 # Targets and prerequisties

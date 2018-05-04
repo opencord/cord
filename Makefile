@@ -194,6 +194,14 @@ xos-service-config:
 xos-services-up:
 	$(ANSIBLE_PB) $(PI)/xos-services-up.yml $(LOGCMD)
 
+# wait for dynamic loading
+DYNAMICLOAD_WAIT   ?= 60
+DYNAMICLOAD_URL    ?= http://localhost:9101
+DYNAMICLOAD_MODELS ?=
+
+xos-wait-dynamicload:
+	python $(BUILD)/scripts/xos-wait-dynamicload.py $(DYNAMICLOAD_WAIT) $(DYNAMICLOAD_URL) $(DYNAMICLOAD_MODELS)
+
 # docs
 .PHONY: docs
 docs:
