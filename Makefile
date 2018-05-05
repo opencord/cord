@@ -71,7 +71,7 @@ VAGRANT_CWD      ?= $(SCENARIOS_D)/$(SCENARIO)/
 VIRSH_CORDDEV_DOMAIN ?= cord_corddev
 
 # Ansible args, for verbosity and other runtime parameters
-ANSIBLE_ARGS     ?=
+ANSIBLE_ARGS     +=
 EXTRA_VARS       ?= --extra-vars "@/opt/cord_profile/genconfig/config.yml"
 
 # Commands
