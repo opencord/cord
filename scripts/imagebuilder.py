@@ -1242,7 +1242,7 @@ class DockerBuilder():
 
         if self.dc is not None:
 
-            build_tag = "%s:%s" % (image.name, image.tags[0])
+            image_build_tag = "%s:%s" % (image.name, image.tags[0])
 
             buildargs = image.buildargs()
             context_tar = image.context_tarball()
