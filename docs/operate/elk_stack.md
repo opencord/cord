@@ -2,8 +2,9 @@
 
 CORD uses ELK Stack for logging information at all levels. CORD’s ELK Stack
 logger collects information from several components, including the XOS Core,
-API, and various Synchronizers. On a running POD, the logs can be accessed at
-`http://<head-node>:8080/app/kibana`.
+API, and various Synchronizers. On a running physical POD, the logs can be
+accessed at `http://<head-node>/app/kibana`. For CORD-in-a-box these logs can
+be accessed at `http://<head-node>:8080/app/kibana`.
 
 There is also a second way of accessing low-level logs with additional
 verbosity that do not make it into ELK Stack. This involves accessing log
