@@ -17,6 +17,6 @@
 extra_disk_dev: /dev/vda
 
 extra_disk_links:
- - { src: /mnt/lxd, dest: /var/lib/lxd }
- - { src: /mnt/docker-registry, dest: /docker-registry }
- - { src: /mnt/lxcfs, dest: /var/lib/lxcfs }
+ - { dest: /mnt/lxd, src: /var/lib/lxd }
+ - { dest: /mnt/docker-registry, src: /docker-registry }
+ - { dest: /mnt/lxcfs, src: /var/lib/lxcfs }
