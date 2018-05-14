@@ -19,7 +19,8 @@ def manifestUrl = 'https://gerrit.opencord.org/manifest'
 deployment_config = null;
 pod_config = null;
 
-node ('master') {
+node ("${devNodeName}") {
+    timeout (time: 360) {
     checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
 
     stage ("Generate and Copy Manifest file") {
@@ -33,10 +34,7 @@ node ('master') {
         deployment_config = readYaml file: "${configRepoBaseDir}${configRepoFile}"
         pod_config = readYaml file: "${configRepoBaseDir}${deployment_config.pod_config.file_name}"
     }
-}
 
-node ("${deployment_config.dev_node.name}") {
-    timeout (time: 360) {
         stage ('Remove old head node from known hosts') {
             sh "ssh-keygen -R ${deployment_config.head.ip}"
         }
