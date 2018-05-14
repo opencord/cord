@@ -21,12 +21,6 @@ pod_config = null;
 
 node ("${devNodeName}") {
     timeout (time: 360) {
-    checkout changelog: false, poll: false, scm: [$class: 'RepoScm', currentBranch: true, manifestBranch: params.branch, manifestRepositoryUrl: "${manifestUrl}", quiet: true]
-
-    stage ("Generate and Copy Manifest file") {
-        sh returnStdout: true, script: 'repo manifest -r -o ' + filename
-        sh returnStdout: true, script: 'cp ' + filename + ' ' + env.JENKINS_HOME + '/tmp'
-    }
 
     stage ("Parse deployment configuration file") {
         sh returnStdout: true, script: 'rm -rf ${configRepoBaseDir}'
@@ -44,7 +38,7 @@ node ("${devNodeName}") {
         }
 
         stage ('Copy NG40 license file') {
-            sh "cp ../ng40-license orchestration/xos_services/venb/xos/synchronizer/files/ng40-license"   
+            sh "cp ~/ng40-license orchestration/xos_services/venb/xos/synchronizer/files/ng40-license"   
         }
 
         try {
@@ -284,8 +278,8 @@ node ("${devNodeName}") {
             currentBuild.result = 'FAILURE'
             step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "${notificationEmail}", sendToIndividuals: false])
         } finally {
-            //sh "make -C build clean-all || true"
-            //sh "rm -rf *"
+            sh "make -C build clean-all || true"
+            sh "rm -rf *"
         }
         echo "RESULT: ${currentBuild.result}"
     }
