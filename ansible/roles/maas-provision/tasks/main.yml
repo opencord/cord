@@ -42,6 +42,25 @@
   tags:
     - skip_ansible_lint
 
+- name: Wait for ~maas/.ssh/known_hosts
+  wait_for:
+    path: ~maas/.ssh/known_hosts
+  become: yes
+  become_user: maas
+  register: result
+  retries: 10
+  delay: 30
+  tags:
+    - skip_ansible_lint
+
+- name: Test virsh power type
+  command: virsh -c qemu+ssh://maas@10.100.198.1/system list --all
+  become: yes
+  become_user: maas
+  register: result
+  tags:
+    - skip_ansible_lint
+
 - name: Wait for node to be fully provisioned
   become: yes
   shell: /usr/local/bin/get-node-prov-state |jq '.[] | select(.id == "{{ nodeid.stdout }}").status'
