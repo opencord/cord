@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c46a1fe1_890ec139",
+        "filename": "docker_images.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-05-25T21:51:10Z",
+      "side": 1,
+      "message": "unneeded whitespace",
+      "range": {
+        "startLine": 261,
+        "startChar": 20,
+        "endLine": 261,
+        "endChar": 21
+      },
+      "revId": "18a6c8f9945f7cb070539aa411ce59ce1e8d8bc1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51159e4d_d23bb498",
+        "filename": "docker_images.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000011
+      },
+      "writtenOn": "2018-05-25T21:51:10Z",
+      "side": 1,
+      "message": "Not sure this is needed - the `path` items are gone from most synchronizers now that Scott moved the Dockerfile.synchronizer to the top level.\n\nYou might sync and rebase to see if this is the case.",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 28
+      },
+      "revId": "18a6c8f9945f7cb070539aa411ce59ce1e8d8bc1",
+      "serverId": "2a2bfe1b-c5c2-48ed-9ac8-16438ab24388",
+      "unresolved": true
+    }
+  ]
+}
