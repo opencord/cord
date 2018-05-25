@@ -257,6 +257,11 @@ buildable_images:
     path: "xos/synchronizer"
     dockerfile: "Dockerfile.synchronizer"
 
+  - name: xosproject/hippie-oss-synchronizer
+    repo: hippie-oss 
+    path: "xos/synchronizer"
+    dockerfile: "Dockerfile.synchronizer"
+
   - name: xosproject/xos-api-tester
     repo: cord-tester
     path: "src/test/cord-api"
